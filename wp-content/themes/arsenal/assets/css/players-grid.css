@@ -1,0 +1,276 @@
+/* ==========================================================================
+   Players Grid Component - Figma Design
+   ========================================================================== */
+
+.teams-section {
+	background-color: #f9fafb;
+	padding: 60px 0;
+}
+
+.container {
+	width: 100%;
+	max-width: 1536px;
+	margin: 0 auto;
+	padding: 0 63px;
+}
+
+/* Header */
+.teams-header {
+	margin-bottom: 48px;
+}
+
+.teams-title {
+	font-family: 'Inter', sans-serif;
+	font-size: 36px;
+	font-weight: 700;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+/* Content Wrapper */
+.teams-content {
+	display: flex;
+	flex-direction: column;
+	gap: 48px;
+}
+
+/* Position Group */
+.position-group {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.position-heading {
+	font-family: 'Inter', sans-serif;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: #900;
+	margin: 0;
+	padding: 0;
+}
+
+/* Grid Layouts */
+.players-grid {
+	display: grid;
+	gap: 16px;
+}
+
+/* Одна колонка для вратарей */
+.players-grid--single {
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+/* Четыре колонки для остальных */
+.players-grid--multi {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* ============================================
+   Player Card
+   ============================================ */
+
+.player-card {
+	background-color: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto;
+	height: 100%;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+}
+
+.player-card:hover {
+	box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.15), 0px 2px 4px -1px rgba(0, 0, 0, 0.1);
+	transform: translateY(-2px);
+}
+
+/* Левая колонка 50%: Фото + Номер */
+.player-card__photo {
+	position: relative;
+	background: linear-gradient(180deg, #990000 0%, #cc0000 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+	min-height: 150px;
+}
+
+.player-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Номер игрока */
+.player-card__number {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 32px;
+	height: 32px;
+	background-color: #ff1a1a;
+	border: 2px solid white;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Inter', sans-serif;
+	font-size: 12px;
+	font-weight: 700;
+	color: white;
+	line-height: 1;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Правая колонка 50%: Информация */
+.player-card__info {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	padding: 12px;
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	justify-content: flex-start;
+}
+
+.player-card__name {
+	font-family: 'Inter', sans-serif;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+.player-card__position {
+	font-family: 'Inter', sans-serif;
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+}
+
+.player-card__meta {
+	font-family: 'Inter', sans-serif;
+	font-size: 11px;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #6a7282;
+	margin: 0;
+	padding: 0;
+}
+
+/* Нижняя строка 100%: Статистика */
+.player-card__stats {
+	background-color: #f9fafb;
+	border-top: 1px solid #f3f4f6;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 6px;
+	padding: 6px;
+	grid-row: 2 / 3;
+	grid-column: 1 / 3;
+}
+
+.player-stat {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	text-align: center;
+}
+
+.player-stat__label {
+	font-family: 'Inter', sans-serif;
+	font-size: 10px;
+	font-weight: 400;
+	line-height: 1.2;
+	color: #6a7282;
+	display: block;
+}
+
+.player-stat__value {
+	font-family: 'Inter', sans-serif;
+	font-size: 10px;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #101828;
+	display: block;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.no-players-message {
+	font-family: 'Inter', sans-serif;
+	font-size: 16px;
+	color: #6a7282;
+	text-align: center;
+	padding: 40px;
+	margin: 0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 1024px) {
+	.players-grid--multi {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 768px) {
+	.players-grid--multi {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	
+	.teams-title {
+		font-size: 28px;
+	}
+	
+	.position-heading {
+		font-size: 20px;
+	}
+}
+
+@media (max-width: 480px) {
+	.teams-section {
+		padding: 30px 0;
+	}
+	
+	.container {
+		padding: 0 16px;
+	}
+	
+	.players-grid--single,
+	.players-grid--multi {
+		grid-template-columns: 1fr;
+	}
+	
+	.teams-title {
+		font-size: 24px;
+	}
+	
+	.position-heading {
+		font-size: 18px;
+	}
+	
+	.player-card__stats {
+		padding: 8px;
+	}
+}

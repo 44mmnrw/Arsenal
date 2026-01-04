@@ -1,0 +1,157 @@
+/*
+Theme Name: Arsenal
+Theme URI: https://github.com/44mmnrw/Arsenal
+Author: NRW Group
+Author URI: https://github.com/44mmnrw
+Description: Кастомная тема Arsenal для футбольного клуба Арсенал Дзержинск.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.9
+Requires PHP: 7.2
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: arsenal
+*/
+
+/* ==========================================================================
+   CSS RESET - Сброс стандартных стилей браузера
+   ========================================================================== */
+
+/* Универсальный селектор: убираем margin и padding у всех элементов */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Гарантируем полную высоту для html и body */
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+/* Убираем стандартные отступы у заголовков и параграфов */
+h1, h2, h3, h4, h5, h6, p {
+	margin: 0;
+	padding: 0;
+}
+
+/* Убираем стандартные стили у списков */
+ul, ol, li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/* Сбрасываем стили для форм и кнопок */
+button, input, textarea, select {
+	font-family: inherit;
+	font-size: inherit;
+	border: none;
+	padding: 0;
+	margin: 0;
+	background: none;
+	cursor: pointer;
+}
+
+/* Убираем стандартный стиль ссылок */
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+/* Гарантируем, что изображения не выходят за границы контейнера */
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Убираем стандартные отступы таблиц */
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* ==========================================================================
+   Основные стили темы
+   ========================================================================== */
+
+:root {
+	/* Красная палитра Arsenal */
+	--red-900: #990000; /* Темный бордовый для текста и акцентов */
+	--red-800: #CC0000; /* Для активных состояний */
+	--red-700: #FF1A1A; /* Основной яркий красный */
+	--red-600: #FF3333; /* Для hover-эффектов */
+	--red-500: #FF4D4D; /* Более светлый акцент */
+	--red-100: #FFE5E5; /* Светлый фон для выделения */
+	--red-50: #FFF0F0;  /* Очень светлый фон */
+	
+	/* Базовые цвета */
+	--color-white: #ffffff;
+	--color-black: #000000;
+	--color-dark-gray: #1a1a1a;
+	--color-beige: #EAD6BE;
+	--color-dark-green: #093733;
+	--color-charcoal: #212121;
+	
+	/* Фоны */
+	--color-bg: #ffffff;
+	--color-bg-dark: #1a1a1a;
+	--color-bg-red-light: var(--red-100);
+	--color-bg-red-lighter: var(--red-50);
+	
+	/* Текст */
+	--color-text: #333333;
+	--color-text-light: #ffffff;
+	--color-text-muted: #666666;
+	
+	/* Границы */
+	--color-border: #e5e5e5;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+}
+
+/* Контейнер */
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6 {
+	margin-bottom: 1rem;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+/* Ссылки */
+a {
+	color: var(--red-700);
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+a:hover {
+	color: #1a1a1a;
+}
+
+/* Изображения */
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}

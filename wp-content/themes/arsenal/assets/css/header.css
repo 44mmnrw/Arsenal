@@ -1,0 +1,282 @@
+/**
+ * Arsenal Theme - Header Stylesheet
+ *
+ * Стили шапки сайта
+ *
+ * @package Arsenal
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.site-header {
+	background-color: var(--red-900, #990000);
+	box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.header-container {
+	max-width: 103.875rem;
+	margin: 0 auto;
+	padding: 0 1.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 4rem;
+}
+
+/* Логотип */
+.site-logo {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	text-decoration: none;
+}
+
+.logo-icon {
+	width: 3rem;
+	height: 3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-white, #ffffff);
+	border-radius: 50%;
+	padding: 0.25rem;
+	transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.site-logo:hover .logo-icon {
+	transform: scale(1.05);
+	background-color: var(--color-dark-green, #093733);
+}
+
+.logo-icon svg {
+	width: 2.5rem;
+	height: 2.5rem;
+}
+
+.logo-icon svg .cls-2,
+.logo-icon svg .cls-3 {
+	fill: var(--color-charcoal, #212121);
+	transition: fill 0.3s ease;
+}
+
+.logo-icon svg .cls-5 {
+	fill: var(--color-charcoal, #212121);
+	transition: fill 0.3s ease;
+}
+
+.site-logo:hover .logo-icon svg .cls-2 {
+	fill: var(--color-beige, #EAD6BE);
+}
+
+.site-logo:hover .logo-icon svg .cls-5 {
+	fill: var(--red-700, #FF1A1A);
+}
+
+.logo-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.logo-title {
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--color-text-light);
+	line-height: 1.2;
+}
+
+.logo-subtitle {
+	font-size: 0.75rem;
+	color: var(--red-100, #FFE5E5);
+	line-height: 1.2;
+}
+
+/* Навигация */
+.main-navigation {
+	display: flex;
+	align-items: center;
+}
+
+.nav-menu {
+	display: flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	gap: 0.25rem;
+}
+
+.nav-menu li {
+	margin: 0;
+}
+
+.nav-menu a {
+	display: block;
+	padding: 0.625rem 1.25rem;
+	font-size: 1rem;
+	font-weight: 400;
+	color: var(--color-text-light);
+	text-decoration: none;
+	border-radius: 0.25rem;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu .current-menu-item a {
+	background-color: var(--red-800, #CC0000);
+	color: var(--color-text-light);
+}
+
+/* Выпадающее подменю */
+.nav-menu .sub-menu {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 12.5rem;
+	background-color: var(--red-800, #CC0000);
+	box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+	border-radius: 0.25rem;
+	padding: 0.5rem 0;
+	list-style: none;
+	margin: 0;
+	z-index: 1000;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu li {
+	position: relative;
+}
+
+.nav-menu li:hover > .sub-menu,
+.nav-menu li:focus-within > .sub-menu {
+	display: block;
+}
+
+.nav-menu .sub-menu a {
+	padding: 0.625rem 1.25rem;
+	font-size: 0.9375rem;
+	border-radius: 0;
+	font-weight: 400;
+}
+
+.nav-menu .sub-menu a:hover {
+	background-color: var(--red-700, #FF1A1A);
+	color: var(--color-text-light);
+}
+
+.nav-menu .sub-menu .current-menu-item a {
+	background-color: var(--red-700, #FF1A1A);
+}
+
+/* Индикатор подменю (стрелка вниз) */
+.nav-menu .menu-item-has-children > a::after {
+	content: '';
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 0.5rem;
+	border-left: 0.3125rem solid transparent;
+	border-right: 0.3125rem solid transparent;
+	border-top: 0.3125rem solid currentColor;
+	vertical-align: middle;
+}
+
+/* Кнопка мобильного меню */
+.menu-toggle {
+	display: none;
+	background: none;
+	border: none;
+	padding: 0.625rem;
+	cursor: pointer;
+}
+
+.hamburger {
+	display: block;
+	width: 1.5rem;
+	height: 0.125rem;
+	background-color: var(--color-text-light);
+	position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+	content: '';
+	position: absolute;
+	width: 1.5rem;
+	height: 0.125rem;
+	background-color: var(--color-text-light);
+	left: 0;
+}
+
+.hamburger::before {
+	top: -0.5rem;
+}
+
+.hamburger::after {
+	top: 0.5rem;
+}
+
+/* Skip link */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+}
+
+.skip-link:focus {
+	background-color: var(--color-bg);
+	clip: auto !important;
+	display: block;
+	height: auto;
+	left: 0.3125rem;
+	padding: 0.9375rem 1.4375rem 0.875rem;
+	top: 0.3125rem;
+	width: auto;
+	z-index: 100000;
+}
+
+/* ==========================================================================
+   RESPONSIVE - HEADER
+   ========================================================================== */
+
+@media (max-width: 768px) {
+	.menu-toggle {
+		display: block;
+	}
+
+	.nav-menu {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		flex-direction: column;
+		background-color: var(--red-900, #990000);
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		padding: 1.25rem;
+		gap: 0.25rem;
+	}
+
+	.nav-menu.toggled {
+		display: flex;
+	}
+
+	.site-header {
+		position: relative;
+	}
+
+	.logo-title {
+		font-size: 0.875rem;
+	}
+
+	.logo-subtitle {
+		font-size: 0.625rem;
+	}
+}

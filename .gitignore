@@ -1,0 +1,55 @@
+# WordPress
+wp-config.php
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/backup/
+wp-content/cache/
+wp-content/debug.log
+debug.log
+
+# Debug scripts
+_debug/
+
+# Dependencies
+node_modules/
+vendor/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Backups
+*.sql
+*.bak
+backup/
+
+# Database backups (разрешены для коммита)
+!database/*.sql
+
+# Logs
+*.log
+logs/
+
+# Deployment files
+deployment-info.txt
+wp-config-production.php
+wp-config-debug.php
+*.zip
+*.tar.gz
+tools/
+
+# Documentation
+docs/

@@ -1,0 +1,190 @@
+/* Arsenal Team Manager - Admin Styles */
+
+/* ========== Карточки команд ========== */
+.arsenal-team-card {
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.arsenal-team-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+/* Компактные кнопки для карточек команд */
+button.arsenal-team-btn,
+a.arsenal-team-btn,
+input.arsenal-team-btn {
+    width: 100% !important;
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    height: auto !important;
+    min-height: 24px !important;
+    max-height: 26px !important;
+    text-align: center !important;
+    display: inline-block !important;
+    box-sizing: border-box !important;
+}
+
+.arsenal-team-btn .dashicons,
+button.arsenal-team-btn .dashicons,
+a.arsenal-team-btn .dashicons {
+    font-size: 14px !important;
+    width: 14px !important;
+    height: 14px !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+}
+
+/* Кнопка загрузки - синяя */
+button.arsenal-team-btn-upload,
+a.arsenal-team-btn-upload {
+    background: #2271b1 !important;
+    border-color: #2271b1 !important;
+    color: #fff !important;
+}
+
+button.arsenal-team-btn-upload:hover,
+a.arsenal-team-btn-upload:hover {
+    background: #135e96 !important;
+    border-color: #135e96 !important;
+    color: #fff !important;
+}
+
+/* Кнопка сохранения - зелёная */
+button.arsenal-team-btn-save,
+a.arsenal-team-btn-save {
+    background: #00a32a !important;
+    border-color: #00a32a !important;
+    color: #fff !important;
+}
+
+button.arsenal-team-btn-save:hover,
+a.arsenal-team-btn-save:hover {
+    background: #008a20 !important;
+    border-color: #008a20 !important;
+    color: #fff !important;
+}
+
+/* Кнопка удаления - красная */
+button.arsenal-team-btn-delete,
+a.arsenal-team-btn-delete {
+    color: #d63638 !important;
+    border-color: #d63638 !important;
+    background: #fff !important;
+}
+
+button.arsenal-team-btn-delete:hover,
+a.arsenal-team-btn-delete:hover {
+    background: #d63638 !important;
+    color: #fff !important;
+    border-color: #d63638 !important;
+}
+
+/* Информация о команде */
+.arsenal-team-info {
+    font-size: 10px;
+    color: #666;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.arsenal-team-info .dashicons {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    vertical-align: middle;
+}
+
+/* ========== Dashboard ========== */
+.arsenal-dashboard-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.arsenal-stat-number {
+    font-size: 48px;
+    font-weight: bold;
+    color: #d9534f;
+    margin: 10px 0;
+}
+
+.arsenal-player-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.arsenal-position-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.arsenal-position-G {
+    background: #5cb85c;
+    color: white;
+}
+
+.arsenal-position-D {
+    background: #5bc0de;
+    color: white;
+}
+
+.arsenal-position-M {
+    background: #f0ad4e;
+    color: white;
+}
+
+.arsenal-position-F {
+    background: #d9534f;
+    color: white;
+}
+
+/* Типы составов */
+.arsenal-badge-main {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #0073aa;
+    color: white;
+}
+
+.arsenal-badge-reserve {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #82878c;
+    color: white;
+}
+
+/* Таблица игроков */
+.wp-list-table .arsenal-player-row:hover {
+    background-color: #f9f9f9;
+}
+
+/* Форма редактирования */
+.form-table th {
+    width: 200px;
+}
+
+.form-table input[type="text"],
+.form-table input[type="url"],
+.form-table input[type="date"],
+.form-table select {
+    width: 100%;
+    max-width: 400px;
+}

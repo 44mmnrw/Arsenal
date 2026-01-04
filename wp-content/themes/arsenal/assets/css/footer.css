@@ -1,0 +1,478 @@
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.site-footer {
+	background-color: #212121;
+	color: #fff;
+}
+
+/* Основная часть футера */
+.footer-main {
+	padding: 0rem 0 2.5rem;
+}
+
+.footer-main .container {
+	max-width: 94rem;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.footer-content {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 2rem;
+	align-items: start;
+}
+
+/* Логотип и бренд */
+.footer-brand {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1rem;
+	grid-column: 1;
+}
+
+.footer-brand-top {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.footer-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	background-color: var(--color-white, #ffffff);
+	border-radius: 50%;
+	flex-shrink: 0;
+	transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.footer-logo:hover {
+	transform: scale(1.05);
+	background-color: var(--color-dark-green, #093733);
+}
+
+.footer-logo-icon {
+	width: 2.5rem;
+	height: 2.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.footer-logo-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.footer-logo-icon svg .cls-2,
+.footer-logo-icon svg .cls-3 {
+	fill: var(--color-charcoal, #212121);
+	transition: fill 0.3s ease;
+}
+
+.footer-logo-icon svg .cls-5 {
+	fill: var(--color-charcoal, #212121);
+	transition: fill 0.3s ease;
+}
+
+.footer-logo:hover .footer-logo-icon svg .cls-2 {
+	fill: var(--color-beige, #EAD6BE);
+}
+
+.footer-logo:hover .footer-logo-icon svg .cls-5 {
+	fill: var(--red-700, #FF1A1A);
+}
+
+.footer-brand-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.footer-brand-name {
+	font-size: 1.250rem;
+	font-weight: 400;
+	color: #fff;
+}
+
+.footer-brand-city {
+	font-size: 0.875rem;
+	color: #99A1AF;
+}
+
+.footer-brand-address {
+	font-size: 0.875rem;
+	color: #99A1AF;
+}
+
+/* Навигация футера */
+.footer-nav {
+	grid-column: 2 / 5;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 2rem;
+}
+
+.footer-nav-column {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.footer-nav-title {
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: #fff;
+}
+
+.footer-nav-links {
+	display: flex;
+	flex-direction: column;
+	gap: 0.875rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.footer-nav-links li a {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 400;
+	color: #99A1AF;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.footer-nav-links li a:hover {
+	color: #fff;
+}
+
+/* Кнопка аккордеона (скрыта на десктопе) */
+.footer-accordion-toggle {
+	display: none;
+	background: none;
+	border: none;
+	padding: 0;
+	color: #fff;
+	font-size: 1.125rem;
+	font-weight: 600;
+	cursor: pointer;
+	width: 100%;
+	text-align: left;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.footer-accordion-icon {
+	font-size: 1.5rem;
+	font-weight: 300;
+	line-height: 1;
+	transition: transform 0.3s ease;
+	flex-shrink: 0;
+}
+
+.footer-accordion-toggle[aria-expanded="true"] .footer-accordion-icon {
+	transform: rotate(45deg);
+}
+
+/* Контакты */
+.footer-contacts {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	grid-column: 5;
+}
+
+/* Заголовок блока "Контакты" */
+.footer-contacts-heading {
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: #fff;
+	pointer-events: none;
+	cursor: default;
+}
+
+/* Контент контактов */
+.footer-contacts-content {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+/* Группа контактов */
+.footer-contacts-group {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.625rem;
+}
+
+/* Иконка контакта */
+.footer-contacts-icon {
+	color: #99A1AF;
+	flex-shrink: 0;
+	margin-top: 0.125rem;
+}
+
+.footer-contacts-icon svg {
+	display: block;
+}
+
+/* Список контактов */
+.footer-contacts-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.footer-contacts-list li {
+	font-size: 0.875rem;
+	font-weight: 400;
+	color: #99A1AF;
+}
+
+.footer-contacts-list li a {
+	color: #99A1AF;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.footer-contacts-list li a:hover {
+	color: #fff;
+}
+
+/* Социальные сети */
+.footer-social {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.footer-social-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	background-color: #3A3A3A;
+	border-radius: 50%;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.footer-social-link:hover {
+	transform: scale(1.1);
+}
+
+/* Корпоративные цвета социальных сетей */
+.footer-social-facebook:hover {
+	background-color: #1877F2;
+}
+
+.footer-social-instagram:hover {
+	background: linear-gradient(45deg, #F58529, #DD2A7B, #8134AF, #515BD4);
+}
+
+.footer-social-youtube:hover {
+	background-color: #FF0000;
+}
+
+.footer-social-telegram:hover {
+	background-color: #0088CC;
+}
+
+.footer-social-vk:hover {
+	background-color: #0077FF;
+}
+
+.footer-social-link svg {
+	width: 1.125rem;
+	height: 1.125rem;
+	stroke: white;
+	fill: white;
+	color: white;
+}
+
+/* Нижняя часть футера */
+.footer-bottom {
+		padding: 1rem 0;
+}
+
+.footer-bottom .container {
+	max-width: 94rem;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.footer-bottom-content {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1.5rem;
+	align-items: center;
+	border-top: 1px solid #1E2939;
+	padding-top: 1.5rem;
+	padding-bottom: 1rem;
+}
+
+.footer-bottom-left,
+.footer-bottom-right {
+	display: flex;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.footer-bottom-right {
+	justify-content: flex-end;
+}
+
+.footer-copyright {
+	font-size: 0.875rem;
+	color: #99A1AF;
+}
+
+.footer-link {
+	font-size: 0.875rem;
+	color: #99A1AF;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+	color: #fff;
+}
+
+.footer-link--accent {
+	color: var(--red-700, #FF1A1A);
+}
+
+.footer-link--accent:hover {
+	color: var(--red-600, #FF3333);
+}
+
+.footer-developer {
+	font-size: 0.875rem;
+	color: #99A1AF;
+}
+
+/* Footer Responsive */
+
+/* Планшеты: 2 колонки сверху (brand + contacts), nav на всю ширину снизу */
+@media (max-width: 991px) {
+	.footer-content {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5rem;
+		grid-auto-flow: dense;
+	}
+	
+	.footer-brand {
+		grid-column: 1;
+		grid-row: 1;
+	}
+	
+	.footer-contacts {
+		grid-column: 2;
+		grid-row: 1;
+	}
+	
+	.footer-nav {
+		grid-column: 1 / 3;
+		grid-row: 2;
+	}
+	
+	.footer-bottom-content {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+	
+	.footer-bottom-right {
+		justify-content: flex-start;
+	}
+}
+
+/* Мобильные: полностью вертикальный layout */
+@media (max-width: 767px) {
+	.footer-content {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+	
+	.footer-brand,
+	.footer-nav,
+	.footer-contacts {
+		width: 100%;
+	}
+	
+	.footer-brand {
+		margin-bottom: 1.5rem;
+	}
+}
+
+/* Маленькие мобильные: аккордеон-меню */
+@media (max-width: 576px) {
+	.footer-main {
+		padding: 2rem 0 0 0;
+	}
+	
+	.footer-nav {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+	
+	.footer-nav-column,
+	.footer-contacts {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 0;
+	}
+	
+	.footer-nav-column:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+	
+	.footer-contacts {
+		border-bottom: none;
+	}
+	
+	/* Скрываем обычные заголовки на мобильных */
+	.footer-nav-column > .footer-nav-title,
+	.footer-contacts > .footer-contacts-heading {
+		display: none;
+	}
+	
+	/* Показываем кнопки аккордеона */
+	.footer-accordion-toggle {
+		display: flex;
+		padding: 1rem 0;
+	}
+	
+	/* Скрываем контент по умолчанию */
+	.footer-accordion-section .footer-nav-links,
+	.footer-accordion-section .footer-contacts-content {
+		display: none;
+		padding: 0 0 1rem 0;
+	}
+	
+	/* Показываем контент когда активно */
+	.footer-accordion-section.active .footer-nav-links,
+	.footer-accordion-section.active .footer-contacts-content {
+		display: flex;
+	}
+	
+	.footer-bottom-left,
+	.footer-bottom-right {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+}
+
+

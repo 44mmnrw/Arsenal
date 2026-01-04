@@ -1,0 +1,1678 @@
+/* ========================================
+   PLAYER PAGE STYLES
+   ======================================== */
+
+/* ========================================
+   PLAYER PAGE CONTAINER
+   ======================================== */
+.player-page {
+	background: #f5f5f5;
+	min-height: 100vh;
+}
+
+/* ========================================
+   PLAYER HERO SECTION
+   ======================================== */
+.player-hero {
+	background: linear-gradient(180deg, #990000 0%, #CC0000 50%, #990000 100%);
+	height: 31rem;
+	padding: 40px 0 40px;
+	position: relative;
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+.player-container {
+	max-width: 1536px;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0 40px;
+	box-sizing: border-box;
+}
+
+
+/* ========================================
+   PLAYER PROFILE CARD (PHOTO + INFO)
+   ======================================== */
+
+/* Основной блок профиля */
+.player-profile-card {
+	display: grid;
+	grid-template-columns: 32% 68%;
+	gap : 0.5rem;	
+	justify-content: space-between;
+	height: 100%;
+}
+
+/* Фото игрока */
+.player-photo-wrapper {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+	background: rgba(139, 0, 0, 0.4);
+	border-radius: 36px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 4.5px solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+}
+
+.player-photo-wrapper img {
+	height: 100%;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: contain;
+	display: block;
+	flex-shrink: 0;
+}
+
+.player-photo-wrapper .no-photo {
+	font-size: 100px;
+	font-weight: bold;
+	color: rgba(255, 255, 255, 0.3);
+	text-transform: uppercase;
+}
+
+
+/* ========================================
+   PLAYER INFO SECTION (NAME, POSITION, STATS)
+   ======================================== */
+
+.player-info-section {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 16px;
+	padding: 26px;
+	backdrop-filter: blur(20px);
+	border: 2px solid rgba(255, 254, 254, 0.4);
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+	height: 100%;
+	width: 70%;
+	margin: 0 0 0 auto;
+	text-align: right;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+
+/* ========================================
+   PLAYER HEADER (NUMBER + NAME + POSITION)
+   ======================================== */
+
+/* Заголовок с номером и именем */
+.player-header {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+.player-number-box {
+	aspect-ratio: 1;
+	width: 5rem;
+	height: 5rem;
+	background: #fff;
+	border-radius: 16.4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 36px;
+	font-weight: 700;
+	color: #990000;
+	flex-shrink: 0;
+	box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.player-name-block {
+	flex: 1;
+	text-align: left;
+}
+
+.player-name {
+	font-size: 36px;
+	font-weight: 700;
+	color: #fff;
+	margin: 0 0 12px 0;
+	line-height: 1.1;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.player-position-tag {
+	display: inline-block;
+	background: #ff1a1a;
+	color: #fff;
+	padding: 6px 16px;
+	border-radius: 33554400px;
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   PLAYER STATS BAR (HORIZONTAL STATS)
+   ======================================== */
+
+.player-stats-bar {
+	background-color: #fff;
+	width: 100%;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.player-stats-bar-container {
+	max-width: 1536px;
+	margin: 0 auto;
+	padding: 0 40px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	min-height: auto;
+	flex-wrap: nowrap;
+	gap: 20px;
+}
+
+.player-stats-bar-item {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.25rem;
+	padding: 1rem 0;
+	flex: 0 1 auto;
+	min-width: auto;
+	white-space: nowrap;
+}
+
+.player-stats-bar-number {
+	color: #c41e3a;
+	font-size: 2rem;
+	font-weight: 600;
+	line-height: 1;
+}
+
+.player-stats-bar-label {
+	color: #666;
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.4;
+}
+
+/* Селектор турнира */
+.player-stats-bar-item--tournament {
+	min-width: 180px;
+}
+
+/* ========================================
+   CUSTOM SEASON SELECTOR DROPDOWN
+   ======================================== */
+
+/* Селектор турнира */
+.custom-season-select {
+	position: relative;
+	display: inline-block;
+}
+
+.custom-season-select-trigger {
+	border: none;
+	background: transparent;
+	color: #c41e3a;
+	font-size: 2rem;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0;
+}
+
+.custom-season-select-trigger:after {
+	content: '';
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 0.5rem;
+	border-left: 0.5rem solid transparent;
+	border-right: 0.5rem solid transparent;
+	border-top: 0.5rem solid currentColor;
+	vertical-align: middle;
+}
+
+.custom-season-select-dropdown {
+	display: none;
+	position: absolute;
+	top: 100%;
+	right: -20px;
+	min-width: auto;
+	background-color: #fff;
+	box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
+	border-radius: 0.25rem;
+	padding: 0.5rem 0;
+	list-style: none;
+	margin: 0.5rem 0 0 0;
+	z-index: 1000;
+	border: 1px solid #dcdcde;
+	max-height: auto;
+	overflow-y: auto;
+}
+
+.custom-season-select.active .custom-season-select-dropdown {
+	display: block;
+}
+
+.custom-season-select-dropdown a {
+	display: block;
+	padding: 0.5rem 1rem;
+	font-size: 2rem;
+	color: #c41e3a;
+	text-decoration: none;
+	border-radius: 0;
+	font-weight: 600;
+	transition: background-color 0.2s ease;
+}
+
+.custom-season-select-dropdown a:hover {
+	background-color: #FFE5E5;
+	color: #c41e3a;
+}
+
+.custom-season-select-dropdown a.selected {
+	background-color: #FFE5E5;
+	font-weight: 600;
+}
+
+/* ========================================
+   CHARACTERISTIC STATS GRID (AGE, HEIGHT, ETC)
+   ======================================== */
+
+/* Сетка характеристик */
+.player-stats-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+	width: 100%;
+	justify-content: center;
+	text-align: left;
+}
+
+.stat-box {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 10px;
+	padding: 13px;
+	border: 1px solid rgba(255, 254, 254, 0.3);
+	transition: all 0.3s ease;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: 4px;
+}
+
+.stat-box:hover {
+	background: rgba(255, 255, 255, 0.25);
+	transition: all 0.2s ease;
+}
+
+.stat-box.full-width {
+	grid-column: 1 / -1;
+}
+
+.stat-box-label {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.9);
+	text-transform: uppercase;
+	letter-spacing: 0.6px;
+	font-weight: 600;
+	line-height: 16px;
+}
+
+.stat-box-value {
+	font-size: 20px;
+	color: #fff;
+	font-weight: 700;
+	line-height: 28px;
+}
+
+.stat-box-value .unit {
+	font-size: 16px;
+	font-weight: 500;
+	opacity: 0.9;
+	margin-left: 4px;
+}
+
+/* ========================================
+   PLAYER CONTENT SECTIONS (MAIN LAYOUT)
+   ======================================== */
+
+.player-content {
+	background: #f5f5f5;
+	padding: 15px 0 60px 0;
+}
+
+.content-container {
+	max-width: 1536px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 40px;
+	box-sizing: border-box;
+}
+
+/* ========================================
+   CAREER STATS SECTION
+   ======================================== *//* Карьерная статистика */
+.career-stats-section {
+	background: #fff;
+	border-radius: 16.4px;
+	padding: 40px;
+	margin-bottom: 40px;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+	font-size: 20px;
+	font-weight: 700;
+	color: #333;
+	margin: 0 0 25px 0;
+	padding-left: 15px;
+	border-left: 4px solid #c41e3a;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.section-title svg {
+	width: 20px;
+	height: 20px;
+	color: #c41e3a;
+}
+
+.stats-cards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(auto, 1fr));
+	gap: 20px;
+}
+
+.stat-card {
+	background: #f8f8f8;
+	border: 1px solid #e8e8e8;
+	border-radius: 10px;
+	padding: 25px 20px;
+	text-align: center;
+	transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+	background: #fff;
+	border-color: #c41e3a;
+	box-shadow: 0 6px 20px rgba(196, 30, 58, 0.12);
+	transform: translateY(-4px);
+}
+
+.stat-card-value {
+	font-size: 36px;
+	font-weight: 800;
+	color: #c41e3a;
+	margin-bottom: 8px;
+	line-height: 1;
+}
+
+.stat-card-label {
+	font-size: 12px;
+	color: #666;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-weight: 600;
+}
+
+/* ========================================
+   PLAYER SECTIONS GRID (POSITION + MATCHES + BIOGRAPHY)
+   ======================================== */
+
+/* Сетка основных блоков: Позиция + Матчи + Биография + Таблица */
+.player-sections-grid {
+	display: grid;
+	grid-template-columns: 32% 68%;
+	gap: 0.5rem;
+	align-items: stretch;
+	padding: 0;	
+	justify-content: space-between;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/* Позиция на поле */
+.position-section {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	background-color: #ffffff;
+	border-radius: 16.4px;
+	padding: 24px;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.position-section .section-heading {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.position-section .section-title {
+	font-family: "Inter-SemiBold", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	font-weight: 600;
+	color: #101727;
+	font-size: 24px;
+	letter-spacing: 0;
+	line-height: 31.2px;
+	margin: 0;
+}
+
+.field-container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 16px;
+}
+
+.field-svg {
+	width: 100%;
+	height: auto;
+	display: block;
+	border-radius: 10px;
+	overflow: hidden;
+	background: linear-gradient(
+		90deg,
+		rgba(0, 166, 62, 1) 0%,
+		rgba(0, 130, 54, 1) 100%
+	);
+}
+
+.player-position-marker {
+	position: absolute;
+	width: 2.25rem;
+	height: 2.25rem;
+	background: linear-gradient(135deg, #ff1a1a 0%, #cc0000 100%);
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(255, 26, 26, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+	animation: pulse-shadow 2s ease-in-out infinite;
+	z-index: 10;
+	pointer-events: none;
+	overflow: visible;
+}
+
+.marker-content {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.marker-number {
+	font-size: 1.25rem;
+	font-weight: 600;
+	line-height: 1;
+	color: #ffffff;
+}
+
+.player-position-label {
+	margin-top: 12px;
+	padding: 12px 16px;
+	text-align: left;
+	background: linear-gradient(135deg, var(--red-900, #990000) 0%, rgba(255, 26, 26, 0.9) 100%);
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	display: flex;
+	align-items: stretch;
+	gap: 12px;
+	font-family: "Inter-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	box-shadow: 0 4px 12px rgba(153, 0, 0, 0.25);
+	width: 100%;
+}
+
+.position-label-container {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+}
+
+.position-label-shirt {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.shirt-badge {
+	width: 40px;
+	height: 40px;
+	background-color: var(--red-700, #FF1A1A);
+	border: 2px solid rgba(255, 255, 255, 0.4);
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff;
+	font-weight: 700;
+	font-size: 18px;
+	font-family: "Inter-Bold", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	line-height: 1;
+	box-shadow: 0 2px 6px rgba(255, 26, 26, 0.4);
+}
+
+.position-label-info {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	flex: 1;
+}
+
+.player-name-label {
+	color: #ffffff;
+	font-weight: 600;
+	font-size: 15px;
+	line-height: 1.3;
+	font-family: "Inter-SemiBold", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.position-name-label {
+	color: rgba(255, 255, 255, 0.85);
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 1.2;
+	opacity: 0.9;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-family: "Inter-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.position-label-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.position-label-icon svg {
+	width: 20px;
+	height: 20px;
+}
+
+.field-stats {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 12px;
+	padding: 16px;
+	background-color: #f9fafb;
+	border-radius: 10px;
+}
+
+.field-stat-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.field-stat-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	flex: 1;
+}
+
+.field-stat-label {
+	font-family: "Inter-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	color: #495565;
+	font-size: 14px;
+	letter-spacing: 0;
+	line-height: 20px;
+	margin: 0;
+}
+
+.field-stat-value {
+	font-family: "Inter-Regular", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	color: #101727;
+	font-size: 18px;
+	letter-spacing: 0;
+	line-height: 28px;
+	margin: 0;
+}
+
+/* Последние матчи */
+.recent-matches-section {
+	background: #fff;
+	border-radius: 16.4px;
+	padding: 30px;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   MATCHES TABLE (RECENT GAMES)
+   ======================================== */
+
+.matches-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 15px;
+}
+
+.matches-table thead {
+	background: #f8f8f8;
+}
+
+.matches-table th {
+	padding: 12px 15px;
+	text-align: left;
+	font-size: 10px;
+	font-weight: 700;
+	color: #666;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	border-bottom: 2px solid #e0e0e0;
+}
+
+.matches-table td {
+	padding: 15px;
+	color: #333;
+	font-size: 12px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.matches-table tbody tr:hover {
+	background: #fafafa;
+}
+
+.match-score {
+	font-weight: 700;
+	color: #c41e3a;
+}
+
+.match-events {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.event-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.event-badge.goal {
+	background: #d4f4dd;
+	color: #2d7a4b;
+}
+
+.event-badge.yellow {
+	background: #fff9e6;
+	color: #d97706;
+}
+
+.event-badge.red {
+	background: #fee;
+	color: #dc2626;
+}
+
+.event-badge.substitution {
+	background: #e0f2fe;
+	color: #0369a1;
+}
+
+/* ========================================
+   MATCHES COLLAPSE/EXPAND
+   ======================================== */
+
+.matches-wrapper {
+	max-height: none;
+	overflow: visible;
+	transition: max-height 0.3s ease-out;
+}
+
+.matches-wrapper.collapsed {
+	max-height: 300px;
+	overflow: hidden;
+	mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.toggle-matches-btn {
+	display: none;
+	width: 100%;
+	margin-top: 20px;
+	padding: 12px 16px;
+	background: var(--red-700, #FF1A1A);
+	color: #ffffff;
+	border: none;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	font-family: "Inter-SemiBold", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.toggle-matches-btn:hover {
+	background: #cc0000;
+	transform: translateY(-1px);
+}
+
+.toggle-matches-btn.expanded {
+	background: var(--red-700, #FF1A1A);
+}
+
+.toggle-icon {
+	transition: transform 0.3s ease;
+	width: 18px;
+	height: 18px;
+}
+
+.toggle-matches-btn.expanded .toggle-icon {
+	transform: rotate(180deg);
+}
+
+.matches-wrapper.collapsed ~ .toggle-matches-btn {
+	display: flex;
+}
+
+/* Таблица статистики по годам - полная ширина */
+.seasons-table-section {
+	grid-column: 1 / -1;
+	background: #fff;
+	border-radius: 16.4px;
+	padding: 40px;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   BIOGRAPHY SECTION
+   ======================================== */
+
+.full-report-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 6px 12px;
+	background: #c41e3a;
+	color: #fff;
+	text-decoration: none;
+	border-radius: 6px;
+	font-size: 11px;
+	font-weight: 600;
+	transition: all 0.3s ease;
+}
+
+.full-report-btn:hover {
+	background: #a01828;
+	transform: translateX(2px);
+}
+
+/* Ссылка матча в таблице событий */
+.match-link {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.match-link:hover {
+	color: #c41e3a;
+}
+
+/* Номер игрока в таблице события */
+.shirt-number-highlight {
+	color: #c41e3a;
+}
+
+/* Биография */
+.biography-section {
+	grid-column: 1 / -1;
+	background: #fff;
+	border-radius: 16.4px;
+	padding: 35px;	
+	box-sizing: border-box;
+	box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.biography-text {
+	font-size: 15px;
+	line-height: 1.7;
+	color: #555;
+}
+
+/* ========================================
+   STATS TABLE (SEASONS DATA)
+   ======================================== */
+
+.stats-table {
+	width: 100%;
+	border-collapse: collapse;	
+}
+
+.stats-table th {
+	padding: 18px 15px;
+	text-align: left;
+	font-size: 12px;
+	font-weight: 700;
+	color: #666;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	border-bottom: 3px solid #c41e3a;
+}
+
+.stats-table td {
+	padding: 18px 15px;
+	color: #333;
+	font-size: 15px;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.stats-table tbody tr {
+	transition: all 0.2s ease;
+}
+
+.stats-table tbody tr:hover {
+	background: #fafafa;
+}
+
+.stats-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.stats-table .year-cell {
+	font-weight: 700;
+	color: #c41e3a;
+	font-size: 16px;
+}
+
+.stats-table .total-row {
+	background: linear-gradient(135deg, #fff3f5 0%, #fff 100%);
+	font-weight: 700;
+}
+
+.stats-table .total-row td {
+	color: #333;
+	padding: 22px 15px;
+	border-top: 3px solid #c41e3a;
+	border-bottom: none;
+	font-size: 16px;
+}
+
+.no-stats-message {
+	text-align: center;
+	padding: 50px 30px;
+	color: #999;
+	font-size: 16px;
+}
+
+/* ========================================
+   ERROR & NOT FOUND STATES
+   ======================================== */
+
+/* Страница не найдена */
+.player-not-found {
+	text-align: center;
+	padding: 80px 40px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 24px;
+}
+
+.player-not-found h1 {
+	font-size: 36px;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+.player-not-found p {
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 18px;
+}
+
+/* Пульсирующая тень для маркера позиции */
+@keyframes pulse-shadow {
+	0%, 100% {
+		box-shadow: 0 4px 12px rgba(255, 26, 26, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+	}
+	50% {
+		box-shadow: 0 4px 24px rgba(255, 26, 26, 0.7), 0 2px 8px rgba(0, 0, 0, 0.3);
+	}
+}
+
+/* ========================================
+   MOBILE RESPONSIVE - 3 COLUMN STATS BAR
+   ======================================== */
+
+/* ========================================
+   RESPONSIVE BREAKPOINT: 1024px (TABLETS)
+   ======================================== */
+
+@media (max-width: 1024px) {
+	/* Профиль игрока - адаптация */
+	.player-profile-card {
+		grid-template-columns: 32% 68%;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.player-photo-wrapper {
+		max-width: 100%;
+		align-self: stretch;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.player-info-section {
+		width: 100%;
+		padding: 10px;
+		gap: 8px;
+		height: auto;
+	}
+
+	.player-header {
+		flex-direction: row;
+		gap: 6px;
+		margin-bottom: 8px;
+	}
+
+	.player-number-box {
+		width: 3.5rem;
+		height: 3.5rem;
+		font-size: 24px;
+		flex-shrink: 0;
+	}
+
+	.player-name-block {
+		flex: 1;
+		text-align: left;
+	}
+
+	.player-name {
+		font-size: 26px;
+		margin-bottom: 4px;
+	}
+
+	.player-position-tag {
+		font-size: 12px;
+		padding: 4px 12px;
+	}
+
+	.player-stats-grid {
+		gap: 0.5rem;
+	}
+
+	.stat-box {
+		padding: 0.5em;
+	}
+
+	.stat-box-label {
+		font-size: 10px;
+	}
+
+	.stat-box-value {
+		font-size: 16px;
+	}
+
+	.custom-season-select-dropdown a {
+		font-size: 1.25rem;
+		padding: 0.4rem 0.8rem;
+	}
+
+	.player-stats-bar-container {
+		padding: 0 30px;
+		gap: 15px;
+		flex-wrap: wrap;
+	}
+
+	.player-stats-bar-item {
+		flex: 0 0 calc((100% - 30px) / 3);
+		padding: 0.75rem 0;
+		gap: 0.15rem;
+	}
+
+	.player-stats-bar-item--tournament {
+		flex: 0 0 100%;
+		margin-bottom: 0.75rem;
+	}
+
+	.player-stats-bar-number {
+		font-size: 1.5rem;
+	}
+
+	.custom-season-select-dropdown a {
+		font-size: 1.5rem;
+		padding: 0.4rem 0.8rem;
+	}
+
+	/* Сетка позиции + матчи */
+	.player-sections-grid {
+		grid-template-columns: 32% 68%;
+		
+		width: auto;
+		max-width: 100%;
+		margin: 0 auto;
+	}
+
+	.position-section {
+		width: 100%;
+	}
+
+	.player-position-marker {
+		width: 2rem;
+		height: 2rem;
+	}
+
+	.marker-number {
+		font-size: 1.1rem;
+	}
+
+	.player-hero {
+		height: auto;
+		padding: 25px 0;
+	}
+
+	.recent-matches-section {
+		width: 100%;
+		box-sizing: border-box;
+	}
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINT: 768px (SMALL TABLETS)
+   ======================================== */
+
+@media (max-width: 768px) {
+	/* Навигация и контейнер */
+	.player-container {
+		padding: 0 20px;
+		height: auto;
+	}
+
+	.content-container {
+		padding: 0 20px;		
+	}
+
+	/* Профиль игрока - переход на колонку */
+	.player-profile-card {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		padding: 0;
+		align-items: start;
+	}
+
+	.player-photo-wrapper {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		border-radius: 24px;
+	}
+
+	.player-photo-wrapper img {
+		height: 100%;
+		width: 100%;
+	}
+
+	.player-info-section {
+		width: 100%;
+		margin: 0;
+		text-align: left;
+		padding: 20px;
+		background: rgba(255, 255, 255, 0.25);
+		border-radius: 12px;
+		justify-content: flex-start;
+		height: auto;
+	}
+
+	.player-header {
+		flex-direction: column;
+		gap: 12px;
+		margin-bottom: 16px;
+	}
+
+	.player-number-box {
+		width: 3.5rem;
+		height: 3.5rem;
+		font-size: 24px;
+	}
+
+	.player-name {
+		font-size: 28px;
+		margin-bottom: 8px;
+	}
+
+	.player-position-tag {
+		padding: 5px 12px;
+		font-size: 12px;
+		width: fit-content;
+	}
+
+	/* Статистика характеристик - одна колонка */
+	.player-stats-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 0.75rem;
+	}
+
+	.stat-box {
+		padding: 0.625em;
+		gap: 3px;
+	}
+
+	.stat-box-label {
+		font-size: 11px;
+	}
+
+	.stat-box-value {
+		font-size: 18px;
+	}
+
+	/* Статистика в шапке - переход на 2 колонки */
+	.player-stats-bar-container {
+		padding: 15px;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	.player-stats-bar-item {
+		flex: 0 0 calc((100% - 10px) / 2);
+		padding: 0.5rem 0;
+		gap: 0.1rem;
+	}
+
+	.player-stats-bar-item--tournament {
+		flex: 0 0 100%;
+		margin-bottom: 0.5rem;
+	}
+
+	.player-stats-bar-number {
+		font-size: 1.25rem;
+	}
+
+	.player-stats-bar-label {
+		font-size: 0.8rem;
+	}
+
+	.custom-season-select-dropdown a {
+		font-size: 1.25rem;	
+		padding: 0.2rem 0.8rem;
+	}
+
+	/* Характеристики */
+	.player-stats-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+	}
+
+	.stat-box {
+		padding: 10px;
+	}
+
+	.stat-box-label {
+		font-size: 11px;
+	}
+
+	.stat-box-value {
+		font-size: 18px;
+	}
+
+	/* Герой */
+	.player-hero {
+		height: auto;
+		padding: 25px 0;
+	}
+
+	/* Главная сетка - позиция и матчи в колонку */
+	.player-sections-grid {
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+		padding: 0;
+		align-items: stretch;
+	}
+
+	.position-section {
+		width: 100%;
+		padding: 18px;
+		border-radius: 12px;
+	}
+
+	.section-title {
+		font-size: 18px;
+		margin-bottom: 20px;
+	}
+
+	.player-position-marker {
+		width: 1.75rem;
+		height: 1.75rem;
+	}
+
+	.marker-number {
+		font-size: 1rem;
+	}
+
+	.position-label-container {
+		gap: 10px;
+	}
+
+	.shirt-badge {
+		width: 35px;
+		height: 35px;
+		font-size: 16px;
+	}
+
+	.player-name-label {
+		font-size: 14px;
+	}
+
+	.position-name-label {
+		font-size: 11px;
+	}
+
+	.player-position-label {
+		padding: 10px 14px;
+		gap: 10px;
+		border-radius: 6px;
+	}
+
+	/* Таблица - уменьшение текста */
+	.matches-table th,
+	.matches-table td {
+		padding: 10px 8px;
+		font-size: 12px;
+	}
+
+	.matches-table th {
+		font-size: 10px;
+		padding: 10px 8px;
+	}
+
+	/* Биография и статистика по годам - полная ширина */
+	.biography-section,
+	.seasons-table-section {
+		padding: 20px;
+	}
+
+	.biography-text {
+		font-size: 14px;
+		line-height: 1.6;
+	}
+
+	.stats-table th,
+	.stats-table td {
+		padding: 12px 10px;
+		font-size: 13px;
+	}
+
+	.stats-table th {
+		font-size: 11px;
+	}
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINT: 480px (MOBILE)
+   ======================================== */
+
+@media (max-width: 480px) {
+	/* Контейнеры - минимальное расстояние */
+	.player-container {
+		padding: 0 12px;
+		height: auto;
+	}
+
+	.content-container {
+		padding: 0 12px;
+	}
+
+	/* Профиль */
+	.player-hero {
+		height: auto;
+		padding: 15px 0;
+	}
+
+	.player-profile-card {
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.player-photo-wrapper {
+		height: auto;
+		border-radius: 16px;
+		border: 3px solid rgba(255, 255, 255, 0.15);
+	}
+
+	.player-photo-wrapper .no-photo {
+		font-size: 80px;
+	}
+
+	.player-info-section {
+		padding: 16px;
+		border-radius: 10px;
+		gap: 16px;
+		height: auto;
+	}
+
+	.player-number-box {
+		width: 3rem;
+		height: 3rem;
+		font-size: 20px;
+	}
+
+	.player-header {
+		flex-direction: column;
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+
+	.player-name {
+		font-size: 24px;
+		margin-bottom: 6px;
+	}
+
+	.player-position-tag {
+		padding: 4px 10px;
+		font-size: 11px;
+		border-radius: 20px;
+	}
+
+	/* Характеристики */
+	.player-stats-grid {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+
+	.stat-box {
+		padding: 0.5em;
+		border-radius: 8px;
+		gap: 2px;
+	}
+
+	.stat-box-label {
+		font-size: 11px;
+		line-height: 1.3;
+	}
+
+	.stat-box-value {
+		font-size: 16px;
+	}
+
+	.stat-box-value .unit {
+		font-size: 14px;
+	}
+
+	/* Полоса статистики */
+	.player-stats-bar {
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	.player-stats-bar-container {
+		padding: 10px;
+		gap: 8px;
+		flex-wrap: wrap;
+	}
+
+	.player-stats-bar-item {
+		flex: 0 0 calc((100% - 8px) / 2);
+		padding: 0.4rem 0;
+		gap: 0.08rem;
+		align-items: flex-start;
+	}
+
+	.player-stats-bar-item--tournament {
+		flex: 0 0 100%;
+		margin-bottom: 0.4rem;
+	}
+
+	.player-stats-bar-number {
+		font-size: 1.25rem;
+	}
+
+	.player-stats-bar-label {
+		font-size: 0.75rem;
+		line-height: 1.2;
+	}
+
+	/* Селектор турнира */
+	.custom-season-select-dropdown a {
+		font-size: 1.25rem;
+		padding: 0.2rem 0.8rem;
+	}
+
+	.custom-season-select-trigger {
+		font-size: 1.25rem;
+	}
+
+	/* Основная сетка - все в колонку */
+	.player-sections-grid {
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+		align-items: stretch;
+	}
+
+	.position-section {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.section-title {
+		font-size: 16px;
+		margin-bottom: 16px;
+		padding-left: 12px;
+	}
+
+	.section-title svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	.field-container {
+		gap: 12px;
+	}
+
+	.player-position-marker {
+		width: 1.5rem;
+		height: 1.5rem;
+	}
+
+	.marker-number {
+		font-size: 0.9rem;
+	}
+
+	.player-position-label {
+		padding: 8px 12px;
+		gap: 8px;
+		border-radius: 6px;
+		margin-top: 10px;
+	}
+
+	.position-label-container {
+		gap: 8px;
+	}
+
+	.shirt-badge {
+		width: 32px;
+		height: 32px;
+		font-size: 14px;
+		border: 2px solid rgba(255, 255, 255, 0.3);
+	}
+
+	.player-name-label {
+		font-size: 13px;
+	}
+
+	.position-name-label {
+		font-size: 10px;
+	}
+
+	.position-label-icon {
+		width: 20px;
+		height: 20px;
+	}
+
+	.position-label-icon svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	/* Таблица матчей */
+	.matches-table {
+		margin-top: 10px;
+	}
+
+	.matches-table thead {
+		display: none;
+	}
+
+	.matches-table td {
+		display: block;
+		padding: 4px 0;
+		border-bottom: none;
+		text-align: right;
+		background-color: #fafafa;
+		font-size: 11px;
+		color: #333;
+	}
+
+	.matches-table td::before {
+		content: attr(data-label);
+		float: left;
+		font-weight: 700;
+		color: #666;
+		text-align: left;
+	}
+
+	.matches-table tr {
+		display: block;
+		margin-bottom: 6px;
+		border: 1px solid #e0e0e0;
+		border-radius: 6px;
+		overflow: hidden;
+		background: #fff;
+		padding: 6px;
+	}
+
+	/* Биография и таблица статов - адаптация */
+	.biography-section,
+	.seasons-table-section {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.biography-text {
+		font-size: 13px;
+		line-height: 1.5;
+	}
+
+	.stats-table {
+		font-size: 12px;
+	}
+
+	.stats-table thead {
+		display: none;
+	}
+
+	.stats-table tr {
+		display: block;
+		margin-bottom: 6px;
+		border: 1px solid #e0e0e0;
+		border-radius: 6px;
+		overflow: hidden;
+		background: #fff;
+		padding: 6px;
+	}
+
+	.stats-table td {
+		display: block;
+		padding: 4px 0;
+		border-bottom: none;
+		text-align: right;
+		background-color: #fafafa;
+		font-size: 11px;
+		color: #333;
+	}
+
+	.stats-table td::before {
+		content: attr(data-label);
+		float: left;
+		font-weight: 700;
+		color: #666;
+		text-align: left;
+		margin-right: 10px;
+	}
+
+	.stats-table td:last-child {
+		border-bottom: none;
+		padding-bottom: 8px;
+	}
+
+	.stats-table th,
+	.stats-table td {
+		padding: 10px 8px;
+		font-size: 12px;
+	}
+
+	.stats-table th {
+		font-size: 10px;
+		padding: 8px 6px;
+	}
+
+	.stats-table .year-cell {
+		font-size: 14px;
+	}
+
+	/* Кнопка разворота */
+	.toggle-matches-btn {
+		padding: 10px 12px;
+		font-size: 13px;
+		border-radius: 6px;
+		margin-top: 10px;
+	}
+
+	/* Карточки статистики */
+	.stat-card {
+		padding: 15px 12px;
+	}
+
+	.stat-card-value {
+		font-size: 28px;
+	}
+
+	.stat-card-label {
+		font-size: 10px;
+	}
+
+	/* Сообщение об ошибке */
+	.player-not-found {
+		padding: 40px 20px;
+		border-radius: 16px;
+	}
+
+	.player-not-found h1 {
+		font-size: 24px;
+	}
+
+	.player-not-found p {
+		font-size: 14px;
+	}
+}
+
+
