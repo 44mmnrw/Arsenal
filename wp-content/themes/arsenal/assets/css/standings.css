@@ -1,0 +1,330 @@
+/**
+ * Стили для страницы турнирной таблицы
+ * 
+ * @package Arsenal
+ * @since 1.0.0
+ */
+
+.tournament-standings-section {
+    padding: 40px 0;
+    background: #f9f9f9;
+}
+
+.standings-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.standings-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+}
+
+.standings-season {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.standings-table-wrapper {
+    background: white;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.standings-table thead {
+    background: #f5f5f5;
+    border-bottom: 2px solid #ddd;
+}
+
+.standings-table thead th {
+    padding: 12px 8px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.standings-table tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.standings-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.standings-table tbody tr.arsenal-row {
+    background-color: #fff5f5;
+    font-weight: 500;
+}
+
+.standings-table tbody td {
+    padding: 12px 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.standings-table .col-position {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+    color: #666;
+}
+
+.standings-table .col-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.standings-table .team-badge {
+    display: block;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.standings-table .team-name {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
+    min-width: 0;
+}
+
+.standings-table .col-games,
+.standings-table .col-wins,
+.standings-table .col-draws,
+.standings-table .col-losses,
+.standings-table .col-diff,
+.standings-table .col-points {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.standings-table .col-points {
+    font-weight: 600;
+    color: #1a1a1a;
+    width: 70px;
+}
+
+.standings-table .text-center {
+    text-align: center;
+}
+
+.standings-table .font-bold {
+    font-weight: 700;
+}
+
+.standings-error {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+}
+
+/* Примечания */
+.standings-notes {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.standings-notes .notes-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 15px 0;
+}
+
+.standings-notes .note-item {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.standings-notes .note-item:last-child {
+    margin-bottom: 0;
+}
+
+.standings-notes .note-item strong {
+    color: #c8102e;
+}
+
+/* Штраф в колонке очков */
+.points-penalty {
+    display: inline-block;
+    margin-left: 4px;
+    color: #c8102e;
+    font-weight: 600;
+    cursor: help;
+}
+
+/* ===== МОБИЛЬНАЯ АДАПТАЦИЯ (480px и меньше) ===== */
+@media (max-width: 480px) {
+    .standings-title {
+        font-size: 22px;
+    }
+    
+    .standings-season {
+        font-size: 13px;
+    }
+    
+    /* Скрываем таблицу */
+    .standings-table thead {
+        display: none;
+    }
+    
+    .standings-table,
+    .standings-table tbody,
+    .standings-table tr,
+    .standings-table td {
+        display: block;
+        width: 100%;
+    }
+    
+    /* Карточка команды */
+    .standings-table tbody tr {
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+    
+    .standings-table tbody tr:hover {
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .standings-table tbody tr.arsenal-row {
+        background-color: #fff5f5;
+        border-color: #c8102e;
+    }
+    
+    /* Позиция команды - бейдж */
+    .standings-table .col-position {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        background: #f5f5f5;
+        border-radius: 50%;
+        font-size: 14px;
+        font-weight: 700;
+        color: #666;
+    }
+    
+    .standings-table tr.arsenal-row .col-position {
+        background: #c8102e;
+        color: white;
+    }
+    
+    /* Название команды */
+    .standings-table .col-team {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+        padding-right: 45px;
+        min-width: 0;
+        max-width: 100%;
+    }
+    
+    .standings-table .team-badge {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .standings-table .team-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    /* Статистика - строки одна под другой */
+    .standings-table td:not(.col-position):not(.col-team) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin: 0 0 8px 0;
+        padding: 10px 12px;
+        background: #f9f9f9;
+        border-radius: 6px;
+    }
+    
+    .standings-table td:not(.col-position):not(.col-team)::before {
+        content: attr(data-label);
+        font-size: 13px;
+        font-weight: 600;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Значение справа */
+    .standings-table td:not(.col-position):not(.col-team) {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    /* Очки - выделяем */
+    .standings-table .col-points {
+        background: #1a1a1a;
+        color: white;
+        font-size: 16px;
+        padding: 12px;
+        margin: 8px 0 0 0;
+    }
+    
+    .standings-table tr.arsenal-row .col-points {
+        background: #c8102e;
+    }
+    
+    .standings-table .col-points::before {
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Штраф */
+    .points-penalty {
+        display: block;
+        margin: 4px 0 0 0;
+        font-size: 14px;
+        color: #ffcccc;
+    }
+    
+    /* Примечания */
+    .standings-notes {
+        margin-top: 20px;
+        padding: 15px;
+    }
+    
+    .standings-notes .notes-title {
+        font-size: 16px;
+    }
+    
+    .standings-notes .note-item {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+}
