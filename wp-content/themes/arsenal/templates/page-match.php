@@ -66,19 +66,11 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 ?>
 
 <main class="match-detail-page">
-	<!-- Секция героя с заголовком -->
+	<!-- Секция hero с заголовком -->
 	<header class="match-hero-header" style="<?php echo $stadium_photo_url ? 'background-image: url(' . esc_url( $stadium_photo_url ) . ');' : ''; ?>">
 		<div class="hero-background"></div>
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
-			<!-- Кнопка возврата -->
-			<a href="<?php echo esc_url( home_url( '/matches/' ) ); ?>" class="back-button">
-				<svg class="back-icon" viewBox="0 0 20 20" fill="white" width="20" height="20">
-					<path d="M12 4L6 10M6 10L12 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
-				</svg>
-				Вернуться к матчам
-			</a>
-
 			<!-- Мета-информация матча -->
 			<div class="match-meta">
 				<span class="league-badge">Высшая лига</span>
@@ -130,14 +122,32 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					<?php echo esc_html( $match->stadium_name ?? 'Стадион "Строитель"' ); ?>, Дзержинск
 				</div>
 				<div class="detail-item">
-					<svg viewBox="0 0 16 16" class="detail-icon">
-						<circle cx="8" cy="8" r="8" fill="#d1d5dc"/>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
+					<g clip-path="url(#clip0_139_466)">
+						<path d="M8 4V8L10.6667 9.33333" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M7.99998 14.6667C11.6819 14.6667 14.6666 11.6819 14.6666 8C14.6666 4.3181 11.6819 1.33333 7.99998 1.33333C4.31808 1.33333 1.33331 4.3181 1.33331 8C1.33331 11.6819 4.31808 14.6667 7.99998 14.6667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+					</g>
+					<defs>
+						<clipPath id="clip0_139_466">
+							<rect width="16" height="16" fill="white"/>
+						</clipPath>
+					</defs>
 					</svg>
 					<?php echo esc_html( date_i18n( 'H:i', strtotime( $match->match_time ?? '19:00' ) ) ); ?>
 				</div>
 				<div class="detail-item">
-					<svg viewBox="0 0 16 16" class="detail-icon">
-						<circle cx="8" cy="8" r="7" fill="none" stroke="#d1d5dc" stroke-width="1"/>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
+					<g clip-path="url(#clip0_139_472)">
+						<path d="M10.6666 14V12.6667C10.6666 11.9594 10.3857 11.2811 9.8856 10.781C9.3855 10.281 8.70722 10 7.99998 10H3.99998C3.29274 10 2.61446 10.281 2.11436 10.781C1.61426 11.2811 1.33331 11.9594 1.33331 12.6667V14" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M10.6667 2.08533C11.2385 2.23358 11.7449 2.56751 12.1065 3.03471C12.468 3.50191 12.6642 4.07593 12.6642 4.66667C12.6642 5.25741 12.468 5.83143 12.1065 6.29862C11.7449 6.76582 11.2385 7.09975 10.6667 7.248" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M14.6667 14V12.6667C14.6662 12.0758 14.4696 11.5018 14.1076 11.0349C13.7456 10.5679 13.2388 10.2344 12.6667 10.0867" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M5.99998 7.33333C7.47274 7.33333 8.66665 6.13943 8.66665 4.66667C8.66665 3.19391 7.47274 2 5.99998 2C4.52722 2 3.33331 3.19391 3.33331 4.66667C3.33331 6.13943 4.52722 7.33333 5.99998 7.33333Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+					</g>
+					<defs>
+						<clipPath id="clip0_139_472">
+							<rect width="16" height="16" fill="white"/>
+						</clipPath>
+					</defs>
 					</svg>
 					<?php echo esc_html( arsenal_pluralize_spectators( intval( $match->attendance ?? 3500 ) ) ); ?>
 				</div>
@@ -699,8 +709,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 		<section class="report-section">
 			<div class="section-card">
 				<div class="section-header">
-					<svg class="section-icon" viewBox="0 0 22 22" fill="currentColor">
-						<rect x="2" y="2" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1"/>
+					<svg class="section-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M13.75 1.83337H5.5C5.01377 1.83337 4.54745 2.02653 4.20363 2.37034C3.85982 2.71416 3.66666 3.18048 3.66666 3.66671V18.3334C3.66666 18.8196 3.85982 19.2859 4.20363 19.6297C4.54745 19.9736 5.01377 20.1667 5.5 20.1667H16.5C16.9862 20.1667 17.4525 19.9736 17.7964 19.6297C18.1402 19.2859 18.3333 18.8196 18.3333 18.3334V6.41671L13.75 1.83337Z" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M12.8333 1.83337V5.50004C12.8333 5.98627 13.0265 6.45259 13.3703 6.7964C13.7141 7.14022 14.1804 7.33337 14.6667 7.33337H18.3333" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M9.16667 8.25H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M14.6667 11.9166H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M14.6667 15.5834H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>
 					<h3>Отчет о матче</h3>
 				</div>
