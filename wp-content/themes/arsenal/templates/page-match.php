@@ -543,7 +543,14 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<div class="events-list">
 					<?php
 					if ( $events ) {
-						foreach ( $events as $event ) {
+						$processed_indices = array();
+						
+						foreach ( $events as $index => $event ) {
+							// Пропускаем если это событие уже обработано как часть замены
+							if ( isset( $processed_indices[ $index ] ) ) {
+								continue;
+							}
+							
 							$event_icon = '⚽';
 							$event_bg = 'event-goal';
 
@@ -582,21 +589,70 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							$event_text = '';
 							$event_comment = '';
 							
+							// Проверяем если это замена (out), ищем соответствующее событие замены (in)
 							if ( stripos( $event_name, 'substitution_out' ) !== false ) {
-								$event_text = $event->player_name ?? 'Игрок';
-								$event_comment = 'уходит с поля';
+								$player_out = $event->player_name ?? 'Игрок';
+								$player_in = '';
+								
+								// Ищем событие substitution_in для той же команды в близкое время
+								foreach ( $events as $check_index => $check_event ) {
+									if ( ! isset( $processed_indices[ $check_index ] ) && $check_index > $index ) {
+										$check_name = ! empty( $check_event->event_name ) ? strtolower( $check_event->event_name ) : '';
+										
+										if ( stripos( $check_name, 'substitution_in' ) !== false && 
+											 ! empty( $check_event->event_team_id ) && 
+											 $check_event->event_team_id === $event->event_team_id &&
+											 $check_event->minute == $event->minute ) {
+											$player_in = $check_event->player_name ?? '';
+											$processed_indices[ $check_index ] = true;
+											break;
+										}
+									}
+								}
+								
+								if ( ! empty( $player_in ) ) {
+									$event_text = $player_out . ' на ' . $player_in;
+									$event_comment = 'замена';
+								} else {
+									$event_text = $player_out;
+									$event_comment = 'уходит с поля';
+								}
 							} elseif ( stripos( $event_name, 'substitution_in' ) !== false ) {
-								$event_text = $event->player_name ?? 'Игрок';
-								$event_comment = 'выходит на поле';
+								// Это событие должно было быть обработано выше, пропускаем
+								continue;
 							} elseif ( stripos( $event_name, 'goal' ) !== false || stripos( $event_name, 'own_goal' ) !== false ) {
-								$event_text = $event->player_name ?? 'Игрок';
+							$player_scored = $event->player_name ?? 'Игрок';
+							$player_assist = '';
+							
+							// Ищем событие assist для той же команды в близкое время
+							foreach ( $events as $check_index => $check_event ) {
+								if ( ! isset( $processed_indices[ $check_index ] ) && $check_index > $index ) {
+									$check_name = ! empty( $check_event->event_name ) ? strtolower( $check_event->event_name ) : '';
+									
+									if ( stripos( $check_name, 'assist' ) !== false && 
+										 ! empty( $check_event->event_team_id ) && 
+										 $check_event->event_team_id === $event->event_team_id &&
+										 $check_event->minute == $event->minute ) {
+										$player_assist = $check_event->player_name ?? '';
+										$processed_indices[ $check_index ] = true;
+										break;
+									}
+								}
+							}
+							
+							if ( ! empty( $player_assist ) ) {
+								$event_text = $player_scored . ' (ассистенты: ' . $player_assist . ')';
+								$event_comment = 'гол';
+							} else {
+								$event_text = $player_scored;
 								$event_comment = 'гол';
 								if ( ! empty( $event->assist_name ) ) {
 									$event_comment .= ' (пас: ' . $event->assist_name . ')';
 								}
-							} elseif ( stripos( $event_name, 'assist' ) !== false ) {
-								$event_text = $event->player_name ?? 'Игрок';
-								$event_comment = 'голевая передача';
+							}
+						} elseif ( stripos( $event_name, 'assist' ) !== false ) {
+							// Это событие должно было быть обработано выше, пропускаем
+							continue;
 							} elseif ( stripos( $event_name, 'warning' ) !== false || stripos( $event_name, 'yellow' ) !== false ) {
 								$event_text = $event->player_name ?? 'Игрок';
 								$event_comment = 'жёлтая карточка';
