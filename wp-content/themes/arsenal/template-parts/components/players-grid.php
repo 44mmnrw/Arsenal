@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part: Players Grid (Figma Design)
+ * Template part: Players Grid
  *
  * Сетка карточек игроков с сортировкой по позициям
  *
@@ -46,14 +46,11 @@ foreach ( $players as $player ) {
 			<div class="teams-content">
 				<?php
 				foreach ( $players_by_position as $position_name => $position_players ) :
-					// Определяем тип сетки: один столбец для вратарей, четыре для остальных
-					$is_goalkeepers = ( stripos( $position_name, 'вратар' ) !== false );
-					$grid_class = $is_goalkeepers ? 'players-grid--single' : 'players-grid--multi';
 				?>
 					<div class="position-group">
 						<h2 class="position-heading"><?php echo esc_html( $position_name ); ?></h2>
 						
-						<div class="players-grid <?php echo esc_attr( $grid_class ); ?>">
+						<div class="players-grid">
 							<?php foreach ( $position_players as $player ) : 
 								// Получаем данные игрока
 								$photo_url = ! empty( $player->photo_url ) ? $player->photo_url : get_template_directory_uri() . '/assets/images/player-placeholder.png';
@@ -89,13 +86,14 @@ foreach ( $players as $player ) {
 								}
 								
 								// Используем функцию arsenal_get_player_stats из inc/player-functions.php
-								if ( function_exists( 'arsenal_get_player_stats' ) ) {
+								if ( function_exists( 'arsenal_get_player_stats' ) && ! empty( $player->player_id ) ) {
 									$player_stats = arsenal_get_player_stats( $player->player_id, $first_tournament, $current_year );
-									$matches_count = intval( $player_stats->matches_played ) ?: 0;
-									$goals_count = intval( $player_stats->goals ) ?: 0;
-									$assists_count = intval( $player_stats->assists ) ?: 0;
+									
+									$matches_count = ( $player_stats && ! empty( $player_stats->matches_played ) ) ? intval( $player_stats->matches_played ) : 0;
+									$goals_count = ( $player_stats && ! empty( $player_stats->goals ) ) ? intval( $player_stats->goals ) : 0;
+									$assists_count = ( $player_stats && ! empty( $player_stats->assists ) ) ? intval( $player_stats->assists ) : 0;
 								} else {
-									// Fallback если функция не определена
+									// Fallback если функция не определена или player_id пустой
 									$matches_count = 0;
 									$goals_count = 0;
 									$assists_count = 0;
@@ -125,7 +123,7 @@ foreach ( $players as $player ) {
 										<h3 class="player-card__name"><?php echo esc_html( $name_display ); ?></h3>
 										<p class="player-card__position"><?php echo esc_html( $position ); ?></p>
 										<?php if ( $age ) : ?>
-											<p class="player-card__meta"><?php echo esc_html( $age ); ?> • Беларусь</p>
+										<p class="player-card__meta"><?php echo esc_html( arsenal_pluralize_years( $age ) ); ?> • Беларусь</p>
 										<?php endif; ?>
 									</div>
 

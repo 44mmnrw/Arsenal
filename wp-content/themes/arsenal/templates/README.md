@@ -10,6 +10,7 @@
 - **page-match.php** - Детали матча (структура + компонент blocks/match-details)
 - **page-squad.php** - Состав команды (структура + компонент components/players-grid)
 - **page-calendar.php** - Календарь матчей (структура + компонент components/calendar-full)
+- **page-history.php** - История клуба (табы, временная шкала, рекорды, стадионы)
 - **page-player.php** - Профиль игрока
 
 ## Соглашения

@@ -1,12 +1,12 @@
 /**
- * Match Detail Page Styles (Based on Figma Design)
- * Professional football match presentation
+ * Стили страницы деталей матча (на основе дизайна Figma)
+ * Профессиональная демонстрация футбольного матча
  *
  * @package Arsenal
  * @since 1.0.0
  */
 
-/* Root variables */
+/* Корневые переменные */
 :root {
 	--color-home: #ff1a1a;
 	--color-away: #155dfc;
@@ -19,7 +19,7 @@
 	--spacing-lg: 1.5rem;
 	--spacing-md: 1rem;
 	--spacing-sm: 0.75rem;
-	--radius: 1.025rem;
+	--radius: 0.625rem;
 }
 
 .match-detail-page {
@@ -132,7 +132,7 @@
 	opacity: 0.6;
 }
 
-/* Score Section */
+/* Раздел счета */
 .match-score-section {
 	display: flex;
 	align-items: center;
@@ -192,7 +192,7 @@
 	margin: 0 0.5rem;
 }
 
-/* Match Detail Items */
+/* Элементы деталей матча */
 .match-detail-items {
 	display: flex;
 	align-items: center;
@@ -224,7 +224,7 @@
 }
 
 /* ============================================
-   MAIN CONTENT CONTAINER
+   ОСНОВНОЙ КОНТЕЙНЕР СОДЕРЖИМОГО
    ============================================ */
 .match-container {
 	max-width: 1536px;
@@ -235,7 +235,7 @@
 	gap: 1.5rem;
 }
 
-/* Section Cards */
+/* Карточки разделов */
 .section-card {
 	background-color: var(--color-card-bg);
 	border-radius: var(--radius);
@@ -264,7 +264,7 @@
 }
 
 /* ============================================
-   EVENTS SECTION
+   РАЗДЕЛ СОБЫТИЙ
    ============================================ */
 .events-section .section-card {
 	display: flex;
@@ -356,7 +356,7 @@
 	background-color: var(--color-away);
 }
 
-/* Toggle Events Button */
+/* Кнопка переключения событий */
 .toggle-events-btn {
 	margin-top: 1rem;
 	padding: 0.75rem 1.25rem;
@@ -374,7 +374,7 @@
 	transition: all 0.2s ease;
 }
 
-/* Toggle Lineups Button */
+/* Кнопка переключения составов */
 .toggle-lineup-btn {
 	display: none;
 }
@@ -394,7 +394,7 @@
 }
 
 /* ============================================
-   LINEUPS SECTION
+   РАЗДЕЛ СОСТАВОВ
    ============================================ */
 .lineups-section .section-card {
 	padding: 0;
@@ -535,14 +535,15 @@
 	text-overflow: ellipsis;
 }
 
-/* Pitch Visualization */
+/* Визуализация поля */
 .pitch-wrapper {
 	display: flex;
 	flex-direction: column;
-	background-color: var(--color-card-bg);
+	justify-content: flex-start;
+	background-color: rgb(255, 255, 255);
 	border-radius: var(--radius);
 	overflow: hidden;
-	min-height: 25rem;
+	width: 100%;
 }
 
 .pitch-title {
@@ -555,26 +556,27 @@
 }
 
 .pitch-field {
-	position: relative;
-	flex: 1;
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex-direction: column;
+	position: relative;
 	padding: 1rem;
-	background-color: white;
+	background-color: rgb(255, 255, 255);
 	width: 100%;
+	box-sizing: border-box;
 }
 
 .field-svg {
-	width: 100%;
-	height: 100%;
-	border: 0.25rem solid white;
+	width: 100% !important;
+	height: auto !important;
+	max-width: 100%;
+	display: block;
+	border: 0.25rem solid rgb(255, 255, 255);
 	border-radius: 0.625rem;
 	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* ============================================
-   REPORT SECTION
+   РАЗДЕЛ ОТЧЕТА
    ============================================ */
 .report-section .section-card {
 	min-height: 36.875rem;
@@ -600,7 +602,7 @@
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
+   АДАПТИВНЫЙ ДИЗАЙН
    ============================================ */
 @media (max-width: 1200px) {
 	.match-container {

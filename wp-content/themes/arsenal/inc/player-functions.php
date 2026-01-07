@@ -86,32 +86,42 @@ function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = nu
 	$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
 	$params = array_merge( array( $player_id ), $match_ids );
 	
-	$lineups = $wpdb->get_row( $wpdb->prepare(
-		"SELECT 
-			COUNT(*) as matches_played,
-			SUM(CASE WHEN is_starting = 1 THEN 1 ELSE 0 END) as matches_started,
-			SUM(CASE WHEN is_starting = 1 THEN 90 ELSE 0 END) as minutes_played
-		 FROM {$wpdb->prefix}arsenal_match_lineups
-		 WHERE player_id = %s AND match_id IN ($placeholders)",
+	// Проверяем сколько записей в lineups для этого игрока
+	$lineup_count = $wpdb->get_var( $wpdb->prepare(
+		"SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_lineups WHERE player_id = %s AND match_id IN ($placeholders)",
 		$params
 	) );
+	
+	$lineups = $wpdb->get_row( 
+		$wpdb->prepare(
+			"SELECT 
+				COUNT(*) as matches_played,
+				SUM(CASE WHEN is_starting = 1 THEN 1 ELSE 0 END) as matches_started,
+				SUM(CASE WHEN is_starting = 1 THEN 90 ELSE 0 END) as minutes_played
+			 FROM {$wpdb->prefix}arsenal_match_lineups
+			 WHERE player_id = %s AND match_id IN ($placeholders)",
+			$params
+		) 
+	);
 	
 	// ШАГ 3: Вычисляем реальные минуты на основе подстановок
 	// Для каждого матча где был игрок в lineups, ищем события sub_out/sub_in
 	$params_events = array_merge( array( $player_id ), $match_ids );
 	
-	$minutes_data = $wpdb->get_results( $wpdb->prepare(
-		"SELECT 
-			ml.match_id,
-			ml.is_starting,
-			MIN(CASE WHEN me.event_type = '8A3000CC' THEN me.minute END) as sub_out,
-			MAX(CASE WHEN me.event_type = 'F6804FE9' THEN me.minute END) as sub_in
-		 FROM {$wpdb->prefix}arsenal_match_lineups ml
-		 LEFT JOIN {$wpdb->prefix}arsenal_match_events me ON ml.match_id = me.match_id AND me.player_id = ml.player_id
-		 WHERE ml.player_id = %s AND ml.match_id IN ($placeholders)
-		 GROUP BY ml.match_id",
-		$params_events
-	) );
+	$minutes_data = $wpdb->get_results( 
+		$wpdb->prepare(
+			"SELECT 
+				ml.match_id,
+				ml.is_starting,
+				MIN(CASE WHEN me.event_type = '8A3000CC' THEN me.minute END) as sub_out,
+				MAX(CASE WHEN me.event_type = 'F6804FE9' THEN me.minute END) as sub_in
+			 FROM {$wpdb->prefix}arsenal_match_lineups ml
+			 LEFT JOIN {$wpdb->prefix}arsenal_match_events me ON ml.match_id = me.match_id AND me.player_id = ml.player_id
+			 WHERE ml.player_id = %s AND ml.match_id IN ($placeholders)
+			 GROUP BY ml.match_id",
+			$params_events
+		) 
+	);
 	
 	// Считаем минуты для каждого матча
 	$total_minutes = 0;
@@ -140,16 +150,18 @@ function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = nu
 	// Обновляем minutes_played в lineups
 	$lineups->minutes_played = $total_minutes;
 	
-	$events = $wpdb->get_row( $wpdb->prepare(
-		"SELECT 
-			SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
-			SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
-			SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
-			SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards
-		 FROM {$wpdb->prefix}arsenal_match_events
-		 WHERE player_id = %s AND match_id IN ($placeholders)",
-		$params_events
-	) );
+	$events = $wpdb->get_row( 
+		$wpdb->prepare(
+			"SELECT 
+				SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
+				SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
+				SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
+				SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards
+			 FROM {$wpdb->prefix}arsenal_match_events
+			 WHERE player_id = %s AND match_id IN ($placeholders)",
+			$params_events
+		) 
+	);
 	
 	return (object) array(
 		'matches_played' => $lineups->matches_played ?? 0,

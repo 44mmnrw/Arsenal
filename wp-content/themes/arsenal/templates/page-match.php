@@ -1,10 +1,10 @@
 <?php
 /**
- * Template Name: Match Details Page
- * Description: Displays detailed information about a match using Figma design
+ * Имя шаблона: Страница деталей матча
+ * Описание: Отображает подробную информацию о матче с использованием дизайна Figma
  *
- * URL Pattern: /match/{team_id}/{YYYY-MM-DD}/
- * Retrieves match data via arsenal_get_match_by_date_and_team()
+ * Паттерн URL: /match/{team_id}/{YYYY-MM-DD}/
+ * Получает данные матча через arsenal_get_match_by_date_and_team()
  *
  * @package Arsenal
  * @since 1.0.0
@@ -16,14 +16,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-// Enqueue match page styles
+// Загрузить стили страницы матча
 wp_enqueue_style( 'arsenal-page-match', get_template_directory_uri() . '/assets/css/page-match.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
 
-// Get URL parameters
+// Получить параметры URL
 $match_date = get_query_var( 'match_date' );
 $team_id    = get_query_var( 'team_id' );
 
-// Validate parameters
+// Проверить параметры
 if ( ! $team_id || ! $match_date || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $match_date ) ) {
 	echo '<div class="container" style="padding: 60px 0; text-align: center;">';
 	echo '<h1>Матч не найден</h1>';
@@ -33,7 +33,7 @@ if ( ! $team_id || ! $match_date || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $matc
 	return;
 }
 
-// Get match data
+// Получить данные матча
 $match = arsenal_get_match_by_date_and_team( $match_date, $team_id );
 
 if ( ! $match ) {
@@ -46,16 +46,16 @@ if ( ! $match ) {
 	return;
 }
 
-// Get match events and lineups
+// Получить события матча и составы
 $events    = arsenal_get_match_events( $match->match_id );
 $lineups   = arsenal_get_match_lineups( $match->match_id );
 $organized = arsenal_organize_lineups( $lineups, $match->home_team_id );
 
-// Get stadium information for background
+// Получить информацию о стадионе для фона
 $stadium = arsenal_get_stadium_by_id( $match->stadium_id );
 $stadium_photo_url = '';
 if ( $stadium && ! empty( $stadium->photo_url ) ) {
-    // Convert relative path to full URL if needed
+    // Преобразовать относительный путь в полный URL при необходимости
     if ( ! str_starts_with( $stadium->photo_url, 'http://' ) && ! str_starts_with( $stadium->photo_url, 'https://' ) ) {
         $stadium_photo_url = home_url( $stadium->photo_url );
     } else {
@@ -66,12 +66,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 ?>
 
 <main class="match-detail-page">
-	<!-- Hero Header Section -->
+	<!-- Секция героя с заголовком -->
 	<header class="match-hero-header" style="<?php echo $stadium_photo_url ? 'background-image: url(' . esc_url( $stadium_photo_url ) . ');' : ''; ?>">
 		<div class="hero-background"></div>
 		<div class="hero-overlay"></div>
 		<div class="hero-content">
-			<!-- Back Button -->
+			<!-- Кнопка возврата -->
 			<a href="<?php echo esc_url( home_url( '/matches/' ) ); ?>" class="back-button">
 				<svg class="back-icon" viewBox="0 0 20 20" fill="white" width="20" height="20">
 					<path d="M12 4L6 10M6 10L12 16" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -79,7 +79,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				Вернуться к матчам
 			</a>
 
-			<!-- Match Meta Info -->
+			<!-- Мета-информация матча -->
 			<div class="match-meta">
 				<span class="league-badge">Высшая лига</span>
 				<span class="tour-info">Тур <?php echo intval( $match->tour ); ?></span>
@@ -87,9 +87,9 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<span class="match-date"><?php echo esc_html( date_i18n( 'j F Y', strtotime( $match->match_date ) ) ); ?></span>
 			</div>
 
-			<!-- Score Section -->
+			<!-- Раздел счета -->
 			<div class="match-score-section">
-				<!-- Home Team -->
+				<!-- Домашняя команда -->
 				<div class="team-block">
 				<div class="team-icon-circle">
 					<?php if ( ! empty( $match->home_logo ) ) : ?>
@@ -101,14 +101,14 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<h2 class="team-title"><?php echo esc_html( $match->home_team_name ); ?></h2>
 			</div>
 
-			<!-- Big Score Display -->
+			<!-- Большой дисплей счета -->
 			<div class="score-display">
 				<span class="score-num"><?php echo intval( $match->home_score ); ?></span>
 				<span class="score-colon">:</span>
 				<span class="score-num"><?php echo intval( $match->away_score ); ?></span>
 			</div>
 
-			<!-- Away Team -->
+			<!-- Гостевая команда -->
 			<div class="team-block">
 				<div class="team-icon-circle">
 					<?php if ( ! empty( $match->away_logo ) ) : ?>
@@ -121,7 +121,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 			</div>
 		</div>
 
-		<!-- Match Details -->
+		<!-- Детали матча -->
 			<div class="match-detail-items">
 				<div class="detail-item">
 					<svg viewBox="0 0 16 16" class="detail-icon">
@@ -143,17 +143,17 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 			</div>
 
-			<!-- Referee Info -->
+		<!-- Информация о судье -->
 			<div class="referee-info">
 				Судья: <?php echo esc_html( $match->main_referee ?? 'Алексей Кулешов' ); ?>
 			</div>
 		</div>
 	</header>
 
-	<!-- Content Container -->
+	<!-- Контейнер контента -->
 	<div class="match-container">
 
-		<!-- SECTION 1: Lineups and Pitch -->
+		<!-- РАЗДЕЛ 1: Составы и поле -->
 		<section class="lineups-section">
 			<!-- JavaScript для раскрытия составов на мобилах -->
 			<script>
@@ -193,7 +193,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 			</script>
 
 			<div class="lineups-grid">
-				<!-- Home Team Panel -->
+				<!-- Панель домашней команды -->
 				<div class="lineup-panel home-panel">
 					<div class="lineup-header home-header">
 						<h3 class="team-name"><?php echo esc_html( $match->home_team_name ); ?></h3>
@@ -251,12 +251,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					</div>
 				</div>
 
-				<!-- Pitch Visualization -->
+				<!-- Визуализация поля -->
 				<div class="pitch-wrapper">
 					<div class="pitch-title">Поле</div>
 					<div class="pitch-field">
 						<?php
-						// Function to generate coordinates based on player count
+						// Функция для генерации координат на основе количества игроков
 						function arsenal_get_player_coords( $player_count, $y_position, $field_width = 667, $side_padding = 50 ) {
 							$coords = array();
 							$playable_width = $field_width - ( 2 * $side_padding );
@@ -283,7 +283,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								$coords[] = array( $center + 80, $y_position );
 								$coords[] = array( $center + 160, $y_position );
 							} else {
-								// For 6+ players, distribute evenly
+							// Для 6+ игроков распределить равномерно
 								$step = $playable_width / ( $player_count + 1 );
 								for ( $i = 1; $i <= $player_count; $i++ ) {
 									$coords[] = array( $side_padding + ( $step * $i ), $y_position );
@@ -293,7 +293,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							return $coords;
 						}
 						
-						// Prepare player positions for visualization
+						// Подготовить позиции игроков для визуализации
 						$home_players = array();
 						$away_players = array();
 						
@@ -321,21 +321,21 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							}
 						}
 						
-						// Count players by position for home team
+						// Подсчитать игроков по позиции для домашней команды
 						$home_position_counts = array();
 						foreach ( $home_players as $player ) {
 							$pos = $player['position'];
 							$home_position_counts[ $pos ] = isset( $home_position_counts[ $pos ] ) ? $home_position_counts[ $pos ] + 1 : 1;
 						}
 						
-						// Count players by position for away team
+						// Подсчитать игроков по позиции для гостевой команды
 						$away_position_counts = array();
 						foreach ( $away_players as $player ) {
 							$pos = $player['position'];
 							$away_position_counts[ $pos ] = isset( $away_position_counts[ $pos ] ) ? $away_position_counts[ $pos ] + 1 : 1;
 						}
 						
-						// Build dynamic position maps for home team
+						// Построить динамические карты позиций для домашней команды
 						$home_positions_map = array(
 							'Вратарь' => arsenal_get_player_coords( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 900 ),
 							'Защитник' => arsenal_get_player_coords( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 750 ),
@@ -343,7 +343,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							'Нападающий' => arsenal_get_player_coords( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 320 )
 						);
 						
-						// Build dynamic position maps for away team
+						// Построить динамические карты позиций для гостевой команды
 						$away_positions_map = array(
 							'Вратарь' => arsenal_get_player_coords( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 100 ),
 							'Защитник' => arsenal_get_player_coords( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 250 ),
@@ -351,7 +351,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							'Нападающий' => arsenal_get_player_coords( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 680 )
 						);
 						?>
-						<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="667px" height="1000px" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 667 1000.52" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+						<svg class="field-svg" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 667 1000.52" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
 							<defs>
 								<clipPath id="id0">
 									<path d="M635.73 0c17.27,0 31.27,14 31.27,31.27l0 937.99c0,17.26 -14,31.26 -31.27,31.26l-604.46 0c-17.27,0 -31.27,-14 -31.27,-31.26l0 -937.99c0,-17.27 14,-31.27 31.27,-31.27l604.46 0z"/>
@@ -387,7 +387,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								</g>
 								<path fill="none" d="M635.73 0c17.27,0 31.27,14 31.27,31.27l0 937.99c0,17.26 -14,31.26 -31.27,31.26l-604.46 0c-17.27,0 -31.27,-14 -31.27,-31.26l0 -937.99c0,-17.27 14,-31.27 31.27,-31.27l604.46 0z"/>
 							</g>
-							<!-- Home Team Players (Red) -->
+							<!-- Игроки домашней команды (красные) -->
 							<?php
 							$home_player_idx = array(
 								'Вратарь' => 0,
@@ -414,7 +414,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							}
 							?>
 							
-							<!-- Away Team Players (Blue) -->
+							<!-- Игроки гостевой команды (синие) -->
 							<?php
 							$away_player_idx = array(
 								'Вратарь' => 0,
@@ -443,7 +443,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						</svg>
 					</div>
 				</div>
-				<!-- Away Team Panel -->
+				<!-- Панель гостевой команды -->
 				<div class="lineup-panel away-panel">
 					<div class="lineup-header away-header">
 						<h3 class="team-name"><?php echo esc_html( $match->away_team_name ); ?></h3>
@@ -502,7 +502,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 			</div>
 		</section>
-        <!-- SECTION 2: Match Events -->
+        <!-- РАЗДЕЛ 2: События матча -->
 		<section class="events-section">
 			<div class="section-card">
 				<!-- JavaScript для раскрывания событий -->
@@ -547,7 +547,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							$event_icon = '⚽';
 							$event_bg = 'event-goal';
 
-							// Determine event type by event_name (not event_type which is ID)
+							// Определить тип события по event_name (а не по event_type, который является ID)
 							$event_name = ! empty( $event->event_name ) ? strtolower( $event->event_name ) : '';
 							
 							if ( stripos( $event_name, 'goal' ) !== false || stripos( $event_name, 'own_goal' ) !== false ) {
@@ -567,18 +567,18 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								$event_bg = 'event-sub';
 							}
 
-							// Format minute
+							// Формат минуты
 							$minute = isset( $event->minute ) ? (int) $event->minute : 0;
 							if ( isset( $event->extra_time ) && $event->extra_time > 0 ) {
 								$minute .= '+' . (int) $event->extra_time;
 							}
 
-							// Get team from match_lineups (stored in event_team_id field via LEFT JOIN)
+							// Получить команду из match_lineups (хранится в поле event_team_id через LEFT JOIN)
 							$is_home = ! empty( $event->event_team_id ) && $event->event_team_id === $match->home_team_id;
 							$team_name = $is_home ? $match->home_team_name : $match->away_team_name;
 							$team_color = $is_home ? 'team-home' : 'team-away';
 
-							// Build event text
+							// Построить текст события
 							$event_text = '';
 							$event_comment = '';
 							
@@ -639,7 +639,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 			</div>
 		</section>
 
-		<!-- SECTION 3: Match Report -->
+		<!-- РАЗДЕЛ 3: Отчет о матче -->
 		<section class="report-section">
 			<div class="section-card">
 				<div class="section-header">

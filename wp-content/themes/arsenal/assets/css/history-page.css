@@ -1,0 +1,670 @@
+/**
+ * Стили для страницы "История клуба"
+ *
+ * @package Arsenal
+ * @since 1.0.0
+ */
+
+/* ========================================
+   Основные переменные и классы
+   ======================================== */
+
+.club-page {
+    padding: 32px 16px;
+    max-width: 1440px;
+    margin: 0 auto;
+    background: #ffffff;
+}
+
+.club-page__header {
+    margin-bottom: 32px;
+}
+
+.club-page__title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin: 0 0 10px 0;
+    line-height: 43.2px;
+}
+
+/* ========================================
+   Вкладки (Tabs)
+   ======================================== */
+
+.club-page__tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    background: transparent;
+}
+
+.club-page__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background: #f3f4f6;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0a0a0a;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.club-page__tab:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.club-page__tab--active {
+    background: #900;
+    color: white;
+}
+
+.club-page__tab-icon {
+    font-size: 18px;
+}
+
+.club-page__tab-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+}
+
+/* ========================================
+   Основной контент
+   ======================================== */
+
+.club-page__content {
+    background: rgb(255, 255, 255);
+    padding: 32px;
+  
+
+.club-page__section {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+/* ========================================
+   Введение (История клуба)
+   ======================================== */
+
+.club-page__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.club-page__section-title {
+    font-size: 30px;
+    font-weight: 600;
+    color: #0a0a0a;
+    margin: 0;
+    line-height: 39px;
+}
+
+.club-page__intro-text {
+    font-size: 16px;
+    color: #4a5565;
+    line-height: 25.6px;
+    margin: 0;
+    max-width: 1370px;
+}
+
+/* ========================================
+   Временная шкала (Timeline)
+   ======================================== */
+
+.club-page__timeline-section {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.club-page__subsection-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #900;
+    margin: 0;
+    line-height: 33.6px;
+}
+
+.club-page__timeline {
+    position: relative;
+    height: 216px;
+    overflow-x: auto;
+    padding: 48px 0;
+}
+
+.club-page__timeline-line {
+    position: absolute;
+    top: 106px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #d1d5dc;
+    border-radius: 2px;
+}
+
+.club-page__timeline-progress {
+    position: absolute;
+    top: 106px;
+    left: 0;
+    height: 4px;
+    background: #900;
+    border-radius: 2px;
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+.club-page__timeline-events {
+    display: flex;
+    position: relative;
+    z-index: 2;
+    justify-content: space-between;
+    height: 72px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.club-page__timeline-event {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    position: relative;
+}
+
+.club-page__timeline-label {
+    background: #e5e7eb;
+    padding: 3px 12px;
+    border-radius: 3000px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #0a0a0a;
+    line-height: 24px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.club-page__timeline-dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 4px solid white;
+    position: absolute;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.06);
+    z-index: 3;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.club-page__timeline-dot:hover {
+    width: 30px;
+    height: 30px;
+    border-width: 5px;
+    top: 44px;
+}
+
+/* Всплывающая подсказка (tooltip) */
+.club-page__timeline-tooltip {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+}
+
+/* Стрелка подсказки */
+.club-page__timeline-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #0a0a0a;
+}
+
+/* Показываем подсказку при наведении на точку - используем sibling selector */
+.club-page__timeline-dot:hover ~ .club-page__timeline-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Убираем старые стили */
+.club-page__timeline-dot::before {
+    content: none !important;
+}
+
+.club-page__timeline-dot::after {
+    content: none !important;
+}
+
+/* ========================================
+   Легенда временной шкалы
+   ======================================== */
+
+.club-page__timeline-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 32px;
+    margin-top: 20px;
+}
+
+.club-page__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.club-page__legend-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.club-page__legend-label {
+    font-size: 14px;
+    color: #0a0a0a;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+/* ========================================
+   Рекорды и достижения
+   ======================================== */
+
+.club-page__records-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.club-page__records-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+/* Основная карточка достижений */
+.club-page__achievement-card {
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.06);
+}
+
+.club-page__achievement-card--primary {
+    background: linear-gradient(180deg, #990000 0%, #ff1a1a 100%);
+    color: white;
+    grid-row: span 2;
+}
+
+.club-page__achievement-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.club-page__achievement-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.club-page__achievement-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    line-height: 28px;
+}
+
+.club-page__achievement-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.club-page__achievement-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.club-page__achievement-emoji {
+    font-size: 16px;
+    color: #ffdf20;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.club-page__achievement-text {
+    font-size: 16px;
+    color: white;
+    line-height: 24px;
+    margin: 0;
+}
+
+/* Карточка лучших результатов */
+.club-page__records-card {
+    background: white;
+    border: 2px solid #900;
+    border-radius: 10px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.06);
+    grid-row: span 2;
+}
+
+.club-page__records-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.club-page__records-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.club-page__records-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0a0a0a;
+    margin: 0;
+    line-height: 28px;
+}
+
+.club-page__records-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.club-page__record-item {
+    font-size: 16px;
+    color: #364153;
+    line-height: 24px;
+    margin: 0;
+}
+
+.club-page__record-item strong {
+    font-weight: 700;
+    color: #364153;
+}
+
+/* Статистические карточки */
+.club-page__stat-card {
+    background: white;
+    border-left: 4px solid #ff1a1a;
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.club-page__stat-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5565;
+    margin: 0;
+    line-height: 19.6px;
+}
+
+.club-page__stat-value {
+    font-size: 16px;
+    color: #101828;
+    line-height: 25.6px;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ========================================
+   Домашние стадионы
+   ======================================== */
+
+.club-page__stadiums-section {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.club-page__stadiums-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.club-page__stadium-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: transparent;
+}
+
+.club-page__stadium-icon {
+    background: #900;
+    border-radius: 10px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.club-page__stadium-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.club-page__stadium-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0a0a0a;
+    margin: 0;
+    line-height: 25.2px;
+}
+
+.club-page__stadium-details {
+    font-size: 14px;
+    color: #4a5565;
+    margin: 0;
+    line-height: 22.4px;
+}
+
+/* ========================================
+   Основной контент из редактора
+   ======================================== */
+
+.club-page__main-content {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.club-page__main-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.club-page__main-content h2,
+.club-page__main-content h3 {
+    color: #900;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+
+/* ========================================
+   Адаптивный дизайн
+   ======================================== */
+
+@media (max-width: 768px) {
+    .club-page {
+        padding: 16px 8px;
+    }
+
+    .club-page__content {
+        padding: 16px;
+    }
+
+    .club-page__title {
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .club-page__section {
+        gap: 32px;
+    }
+
+    .club-page__tabs {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .club-page__tab {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 16px;
+    }
+
+    .club-page__section-title {
+        font-size: 24px;
+        line-height: 32px;
+    }
+
+    .club-page__subsection-title {
+        font-size: 20px;
+    }
+
+    .club-page__records-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .club-page__achievement-card--primary {
+        grid-row: auto;
+    }
+
+    .club-page__records-card {
+        grid-row: auto;
+    }
+
+    .club-page__stadiums-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .club-page__timeline-events {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+
+    .club-page__timeline-legend {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .club-page__intro-text {
+        max-width: 100%;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .club-page {
+        padding: 12px 4px;
+    }
+
+    .club-page__content {
+        padding: 12px;
+    }
+
+    .club-page__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .club-page__section-title {
+        font-size: 18px;
+    }
+
+    .club-page__subsection-title {
+        font-size: 18px;
+    }
+
+    .club-page__tab {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .club-page__records-grid {
+        gap: 16px;
+    }
+
+    .club-page__stat-card {
+        padding: 16px 12px;
+    }
+
+    .club-page__stadium-card {
+        gap: 12px;
+    }
+
+    .club-page__stadium-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .club-page__achievement-list,
+    .club-page__records-list {
+        gap: 6px;
+    }
+}
+}

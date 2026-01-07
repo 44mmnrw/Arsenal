@@ -72,7 +72,7 @@ if ( $arsenal_team_id ) {
 		),
 		array(
 			'number' => $total_players ?: '0',
-			'label'  => 'Игроков в составе',
+			'label'  => arsenal_get_player_form( $total_players ?: 0 ) . ' в составе',
 		),
 	);
 } else {

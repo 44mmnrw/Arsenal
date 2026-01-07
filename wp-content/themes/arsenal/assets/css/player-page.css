@@ -14,7 +14,7 @@
    PLAYER HERO SECTION
    ======================================== */
 .player-hero {
-	background: linear-gradient(180deg, #990000 0%, #CC0000 50%, #990000 100%);
+	background: linear-gradient(180deg, var(--red-900) 0%, var(--red-700) 50%, var(--red-800) 100%);
 	height: 31rem;
 	padding: 40px 0 40px;
 	position: relative;
@@ -50,8 +50,7 @@
 	width: 100%;
 	max-width: 100%;
 	height: auto;
-	margin: 0 auto;
-	background: rgba(139, 0, 0, 0.4);
+	margin: 0 auto;	
 	border-radius: 36px;
 	overflow: hidden;
 	display: flex;
@@ -64,6 +63,7 @@
 .player-photo-wrapper img {
 	height: 100%;
 	width: 100%;
+	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
 	aspect-ratio: 1 / 1;
 	object-fit: contain;
 	display: block;

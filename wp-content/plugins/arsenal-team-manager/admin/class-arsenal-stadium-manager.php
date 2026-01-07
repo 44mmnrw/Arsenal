@@ -77,9 +77,11 @@ class Arsenal_Stadium_Manager {
             return false;
         }
         
+        $name = sanitize_text_field( $data['name'] );
+        
         $insert_data = array(
             'stadium_id' => sanitize_text_field( $data['stadium_id'] ?? '' ),
-            'name' => sanitize_text_field( $data['name'] ),
+            'name' => $name,
             'city' => sanitize_text_field( $data['city'] ?? '' ),
             'capacity' => isset( $data['capacity'] ) ? intval( $data['capacity'] ) : null,
             'photo_url' => sanitize_text_field( $data['photo_url'] ?? '' ),
@@ -110,7 +112,7 @@ class Arsenal_Stadium_Manager {
         $update_data = array();
         $format = array();
         
-        if ( isset( $data['name'] ) ) {
+        if ( isset( $data['name'] ) && ! empty( $data['name'] ) ) {
             $update_data['name'] = sanitize_text_field( $data['name'] );
             $format[] = '%s';
         }
@@ -120,7 +122,7 @@ class Arsenal_Stadium_Manager {
             $format[] = '%s';
         }
         
-        if ( isset( $data['capacity'] ) ) {
+        if ( isset( $data['capacity'] ) && ! empty( $data['capacity'] ) ) {
             $update_data['capacity'] = intval( $data['capacity'] );
             $format[] = '%d';
         }

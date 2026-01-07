@@ -19,9 +19,37 @@ define( 'ARSENAL_THEME_DIR', get_template_directory() );
 define( 'ARSENAL_THEME_URI', get_template_directory_uri() );
 
 /**
+ * Отключение встроенных стилей WordPress
+ * Все стили управляются через наши CSS файлы
+ */
+add_action( 'wp_enqueue_scripts', function() {
+	// Отключить глобальные стили
+	wp_dequeue_style( 'global-styles' );
+	wp_deregister_style( 'global-styles' );
+	
+	// Отключить встроенные стили блоков
+	wp_dequeue_style( 'wp-block-library' );
+	wp_deregister_style( 'wp-block-library' );
+}, 100 );
+
+// Отключить inline глобальные стили в footer
+remove_action( 'wp_footer', 'wp_print_global_styles' );
+remove_action( 'wp_footer', 'wp_print_global_styles_wrapper' );
+
+// Отключить в редакторе админ-панели
+add_action( 'admin_init', function() {
+	wp_dequeue_style( 'global-styles' );
+	wp_deregister_style( 'global-styles' );
+}, 100 );
+
+/**
  * Подключение файлов темы
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
+
+/**
+ * Паттерны отключены - используется классический редактор
+ */
 
 /**
  * Настройка темы
@@ -45,9 +73,10 @@ if ( ! function_exists( 'arsenal_setup' ) ) {
 			'script',
 		) );
 
-		// Отключаем блочный редактор (Gutenberg) для всех post types
-		add_filter( 'use_block_editor_for_post_type', '__return_false', 100 );
-		add_filter( 'use_block_editor_for_post', '__return_false', 100 );
+		// Отключаем блочный редактор (Gutenberg) везде - используем классический редактор
+		add_filter( 'use_block_editor_for_post_type', function() {
+			return false;
+		}, 10, 2 );
 
 		// Поддержка пользовательского логотипа
 		add_theme_support( 'custom-logo', array(
@@ -133,6 +162,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			ARSENAL_VERSION
 		);
 
+		// Стили страницы истории
+		if ( is_page_template( 'templates/page-history.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'history' ) ) ) {
+			wp_enqueue_style(
+				'arsenal-history',
+				ARSENAL_THEME_URI . '/assets/css/history-page.css',
+				array( 'arsenal-patterns' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы статистики игрока (только для шаблона Статистика игрока)
 		if ( get_query_var( 'player_id' ) ) {
 			wp_enqueue_style(
@@ -198,6 +237,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-match',
 				ARSENAL_THEME_URI . '/assets/css/page-match.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
+		// Стили страницы истории клуба (только для страницы История)
+		if ( is_page_template( 'templates/page-history.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'history' ) ) ) {
+			wp_enqueue_style(
+				'arsenal-history',
+				ARSENAL_THEME_URI . '/assets/css/history-page.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -1056,6 +1105,33 @@ if ( ! function_exists( 'arsenal_pluralize_spectators' ) ) {
 			return $count . ' зрителя';
 		} else {
 			return $count . ' зрителей';
+		}
+	}
+}
+
+/**
+ * Склонение слова "игрок"
+ * 
+ * @param int $count Количество игроков
+ * @return string Форма слова (игрок, игрока, игроков)
+ */
+if ( ! function_exists( 'arsenal_get_player_form' ) ) {
+	function arsenal_get_player_form( $count ) {
+		$remainder = $count % 10;
+		$remainder100 = $count % 100;
+		
+		// Спецслучай для 11-19
+		if ( $remainder100 >= 11 && $remainder100 <= 19 ) {
+			return 'игроков';
+		}
+		
+		// Для остального
+		if ( $remainder == 1 ) {
+			return 'игрок';
+		} elseif ( $remainder >= 2 && $remainder <= 4 ) {
+			return 'игрока';
+		} else {
+			return 'игроков';
 		}
 	}
 }

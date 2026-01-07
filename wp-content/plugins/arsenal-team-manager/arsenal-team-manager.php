@@ -334,6 +334,16 @@ class Arsenal_Team_Manager {
             'arsenal-player-edit',
             array( $this, 'render_player_edit' )
         );
+        
+        // Скрытая страница добавления игрока (без пункта меню)
+        add_submenu_page(
+            null,
+            'Добавить игрока',
+            'Добавить игрока',
+            'manage_options',
+            'arsenal-player-add',
+            array( $this, 'render_player_add' )
+        );
     }
     
     /**
@@ -416,6 +426,13 @@ class Arsenal_Team_Manager {
      * Редактирование/добавление игрока
      */
     public function render_player_edit() {
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/player-edit.php';
+    }
+    
+    /**
+     * Добавление игрока
+     */
+    public function render_player_add() {
         include ARSENAL_TM_PLUGIN_DIR . 'admin/player-edit.php';
     }
     
