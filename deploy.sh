@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 REPO_DIR="/var/www/site_user/data/arsenal-repo"
 WEB_DIR="/var/www/site_user/data/www/1779917-cq85026.twc1.net"
 REPO_URL="https://github.com/44mmnrw/arsenal.git"
-BRANCH="dev"
+BRANCH="dev_main"
 
 echo -e "${GREEN}=== Начало деплоя ФК Арсенал ===${NC}"
 echo -e "${YELLOW}Директория репозитория: ${REPO_DIR}${NC}"
