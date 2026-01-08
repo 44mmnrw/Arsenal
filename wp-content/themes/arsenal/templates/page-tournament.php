@@ -24,7 +24,7 @@ $active_season_year = get_option( 'arsenal_active_season_year', intval( date( 'Y
 
 <main id="main" class="site-main tournament-page">
 	
-	<div class="tournament-container">
+	<div class="tournament-container" style="max-width: var(--container-max-width); margin: 0 auto; padding: 0 2.5rem;">
 		
 		<!-- Заголовок турнира -->
 		<div class="tournament-header">

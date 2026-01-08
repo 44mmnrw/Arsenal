@@ -24,7 +24,7 @@ function arsenal_get_match_by_date_and_team( $match_date, $team_id ) {
 
     $query = $wpdb->prepare(
         "SELECT m.id, m.match_id, m.match_date, m.match_time, m.home_team_id, m.away_team_id, m.home_score, m.away_score,
-                m.status, m.tour, m.attendance, m.main_referee, m.assistant_referees_1, m.assistant_referees_2, m.stadium_id, m.league_id, m.match_report,
+                m.status, m.tour, m.attendance, m.main_referee, m.assistant_referees_1, m.assistant_referees_2, m.fourth_referee, m.referee_inspector, m.delegate, m.stadium_id, m.league_id, m.match_report,
                 ht.name AS home_team_name, ht.logo_url AS home_logo,
                 at.name AS away_team_name, at.logo_url AS away_logo,
                 s.name AS stadium_name

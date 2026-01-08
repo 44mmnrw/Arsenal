@@ -59,9 +59,6 @@ class Arsenal_Match_Admin {
         $filters = array();
         if ( ! empty( $_GET['filter_team'] ) ) {
             $filters['team_id'] = sanitize_text_field( $_GET['filter_team'] );
-        } else {
-            // По умолчанию показываем матчи команды Арсенал
-            $filters['team_id'] = 'EB8AA245'; // ID команды Арсенал
         }
         if ( ! empty( $_GET['filter_status'] ) ) {
             $filters['status'] = sanitize_text_field( $_GET['filter_status'] );

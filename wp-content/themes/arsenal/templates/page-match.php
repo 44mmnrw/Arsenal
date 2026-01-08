@@ -73,8 +73,44 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 		<div class="hero-content">
 			<!-- Мета-информация матча -->
 			<div class="match-meta">
-				<span class="league-badge">Высшая лига</span>
-				<span class="tour-info">Тур <?php echo intval( $match->tour ); ?></span>
+				<?php 
+				global $wpdb;
+				$tournament_name = 'Турнир';
+				$tournament_id = '';
+				if ( ! empty( $match->match_id ) ) {
+					// Получить tournament_id из wp_arsenal_matches
+					$tournament_id = $wpdb->get_var( $wpdb->prepare(
+						"SELECT tournament_id FROM {$wpdb->prefix}arsenal_matches WHERE match_id = %s",
+						$match->match_id
+					) );
+					
+					if ( ! empty( $tournament_id ) ) {
+						// Получить name из wp_arsenal_tournaments по tournament_id
+						$tournament_name = $wpdb->get_var( $wpdb->prepare(
+							"SELECT name FROM {$wpdb->prefix}arsenal_tournaments WHERE tournament_id = %s",
+							$tournament_id
+						) );
+						if ( ! $tournament_name ) {
+							$tournament_name = 'Турнир';
+						}
+					}
+				}
+				
+				// Определить текст тура (для Кубка - этапы, для других - номер тура)
+				$tour_text = 'Тур ' . intval( $match->tour );
+				if ( $tournament_id === 'E4DE8DC0' ) { // Кубок Беларуси
+					$tour_map = array(
+						1 => '1/16 Финала',
+						2 => '1/8 Финала',
+						3 => '1/4 Финала',
+						4 => '1/2 Финала',
+						5 => 'Финал'
+					);
+					$tour_text = $tour_map[ intval( $match->tour ) ] ?? 'Тур ' . intval( $match->tour );
+				}
+				?>
+				<span class="league-badge"><?php echo esc_html( $tournament_name ); ?></span>
+				<span class="tour-info"><?php echo esc_html( $tour_text ); ?></span>
 				<span class="meta-sep">•</span>
 				<span class="match-date"><?php echo esc_html( date_i18n( 'j F Y', strtotime( $match->match_date ) ) ); ?></span>
 			</div>
@@ -116,10 +152,17 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 		<!-- Детали матча -->
 			<div class="match-detail-items">
 				<div class="detail-item">
-					<svg viewBox="0 0 16 16" class="detail-icon">
-						<path d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z" fill="#d1d5dc"/>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
+					<path d="M13.3334 6.66667C13.3334 9.99533 9.64069 13.462 8.40069 14.5327C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5327C6.35935 13.462 2.66669 9.99533 2.66669 6.66667C2.66669 5.25218 3.22859 3.89563 4.22878 2.89543C5.22898 1.89524 6.58553 1.33333 8.00002 1.33333C9.41451 1.33333 10.7711 1.89524 11.7713 2.89543C12.7715 3.89563 13.3334 5.25218 13.3334 6.66667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M8 8.66667C9.10457 8.66667 10 7.77124 10 6.66667C10 5.5621 9.10457 4.66667 8 4.66667C6.89543 4.66667 6 5.5621 6 6.66667C6 7.77124 6.89543 8.66667 8 8.66667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>
-					<?php echo esc_html( $match->stadium_name ?? 'Стадион "Строитель"' ); ?>, Дзержинск
+					<?php 
+					if ( $stadium ) {
+						echo esc_html( $stadium->name ) . ', ' . esc_html( $stadium->city );
+					} else {
+						echo esc_html( $match->stadium_name ?? 'Стадион "Строитель"' ) . ', Дзержинск';
+					}
+					?>
 				</div>
 				<div class="detail-item">
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
@@ -153,9 +196,36 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 			</div>
 
-		<!-- Информация о судье -->
+		<!-- Информация о судьях -->
 			<div class="referee-info">
-				Судья: <?php echo esc_html( $match->main_referee ?? 'Алексей Кулешов' ); ?>
+				<?php if ( ! empty( $match->main_referee ) ) : ?>
+					<div>Главный судья: <?php echo esc_html( $match->main_referee ); ?></div>
+				<?php endif; ?>
+				<div>
+					<?php 
+					$assistants = array();
+					if ( ! empty( $match->assistant_referees_1 ) ) {
+						$assistants[] = $match->assistant_referees_1;
+					}
+					if ( ! empty( $match->assistant_referees_2 ) ) {
+						$assistants[] = $match->assistant_referees_2;
+					}
+					if ( ! empty( $assistants ) ) : 
+					?>
+						Помощники судьи: <?php echo esc_html( implode( ', ', $assistants ) ); ?>
+					<?php endif; ?>
+					<?php if ( ! empty( $match->fourth_referee ) ) : ?>
+						<?php echo ! empty( $assistants ) ? ' • ' : ''; ?>Четвёртый судья: <?php echo esc_html( $match->fourth_referee ); ?>
+					<?php endif; ?>
+				</div>
+				<div>
+					<?php if ( ! empty( $match->referee_inspector ) ) : ?>
+						Инспектор: <?php echo esc_html( $match->referee_inspector ); ?>
+					<?php endif; ?>
+					<?php if ( ! empty( $match->delegate ) ) : ?>
+						<?php echo ! empty( $match->referee_inspector ) ? ' • ' : ''; ?>Делегат: <?php echo esc_html( $match->delegate ); ?>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 	</header>
@@ -206,8 +276,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<!-- Панель домашней команды -->
 				<div class="lineup-panel home-panel">
 					<div class="lineup-header home-header">
-						<h3 class="team-name"><?php echo esc_html( $match->home_team_name ); ?></h3>
-						<span class="formation-badge">4-3-3</span>
+					<h3 class="team-name"><?php echo esc_html( $match->home_team_name ); ?></h3>					
 					</div>
 					<div class="lineup-body">
 						<?php if ( ! empty( $organized['home_starting_by_position'] ) ) { ?>
@@ -456,8 +525,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<!-- Панель гостевой команды -->
 				<div class="lineup-panel away-panel">
 					<div class="lineup-header away-header">
-						<h3 class="team-name"><?php echo esc_html( $match->away_team_name ); ?></h3>
-						<span class="formation-badge">4-4-2</span>
+					<h3 class="team-name"><?php echo esc_html( $match->away_team_name ); ?></h3>					
 					</div>
 					<div class="lineup-body">
 						<?php if ( ! empty( $organized['away_starting_by_position'] ) ) { ?>
@@ -544,10 +612,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</script>
 
 				<div class="section-header">
-					<svg class="section-icon" viewBox="0 0 22 22" fill="currentColor">
-						<circle cx="11" cy="11" r="10" fill="none" stroke="currentColor" stroke-width="1"/>
-					</svg>
-					<h3>События матча</h3>
+				<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M3.66666 12.8333C3.4932 12.8339 3.32313 12.7853 3.17621 12.6931C3.02928 12.6008 2.91155 12.4688 2.83667 12.3124C2.76179 12.1559 2.73285 11.9814 2.75321 11.8091C2.77356 11.6368 2.84238 11.4739 2.95166 11.3392L12.0267 1.98917C12.0947 1.91059 12.1875 1.8575 12.2897 1.83859C12.392 1.81969 12.4976 1.8361 12.5893 1.88513C12.6809 1.93416 12.7532 2.01291 12.7942 2.10843C12.8352 2.20396 12.8426 2.3106 12.815 2.41084L11.055 7.92917C11.0031 8.06807 10.9857 8.21748 11.0042 8.36459C11.0227 8.5117 11.0767 8.65213 11.1614 8.77381C11.2461 8.89549 11.3591 8.99481 11.4907 9.06323C11.6222 9.13166 11.7684 9.16715 11.9167 9.16667H18.3333C18.5068 9.16608 18.6769 9.21472 18.8238 9.30694C18.9707 9.39916 19.0885 9.53118 19.1633 9.68765C19.2382 9.84412 19.2671 10.0186 19.2468 10.1909C19.2264 10.3632 19.1576 10.5261 19.0483 10.6608L9.97333 20.0108C9.90526 20.0894 9.81249 20.1425 9.71027 20.1614C9.60804 20.1803 9.50242 20.1639 9.41075 20.1149C9.31907 20.0658 9.2468 19.9871 9.20577 19.8916C9.16475 19.796 9.15743 19.6894 9.185 19.5892L10.945 14.0708C10.9969 13.9319 11.0143 13.7825 10.9958 13.6354C10.9773 13.4883 10.9233 13.3479 10.8386 13.2262C10.7539 13.1045 10.6409 13.0052 10.5093 12.9368C10.3778 12.8683 10.2316 12.8329 10.0833 12.8333H3.66666Z" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+				<h3>События матча</h3>
 				</div>
 
 				<div class="events-list">
@@ -710,11 +778,11 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 			<div class="section-card">
 				<div class="section-header">
 					<svg class="section-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M13.75 1.83337H5.5C5.01377 1.83337 4.54745 2.02653 4.20363 2.37034C3.85982 2.71416 3.66666 3.18048 3.66666 3.66671V18.3334C3.66666 18.8196 3.85982 19.2859 4.20363 19.6297C4.54745 19.9736 5.01377 20.1667 5.5 20.1667H16.5C16.9862 20.1667 17.4525 19.9736 17.7964 19.6297C18.1402 19.2859 18.3333 18.8196 18.3333 18.3334V6.41671L13.75 1.83337Z" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M12.8333 1.83337V5.50004C12.8333 5.98627 13.0265 6.45259 13.3703 6.7964C13.7141 7.14022 14.1804 7.33337 14.6667 7.33337H18.3333" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M9.16667 8.25H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M14.6667 11.9166H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M14.6667 15.5834H7.33334" stroke="currentColor" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M13.75 1.83337H5.5C5.01377 1.83337 4.54745 2.02653 4.20363 2.37034C3.85982 2.71416 3.66666 3.18048 3.66666 3.66671V18.3334C3.66666 18.8196 3.85982 19.2859 4.20363 19.6297C4.54745 19.9736 5.01377 20.1667 5.5 20.1667H16.5C16.9862 20.1667 17.4525 19.9736 17.7964 19.6297C18.1402 19.2859 18.3333 18.8196 18.3333 18.3334V6.41671L13.75 1.83337Z" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M12.8333 1.83337V5.50004C12.8333 5.98627 13.0265 6.45259 13.3703 6.7964C13.7141 7.14022 14.1804 7.33337 14.6667 7.33337H18.3333" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M9.16667 8.25H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M14.6667 11.9166H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M14.6667 15.5834H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
 					</svg>
 					<h3>Отчет о матче</h3>
 				</div>

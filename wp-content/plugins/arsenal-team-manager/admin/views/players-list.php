@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 global $wpdb;
 
-// Удаление полностью отключено из списка игроков
-// Управление игроками только через страницу редактирования
-
 // Получаем все доступные сезоны
 $seasons = $wpdb->get_results( "SELECT id, season_name FROM wp_arsenal_seasons ORDER BY id DESC" );
 

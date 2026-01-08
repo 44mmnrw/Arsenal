@@ -379,7 +379,7 @@ class Arsenal_Team_Manager {
      * Главная страница (Dashboard)
      */
     public function render_dashboard() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/dashboard.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/dashboard.php';
     }
     
     /**
@@ -419,35 +419,35 @@ class Arsenal_Team_Manager {
      * Список игроков
      */
     public function render_players_list() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/players-list.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/players-list.php';
     }
     
     /**
      * Редактирование/добавление игрока
      */
     public function render_player_edit() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/player-edit.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/player-form.php';
     }
     
     /**
      * Добавление игрока
      */
     public function render_player_add() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/player-edit.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/player-form.php';
     }
     
     /**
      * Список команд лиги
      */
     public function render_teams_list() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/teams-list.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/teams-list.php';
     }
     
     /**
      * Управление контрактами
      */
     public function render_contracts() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/contracts.php';
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/contracts.php';
     }
     
     /**

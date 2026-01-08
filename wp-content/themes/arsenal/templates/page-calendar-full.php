@@ -85,7 +85,22 @@ $has_matches = ! empty( $matches );
 									<!-- Заголовок: Название турнира + Тур -->
 									<div class="calendar-match-header">
 										<div class="calendar-tournament-name"><?php echo esc_html( ! empty( $match->tournament_name ) ? $match->tournament_name : 'Турнир' ); ?></div>
-										<div class="calendar-tour-info">Тур <?php echo esc_html( $match->tour ); ?></div>
+										<div class="calendar-tour-info">
+											<?php 
+											$tour_text = 'Тур ' . intval( $match->tour );
+											if ( ! empty( $match->tournament_id ) && $match->tournament_id === 'E4DE8DC0' ) { // Кубок Беларуси
+												$tour_map = array(
+													1 => '1/16 Финала',
+													2 => '1/8 Финала',
+													3 => '1/4 Финала',
+													4 => '1/2 Финала',
+													5 => 'Финал'
+												);
+												$tour_text = $tour_map[ intval( $match->tour ) ] ?? 'Тур ' . intval( $match->tour );
+											}
+											echo esc_html( $tour_text );
+											?>
+										</div>
 									</div>
 
 									<!-- Основной контент: Левая панель + Команды + Правая панель -->

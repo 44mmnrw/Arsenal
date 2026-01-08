@@ -105,21 +105,68 @@ if ( ! defined( 'ABSPATH' ) ) {
     
     <!-- Пагинация -->
     <?php if ( $total_pages > 1 ) : ?>
-        <div class="tablenav bottom">
-            <div class="tablenav-pages">
-                <span class="displaying-num"><?php echo esc_html( "Всего: $total стадионов" ); ?></span>
-                <span class="pagination-links">
-                    <?php
-                    for ( $p = 1; $p <= $total_pages; $p++ ) {
-                        if ( $p === $paged ) {
-                            echo "<span class=\"page-numbers current\">$p</span>";
-                        } else {
-                            echo "<a class=\"page-numbers\" href=\"" . esc_url( admin_url( "admin.php?page=arsenal-stadiums&paged=$p" ) ) . "\">$p</a>";
-                        }
+        <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px; padding: 20px;">
+            <!-- Кнопка "Назад" -->
+            <?php if ( $paged > 1 ) : ?>
+                <a href="<?php echo esc_url( admin_url( "admin.php?page=arsenal-stadiums&paged=" . ( $paged - 1 ) ) ); ?>" 
+                   class="button">
+                    ← Назад
+                </a>
+            <?php else : ?>
+                <button class="button" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    ← Назад
+                </button>
+            <?php endif; ?>
+            
+            <!-- Ссылки на страницы -->
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <?php
+                $pages_to_show = array();
+                // Добавляем первые 3 страницы
+                for ( $p = 1; $p <= min( 3, $total_pages ); $p++ ) {
+                    $pages_to_show[] = $p;
+                }
+                // Добавляем последнюю страницу если её ещё нет
+                if ( $total_pages > 3 && ! in_array( $total_pages, $pages_to_show ) ) {
+                    $pages_to_show[] = $total_pages;
+                }
+                
+                $prev_page = 0;
+                foreach ( $pages_to_show as $p ) {
+                    // Добавляем многоточие, если есть разрыв между страницами
+                    if ( $p > $prev_page + 1 ) {
+                        echo "<span style=\"padding: 6px 12px; color: #999;\">...</span>";
                     }
-                    ?>
-                </span>
+                    
+                    if ( $p === $paged ) {
+                        echo "<span style=\"padding: 6px 12px; background: #2271b1; color: white; border-radius: 4px; font-weight: bold; min-width: 36px; text-align: center;\">" . intval( $p ) . "</span>";
+                    } else {
+                        echo "<a href=\"" . esc_url( admin_url( "admin.php?page=arsenal-stadiums&paged=$p" ) ) . "\" 
+                             style=\"padding: 6px 12px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #0073aa; min-width: 36px; text-align: center; transition: background 0.2s;\"
+                             onmouseover=\"this.style.background='#e8e8e8'\"
+                             onmouseout=\"this.style.background='#f5f5f5'\">$p</a>";
+                    }
+                    $prev_page = $p;
+                }
+                ?>
             </div>
+            
+            <!-- Кнопка "Вперед" -->
+            <?php if ( $paged < $total_pages ) : ?>
+                <a href="<?php echo esc_url( admin_url( "admin.php?page=arsenal-stadiums&paged=" . ( $paged + 1 ) ) ); ?>" 
+                   class="button">
+                    Вперед →
+                </a>
+            <?php else : ?>
+                <button class="button" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    Вперед →
+                </button>
+            <?php endif; ?>
+            
+            <!-- Информация о странице -->
+            <span style="margin-left: 20px; color: #666; font-size: 13px;">
+                Страница <?php echo intval( $paged ); ?> из <?php echo intval( $total_pages ); ?> (всего: <?php echo intval( $total ); ?> стадионов)
+            </span>
         </div>
     <?php endif; ?>
 </div>

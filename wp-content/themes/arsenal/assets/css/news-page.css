@@ -8,7 +8,7 @@
 }
 
 .news-page .container {
-	max-width: 1536px;
+	max-width: var(--container-max-width);
 	margin: 0 auto;
 	padding: 0 79px;
 }
@@ -57,7 +57,7 @@
 }
 
 .filter-btn.active {
-	background-color: #990000;
+	background-color: var(--red-700);
 	color: white;
 }
 

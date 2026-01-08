@@ -286,7 +286,7 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
         <section class="tournament-standings-section">
             <div class="container">
                 <div class="standings-header">
-                    <h2 class="standings-title">Турнирная таблица</h2>
+                    <h1 class="standings-title">Турнирная таблица</h1>
                     <p class="standings-season">Сезон <?php echo esc_html( $current_year ); ?></p>
                 </div>
 
