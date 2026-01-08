@@ -417,7 +417,7 @@ if ( ! function_exists( 'arsenal_create_required_pages' ) ) {
 				'template' => 'templates/page-calendar-full.php',
 			),
 			'tournament' => array(
-				'title'    => 'Турнирное дерево',
+				'title'    => 'Турнирная сетка',
 				'slug'     => 'tournament',
 				'content'  => '',
 				'template' => 'templates/page-tournament.php',
@@ -428,9 +428,45 @@ if ( ! function_exists( 'arsenal_create_required_pages' ) ) {
 				'content'  => '',
 				'template' => 'templates/page-standings.php',
 			),
+			'team' => array(
+				'title'    => 'Команда',
+				'slug'     => 'team',
+				'content'  => '',
+				'template' => '',
+			),
+			'club' => array(
+				'title'    => 'Клуб',
+				'slug'     => 'club',
+				'content'  => '',
+				'template' => '',
+			),
+			'seconfd-squad' => array(
+				'title'    => 'Дубль',
+				'slug'     => 'seconfd-squad',
+				'content'  => '',
+				'template' => '',
+			),
+			'match' => array(
+				'title'    => 'Матчи',
+				'slug'     => 'match',
+				'content'  => '',
+				'template' => '',
+			),
 			'news' => array(
 				'title'    => 'Новости',
 				'slug'     => 'news',
+				'content'  => '',
+				'template' => '',
+			),
+			'history' => array(
+				'title'    => 'История клуба',
+				'slug'     => 'history',
+				'content'  => '',
+				'template' => '',
+			),
+			'management' => array(
+				'title'    => 'Руководство',
+				'slug'     => 'management',
 				'content'  => '',
 				'template' => '',
 			),
@@ -501,7 +537,7 @@ if ( ! function_exists( 'arsenal_create_main_menu' ) ) {
 					'order' => 2,
 				),
 				array(
-					'title' => 'Турнирное дерево',
+					'title' => 'Турнирная сетка',
 					'slug'  => 'tournament',
 					'order' => 3,
 				),
@@ -511,9 +547,39 @@ if ( ! function_exists( 'arsenal_create_main_menu' ) ) {
 					'order' => 4,
 				),
 				array(
+					'title' => 'Матчи',
+					'slug'  => 'match',
+					'order' => 5,
+				),
+				array(
+					'title' => 'Команда',
+					'slug'  => 'team',
+					'order' => 6,
+				),
+				array(
+					'title' => 'Клуб',
+					'slug'  => 'club',
+					'order' => 7,
+				),
+				array(
+					'title' => 'Дубль',
+					'slug'  => 'seconfd-squad',
+					'order' => 8,
+				),
+				array(
 					'title' => 'Новости',
 					'slug'  => 'news',
-					'order' => 5,
+					'order' => 9,
+				),
+				array(
+					'title' => 'История клуба',
+					'slug'  => 'history',
+					'order' => 10,
+				),
+				array(
+					'title' => 'Руководство',
+					'slug'  => 'management',
+					'order' => 11,
 				),
 			);
 
