@@ -521,6 +521,14 @@ if ( ! function_exists( 'arsenal_create_main_menu' ) ) {
 			$menu_id = wp_create_nav_menu( $menu_name );
 		} else {
 			$menu_id = $menu_exists->term_id;
+			
+			// Очищаем существующие пункты меню
+			$existing_items = wp_get_nav_menu_items( $menu_id );
+			if ( $existing_items ) {
+				foreach ( $existing_items as $item ) {
+					wp_delete_post( $item->ID, true );
+				}
+			}
 		}
 
 		if ( ! is_wp_error( $menu_id ) && $menu_id ) {
@@ -582,42 +590,24 @@ if ( ! function_exists( 'arsenal_create_main_menu' ) ) {
 					'order' => 11,
 				),
 			);
-
-			// Получаем существующие пункты меню
-			$existing_items = wp_get_nav_menu_items( $menu_id );
 			
 			// Добавляем новые пункты меню
 			foreach ( $menu_items as $item ) {
 				$page = get_page_by_path( $item['slug'] );
 
 				if ( $page ) {
-					// Проверяем, есть ли уже такой пункт в меню
-					$menu_item_exists = false;
-
-					if ( $existing_items ) {
-						foreach ( $existing_items as $existing_item ) {
-							if ( $existing_item->object_id == $page->ID && $existing_item->object == 'page' ) {
-								$menu_item_exists = true;
-								break;
-							}
-						}
-					}
-
-					// Если пункта нет, добавляем его
-					if ( ! $menu_item_exists ) {
-						wp_update_nav_menu_item(
-							$menu_id,
-							0,
-							array(
-								'menu-item-title'      => $item['title'],
-								'menu-item-object'     => 'page',
-								'menu-item-object-id'  => $page->ID,
-								'menu-item-type'       => 'post_type',
-								'menu-item-status'     => 'publish',
-								'menu-item-position'   => $item['order'],
-							)
-						);
-					}
+					wp_update_nav_menu_item(
+						$menu_id,
+						0,
+						array(
+							'menu-item-title'      => $item['title'],
+							'menu-item-object'     => 'page',
+							'menu-item-object-id'  => $page->ID,
+							'menu-item-type'       => 'post_type',
+							'menu-item-status'     => 'publish',
+							'menu-item-position'   => $item['order'],
+						)
+					);
 				}
 			}
 
