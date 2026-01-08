@@ -1,0 +1,5 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM wp_arsenal_teams;
+
+
+SET FOREIGN_KEY_CHECKS = 1;

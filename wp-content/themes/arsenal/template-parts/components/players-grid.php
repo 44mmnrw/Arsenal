@@ -20,6 +20,8 @@ $sql = "SELECT p.*, pos.name as position_name, pos.id as position_id_numeric
 	LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.position_id
 	INNER JOIN {$wpdb->prefix}arsenal_team_contracts tc ON p.player_id = tc.player_id
 	WHERE tc.squad_id = %s
+	AND (tc.end_date IS NULL OR tc.end_date >= CURDATE())
+	AND (tc.start_date IS NULL OR tc.start_date <= CURDATE())
 	ORDER BY pos.id ASC, p.shirt_number ASC";
 
 $players = $wpdb->get_results( $wpdb->prepare( $sql, '21F3D7B3' ) );

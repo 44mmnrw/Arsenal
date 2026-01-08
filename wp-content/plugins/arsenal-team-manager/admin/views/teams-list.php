@@ -291,8 +291,18 @@ jQuery(document).ready(function($) {
         teamMediaUploader.on('select', function() {
             var attachment = teamMediaUploader.state().get('selection').first().toJSON();
             
-            // Обновляем скрытое поле с URL
-            $('#team-logo-url-' + teamId).val(attachment.url);
+            // Конвертируем абсолютный URL в относительный
+            var relativeUrl = attachment.url;
+            var homeUrl = '<?php echo home_url(); ?>';
+            if (relativeUrl.indexOf(homeUrl) === 0) {
+                relativeUrl = relativeUrl.substring(homeUrl.length);
+                if (relativeUrl.charAt(0) !== '/') {
+                    relativeUrl = '/' + relativeUrl;
+                }
+            }
+            
+            // Обновляем скрытое поле с ОТНОСИТЕЛЬНЫМ URL
+            $('#team-logo-url-' + teamId).val(relativeUrl);
             
             // Находим контейнер превью
             var previewContainer = $('#team-logo-preview-' + teamId).parent();

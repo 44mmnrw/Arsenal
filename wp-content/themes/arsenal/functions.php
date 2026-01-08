@@ -641,7 +641,7 @@ if ( ! function_exists( 'arsenal_get_team_logo_url' ) ) {
 			) );
 			
 			if ( $logo_url ) {
-				return esc_url( $logo_url );
+				return arsenal_convert_logo_url( $logo_url );
 			}
 			
 			// Альтернативный поиск по названию
@@ -651,7 +651,7 @@ if ( ! function_exists( 'arsenal_get_team_logo_url' ) ) {
 			) );
 			
 			if ( $logo_url ) {
-				return esc_url( $logo_url );
+				return arsenal_convert_logo_url( $logo_url );
 			}
 			
 			// Fallback на локальный логотип
@@ -672,7 +672,7 @@ if ( ! function_exists( 'arsenal_get_team_logo_url' ) ) {
 		) );
 		
 		if ( $logo_url ) {
-			return esc_url( $logo_url );
+			return arsenal_convert_logo_url( $logo_url );
 		}
 		
 		// Если не найден точный match, пробуем LIKE
@@ -682,11 +682,41 @@ if ( ! function_exists( 'arsenal_get_team_logo_url' ) ) {
 		) );
 		
 		if ( $logo_url ) {
-			return esc_url( $logo_url );
+			return arsenal_convert_logo_url( $logo_url );
 		}
 		
 		// Fallback на placeholder
 		return get_template_directory_uri() . '/assets/images/opponent-placeholder.png';
+	}
+}
+
+/**
+ * Конвертирует относительный или абсолютный URL логотипа в правильный формат для HTML
+ * Если URL относительный (/wp-content/...), добавляет home_url()
+ * Если URL абсолютный или сам по себе, возвращает esc_url()
+ *
+ * @param string $logo_url URL логотипа из БД
+ * @return string Экранированный URL для использования в HTML атрибутах
+ */
+if ( ! function_exists( 'arsenal_convert_logo_url' ) ) {
+	function arsenal_convert_logo_url( $logo_url ) {
+		// Если URL пустой, возвращаем пустую строку
+		if ( empty( $logo_url ) ) {
+			return '';
+		}
+		
+		// Если URL уже абсолютный (начинается с http:// или https://), возвращаем как есть
+		if ( strpos( $logo_url, 'http://' ) === 0 || strpos( $logo_url, 'https://' ) === 0 ) {
+			return esc_url( $logo_url );
+		}
+		
+		// Если URL относительный (начинается с /), добавляем home_url()
+		if ( strpos( $logo_url, '/' ) === 0 ) {
+			return esc_url( home_url( $logo_url ) );
+		}
+		
+		// Если URL не начинается с / или http, добавляем / и затем home_url()
+		return esc_url( home_url( '/' . $logo_url ) );
 	}
 }
 
