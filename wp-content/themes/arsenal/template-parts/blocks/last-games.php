@@ -65,7 +65,8 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 		<div class="section-header">
 			<h2 class="section-title">РЕЗУЛЬТАТЫ ПРОШЕДШИХ ИГР</h2>
 			<a href="<?php echo esc_url( home_url( '/calendar/' ) ); ?>" class="section-link">
-				Весь календарь <span class="arrow">→</span>
+				<?php esc_html_e( 'Весь календарь', 'arsenal' ); ?>
+				<?php arsenal_icon( 'icon-arrow-right', 14, 14 ); ?>
 			</a>
 		</div>
 		

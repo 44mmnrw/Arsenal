@@ -14,9 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <section class="sponsors-section">
     <div class="container">
-        <div class="sponsors-header">
-            <span class="sponsors-header__label">ПАРТНЕРЫ И СПОНСОРЫ</span>
-            <h2 class="sponsors-header__title">Наши спонсоры</h2>
+        <div class="section-header">
+            <h2 class="section-title"><?php esc_html_e( 'Наши спонсоры', 'arsenal' ); ?></h2>
         </div>
 
         <div class="sponsors-grid">

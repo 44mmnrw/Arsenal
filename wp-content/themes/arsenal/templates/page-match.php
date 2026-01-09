@@ -152,9 +152,8 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 		<!-- Детали матча -->
 			<div class="match-detail-items">
 				<div class="detail-item">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
-					<path d="M13.3334 6.66667C13.3334 9.99533 9.64069 13.462 8.40069 14.5327C8.28517 14.6195 8.14455 14.6665 8.00002 14.6665C7.85549 14.6665 7.71487 14.6195 7.59935 14.5327C6.35935 13.462 2.66669 9.99533 2.66669 6.66667C2.66669 5.25218 3.22859 3.89563 4.22878 2.89543C5.22898 1.89524 6.58553 1.33333 8.00002 1.33333C9.41451 1.33333 10.7711 1.89524 11.7713 2.89543C12.7715 3.89563 13.3334 5.25218 13.3334 6.66667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-					<path d="M8 8.66667C9.10457 8.66667 10 7.77124 10 6.66667C10 5.5621 9.10457 4.66667 8 4.66667C6.89543 4.66667 6 5.5621 6 6.66667C6 7.77124 6.89543 8.66667 8 8.66667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+					<svg width="16" height="16" class="detail-icon">
+						<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-place"></use>
 					</svg>
 					<?php 
 					if ( $stadium ) {
@@ -165,32 +164,14 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					?>
 				</div>
 				<div class="detail-item">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
-					<g clip-path="url(#clip0_139_466)">
-						<path d="M8 4V8L10.6667 9.33333" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M7.99998 14.6667C11.6819 14.6667 14.6666 11.6819 14.6666 8C14.6666 4.3181 11.6819 1.33333 7.99998 1.33333C4.31808 1.33333 1.33331 4.3181 1.33331 8C1.33331 11.6819 4.31808 14.6667 7.99998 14.6667Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-					</g>
-					<defs>
-						<clipPath id="clip0_139_466">
-							<rect width="16" height="16" fill="white"/>
-						</clipPath>
-					</defs>
+					<svg width="16" height="16" class="detail-icon">
+						<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-clock"></use>
 					</svg>
 					<?php echo esc_html( date_i18n( 'H:i', strtotime( $match->match_time ?? '19:00' ) ) ); ?>
 				</div>
 				<div class="detail-item">
-				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="detail-icon">
-					<g clip-path="url(#clip0_139_472)">
-						<path d="M10.6666 14V12.6667C10.6666 11.9594 10.3857 11.2811 9.8856 10.781C9.3855 10.281 8.70722 10 7.99998 10H3.99998C3.29274 10 2.61446 10.281 2.11436 10.781C1.61426 11.2811 1.33331 11.9594 1.33331 12.6667V14" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M10.6667 2.08533C11.2385 2.23358 11.7449 2.56751 12.1065 3.03471C12.468 3.50191 12.6642 4.07593 12.6642 4.66667C12.6642 5.25741 12.468 5.83143 12.1065 6.29862C11.7449 6.76582 11.2385 7.09975 10.6667 7.248" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M14.6667 14V12.6667C14.6662 12.0758 14.4696 11.5018 14.1076 11.0349C13.7456 10.5679 13.2388 10.2344 12.6667 10.0867" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M5.99998 7.33333C7.47274 7.33333 8.66665 6.13943 8.66665 4.66667C8.66665 3.19391 7.47274 2 5.99998 2C4.52722 2 3.33331 3.19391 3.33331 4.66667C3.33331 6.13943 4.52722 7.33333 5.99998 7.33333Z" stroke="#D1D5DC" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
-					</g>
-					<defs>
-						<clipPath id="clip0_139_472">
-							<rect width="16" height="16" fill="white"/>
-						</clipPath>
-					</defs>
+					<svg width="16" height="16" class="detail-icon">
+						<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-people"></use>
 					</svg>
 					<?php echo esc_html( arsenal_pluralize_spectators( intval( $match->attendance ?? 3500 ) ) ); ?>
 				</div>
@@ -249,7 +230,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					if (!toggleBtn) {
 						toggleBtn = document.createElement('button');
 						toggleBtn.className = 'toggle-lineup-btn';
-						toggleBtn.innerHTML = '<span class="toggle-text">Показать всех</span><svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>';
+						toggleBtn.innerHTML = '<span class="toggle-text">Показать всех</span><svg class="toggle-icon" width="16" height="16"><use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use></svg>';
 						body.parentNode.appendChild(toggleBtn);
 					}
 					
@@ -586,12 +567,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<!-- JavaScript для раскрывания событий -->
 				<script>
 				document.addEventListener('DOMContentLoaded', function() {
+				setTimeout(function() {
 					const toggleBtn = document.querySelector('[data-toggle-events]');
 					const eventCard = document.querySelector('.events-section .section-card');
-					const eventsList = document.querySelector('.events-list');
 					
-					if ( ! toggleBtn || ! eventCard || ! eventsList ) {
-						console.warn('Events toggle elements not found');
+					if ( ! toggleBtn || ! eventCard ) {
+						console.warn('Events toggle elements not found', { toggleBtn, eventCard });
 						return;
 					}
 					
@@ -604,16 +585,21 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						toggleBtn.classList.toggle('expanded');
 						
 						const isExpanded = !eventCard.classList.contains('collapsed');
-						toggleBtn.querySelector('.toggle-text').textContent = isExpanded 
-							? 'Скрыть события'
-							: 'Показать все события';
+						const toggleText = toggleBtn.querySelector('.toggle-text');
+						
+						if (toggleText) {
+							toggleText.textContent = isExpanded 
+								? 'Скрыть события'
+								: 'Показать все события';
+						}
 					});
+				}, 100);
 				});
 				</script>
 
 				<div class="section-header">
-				<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M3.66666 12.8333C3.4932 12.8339 3.32313 12.7853 3.17621 12.6931C3.02928 12.6008 2.91155 12.4688 2.83667 12.3124C2.76179 12.1559 2.73285 11.9814 2.75321 11.8091C2.77356 11.6368 2.84238 11.4739 2.95166 11.3392L12.0267 1.98917C12.0947 1.91059 12.1875 1.8575 12.2897 1.83859C12.392 1.81969 12.4976 1.8361 12.5893 1.88513C12.6809 1.93416 12.7532 2.01291 12.7942 2.10843C12.8352 2.20396 12.8426 2.3106 12.815 2.41084L11.055 7.92917C11.0031 8.06807 10.9857 8.21748 11.0042 8.36459C11.0227 8.5117 11.0767 8.65213 11.1614 8.77381C11.2461 8.89549 11.3591 8.99481 11.4907 9.06323C11.6222 9.13166 11.7684 9.16715 11.9167 9.16667H18.3333C18.5068 9.16608 18.6769 9.21472 18.8238 9.30694C18.9707 9.39916 19.0885 9.53118 19.1633 9.68765C19.2382 9.84412 19.2671 10.0186 19.2468 10.1909C19.2264 10.3632 19.1576 10.5261 19.0483 10.6608L9.97333 20.0108C9.90526 20.0894 9.81249 20.1425 9.71027 20.1614C9.60804 20.1803 9.50242 20.1639 9.41075 20.1149C9.31907 20.0658 9.2468 19.9871 9.20577 19.8916C9.16475 19.796 9.15743 19.6894 9.185 19.5892L10.945 14.0708C10.9969 13.9319 11.0143 13.7825 10.9958 13.6354C10.9773 13.4883 10.9233 13.3479 10.8386 13.2262C10.7539 13.1045 10.6409 13.0052 10.5093 12.9368C10.3778 12.8683 10.2316 12.8329 10.0833 12.8333H3.66666Z" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+				<svg class="section-icon" width="22" height="22" viewBox="0 0 22 22" fill="none">
+				<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-event"></use>
 				</svg>
 				<h3>События матча</h3>
 				</div>
@@ -766,8 +752,8 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 				<button class="toggle-events-btn" data-toggle-events>
 					<span class="toggle-text">Показать все события</span>
-					<svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-						<path d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+				<svg class="toggle-icon" width="24" height="24">
+					<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use>
 					</svg>
 				</button>
 			</div>
@@ -777,12 +763,8 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 		<section class="report-section">
 			<div class="section-card">
 				<div class="section-header">
-					<svg class="section-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M13.75 1.83337H5.5C5.01377 1.83337 4.54745 2.02653 4.20363 2.37034C3.85982 2.71416 3.66666 3.18048 3.66666 3.66671V18.3334C3.66666 18.8196 3.85982 19.2859 4.20363 19.6297C4.54745 19.9736 5.01377 20.1667 5.5 20.1667H16.5C16.9862 20.1667 17.4525 19.9736 17.7964 19.6297C18.1402 19.2859 18.3333 18.8196 18.3333 18.3334V6.41671L13.75 1.83337Z" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M12.8333 1.83337V5.50004C12.8333 5.98627 13.0265 6.45259 13.3703 6.7964C13.7141 7.14022 14.1804 7.33337 14.6667 7.33337H18.3333" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M9.16667 8.25H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M14.6667 11.9166H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
-						<path d="M14.6667 15.5834H7.33334" stroke="#FF1A1A" stroke-width="1.83333" stroke-linecap="round" stroke-linejoin="round"/>
+					<svg class="section-icon" width="22" height="22" viewBox="0 0 22 22" fill="none">
+					<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-report"></use>
 					</svg>
 					<h3>Отчет о матче</h3>
 				</div>

@@ -1341,3 +1341,22 @@ if ( ! function_exists( 'arsenal_get_season_standings' ) ) {
 		return $standings;
 	}
 }
+
+/**
+ * Функция преобразования названий позиций во множественное число
+ *
+ * @param string $position Название позиции в единственном числе
+ * @return string Название позиции во множественном числе
+ */
+if ( ! function_exists( 'arsenal_pluralize_position' ) ) {
+	function arsenal_pluralize_position( $position ) {
+		$plurals = array(
+			'Вратарь'       => 'Вратари',
+			'Защитник'      => 'Защитники',
+			'Полузащитник'  => 'Полузащитники',
+			'Нападающий'    => 'Нападающие',
+		);
+		
+		return isset( $plurals[ $position ] ) ? $plurals[ $position ] : $position;
+	}
+}

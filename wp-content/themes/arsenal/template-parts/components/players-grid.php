@@ -40,16 +40,21 @@ foreach ( $players as $player ) {
 <section class="teams-section">
 	<div class="container">
 		<div class="teams-header">
-			<h1 class="teams-title">Команды</h1>
+			<h1 class="teams-title">Основной состав</h1>
 		</div>
 
 		<?php if ( ! empty( $players ) ) : ?>
 			<div class="teams-content">
 				<?php
 				foreach ( $players_by_position as $position_name => $position_players ) :
+					// Применяем множественное число если в позиции больше 1 игрока
+					$use_plural_for_position = count( $position_players ) > 1;
+					$position_display = $use_plural_for_position && function_exists( 'arsenal_pluralize_position' ) 
+						? arsenal_pluralize_position( $position_name ) 
+						: $position_name;
 				?>
 					<div class="position-group">
-						<h2 class="position-heading"><?php echo esc_html( $position_name ); ?></h2>
+						<h2 class="position-heading"><?php echo esc_html( $position_display ); ?></h2>
 						
 						<div class="players-grid">
 							<?php foreach ( $position_players as $player ) : 

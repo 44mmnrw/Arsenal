@@ -45,7 +45,6 @@
  * 
  * @package Arsenal
  * @since 1.0.0
- * @link https://www.figma.com/design/3PDLTXxabQeweijDRr6x3E/Arsenal
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -67,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 			<a href="<?php echo esc_url( $news_url ); ?>" class="section-link">
 				<?php esc_html_e( 'Все новости', 'arsenal' ); ?>
-				<?php arsenal_icon( 'icon-arrow-right', 20, 20 ); ?>
+				<?php arsenal_icon( 'icon-arrow-right', 14, 14 ); ?>
 			</a>
 		</div>
 		
@@ -118,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</p>
 							<a href="<?php the_permalink(); ?>" class="news-card__link">
 								<?php esc_html_e( 'Читать далее', 'arsenal' ); ?>
-								<?php arsenal_icon( 'icon-arrow-right-sm', 16, 16 ); ?>
+								<?php arsenal_icon( 'icon-arrow-right', 16, 16 ); ?>
 							</a>
 						</div>
 					</article>

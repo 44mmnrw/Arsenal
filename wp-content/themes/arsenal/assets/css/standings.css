@@ -7,7 +7,7 @@
 
 .tournament-standings-section {
     padding: 40px 0;
-    background: #f9f9f9;
+    background: #ffffff;
 }
 
 .standings-header {
@@ -176,6 +176,123 @@
     color: #c8102e;
     font-weight: 600;
     cursor: help;
+}
+
+/* ===== АДАПТАЦИЯ ДЛЯ ПЛАНШЕТОВ И МОБИЛЬНЫХ (768px и выше) ===== */
+
+/* Tablet Large (1024px) */
+@media (max-width: 1024px) {
+    .tournament-standings-section {
+        padding: 32px 0;
+    }
+
+    .standings-header {
+        margin-bottom: 24px;
+    }
+
+    .standings-title {
+        font-size: 28px;
+    }
+
+    .standings-table thead th {
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+
+    .standings-table tbody td {
+        padding: 10px 6px;
+        font-size: 13px;
+    }
+
+    .standings-table .col-team {
+        min-width: 180px;
+        max-width: 200px;
+        gap: 6px;
+    }
+
+    .standings-table .team-badge {
+        width: 20px;
+        height: 20px;
+    }
+
+    .standings-table .col-points {
+        width: 60px;
+    }
+}
+
+/* Tablet Portrait (768px) */
+@media (max-width: 768px) {
+    .tournament-standings-section {
+        padding: 28px 0;
+    }
+
+    .standings-header {
+        margin-bottom: 20px;
+    }
+
+    .standings-title {
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+
+    .standings-season {
+        font-size: 12px;
+    }
+
+    .standings-table-wrapper {
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .standings-table thead th {
+        padding: 9px 5px;
+        font-size: 11px;
+    }
+
+    .standings-table tbody td {
+        padding: 9px 5px;
+        font-size: 12px;
+    }
+
+    .standings-table .col-team {
+        min-width: 160px;
+        max-width: 180px;
+        gap: 6px;
+    }
+
+    .standings-table .team-badge {
+        width: 20px;
+        height: 20px;
+    }
+
+    .standings-table .team-name {
+        font-size: 12px;
+    }
+
+    .standings-table .col-position {
+        width: 35px;
+        font-size: 12px;
+    }
+
+    .standings-table .col-points {
+        width: 55px;
+        font-size: 13px;
+    }
+
+    .standings-notes {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .standings-notes .notes-title {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .standings-notes .note-item {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
 }
 
 /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ (480px и меньше) ===== */

@@ -58,14 +58,11 @@ if ( $arsenal_position >= 0 ) {
 
 <section class="tournament-table-section">
     <div class="container">
-        <div class="tournament-header">
-            <div class="tournament-header__left">
-                <span class="tournament-header__label">ЧЕМПИОНАТ</span>
-                <h2 class="tournament-header__title">Высшая лига Беларуси <?php echo esc_html( $active_season_year ); ?></h2>
-            </div>
-            <a href="<?php echo esc_url( home_url( '/standings/' ) ); ?>" class="tournament-header__link">
-                <span>Полная таблица</span>
-                <?php arsenal_icon( 'icon-arrow-right', 20, 12 ); ?>
+        <div class="section-header">
+            <h2 class="section-title">Высшая лига Беларуси <?php echo esc_html( $active_season_year ); ?></h2>
+            <a href="<?php echo esc_url( home_url( '/standings/' ) ); ?>" class="section-link">
+                <?php esc_html_e( 'Полная таблица', 'arsenal' ); ?>
+                <?php arsenal_icon( 'icon-arrow-right', 14, 14 ); ?>
             </a>
         </div>
 
