@@ -1401,6 +1401,8 @@ article {
 
 .game-location svg {
 	flex-shrink: 0;
+	stroke: currentColor;
+	fill: none;
 }
 
 /* ==========================================================================
