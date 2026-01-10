@@ -28,7 +28,8 @@ $upcoming_match = $wpdb->get_row( $wpdb->prepare( "
 		at.name as away_team,
 		m.home_score as home_score,
 		m.away_score as away_score,
-		s.name as stadium
+		s.name as stadium_name,
+		s.city as stadium_city
 	FROM {$wpdb->prefix}arsenal_matches m
 	LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 	LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
@@ -49,7 +50,8 @@ if ( ! $upcoming_match ) {
 			at.name as away_team,
 			m.home_score as home_score,
 			m.away_score as away_score,
-			s.name as stadium
+			s.name as stadium_name,
+			s.city as stadium_city
 		FROM {$wpdb->prefix}arsenal_matches m
 		LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 		LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
@@ -66,7 +68,8 @@ if ( $upcoming_match ) :
 	// Проверяем, играет ли Арсенал дома
 	$is_home = ( $upcoming_match->home_team_id == $arsenal_team_id );
 	$opponent = $is_home ? $upcoming_match->away_team : $upcoming_match->home_team;
-	$is_completed = ( $upcoming_match->home_score !== null && $upcoming_match->away_score !== null );
+	// Матч завершён если статус "Завершено" (ID: 0083CE05)
+	$is_completed = ( $upcoming_match->status === '0083CE05' );
 	
 	// Форматирование даты
 	$formatted_date = '';
@@ -103,12 +106,6 @@ if ( $upcoming_match ) :
 						>
 					</div>
 					<h3 class="team-name"><?php echo esc_html( $upcoming_match->home_team ); ?></h3>
-					<?php if ( $upcoming_match->stadium ) : ?>
-						<div class="team-location">
-							<?php arsenal_icon( 'icon-location-sm', 16, 16 ); ?>
-							<span><?php echo esc_html( $upcoming_match->stadium ); ?></span>
-						</div>
-					<?php endif; ?>
 				</div>
 				
 				<!-- VS / Счёт -->
@@ -128,10 +125,14 @@ if ( $upcoming_match ) :
 						<?php if ( ! $is_completed ) : ?>
 							<span class="match-time"><?php echo esc_html( $formatted_time ); ?></span>
 						<?php endif; ?>
-						<?php if ( $upcoming_match->stadium ) : ?>
+						<?php if ( $upcoming_match->stadium_name ) : ?>
 							<div class="match-venue">
-								<?php arsenal_icon( 'icon-stadium', 16, 16 ); ?>
-								<span><?php echo esc_html( $upcoming_match->stadium ); ?></span>
+								<?php arsenal_icon( 'icon-place', 16, 16 ); ?>
+								<span>
+									<?php echo esc_html( $upcoming_match->stadium_name ); ?><?php if ( $upcoming_match->stadium_city ) : ?>,
+										 <?php echo esc_html( $upcoming_match->stadium_city ); ?>
+									<?php endif; ?>
+								</span>
 							</div>
 						<?php endif; ?>
 					</div>
@@ -148,15 +149,6 @@ if ( $upcoming_match ) :
 					<h3 class="team-name"><?php echo esc_html( $upcoming_match->away_team ); ?></h3>
 				</div>
 			</div>
-			
-			<?php if ( ! $is_completed ) : ?>
-				<div class="match-ticket-info">
-					<p class="ticket-text">
-						Билеты на матч можно приобрести на 
-						<a href="#" class="ticket-link">официальном сайте</a>
-					</p>
-				</div>
-			<?php endif; ?>
 		</div>
 	</div>
 </section>

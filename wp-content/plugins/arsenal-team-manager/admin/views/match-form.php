@@ -24,6 +24,7 @@ $grid_style = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px;';
     <?php if ( isset( $_GET['error'] ) && $_GET['error'] == 1 ) : ?>
         <div class="notice notice-error is-dismissible">
             <p><strong>Произошла ошибка при сохранении матча!</strong></p>
+            <p>Убедитесь, что заполнены все обязательные поля, особенно <strong>Стадион</strong>.</p>
             <button type="button" class="notice-dismiss"><span class="screen-reader-text">Закрыть уведомление</span></button>
         </div>
     <?php endif; ?>
@@ -56,6 +57,21 @@ $grid_style = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px;';
                     <?php endforeach; ?>
                 </select>
                 <p class="description" style="margin-top: 4px;">Выберите турнир, в котором проходит матч</p>
+            </div>
+            
+            <!-- Лига -->
+            <div>
+                <label for="league_id" style="display: block; font-weight: 600; margin-bottom: 8px;">Лига</label>
+                <select name="league_id" id="league_id" style="width: 100%; padding: 8px;">
+                    <option value="">— Выберите лигу (опционально) —</option>
+                    <?php foreach ( $leagues as $league_id => $league_name ) : ?>
+                        <option value="<?php echo esc_attr( $league_id ); ?>" 
+                            <?php selected( ! empty( $match ) && $match->league_id === $league_id ); ?>>
+                            <?php echo esc_html( $league_name ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="description" style="margin-top: 4px;">Если не выбрать, будет использована первая доступная лига</p>
             </div>
             
             <!-- Сезон -->
@@ -95,8 +111,8 @@ $grid_style = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px;';
             
             <!-- Статус матча -->
             <div>
-                <label for="status" style="display: block; font-weight: 600; margin-bottom: 8px;">Статус матча</label>
-                <select name="status" id="status" style="width: 100%; padding: 8px;">
+                <label for="status" style="display: block; font-weight: 600; margin-bottom: 8px;">Статус матча <span style="color: red;">*</span></label>
+                <select name="status" id="status" required style="width: 100%; padding: 8px;">
                     <option value="">— Выберите статус —</option>
                     <?php foreach ( $statuses as $status_id => $status_name ) : ?>
                         <option value="<?php echo esc_attr( $status_id ); ?>" 
@@ -185,8 +201,8 @@ $grid_style = 'display: grid; grid-template-columns: 1fr 1fr; gap: 30px;';
             
             <!-- Стадион -->
             <div>
-                <label for="stadium_id" style="display: block; font-weight: 600; margin-bottom: 8px;">Стадион</label>
-                <select name="stadium_id" id="stadium_id" style="width: 100%; padding: 8px;">
+                <label for="stadium_id" style="display: block; font-weight: 600; margin-bottom: 8px;">Стадион <span style="color: red;">*</span></label>
+                <select name="stadium_id" id="stadium_id" required style="width: 100%; padding: 8px;">
                     <option value="">— Выберите стадион —</option>
                     <?php foreach ( $stadiums as $stadium_id => $stadium_name ) : ?>
                         <option value="<?php echo esc_attr( $stadium_id ); ?>" 

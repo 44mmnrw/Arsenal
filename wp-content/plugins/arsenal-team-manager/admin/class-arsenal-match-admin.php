@@ -112,6 +112,7 @@ class Arsenal_Match_Admin {
         // Получение справочников
         $teams = Arsenal_Match_Manager::get_teams();
         $stadiums = Arsenal_Match_Manager::get_stadiums();
+        $leagues = Arsenal_Match_Manager::get_leagues();
         $tournaments = Arsenal_Match_Manager::get_tournaments();
         $statuses = Arsenal_Match_Manager::get_match_statuses();
         $seasons = Arsenal_Season_Manager::get_seasons( 1, 999 );
@@ -139,8 +140,16 @@ class Arsenal_Match_Admin {
             wp_die( 'Проверка безопасности не пройдена.' );
         }
         
+        // Валидация обязательных полей
+        if ( empty( $_POST['stadium_id'] ) ) {
+            wp_redirect( admin_url( 'admin.php?page=arsenal-match-add&error=1' ) );
+            exit;
+        }
+        
         // Подготовка данных
         $data = array(
+            'league_id' => sanitize_text_field( $_POST['league_id'] ?? '' ),
+            'season_id' => sanitize_text_field( $_POST['season_id'] ?? '' ),
             'tournament_id' => sanitize_text_field( $_POST['tournament_id'] ?? '' ),
             'match_date' => sanitize_text_field( $_POST['match_date'] ?? '' ),
             'match_time' => sanitize_text_field( $_POST['match_time'] ?? '' ),
@@ -196,27 +205,34 @@ class Arsenal_Match_Admin {
             wp_die( 'ID матча не указан.' );
         }
         
+        // Валидация обязательных полей
+        if ( empty( $_POST['stadium_id'] ) ) {
+            wp_redirect( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match_id . '&error=1' ) );
+            exit;
+        }
+        
         // Подготовка данных
         $data = array(
+            'league_id' => ! empty( $_POST['league_id'] ) ? sanitize_text_field( $_POST['league_id'] ) : null,
+            'season_id' => ! empty( $_POST['season_id'] ) ? sanitize_text_field( $_POST['season_id'] ) : null,
             'tournament_id' => sanitize_text_field( $_POST['tournament_id'] ?? '' ),
-            'season_id' => sanitize_text_field( $_POST['season_id'] ?? '' ),
             'match_date' => sanitize_text_field( $_POST['match_date'] ?? '' ),
-            'match_time' => sanitize_text_field( $_POST['match_time'] ?? '' ),
+            'match_time' => ! empty( $_POST['match_time'] ) ? sanitize_text_field( $_POST['match_time'] ) : null,
             'home_team_id' => sanitize_text_field( $_POST['home_team_id'] ?? '' ),
             'away_team_id' => sanitize_text_field( $_POST['away_team_id'] ?? '' ),
-            'home_score' => sanitize_text_field( $_POST['home_score'] ?? '' ),
-            'away_score' => sanitize_text_field( $_POST['away_score'] ?? '' ),
+            'home_score' => ! empty( $_POST['home_score'] ) ? sanitize_text_field( $_POST['home_score'] ) : null,
+            'away_score' => ! empty( $_POST['away_score'] ) ? sanitize_text_field( $_POST['away_score'] ) : null,
             'status' => sanitize_text_field( $_POST['status'] ?? 'NS' ),
-            'tour' => sanitize_text_field( $_POST['tour'] ?? '' ),
-            'stadium_id' => sanitize_text_field( $_POST['stadium_id'] ?? '' ),
-            'attendance' => sanitize_text_field( $_POST['attendance'] ?? '' ),
-            'main_referee' => sanitize_text_field( $_POST['main_referee'] ?? '' ),
-            'assistant_referees_1' => sanitize_text_field( $_POST['assistant_referees_1'] ?? '' ),
-            'assistant_referees_2' => sanitize_text_field( $_POST['assistant_referees_2'] ?? '' ),
-            'fourth_referee' => sanitize_text_field( $_POST['fourth_referee'] ?? '' ),
-            'referee_inspector' => sanitize_text_field( $_POST['referee_inspector'] ?? '' ),
-            'delegate' => sanitize_text_field( $_POST['delegate'] ?? '' ),
-            'match_report' => wp_kses_post( $_POST['match_report'] ?? '' ),
+            'tour' => ! empty( $_POST['tour'] ) ? sanitize_text_field( $_POST['tour'] ) : null,
+            'stadium_id' => ! empty( $_POST['stadium_id'] ) ? sanitize_text_field( $_POST['stadium_id'] ) : null,
+            'attendance' => ! empty( $_POST['attendance'] ) ? sanitize_text_field( $_POST['attendance'] ) : null,
+            'main_referee' => ! empty( $_POST['main_referee'] ) ? sanitize_text_field( $_POST['main_referee'] ) : null,
+            'assistant_referees_1' => ! empty( $_POST['assistant_referees_1'] ) ? sanitize_text_field( $_POST['assistant_referees_1'] ) : null,
+            'assistant_referees_2' => ! empty( $_POST['assistant_referees_2'] ) ? sanitize_text_field( $_POST['assistant_referees_2'] ) : null,
+            'fourth_referee' => ! empty( $_POST['fourth_referee'] ) ? sanitize_text_field( $_POST['fourth_referee'] ) : null,
+            'referee_inspector' => ! empty( $_POST['referee_inspector'] ) ? sanitize_text_field( $_POST['referee_inspector'] ) : null,
+            'delegate' => ! empty( $_POST['delegate'] ) ? sanitize_text_field( $_POST['delegate'] ) : null,
+            'match_report' => ! empty( $_POST['match_report'] ) ? wp_kses_post( $_POST['match_report'] ) : null,
         );
         
         // Обновление матча
