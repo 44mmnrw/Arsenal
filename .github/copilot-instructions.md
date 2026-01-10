@@ -7,9 +7,8 @@
 - **Локальная**: Laragon (Windows) → `http://arsenal.test`
 - **Продакшн**: `http://1779917-cq85026.twc1.net/` (через Git-деплой)
 - **БД**: `arsenal` (MySQL, префикс `wp_`, user: `arsenal_user`)
-- **Репозиторий**: https://github.com/44mmnrw/Arsenal (ветка `dev`)
+- **Репозиторий**: https://github.com/44mmnrw/Arsenal (ветка `dev_main`)
 
-⚠️ **КРИТИЧНОЕ**: Известна проблема несовместимости ID команд в БД (см. `CRITICAL_BUG_TEAM_IDS.md`). 76% матчей имеют невалидные ссылки на команды (HEX ID vs NUMERIC ID).
 
 ## Архитектура проекта
 
@@ -21,6 +20,10 @@
 - Система стилей: `fonts.css` → `style.css` (base) → `header.css` → `main.css` → `footer.css`
 - Префикс функций: `arsenal_*`
 - Template parts: `template-parts/*-dynamic.php` (запросы к БД через `$wpdb`)
+- **Новые компоненты** (класс 2025):
+  - `inc/class-stat-cards-manager.php` - управление статистическими карточками (JSON в post_meta)
+  - `inc/class-stat-cards-metabox.php` - админ-интерфейс метаокса (280 строк, jQuery UI)
+  - Система полностью независима от ACF/Pods плагинов
 
 **2. Плагин Arsenal Team Manager (Бизнес-логика)**
 - **Корень**: `wp-content/plugins/arsenal-team-manager/`
@@ -73,32 +76,6 @@ arsenal/
 ### Ядро WordPress (НЕ МОДИФИЦИРОВАТЬ)
 - `wp-admin/`, `wp-includes/`, корневые PHP файлы - стандартное ядро WP
 - `wp-config.php` - конфигурация (не в Git, специфична для окружения)
-
-## ⚠️ КРИТИЧНЫЕ ИЗВЕСТНЫЕ ПРОБЛЕМЫ
-
-### Несовместимость ID команд в базе данных (76% матчей затронуто)
-
-**Проблема:** Таблицы `wp_arsenal_matches` и `wp_arsenal_teams` используют несовместимые форматы ID:
-- `wp_arsenal_matches`: `home_team_id`, `away_team_id` = HEX строки (varchar) - `"0720C44E"`, `"D3949C90"`
-- `wp_arsenal_teams`: `id` = NUMERIC (int) - `1`, `2`, `3`...
-- **Результат**: При JOIN и выборке команд 76% матчей не находят свои команды
-
-**Откуда это взялось:**
-1. Парсер (tools/Py/abff_parser) получает HEX ID от championship.abff.by API
-2. При импорте в `wp_arsenal_matches` сохраняет их как есть (HEX)
-3. При импорте в `wp_arsenal_teams` создает новые NUMERIC ID (автоинкремент)
-4. Связь потеряна!
-
-**Где это видно:**
-- Файл: `CRITICAL_BUG_TEAM_IDS.md` (корень проекта) - детальный анализ
-- Проверка: `php check-database.php` покажет 1143-1152 матчей с невалидными team_id
-
-**Как это влияет на код:**
-- Запросы в template-parts с LEFT JOIN на teams часто возвращают NULL для команд
-- Нужна оборонительная кодировка: всегда проверять `if ( $home_team )` перед выводом
-- Никогда не полагайтесь на team_id в matches для связи с teams
-
-**Решение:** Требуется переиндексация (см. CRITICAL_BUG_TEAM_IDS.md вариант 1 или 2)
 
 ## Основные концепции WordPress
 
@@ -158,17 +135,9 @@ wp_localize_script( 'arsenal-script', 'arsenalData', array(
 ) );
 ```
 
-### Работа с кастомной БД Arsenal
+### Работа с БД Arsenal
 
-**Основные таблицы** (`wp_arsenal_*`):
-- `leagues` - турниры (ID, название, страна)
-- `seasons` - сезоны (год, даты, flashscore_id)
-- `teams` - команды (ID, название, логотип, is_arsenal флаг)
-- `players` - игроки (ID из SStats API, имя, позиция, фото)
-- `matches` - матчи (home/away команды, счёт, статус, venue_id)
-- `match_events` - события (голы, карточки, замены)
-- `match_lineups` - составы (стартовые и запасные)
-- `venues` - стадионы (ID = MD5(название), название, город)
+Используйте класс `Arsenal_Database` (Singleton) для управления схемой БД. Актуальное описание всех 18 таблиц смотрите в [docs/DATABASE-SCHEMA.md](../docs/DATABASE-SCHEMA.md).
 
 **Прямые SQL запросы (используется в template-parts/):**
 ```php
@@ -224,6 +193,49 @@ $stats = $db->get_stats(); // ['leagues' => 1, 'teams' => 16, ...]
 if ( $db->tables_exist() ) { /* ... */ }
 ```
 
+### Система управления JSON-данными (Stat Cards)
+
+**Новый паттерн управления данными через post_meta (без плагинов):**
+
+```php
+// Подключить менеджер
+require_once get_template_directory() . '/inc/class-stat-cards-manager.php';
+
+// Получить карточки со страницы
+$cards = Arsenal_Stat_Cards_Manager::get_cards( $post_id );
+// Результат: array( ['stat_title' => '15', 'stat_value' => 'Побед'], ... )
+
+// Добавить новую карточку
+Arsenal_Stat_Cards_Manager::add_card( '15', 'Побед в сезоне', $post_id );
+
+// Обновить карточку
+Arsenal_Stat_Cards_Manager::update_card( 0, '16', 'Побед (новое)', $post_id );
+
+// Удалить карточку
+Arsenal_Stat_Cards_Manager::delete_card( 0, $post_id );
+
+// Получить все карточки (сырые данные)
+$raw_cards = get_post_meta( $post_id, '_arsenal_stat_cards_json', true );
+// Формат: JSON строка в post_meta
+```
+
+**Админ-интерфейс:**
+- Класс `Arsenal_Stat_Cards_Metabox` автоматически регистрирует метаокс на страницах
+- JavaScript управление (добавить/удалить карточку в интерфейсе)
+- Данные сохраняются как JSON в `wp_postmeta` с ключом `_arsenal_stat_cards_json`
+
+**Использование на фронтенде:**
+```php
+// В шаблоне page-history.php
+$stat_cards = Arsenal_Stat_Cards_Manager::get_cards( get_the_ID() );
+foreach ( $stat_cards as $card ) {
+    echo '<div class="stat-card">';
+    echo '<span class="stat-number">' . esc_html( $card['stat_title'] ) . '</span>';
+    echo '<span class="stat-label">' . esc_html( $card['stat_value'] ) . '</span>';
+    echo '</div>';
+}
+```
+
 ### Разработка плагинов
 
 **Структура плагина:**
@@ -256,6 +268,14 @@ function my_plugin_init() {
 - Зарегистрируйте все функции на соответствующих хуках
 - Документируйте все общественные функции PHPDoc комментариями
 
+**⚠️ ВАЖНО про удаленные плагины:**
+- **Удалены**: Advanced Custom Fields (ACF), Pods плагин и их кастомные функции
+- **Причина**: Система управления данными (Stat Cards) переведена на JSON (post_meta) без зависимостей
+- **Файлы удалены**:
+  - `inc/acf-fields.php` - больше не используется
+  - `inc/pods-fields.php` - больше не используется
+- **Функции удалены**: `arsenal_get_pod_field()`, `arsenal_get_pod_repeater()` - заменены на JSON-систему
+
 ## Рабочие процессы разработки
 
 ### Локальная среда (Laragon)
@@ -269,7 +289,7 @@ function my_plugin_init() {
 # 1. Локальный коммит и push
 git add .
 git commit -m "Описание изменений"
-git push origin dev
+git push origin dev_main
 
 # 2. Деплой на сервер (одна команда)
 ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && bash deploy.sh"
@@ -326,17 +346,23 @@ python parse_player_stats.py
 
 ### Работа с БД Arsenal
 
-**Утилиты корневой директории** (запуск через `php script.php`):
-- `check-database.php` - просмотр структуры и данных всех таблиц
+**Утилиты для проверки и управления БД** (запуск через `php script.php`):
+- `service_scripts_ai/check-database.php` - полная проверка структуры БД (таблицы, поля, индексы, FK, количество записей)
 - `install-database.php` - установка/обновление схемы БД (интерактивное меню)
 - `import-data.php` - импорт данных из JSON файлов в БД
 
 **Пример проверки данных:**
 ```bash
-php check-database.php        # Структура всех таблиц + количество записей
-php install-database.php      # Интерактивное меню управления БД
-php import-data.php           # Импорт данных из JSON
+php service_scripts_ai/check-database.php  # Вывод всех wp_arsenal_* таблиц со структурой и статистикой
+php install-database.php                   # Интерактивное меню управления БД (создать/обновить/очистить)
+php import-data.php                        # Импорт данных из JSON
 ```
+
+**Результат `check-database.php`:**
+- Список всех таблиц с количеством строк и размером
+- Для каждой таблицы: поля, типы, ограничения (PK, FK, UNIQUE)
+- Внешние ключи и их связи
+- Проверка целостности FK
 
 **Управление схемой БД:**
 ```php
@@ -485,32 +511,50 @@ function my_ajax_handler() {
 
 **Назначение:** Папка для хранения всех вспомогательных скриптов, которые создаются AI для проверок, миграций, валидации данных и других служебных задач.
 
-**Структура:**
-```
-service_scripts_ai/
-├── migrations/          # Скрипты миграций БД
-├── validators/          # Скрипты проверки данных
-├── cleaners/            # Скрипты очистки и нормализации данных
-├── reports/             # Скрипты генерации отчетов
-└── utilities/           # Прочие служебные скрипты
-```
+**Текущие скрипты:**
+- `service_scripts_ai/check-database.php` - полная проверка структуры и статистики БД (таблицы, поля, индексы, FK, количество записей)
+- `service_scripts_ai/clean-history-page-blocks.php` - очистка старых блоков со страницы История
+- `service_scripts_ai/clean-history-page-full.php` - полная очистка страницы История
+- `cleanup-old-fields-web.php`, `cleanup-old-fields.php` - удаление устаревших полей
+- `delete_old_meta_fields.php` - удаление старых meta полей
+- `update-cup-tours.php` - обновление турниров (кубков)
+- `verify-db-restore.sh`, `import-arsenal-db.sh` - утилиты БД
 
 **Соглашения:**
 - Все скрипты должны быть самостоятельными и не требовать включения в продакшн
 - Каждый скрипт должен иметь PHPDoc комментарий с описанием цели
 - Для скриптов миграций используйте префикс: `migrate_*.php`
 - Для скриптов валидации используйте префикс: `validate_*.php`
-- Скрипты могут использовать WordPress функции, но должны быть запускаемы отдельно
+- Для скриптов проверки используйте префикс: `check-*.php`
+- Скрипты могут использовать WordPress функции, но должны быть запускаемы отдельно (через `php script.php`)
 - Временные файлы (JSON, CSV) из service_scripts_ai не коммитятся в Git
 
 **Пример использования:**
 ```bash
-# Запуск скрипта проверки
+# Запуск скрипта проверки БД
+php service_scripts_ai/check-database.php
+
+# Запуск скрипта валидации (если есть)
 php service_scripts_ai/validators/validate_players.php
 
 # Запуск скрипта миграции
 php service_scripts_ai/migrations/migrate_standings.php
+
+# Запуск скрипта очистки
+php service_scripts_ai/clean-history-page-blocks.php
 ```
+
+## Ключевые файлы проекта для быстрого старта
+
+| Файл | Назначение | Язык |
+|------|-----------|------|
+| `functions.php` | Основные хуки темы и подключения | PHP |
+| `inc/class-stat-cards-manager.php` | Управление статистическими карточками | PHP |
+| `inc/class-stat-cards-metabox.php` | Admin UI для карточек | PHP + jQuery |
+| `inc/database/class-arsenal-database.php` | Управление схемой БД Arsenal | PHP |
+| `template-parts/*-dynamic.php` | Компоненты с SQL запросами | PHP |
+| `assets/css/page-match.css` | Стили страницы матча (1000+ строк) | CSS |
+| `wp-content/plugins/arsenal-team-manager/` | Управление командой и игроками | PHP |
 
 ## Полезные ссылки
 - **Версия WordPress**: `wp-includes/version.php`
@@ -522,3 +566,75 @@ php service_scripts_ai/migrations/migrate_standings.php
   - `docs/DATABASE-SCHEMA.md` - схема БД (8 таблиц)
   - `docs/PARSER-DATABASE-GUIDE.md` - руководство по парсеру (1166 строк)
   - `docs/STRUCTURE.md` - структура проекта
+
+## Типичные задачи разработки
+
+### Добавить новый блок на главную страницу
+1. Создать шаблон в 	emplate-parts/ (например my-block.php или my-block-dynamic.php)
+2. Добавить хук подключения в unctions.php
+3. Если нужны данные из БД - использовать $wpdb в *-dynamic.php версии
+4. Добавить CSS в соответствующий файл в ssets/css/
+5. Проверить на локальной среде и задеплоить
+
+### Добавить статистические карточки на страницу
+1. Открыть WordPress админку → Pages → Edit нужная страница
+2. Скролл до метаокса "Статистические карточки"
+3. Нажать "[+ Добавить карточку]"
+4. Заполнить цифру и описание
+5. Сохранить страницу
+
+### Добавить новое поле в админ-панель игрока
+1. Посмотреть wp-content/plugins/arsenal-team-manager/admin/ - там находятся админ-формы
+2. Добавить input field в HTML форму
+3. Обновить SQL запрос в wp_arsenal_players
+4. Добавить код сохранения в PHP обработчик
+
+### Обновить данные команд и матчей из ABFF
+1. Перейти в 	ools/Py/abff_parser/
+2. Установить зависимости: pip install -r requirements.txt
+3. Запустить процесс в 4 фазы (см. раздел "Работа с данными (ABFF Parser)")
+4. Проверить: php check-database.php
+5. Задеплоить изменения
+
+### Добавить новый CSS стиль
+1. Выбрать правильный файл в ssets/css/ (или создать новый модульный файл)
+2. Добавить стиль с префиксом класса (например .match-detail-page)
+3. Если стиль для определенной страницы - использовать page-*.css
+4. Подключить в unctions.php через wp_enqueue_style()
+5. Проверить каскадность и responsive дизайн
+
+## Типичные задачи разработки
+
+### Добавить новый блок на главную страницу
+1. Создать шаблон в `template-parts/` (например `my-block.php` или `my-block-dynamic.php`)
+2. Добавить хук подключения в `functions.php`
+3. Если нужны данные из БД - использовать `` в `*-dynamic.php` версии
+4. Добавить CSS в соответствующий файл в `assets/css/`
+5. Проверить на локальной среде и задеплоить
+
+### Добавить статистические карточки на страницу
+1. Открыть WordPress админку → Pages → Edit нужная страница
+2. Скролл до метаокса "Статистические карточки"
+3. Нажать "[+ Добавить карточку]"
+4. Заполнить цифру и описание
+5. Сохранить страницу
+
+### Добавить новое поле в админ-панель игрока
+1. Посмотреть `wp-content/plugins/arsenal-team-manager/admin/` - там находятся админ-формы
+2. Добавить input field в HTML форму
+3. Обновить SQL запрос в `wp_arsenal_players`
+4. Добавить код сохранения в PHP обработчик
+
+### Обновить данные команд и матчей из ABFF
+1. Перейти в `tools/Py/abff_parser/`
+2. Установить зависимости: `pip install -r requirements.txt`
+3. Запустить процесс в 4 фазы (см. раздел "Работа с данными (ABFF Parser)")
+4. Проверить: `php service_scripts_ai/check-database.php`
+5. Задеплоить изменения
+
+### Добавить новый CSS стиль
+1. Выбрать правильный файл в `assets/css/` (или создать новый модульный файл)
+2. Добавить стиль с префиксом класса (например `.match-detail-page`)
+3. Если стиль для определенной страницы - использовать `page-*.css`
+4. Подключить в `functions.php` через `wp_enqueue_style()`
+5. Проверить каскадность и responsive дизайн

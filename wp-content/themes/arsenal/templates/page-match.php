@@ -411,7 +411,8 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							'Нападающий' => arsenal_get_player_coords( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 680 )
 						);
 						?>
-						<svg class="field-svg" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 667 1000.52" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+						<!-- ВЕРТИКАЛЬНОЕ ПОЛЕ (для мобильных 480px) -->
+						<svg class="field-svg field-svg-vertical" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 667 1000.52" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
 							<defs>
 								<clipPath id="id0">
 									<path d="M635.73 0c17.27,0 31.27,14 31.27,31.27l0 937.99c0,17.26 -14,31.26 -31.27,31.26l-604.46 0c-17.27,0 -31.27,-14 -31.27,-31.26l0 -937.99c0,-17.27 14,-31.27 31.27,-31.27l604.46 0z"/>
@@ -494,6 +495,170 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 											?>
 											<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="22" fill="#1a56db" stroke="white" stroke-width="2"/>
 											<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 7 ); ?>" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											<?php
+										}
+									}
+								}
+							}
+							?>
+						</svg>
+
+						<!-- ГОРИЗОНТАЛЬНОЕ ПОЛЕ (для планшетов 1024px+) -->
+						<?php
+						// Функция для получения координат горизонтального поля
+						function arsenal_get_player_coords_horizontal( $player_count, $x_position, $field_height = 198.81, $side_padding = 20 ) {
+							$coords = array();
+							$playable_height = $field_height - ( 2 * $side_padding );
+							$center = $field_height / 2;
+							
+							if ( $player_count === 1 ) {
+								$coords[] = array( $x_position, $center );
+							} elseif ( $player_count === 2 ) {
+								$coords[] = array( $x_position, $center - 40 );
+								$coords[] = array( $x_position, $center + 40 );
+							} elseif ( $player_count === 3 ) {
+								$coords[] = array( $x_position, $center - 60 );
+								$coords[] = array( $x_position, $center );
+								$coords[] = array( $x_position, $center + 60 );
+							} elseif ( $player_count === 4 ) {
+								$coords[] = array( $x_position, $center - 70 );
+								$coords[] = array( $x_position, $center - 25 );
+								$coords[] = array( $x_position, $center + 25 );
+								$coords[] = array( $x_position, $center + 70 );
+							} elseif ( $player_count === 5 ) {
+								$coords[] = array( $x_position, $center - 80 );
+								$coords[] = array( $x_position, $center - 40 );
+								$coords[] = array( $x_position, $center );
+								$coords[] = array( $x_position, $center + 40 );
+								$coords[] = array( $x_position, $center + 80 );
+							} elseif ( $player_count === 6 ) {
+								$coords[] = array( $x_position, $center - 68 );
+								$coords[] = array( $x_position, $center - 44 );
+								$coords[] = array( $x_position, $center - 20 );
+								$coords[] = array( $x_position, $center + 20 );
+								$coords[] = array( $x_position, $center + 44 );
+								$coords[] = array( $x_position, $center + 68 );
+							} elseif ( $player_count === 7 ) {
+								$coords[] = array( $x_position, $center - 72 );
+								$coords[] = array( $x_position, $center - 48 );
+								$coords[] = array( $x_position, $center - 24 );
+								$coords[] = array( $x_position, $center );
+								$coords[] = array( $x_position, $center + 24 );
+								$coords[] = array( $x_position, $center + 48 );
+								$coords[] = array( $x_position, $center + 72 );
+							} elseif ( $player_count === 8 ) {
+								$coords[] = array( $x_position, $center - 60 );
+								$coords[] = array( $x_position, $center - 40 );
+								$coords[] = array( $x_position, $center - 20 );
+								$coords[] = array( $x_position, $center );
+								$coords[] = array( $x_position, $center + 20 );
+								$coords[] = array( $x_position, $center + 40 );
+								$coords[] = array( $x_position, $center + 60 );
+								$coords[] = array( $x_position, $center + 80 );
+							} else {
+								// Для 9+ игроков распределить равномерно
+								$step = $playable_height / ( $player_count + 1 );
+								for ( $i = 1; $i <= $player_count; $i++ ) {
+									$coords[] = array( $x_position, $side_padding + ( $step * $i ) );
+								}
+							}
+							
+							return $coords;
+						}
+						
+						// Карты позиций для горизонтального поля
+						// Масштаб: 298.22 × 198.81 px
+						$home_positions_map_horizontal = array(
+							'Вратарь' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 25 ),
+							'Защитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 65 ),
+							'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Полузащитник'] ) ? $home_position_counts['Полузащитник'] : 0, 115 ),
+							'Нападающий' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 210 )
+						);
+						
+						$away_positions_map_horizontal = array(
+							'Вратарь' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 273 ),
+							'Защитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 233 ),
+							'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Полузащитник'] ) ? $away_position_counts['Полузащитник'] : 0, 183 ),
+							'Нападающий' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 88 )
+						);
+						?>
+						<svg class="field-svg field-svg-horizontal" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 298.22 198.81" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+							<defs>
+								<linearGradient id="id2" gradientUnits="userSpaceOnUse" x1="149.11" y1="0" x2="149.11" y2="198.81">
+									<stop offset="0" stop-opacity="1" stop-color="#00A63E"/>
+									<stop offset="1" stop-opacity="1" stop-color="#008236"/>
+								</linearGradient>
+							</defs>
+							<g>
+								<rect width="298.22" height="198.81" fill="url(#id2)"/>
+								<!-- Границы поля -->
+								<rect x="7" y="7" width="284.22" height="184.81" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Линия середины -->
+								<line x1="149.11" y1="7" x2="149.11" y2="191.81" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Центральный круг -->
+								<circle cx="149.11" cy="99.405" r="30" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Центральная точка -->
+								<circle cx="149.11" cy="99.405" r="2" fill="white" fill-opacity="0.8"/>
+								<!-- Штрафная домашней команды -->
+								<rect x="7" y="60" width="45" height="78.81" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Вратарская область домашней команды -->
+								<rect x="7" y="79" width="25" height="40.81" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Точка пенальти домашней -->
+								<circle cx="32" cy="99.405" r="1.5" fill="white" fill-opacity="0.8"/>
+								<!-- Штрафная гостевой команды -->
+								<rect x="246.22" y="60" width="45" height="78.81" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Вратарская область гостевой команды -->
+								<rect x="266.22" y="79" width="25" height="40.81" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.8"/>
+								<!-- Точка пенальти гостевой -->
+								<circle cx="266.22" cy="99.405" r="1.5" fill="white" fill-opacity="0.8"/>
+							</g>
+							<!-- Игроки домашней команды (красные) на горизонтальном поле -->
+							<?php
+							$home_player_idx_h = array(
+								'Вратарь' => 0,
+								'Защитник' => 0,
+								'Полузащитник' => 0,
+								'Нападающий' => 0
+							);
+							
+							if ( ! empty( $home_players ) ) {
+								foreach ( $home_players as $player ) {
+									$pos = $player['position'];
+									if ( isset( $home_positions_map_horizontal[ $pos ] ) && isset( $home_player_idx_h[ $pos ] ) ) {
+										$idx = $home_player_idx_h[ $pos ];
+										if ( $idx < count( $home_positions_map_horizontal[ $pos ] ) ) {
+											$coords = $home_positions_map_horizontal[ $pos ][ $idx ];
+											$home_player_idx_h[ $pos ]++;
+											?>
+											<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="6" fill="#dc2626" stroke="white" stroke-width="1"/>
+											<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 2 ); ?>" text-anchor="middle" fill="white" font-size="5" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											<?php
+										}
+									}
+								}
+							}
+							?>
+							
+							<!-- Игроки гостевой команды (синие) на горизонтальном поле -->
+							<?php
+							$away_player_idx_h = array(
+								'Вратарь' => 0,
+								'Защитник' => 0,
+								'Полузащитник' => 0,
+								'Нападающий' => 0
+							);
+							
+							if ( ! empty( $away_players ) ) {
+								foreach ( $away_players as $player ) {
+									$pos = $player['position'];
+									if ( isset( $away_positions_map_horizontal[ $pos ] ) && isset( $away_player_idx_h[ $pos ] ) ) {
+										$idx = $away_player_idx_h[ $pos ];
+										if ( $idx < count( $away_positions_map_horizontal[ $pos ] ) ) {
+											$coords = $away_positions_map_horizontal[ $pos ][ $idx ];
+											$away_player_idx_h[ $pos ]++;
+											?>
+											<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="6" fill="#1a56db" stroke="white" stroke-width="1"/>
+											<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 2 ); ?>" text-anchor="middle" fill="white" font-size="5" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
 											<?php
 										}
 									}
@@ -752,7 +917,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 				<button class="toggle-events-btn" data-toggle-events>
 					<span class="toggle-text">Показать все события</span>
-				<svg class="toggle-icon" width="24" height="24">
+				<svg class="toggle-icon" width="16" height="16">
 					<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use>
 					</svg>
 				</button>

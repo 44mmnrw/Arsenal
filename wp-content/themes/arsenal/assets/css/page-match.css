@@ -554,13 +554,20 @@
 }
 
 .field-svg {
-	width: 100% !important;
-	height: auto !important;
+	width: 100% 
+	height: auto 
 	max-width: 100%;
 	display: block;
 	border: 0.25rem solid rgb(255, 255, 255);
 	border-radius: 0.625rem;
 	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+/* Добавляем скругленные углы к первому rect в горизонтальном SVG */
+.field-svg-horizontal rect:first-child {
+	rx: 10;
+	ry: 10;
 }
 
 /* ============================================
@@ -592,9 +599,11 @@
 /* ============================================
    АДАПТИВНЫЙ ДИЗАЙН
    ============================================ */
-@media (max-width: 1200px) {
+/* Планшеты: 1024px - 1200px */
+@media (max-width: 1200px) and (min-width: 1025px) {
 	.match-container {
-		padding: 1rem;
+		padding: 1.25rem 2rem;
+		max-width: 100%;
 	}
 
 	.lineups-grid {
@@ -608,8 +617,184 @@
 	}
 
 	.match-score-section {
-		gap: 2.5rem;
+		gap: 2rem;
 	}
+
+	.team-icon-circle {
+		width: 5rem;
+		height: 5rem;
+		font-size: 2rem;
+	}
+
+	.team-title {
+		font-size: 1.5rem;
+	}
+
+	.score-num {
+		font-size: 3.5rem;
+	}
+
+	.event-item {
+		grid-template-columns: 60px 35px 1fr 120px;
+		gap: 0.875rem;
+		padding: 0.875rem;
+	}
+
+	.section-header h3 {
+		font-size: 1.15rem;
+	}
+
+	.match-detail-items {
+		gap: 1.875rem;
+	}
+}
+
+/* На экранах 1024px+ показываем вертикальное поле, скрываем горизонтальное */
+@media (min-width: 1025px) {
+	/* Горизонтальное поле - скрыто на 1024px+ */
+	.field-svg-horizontal {
+		display: none !important;
+	}
+
+	/* Вертикальное поле - показывается на 1024px+ */
+	.field-svg-vertical {
+		display: block !important;
+	}
+
+	.pitch-field {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+}
+
+/* До 1024px включительно */
+@media (max-width: 1024px) {
+	.match-container {
+		padding: 1rem 1.5rem;
+		max-width: 100%;
+	}
+
+	.hero-content {
+		padding: 0 2rem;
+	}
+
+	.match-score-section {
+		gap: 2rem;
+	}
+
+	.team-icon-circle {
+		width: 4.5rem;
+		height: 4.5rem;
+		font-size: 1.8rem;
+	}
+
+	.team-title {
+		font-size: 1.375rem;
+	}
+
+	.score-num {
+		font-size: 3.25rem;
+	}
+
+	.score-colon {
+		font-size: 2.5rem;
+	}
+
+	.match-detail-items {
+		gap: 1.5rem;
+		font-size: 0.8125rem;
+	}
+
+	.event-item {
+		grid-template-columns: 55px 32px 1fr 110px;
+		gap: 0.75rem;
+		padding: 0.75rem;
+		font-size: 0.8125rem;
+	}
+
+	.event-minute {
+		font-size: 0.75rem;
+		text-align: center;
+	}
+
+	.lineups-grid {
+		grid-template-columns: 1fr 1fr;
+		height: auto;
+		gap: 1rem;
+	}
+
+	.pitch-wrapper {
+		grid-column: 1 / -1;
+		order: 2;
+	}
+
+	.lineup-body {
+		padding: 0.625rem;
+	}
+
+	.player-entry {
+		padding: 0.2rem 0.4rem;
+	}
+
+	.player-shirt {
+		width: 1.375rem;
+		height: 1.375rem;
+		font-size: 0.7rem;
+	}
+
+	.player-full-name {
+		font-size: 0.7rem;
+	}
+
+	.section-header h3 {
+		font-size: 1.125rem;
+	}
+
+	.section-card {
+		padding: 1.25rem;
+	}
+
+	.report-body {
+		font-size: 0.95rem;
+		line-height: 1.55;
+	}
+
+	.report-body p {
+		margin: 0.875rem 0;
+	}
+
+	/* Компактный вид групп игроков */
+	.position-section {
+		margin-bottom: 0.125rem;
+	}
+
+	.group-label {
+		font-size: 0.7rem;
+		letter-spacing: 0.5px;
+	}
+
+	.position-name {
+		font-size: 0.65rem;
+		padding: 0 0.4rem;
+	}
+
+	.pitch-field {		
+		max-height: 70vh; 
+		overflow: hidden;		
+	}
+
+	/* На 1024px и меньше показываем горизонтальное поле, скрываем вертикальное */
+	.field-svg-vertical {		
+	    display: none;
+	}
+
+	/* Горизонтальное поле - показывается на 1024px и меньше */
+	.field-svg-horizontal {		
+	    display: block;
+	    border-radius: 0.625rem;
+	}	
 }
 
 @media (max-width: 768px) {
@@ -659,15 +844,41 @@
 	.section-header h3 {
 		font-size: 1.125rem;
 	}
+
+	.lineups-grid {
+		grid-template-columns: 1fr 1fr;
+		height: auto;
+		gap: 1rem;
+	}
+
+	.pitch-wrapper {
+		grid-column: 1 / -1;
+		order: 2;
+	}
+
+	/* На 768px (480-1023px) показываем горизонтальное поле */
+	.field-svg-vertical {
+		display: none;
+	}
+
+	.field-svg-horizontal {
+		display: block;
+		width: 100%;
+		height: auto;
+		object-fit: contain;
+		border-radius: 0.625rem;
+	}
 }
 
 @media (max-width: 480px) {
 	.match-hero-header {
-		height: 18.75rem;
+		min-height: 18.75rem;
+		height: auto;
 	}
 
 	.hero-content {
-		padding: 0 1rem;
+		padding: 1.5rem 1rem;
+		height: auto;
 	}
 
 	.match-score-section {
@@ -703,17 +914,43 @@
 	}
 
 	.event-item {
-		grid-template-columns: 40px 24px 1fr 80px;
+		grid-template-columns: 24px 24px 1fr 100px;
 		gap: 0.5rem;
 		padding: 0.5rem;
 	}
 
 	.event-team-badge {
-		font-size: 0.6875rem;
+		font-size: 0.675rem;
 	}
 
 	.lineups-grid {
+		grid-template-columns: 1fr;
 		height: auto;
+	}
+
+	.pitch-wrapper {
+		grid-column: auto;
+		order: 2;
+	}
+
+	.pitch-field {
+		rotate: 0deg;
+		overflow: visible;
+		max-height: none;
+	}
+
+	/* На 480px и меньше показываем вертикальное поле */
+	.field-svg-vertical {
+		display: block;
+	}
+
+	/* Горизонтальное поле - скрыто на 480px и меньше */
+	.field-svg-horizontal {
+		display: none;
+	}
+
+	.field-svg text {
+		transform: rotate(0deg);
 	}
 
 	/* Раскрывающиеся панели составов на мобилах */

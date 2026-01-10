@@ -374,7 +374,7 @@
 }
 
 .section-title {
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-transform: uppercase;
@@ -975,7 +975,7 @@ article {
 }
 
 .news-section .section-title {
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-transform: uppercase;
@@ -1121,10 +1121,9 @@ article {
 }
 
 .news-card__link svg {
-	width: 1rem;
-	height: 1rem;
-	fill: none;
-	stroke: currentColor;
+	width: 0.875rem;
+	height: 0.875rem;
+	background: transparent;
 }
 
 /* ==========================================================================
@@ -1236,7 +1235,7 @@ article {
 }
 
 .last-games-section .section-title {
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-transform: uppercase;
@@ -1483,7 +1482,7 @@ article {
 .tournament-header__label {
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
 }
@@ -1593,7 +1592,7 @@ article {
 
 .tournament-table .col-points {
 	font-weight: 700;
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 }
 
 .tournament-table tbody tr.highlight-row {
@@ -1601,7 +1600,7 @@ article {
 }
 
 .tournament-table tbody tr.highlight-row td {
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	font-weight: 600;
 }
 
@@ -1702,7 +1701,7 @@ article {
 	display: block;
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: var(--red-900, #990000);
+	color: var(--red-700, #FF1A1A);
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
 	margin-bottom: 0.5rem;
