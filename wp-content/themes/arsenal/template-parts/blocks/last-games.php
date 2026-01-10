@@ -33,7 +33,8 @@ $matches = $wpdb->get_results( $wpdb->prepare( "
 		m.status,
 		ht.name as home_team,
 		at.name as away_team,
-		s.name as stadium
+		s.name as stadium,
+		s.city as stadium_city
 	FROM {$wpdb->prefix}arsenal_matches m
 	LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 	LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
@@ -87,10 +88,13 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 					}
 					
 					$formatted_date = '';
+					$formatted_time = '';
 					if ( function_exists( 'wp_date' ) ) {
-						$formatted_date = wp_date( 'j F Y, H:i', strtotime( $match->match_date ) );
+						$formatted_date = wp_date( 'd.m.Y', strtotime( $match->match_date ) );
+						$formatted_time = isset( $match->match_time ) ? substr( $match->match_time, 0, 5 ) : '';
 					} else {
-						$formatted_date = date_i18n( 'j F Y, H:i', strtotime( $match->match_date ) );
+						$formatted_date = date_i18n( 'd.m.Y', strtotime( $match->match_date ) );
+						$formatted_time = isset( $match->match_time ) ? substr( $match->match_time, 0, 5 ) : '';
 					}
 				?>
 					<?php
@@ -101,7 +105,7 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 					<a href="<?php echo esc_url( $match_url ); ?>" class="game-card-link">
 						<article class="game-card">
 							<div class="game-header">
-								<span class="game-date"><?php echo esc_html( $formatted_date ); ?></span>
+								<span class="game-date"><?php echo esc_html( $formatted_date ); ?><?php echo $formatted_time ? ' ' . esc_html( $formatted_time ) : ''; ?></span>
 								<span class="game-badge <?php echo esc_attr( $badge_class ); ?>">
 									<?php echo esc_html( $badge_text ); ?>
 								</span>
@@ -137,8 +141,19 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 							
 							<div class="game-footer">
 								<div class="game-location">
-									<?php arsenal_icon( 'icon-location-sm', 14, 14 ); ?>
-									<span><?php echo esc_html( $match->stadium ?: 'Стадион не указан' ); ?></span>
+								<?php arsenal_icon( 'icon-place', 16, 16 ); ?>
+								<span>
+									<?php 
+										if ( $match->stadium ) {
+											echo esc_html( $match->stadium );
+											if ( $match->stadium_city ) {
+												echo ', ' . esc_html( $match->stadium_city );
+											}
+										} else {
+											echo 'Стадион не указан';
+										}
+									?>
+								</span>
 								</div>
 							</div>
 						</article>
