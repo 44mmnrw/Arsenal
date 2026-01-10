@@ -207,7 +207,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             <button type="submit" class="button button-primary button-large" style="padding: 10px 30px; font-size: 16px;">
                 Сохранить составы
             </button>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . esc_attr( $match->match_id ) ) ); ?>" class="button button-large" style="padding: 10px 30px; margin-left: 10px;">
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . intval( $match->id ) ) ); ?>" class="button button-large" style="padding: 10px 30px; margin-left: 10px;">
                 Назад к матчу
             </a>
         </div>
