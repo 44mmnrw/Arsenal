@@ -126,6 +126,21 @@
 	width: 16px;
 	height: 16px;
 	flex-shrink: 0;
+	stroke: #4a5565;
+	fill: none;
+	color: #4a5565;
+	background: none !important;
+	background-color: transparent !important;
+}
+
+.calendar-info-row:nth-child(1) .calendar-icon {
+	stroke: #4a5565;
+	color: #4a5565;
+}
+
+.calendar-info-row:nth-child(2) .calendar-icon {
+	stroke: #ff1a1a;
+	color: #ff1a1a;
 }
 
 .calendar-date {

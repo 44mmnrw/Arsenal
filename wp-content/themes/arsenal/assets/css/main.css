@@ -532,6 +532,21 @@
 
 .match-time {
 	color: #4A5565;
+	background: none;
+}
+
+.match-time-wrapper {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+}
+
+.match-time-wrapper svg {
+	background: none !important;
+	background-color: transparent !important;
+	stroke: currentColor;
+	fill: none;
+	color: #4A5565;
 }
 
 .match-venue {

@@ -123,7 +123,7 @@ if ( $upcoming_match ) :
 					<div class="match-date-time">
 						<span class="match-date"><?php echo esc_html( $formatted_date ); ?></span>
 						<?php if ( ! $is_completed ) : ?>
-							<span class="match-time"><?php echo esc_html( $formatted_time ); ?></span>
+							<span class="match-time-wrapper"><?php arsenal_icon( 'icon-clock', 16, 16 ); ?><span class="match-time"><?php echo esc_html( $formatted_time ); ?></span></span>
 						<?php endif; ?>
 						<?php if ( $upcoming_match->stadium_name ) : ?>
 							<div class="match-venue">

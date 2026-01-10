@@ -108,23 +108,16 @@ $has_matches = ! empty( $matches );
 										<!-- Левая панель: Дата, время, стадион -->
 										<div class="calendar-left-panel">
 											<div class="calendar-info-row">
-												<svg class="calendar-icon" viewBox="0 0 16 16" width="16" height="16">
-													<path fill="#4a5565" d="M3 2h10c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1zm0 2v9h10V4H3z"/>
-												</svg>
+												<?php arsenal_icon( 'icon-calendar', 16, 16, 'calendar-icon' ); ?>
 												<span class="calendar-date"><?php echo esc_html( wp_date( 'j.m.Y', strtotime( $match->match_date ) ) ); ?></span>
 											</div>
 											<div class="calendar-info-row">
-												<svg class="calendar-icon" viewBox="0 0 16 16" width="16" height="16">
-													<circle cx="8" cy="8" r="6.5" fill="none" stroke="#ff1a1a" stroke-width="1"/>
-													<path d="M8 3v5h3" fill="none" stroke="#ff1a1a" stroke-width="1" stroke-linecap="round"/>
-												</svg>
+												<?php arsenal_icon( 'icon-clock', 16, 16, 'calendar-icon' ); ?>
 												<span class="calendar-time"><?php echo esc_html( ! empty( $match->match_time ) ? substr( $match->match_time, 0, 5 ) : '—' ); ?></span>
 											</div>
 											<?php if ( ! empty( $match->venue ) ) : ?>
 											<div class="calendar-info-row">
-												<svg class="calendar-icon" viewBox="0 0 16 16" width="16" height="16">
-													<path fill="#6a7282" d="M8 1c-3.86 0-7 3.13-7 7 0 5.25 7 9 7 9s7-3.75 7-9c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-												</svg>
+												<?php arsenal_icon( 'icon-place', 16, 16, 'calendar-icon' ); ?>
 											<span class="calendar-stadium"><?php echo esc_html( $match->venue . ( ! empty( $match->stadium_city ) ? ', ' . $match->stadium_city : '' ) ); ?></span>
 											</div>
 											<?php endif; ?>

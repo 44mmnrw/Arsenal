@@ -164,15 +164,11 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					?>
 				</div>
 				<div class="detail-item">
-					<svg width="16" height="16" class="detail-icon">
-						<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-clock"></use>
-					</svg>
+					<?php arsenal_icon( 'icon-clock', 16, 16, 'detail-icon' ); ?>
 					<?php echo esc_html( date_i18n( 'H:i', strtotime( $match->match_time ?? '19:00' ) ) ); ?>
 				</div>
 				<div class="detail-item">
-					<svg width="16" height="16" class="detail-icon">
-						<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-people"></use>
-					</svg>
+					<?php arsenal_icon( 'icon-people', 16, 16, 'detail-icon' ); ?>
 					<?php echo esc_html( arsenal_pluralize_spectators( intval( $match->attendance ?? 3500 ) ) ); ?>
 				</div>
 			</div>
