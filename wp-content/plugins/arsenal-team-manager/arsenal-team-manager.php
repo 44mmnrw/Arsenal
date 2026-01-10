@@ -125,11 +125,19 @@ class Arsenal_Team_Manager {
      */
     public function add_admin_menu() {
         // Основное меню
+        $parent_slug = 'arsenal-team';
+        
+        // Защита: убедиться, что parent_slug инициализирован
+        if ( empty( $parent_slug ) ) {
+            error_log( '[Arsenal] Warning: parent_slug is empty in add_admin_menu()' );
+            return;
+        }
+        
         add_menu_page(
             'Арсенал',                          // Заголовок страницы
             'Арсенал',                          // Название пункта меню
             'manage_options',                   // Права доступа
-            'arsenal-team',                     // Slug
+            $parent_slug,                       // Slug
             array( $this, 'render_dashboard' ), // Callback функция
             'dashicons-admin-users',            // Иконка
             30                                  // Позиция в меню
@@ -137,7 +145,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Игроки
         add_submenu_page(
-            'arsenal-team',                     // Родительский slug
+            $parent_slug,                       // Родительский slug
             'Игроки',                           // Заголовок страницы
             'Игроки',                           // Название пункта
             'manage_options',                   // Права
@@ -147,7 +155,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Команды лиги
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Команды лиги',
             'Команды лиги',
             'manage_options',
@@ -157,7 +165,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Контракты
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Контракты',
             'Контракты',
             'manage_options',
@@ -167,7 +175,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Стадионы
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Стадионы',
             'Стадионы',
             'manage_options',
@@ -177,7 +185,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Сезоны
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Сезоны',
             'Сезоны',
             'manage_options',
@@ -187,7 +195,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Лиги
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Лиги',
             'Лиги',
             'manage_options',
@@ -197,7 +205,7 @@ class Arsenal_Team_Manager {
         
         // Подменю: Корректировки турнирной таблицы
         add_submenu_page(
-            'arsenal-team',
+            $parent_slug,
             'Корректировки таблицы',
             'Корректировки таблицы',
             'manage_options',
@@ -207,7 +215,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления стадиона (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить стадион',
             'Добавить стадион',
             'manage_options',
@@ -217,7 +225,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования стадиона (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Редактировать стадион',
             'Редактировать стадион',
             'manage_options',
@@ -227,7 +235,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления сезона (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить сезон',
             'Добавить сезон',
             'manage_options',
@@ -237,7 +245,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования сезона (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Редактировать сезон',
             'Редактировать сезон',
             'manage_options',
@@ -247,7 +255,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления лиги (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить лигу',
             'Добавить лигу',
             'manage_options',
@@ -257,7 +265,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования лиги (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Редактировать лигу',
             'Редактировать лигу',
             'manage_options',
@@ -267,7 +275,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления корректировки (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить корректировку',
             'Добавить корректировку',
             'manage_options',
@@ -277,7 +285,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования корректировки (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Редактировать корректировку',
             'Редактировать корректировку',
             'manage_options',
@@ -287,7 +295,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления матча (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить матч',
             'Добавить матч',
             'manage_options',
@@ -297,7 +305,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования матча (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Редактировать матч',
             'Редактировать матч',
             'manage_options',
@@ -307,7 +315,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница событий матча (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'События матча',
             'События матча',
             'manage_options',
@@ -317,7 +325,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница составов матча (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Составы матча',
             'Составы матча',
             'manage_options',
@@ -327,7 +335,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница редактирования игрока (без пункта меню)
         add_submenu_page(
-            null, // Родитель null = скрытая страница
+            '', // Родитель пусто = скрытая страница
             'Редактировать игрока',
             'Редактировать игрока',
             'manage_options',
@@ -337,7 +345,7 @@ class Arsenal_Team_Manager {
         
         // Скрытая страница добавления игрока (без пункта меню)
         add_submenu_page(
-            null,
+            '',
             'Добавить игрока',
             'Добавить игрока',
             'manage_options',
