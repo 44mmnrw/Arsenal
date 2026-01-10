@@ -203,11 +203,11 @@ if ( ! defined( 'ABSPATH' ) ) {
         </script>
         
         <!-- Кнопки -->
-        <div style="margin-top: 30px;">
-            <button type="submit" class="button button-primary button-large" style="padding: 10px 30px; font-size: 16px;">
+        <div style="margin-top: 30px; display: flex; gap: 10px;">
+            <button type="submit" class="button button-primary button-large" style="padding: 10px 30px; font-size: 16px; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 40px;">
                 Сохранить составы
             </button>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . intval( $match->id ) ) ); ?>" class="button button-large" style="padding: 10px 30px; margin-left: 10px;">
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . intval( $match->id ) ) ); ?>" class="button button-large" style="padding: 10px 30px; flex: 1; display: flex; align-items: center; justify-content: center; min-height: 40px; text-decoration: none;">
                 Назад к матчу
             </a>
         </div>
