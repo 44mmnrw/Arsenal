@@ -51,6 +51,10 @@ class Arsenal_Lineup_Admin {
             wp_die( 'Матч не найден.' );
         }
         
+        if ( ! $match ) {
+            wp_die( 'Матч не найден.' );
+        }
+        
         // Получение команд
         $teams = $GLOBALS['wpdb']->get_results( $GLOBALS['wpdb']->prepare(
             "SELECT * FROM {$GLOBALS['wpdb']->prefix}arsenal_teams 
@@ -97,15 +101,19 @@ class Arsenal_Lineup_Admin {
             wp_die( 'Проверка безопасности не пройдена.' );
         }
         
-        $match_id = intval( $_POST['match_id'] ?? 0 );
+        $match_id = isset( $_POST['match_id'] ) ? sanitize_text_field( $_POST['match_id'] ) : '';
         if ( ! $match_id ) {
             wp_die( 'ID матча не указан.' );
         }
         
-        // Получение матча по числовому ID
-        $match = Arsenal_Match_Manager::get_match( $match_id );
+        // Получение матча - используем match_id (строковой)
+        $match = $GLOBALS['wpdb']->get_row( $GLOBALS['wpdb']->prepare(
+            "SELECT m.* FROM {$GLOBALS['wpdb']->prefix}arsenal_matches m WHERE m.match_id = %s",
+            $match_id
+        ) );
+        
         if ( ! $match ) {
-            wp_die( 'Матч не найден.' );
+            wp_die( 'Матч не найден. match_id = ' . esc_html( $match_id ) );
         }
         
         // Обновление составов
@@ -159,16 +167,21 @@ class Arsenal_Lineup_Admin {
         }
         
         $lineup_id = intval( $_GET['lineup_id'] ?? 0 );
-        $match_id = intval( $_GET['match_id'] ?? 0 );
+        $match_id = isset( $_GET['match_id'] ) ? sanitize_text_field( $_GET['match_id'] ) : '';
         
         if ( ! $lineup_id || ! $match_id ) {
             wp_die( 'Необходимые параметры не указаны.' );
         }
         
         // Удаление игрока
-        Arsenal_Lineup_Manager::remove_player_from_lineup( $lineup_id );
+        $deleted = Arsenal_Lineup_Manager::remove_player_from_lineup( $lineup_id );
         
-        wp_redirect( admin_url( 'admin.php?page=arsenal-match-lineups&match_id=' . base64_encode( '' ) . '&success=1' ) );
+        if ( ! $deleted ) {
+            wp_die( 'Не удалось удалить игрока из состава.' );
+        }
+        
+        // Редирект на список матчей
+        wp_redirect( admin_url( 'admin.php?page=arsenal-matches&deleted=1' ) );
         exit;
     }
 }

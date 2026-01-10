@@ -33,12 +33,14 @@ $matches = $wpdb->get_results( $wpdb->prepare( "
 		at.logo_url as away_logo,
 		st.name as venue,
 		st.city as stadium_city,
-		t.name as tournament_name
+		t.name as tournament_name,
+		ms.match_status as status_name
 	FROM wp_arsenal_matches m
 	LEFT JOIN wp_arsenal_teams ht ON m.home_team_id = ht.team_id
 	LEFT JOIN wp_arsenal_teams at ON m.away_team_id = at.team_id
 	LEFT JOIN wp_arsenal_stadiums st ON m.stadium_id = st.stadium_id
 	LEFT JOIN wp_arsenal_tournaments t ON m.tournament_id = t.tournament_id
+	LEFT JOIN wp_arsenal_match_statuses ms ON m.status = ms.status_id
 	WHERE (m.home_team_id = %s OR m.away_team_id = %s)
 		AND YEAR(m.match_date) = %d
 	ORDER BY m.tour ASC, m.match_date ASC
@@ -166,11 +168,18 @@ $has_matches = ! empty( $matches );
 												<?php endif; ?>
 											</div>
 											<div class="calendar-status-block">
+												<?php 
+													// Определяем статус на основе статуса матча
+													$status_display = 'Предстоит';
+													if ( ! empty( $match->status_name ) ) {
+														$status_display = $match->status_name;
+													} elseif ( $has_result ) {
+														$status_display = 'Завершен';
+													}
+												?>
+												<span class="calendar-status"><?php echo esc_html( $status_display ); ?></span>
 												<?php if ( $has_result ) : ?>
-													<span class="calendar-status">Завершен</span>
 													<span class="calendar-link-text">Матч-центр →</span>
-												<?php else : ?>
-													<span class="calendar-status">Предстоит</span>
 												<?php endif; ?>
 											</div>
 										</div>

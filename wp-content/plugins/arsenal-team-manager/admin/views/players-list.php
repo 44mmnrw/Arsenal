@@ -25,6 +25,7 @@ $players = $wpdb->get_results( $wpdb->prepare(
     "SELECT 
         p.*,
         c.contract_id,
+        c.contract_number,
         c.contract_start,
         c.contract_end
     FROM wp_arsenal_players p
@@ -76,7 +77,7 @@ $players = $wpdb->get_results( $wpdb->prepare(
                             <?php echo esc_html( ( $player->first_name ?? '' ) . ' ' . ( $player->last_name ?? '' ) ); ?>
                         </strong>
                     </td>
-                    <td><?php echo esc_html( $player->contract_id ); ?></td>
+                    <td><?php echo esc_html( $player->contract_number ); ?></td>
                     <td><?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_start ?? '' ) ) ); ?></td>
                     <td><?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_end ?? '' ) ) ); ?></td>
                     <td>

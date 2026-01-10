@@ -56,11 +56,27 @@ if ( $arsenal_team_id ) {
 
 // Голы Арсенала в матчах (сумма забитых по home_score и away_score)
 $total_goals = 0;
+$goals_against = 0;
 if ( $arsenal_team_id ) {
     $total_goals = intval( $wpdb->get_var( $wpdb->prepare(
         "SELECT COALESCE(SUM(CASE 
             WHEN home_team_id = %s THEN home_score
             WHEN away_team_id = %s THEN away_score
+            ELSE 0 
+        END), 0)
+        FROM wp_arsenal_matches 
+        WHERE (home_team_id = %s OR away_team_id = %s)
+        AND home_score IS NOT NULL AND away_score IS NOT NULL
+        AND YEAR(match_date) = %d
+        AND tournament_id = %s",
+        $arsenal_team_id, $arsenal_team_id, $arsenal_team_id, $arsenal_team_id, $active_season_year, '71CFDAA6'
+    ) ) );
+    
+    // Голы пропущенные Арсеналом (противоположная логика)
+    $goals_against = intval( $wpdb->get_var( $wpdb->prepare(
+        "SELECT COALESCE(SUM(CASE 
+            WHEN home_team_id = %s THEN away_score
+            WHEN away_team_id = %s THEN home_score
             ELSE 0 
         END), 0)
         FROM wp_arsenal_matches 
@@ -167,9 +183,6 @@ $standings = (object) array(
                 <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #d9534f;">
                     <?php echo $total_players; ?>
                 </p>
-                <a href="<?php echo admin_url( 'admin.php?page=arsenal-players' ); ?>" class="button">
-                    Управление игроками
-                </a>
             </div>
             
             <!-- Карточка: Место в турнире -->
@@ -205,6 +218,17 @@ $standings = (object) array(
                 </h2>
                 <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #5cb85c;">
                     <?php echo $total_goals ? $total_goals : 0; ?>
+                </p>
+            </div>
+            
+            <!-- Карточка: Голы пропущены -->
+            <div class="postbox" style="padding: 20px;">
+                <h2 style="margin: 0 0 10px 0;">
+                    <span class="dashicons dashicons-dismiss" style="color: #d9534f;"></span>
+                    Голов пропущено
+                </h2>
+                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #d9534f;">
+                    <?php echo isset( $goals_against ) ? $goals_against : 0; ?>
                 </p>
             </div>
             

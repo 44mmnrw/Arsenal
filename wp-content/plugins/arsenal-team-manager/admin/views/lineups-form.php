@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     
     <form method="POST" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
         <input type="hidden" name="action" value="arsenal_update_lineup">
-        <input type="hidden" name="match_id" value="<?php echo intval( $match->id ); ?>">
+        <input type="hidden" name="match_id" value="<?php echo esc_attr( $match->match_id ); ?>">
         <?php wp_nonce_field( 'arsenal_lineups_form', 'arsenal_lineups_nonce' ); ?>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                                     </td>
                                     <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">
                                         <button type="button" class="button button-small button-link-delete" 
-                                                onclick="if(confirm('Удалить игрока?')) { document.location='<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=arsenal_delete_lineup_player&lineup_id=' . $player->id . '&match_id=' . $match->id ), 'delete_lineup_' . $player->id ) ); ?>'; }">
+                                                onclick="if(confirm('Удалить игрока?')) { document.location='<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=arsenal_delete_lineup_player&lineup_id=' . $player->id . '&match_id=' . esc_attr( $match->match_id ) ), 'delete_lineup_' . $player->id ) ); ?>'; }">
                                             Удалить
                                         </button>
                                     </td>
@@ -123,7 +123,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                                         </td>
                                         <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">
                                             <button type="button" class="button button-small button-link-delete" 
-                                                    onclick="if(confirm('Удалить игрока?')) { document.location='<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?action=arsenal_delete_lineup_player&lineup_id=' . $player->id . '&match_id=' . $match->id ), 'delete_lineup_' . $player->id ) ); ?>'; }">
+                                                    onclick="if(confirm('Удалить игрока?')) { document.location='<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=arsenal_delete_lineup_player&lineup_id=' . $player->id . '&match_id=' . esc_attr( $match->match_id ) ), 'delete_lineup_' . $player->id ) ); ?>'; }">
                                                 Удалить
                                             </button>
                                         </td>
@@ -175,7 +175,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         </select>
                         
                         <select name="new_players[${playerCounter}][team_id]" required style="padding: 6px; width: 100%;">
-                            <option value="${document.querySelector('input[name="match_id"]').value === '<?php echo intval( $match->id ); ?>' ? '<?php echo isset( $match->home_team_id ) ? esc_attr( $match->home_team_id ) : '' ?>' : ''}"><?php echo esc_html( $match->home_team_name ?? 'Домашняя' ); ?></option>
+                            <option value="${document.querySelector('input[name="match_id"]').value === '<?php echo esc_attr( $match->match_id ); ?>' ? '<?php echo isset( $match->home_team_id ) ? esc_attr( $match->home_team_id ) : '' ?>' : ''}"><?php echo esc_html( $match->home_team_name ?? 'Домашняя' ); ?></option>
                             <option value="<?php echo isset( $match->away_team_id ) ? esc_attr( $match->away_team_id ) : '' ?>"><?php echo esc_html( $match->away_team_name ?? 'Гостевая' ); ?></option>
                         </select>
                         
@@ -200,7 +200,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             <button type="submit" class="button button-primary button-large" style="padding: 10px 30px; font-size: 16px;">
                 Сохранить составы
             </button>
-            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match->id ) ); ?>" class="button button-large" style="padding: 10px 30px; margin-left: 10px;">
+            <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . esc_attr( $match->match_id ) ) ); ?>" class="button button-large" style="padding: 10px 30px; margin-left: 10px;">
                 Назад к матчу
             </a>
         </div>
