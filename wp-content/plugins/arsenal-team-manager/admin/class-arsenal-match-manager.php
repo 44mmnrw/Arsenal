@@ -139,40 +139,55 @@ class Arsenal_Match_Manager {
     public static function create_match( $data ) {
         global $wpdb;
         
-        // Валидация обязательных полей
-        $required = array( 'match_date', 'home_team_id', 'away_team_id', 'tournament_id' );
+        // Валидация обязательных полей (по схеме БД)
+        $required = array( 'status', 'match_date', 'home_team_id', 'away_team_id' );
         foreach ( $required as $field ) {
             if ( empty( $data[ $field ] ) ) {
                 return false;
             }
         }
         
+        // Если league_id не указан, установить первую доступную лигу
+        if ( empty( $data['league_id'] ) ) {
+            $leagues = self::get_leagues();
+            $league_ids = array_keys( $leagues );
+            $data['league_id'] = ! empty( $league_ids ) ? $league_ids[0] : null;
+            
+            if ( empty( $data['league_id'] ) ) {
+                return false; // Нет доступных лиг
+            }
+        }
+        
         // Подготовка данных
         $insert_data = array(
-            'match_id' => sanitize_text_field( $data['match_id'] ?? '' ),
+            'match_id' => null, // Будет сгенерирован триггером БД
+            'league_id' => ! empty( $data['league_id'] ) ? sanitize_text_field( $data['league_id'] ) : null,
+            'season_id' => ! empty( $data['season_id'] ) ? sanitize_text_field( $data['season_id'] ) : null,
             'tournament_id' => sanitize_text_field( $data['tournament_id'] ),
             'match_date' => sanitize_text_field( $data['match_date'] ),
-            'match_time' => sanitize_text_field( $data['match_time'] ?? '' ),
+            'match_time' => ! empty( $data['match_time'] ) ? sanitize_text_field( $data['match_time'] ) : null,
             'home_team_id' => sanitize_text_field( $data['home_team_id'] ),
             'away_team_id' => sanitize_text_field( $data['away_team_id'] ),
             'home_score' => isset( $data['home_score'] ) ? intval( $data['home_score'] ) : null,
             'away_score' => isset( $data['away_score'] ) ? intval( $data['away_score'] ) : null,
             'status' => sanitize_text_field( $data['status'] ?? 'NS' ),
             'tour' => isset( $data['tour'] ) ? intval( $data['tour'] ) : null,
-            'stadium_id' => sanitize_text_field( $data['stadium_id'] ?? '' ),
+            'stadium_id' => ! empty( $data['stadium_id'] ) ? sanitize_text_field( $data['stadium_id'] ) : null,
             'attendance' => isset( $data['attendance'] ) ? intval( $data['attendance'] ) : null,
-            'main_referee' => sanitize_text_field( $data['main_referee'] ?? '' ),
-            'assistant_referees_1' => sanitize_text_field( $data['assistant_referees_1'] ?? '' ),
-            'assistant_referees_2' => sanitize_text_field( $data['assistant_referees_2'] ?? '' ),
-            'fourth_referee' => sanitize_text_field( $data['fourth_referee'] ?? '' ),
-            'referee_inspector' => sanitize_text_field( $data['referee_inspector'] ?? '' ),
-            'delegate' => sanitize_text_field( $data['delegate'] ?? '' ),
-            'match_report' => wp_kses_post( $data['match_report'] ?? '' ),
+            'main_referee' => ! empty( $data['main_referee'] ) ? sanitize_text_field( $data['main_referee'] ) : null,
+            'assistant_referees_1' => ! empty( $data['assistant_referees_1'] ) ? sanitize_text_field( $data['assistant_referees_1'] ) : null,
+            'assistant_referees_2' => ! empty( $data['assistant_referees_2'] ) ? sanitize_text_field( $data['assistant_referees_2'] ) : null,
+            'fourth_referee' => ! empty( $data['fourth_referee'] ) ? sanitize_text_field( $data['fourth_referee'] ) : null,
+            'referee_inspector' => ! empty( $data['referee_inspector'] ) ? sanitize_text_field( $data['referee_inspector'] ) : null,
+            'delegate' => ! empty( $data['delegate'] ) ? sanitize_text_field( $data['delegate'] ) : null,
+            'match_report' => ! empty( $data['match_report'] ) ? wp_kses_post( $data['match_report'] ) : null,
         );
         
         // Типы данных для каждого поля
         $format = array(
             '%s', // match_id
+            '%s', // league_id
+            '%s', // season_id
             '%s', // tournament_id
             '%s', // match_date
             '%s', // match_time
@@ -402,12 +417,12 @@ class Arsenal_Match_Manager {
         global $wpdb;
         
         $leagues = $wpdb->get_results( 
-            "SELECT id, league_name FROM {$wpdb->prefix}arsenal_leagues ORDER BY league_name"
+            "SELECT league_id, league_name FROM {$wpdb->prefix}arsenal_leagues ORDER BY league_name"
         );
         
         $result = array();
         foreach ( $leagues as $league ) {
-            $result[ $league->id ] = $league->league_name;
+            $result[ $league->league_id ] = $league->league_name;
         }
         
         return $result;
