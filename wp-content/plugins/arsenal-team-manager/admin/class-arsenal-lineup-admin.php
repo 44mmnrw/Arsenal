@@ -180,8 +180,8 @@ class Arsenal_Lineup_Admin {
             wp_die( 'Не удалось удалить игрока из состава.' );
         }
         
-        // Редирект на список матчей
-        wp_redirect( admin_url( 'admin.php?page=arsenal-matches&deleted=1' ) );
+        // Редирект на форму составов с сообщением об успехе
+        wp_redirect( admin_url( 'admin.php?page=arsenal-match-lineups&match_id=' . urlencode( $match_id ) . '&lineup_deleted=1' ) );
         exit;
     }
 }

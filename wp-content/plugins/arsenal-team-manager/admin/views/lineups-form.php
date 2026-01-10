@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wrap">
     <h1>Редактировать составы матча</h1>
     
+    <!-- Сообщение об успешном удалении игрока -->
+    <?php if ( isset( $_GET['lineup_deleted'] ) && $_GET['lineup_deleted'] == 1 ) : ?>
+        <div style="background: #dff0d8; border: 1px solid #d6e9c6; color: #3c763d; padding: 12px 20px; margin: 20px 0; border-radius: 4px;">
+            <p style="margin: 0;"><strong>✓ Игрок успешно удален из состава на матч</strong></p>
+        </div>
+    <?php endif; ?>
+    
     <!-- Информация о матче -->
     <div style="background: #f1f1f1; padding: 15px 20px; margin: 20px 0; border-radius: 4px;">
         <p>
