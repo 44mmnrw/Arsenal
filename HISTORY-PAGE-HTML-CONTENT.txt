@@ -1,0 +1,105 @@
+<div class="club-history-container">
+
+  <!-- История клуба -->
+  <section class="history-intro">
+    <h2 class="history-intro__heading">История клуба</h2>
+    <p class="history-intro__text">ФК Арсенал (Дзержинск) — молодой и амбициозный клуб, основанный в 2018 году. За короткий период команда прошла путь от Второй лиги до Высшей лиги белорусского футбола.</p>
+  </section>
+
+  
+
+   
+  <!-- Рекорды и достижения -->
+  <section class="achievements-section">
+    <h3 class="achievements-section__heading">Рекорды и достижения клуба</h3>
+    
+    <div class="achievements-grid">
+      <!-- Титулы -->
+      <div class="achievement-card achievement-card--primary">
+        <div class="achievement-card__header">
+          <span class="achievement-card__icon">🏆</span>
+          <h4 class="achievement-card__title">Титулы</h4>
+        </div>
+        <ul class="achievement-card__list">
+          <li class="achievement-card__item">
+            <span class="achievement-card__item-icon">🏆</span>
+            <span class="achievement-card__item-text">Двукратный чемпион Первой лиги (2021, 2023)</span>
+          </li>
+          <li class="achievement-card__item">
+            <span class="achievement-card__item-icon">🏆</span>
+            <span class="achievement-card__item-text">Чемпион Второй лиги (2019)</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Лучшие результаты -->
+      <div class="achievement-card achievement-card--white">
+        <div class="achievement-card__header">
+          <span class="achievement-card__icon">📊</span>
+          <h4 class="achievement-card__title">Лучшие результаты</h4>
+        </div>
+        <div class="achievement-card__list">
+          <div class="achievement-card__item">
+            <span class="achievement-card__item-text"><strong class="stat-card__bold">В Высшей лиге:</strong> 10 место (2024)</span>
+          </div>
+          <div class="achievement-card__item">
+            <span class="achievement-card__item-text"><strong class="stat-card__bold">Самая крупная победа:</strong> 3:0 (Шахтер, 2024)</span>
+          </div>
+          <div class="achievement-card__item">
+            <span class="achievement-card__item-text"><strong class="stat-card__bold">В Высшей лиге с:</strong> 2022 года</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Статистические карточки -->
+      <div class="stat-card">
+        <div class="stat-card__label">Наибольшее количество матчей</div>
+        <div class="stat-card__value">Александр Скшинецкий – 65</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card__label">Лучший бомбардир всех времен</div>
+        <div class="stat-card__value">Юрий Ловец – 10 голов</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card__label">Лучший бомбардир за сезон</div>
+        <div class="stat-card__value">Александр Французов – 6 голов (2025)</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card__label">Самый полезный игрок</div>
+        <div class="stat-card__value">Руслан Мялковский – 14 (9+5)</div>
+      </div>
+
+      <div class="stat-card stat-card--full-width">
+        <div class="stat-card__label">Самые полезные игроки за сезон</div>
+        <div class="stat-card__value">Вадим Арутюнян – 8 (2024); Александр Французов – 8 (2025)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Домашние стадионы -->
+  <section class="stadiums-section">
+    <h3 class="stadiums-section__heading">Домашние стадионы</h3>
+    
+    <div class="stadiums-grid">
+      <div class="stadium-item">
+        <div class="stadium-item__icon">🏟️</div>
+        <div class="stadium-item__info">
+          <h4 class="stadium-item__name">РЦОП-Стайки</h4>
+          <p class="stadium-item__location">Минск • Вместимость: 1,500</p>
+        </div>
+      </div>
+
+      <div class="stadium-item">
+        <div class="stadium-item__icon">🏟️</div>
+        <div class="stadium-item__info">
+          <h4 class="stadium-item__name">Городской стадион</h4>
+          <p class="stadium-item__location">Борисов • Вместимость: 5,402</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -162,16 +162,6 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			ARSENAL_VERSION
 		);
 
-		// Стили страницы истории
-		if ( is_page_template( 'templates/page-history.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'history' ) ) ) {
-			wp_enqueue_style(
-				'arsenal-history',
-				ARSENAL_THEME_URI . '/assets/css/history-page.css',
-				array( 'arsenal-patterns' ),
-				ARSENAL_VERSION
-			);
-		}
-
 		// Стили страницы статистики игрока (только для шаблона Статистика игрока)
 		if ( get_query_var( 'player_id' ) ) {
 			wp_enqueue_style(
@@ -242,11 +232,11 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
-		// Стили страницы истории клуба (только для страницы История)
-		if ( is_page_template( 'templates/page-history.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'history' ) ) ) {
+		// Стили страницы История клуба (для HTML версии)
+		if ( is_page( 'history' ) || is_page( 'история' ) ) {
 			wp_enqueue_style(
-				'arsenal-history',
-				ARSENAL_THEME_URI . '/assets/css/history-page.css',
+				'arsenal-page-history',
+				ARSENAL_THEME_URI . '/assets/css/page-history.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -870,6 +860,7 @@ if ( ! function_exists( 'arsenal_calculate_standings' ) ) {
 			 INNER JOIN {$wpdb->prefix}arsenal_matches m ON (t.team_id = m.home_team_id OR t.team_id = m.away_team_id)
 			 WHERE YEAR(m.match_date) = %d 
 			 AND m.tournament_id = %s
+			 AND (m.status = '0083CE05' OR m.status = 'E229BE8C')
 			 AND m.home_score IS NOT NULL 
 			 AND m.away_score IS NOT NULL
 			 ORDER BY t.name",
@@ -902,6 +893,7 @@ if ( ! function_exists( 'arsenal_calculate_standings' ) ) {
 			 FROM {$wpdb->prefix}arsenal_matches m
 			 WHERE YEAR(m.match_date) = %d 
 			 AND m.tournament_id = %s
+			 AND (m.status = '0083CE05' OR m.status = 'E229BE8C')
 			 AND m.home_score IS NOT NULL 
 			 AND m.away_score IS NOT NULL
 			 ORDER BY m.match_date ASC",

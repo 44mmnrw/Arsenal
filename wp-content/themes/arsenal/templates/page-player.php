@@ -5,14 +5,30 @@
  * Страница отображения полной статистики игрока ФК Арсенал Дзержинск
  */
 
-get_header();
-
 // Получаем ID игрока из параметра URL (поддерживаем и rewrite rule, и GET параметр)
 // player_id может быть как строкой (player_id из БД) так и числом (id из БД)
 $player_id = get_query_var( 'player_id' );
 if ( ! $player_id ) {
 	$player_id = isset( $_GET['player_id'] ) ? sanitize_text_field( $_GET['player_id'] ) : '';
 }
+
+// Если ID не передан или игрок не найден, используем дефолтный title
+$custom_title = '';
+if ( $player_id ) {
+	$player = arsenal_get_player_data( $player_id );
+	if ( $player ) {
+		$display_name = $player->full_name ?: trim($player->last_name . ' ' . $player->first_name);
+		$position_name = $player->position_name ?? 'игрок';
+		$custom_title = $display_name . ' - игрок команды Арсенал, позиция - ' . $position_name;
+		
+		// Устанавливаем кастомный title
+		add_filter( 'pre_get_document_title', function() use ( $custom_title ) {
+			return $custom_title;
+		}, 999 );
+	}
+}
+
+get_header();
 
 // Если ID не передан, показываем ошибку
 if ( ! $player_id ) {

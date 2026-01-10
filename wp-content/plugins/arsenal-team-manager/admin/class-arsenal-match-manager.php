@@ -257,12 +257,12 @@ class Arsenal_Match_Manager {
             $format[] = '%s';
         }
         
-        if ( isset( $data['home_score'] ) ) {
+        if ( isset( $data['home_score'] ) && $data['home_score'] !== '' ) {
             $update_data['home_score'] = intval( $data['home_score'] );
             $format[] = '%d';
         }
         
-        if ( isset( $data['away_score'] ) ) {
+        if ( isset( $data['away_score'] ) && $data['away_score'] !== '' ) {
             $update_data['away_score'] = intval( $data['away_score'] );
             $format[] = '%d';
         }

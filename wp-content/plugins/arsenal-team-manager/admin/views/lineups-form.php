@@ -156,7 +156,13 @@ if ( ! defined( 'ABSPATH' ) ) {
                 const container = document.getElementById('new-players-container');
                 
                 let playerOptions = '<option value="">— Выберите игрока —</option>';
-                allPlayers.forEach(player => {
+                const sortedPlayers = allPlayers.sort((a, b) => {
+                    const nameA = (a.full_name || '').trim().toLowerCase();
+                    const nameB = (b.full_name || '').trim().toLowerCase();
+                    return nameA.localeCompare(nameB, 'ru');
+                });
+                
+                sortedPlayers.forEach(player => {
                     const playerName = player.full_name;
                     const playerNumber = player.shirt_number || '—';
                     playerOptions += '<option value="' + player.player_id + '">' + playerName + ' №' + playerNumber + '</option>';
