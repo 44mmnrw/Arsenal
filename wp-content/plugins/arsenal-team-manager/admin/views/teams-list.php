@@ -94,155 +94,115 @@ $teams = $wpdb->get_results( "
 " );
 
 ?>
-<div class="wrap">
-    <h1 class="wp-heading-inline">
-        <span class="dashicons dashicons-shield" style="font-size: 32px; width: 32px; height: 32px; vertical-align: middle;"></span>
-        Команды лиги
-    </h1>
-    <a href="#" class="page-title-action" id="add-team-btn">Добавить команду</a>
-    <hr class="wp-header-end">
-    
-    <p style="margin-top: 20px;">
-        Всего команд в лиге: <strong><?php echo count( $teams ); ?></strong>
-        <br>
-        <small style="color: #666;">Загрузите логотипы для каждой команды, чтобы они отображались на сайте</small>
-    </p>
+<div class="teams-wrapper">
+    <div class="teams-header">
+        <h1>🏆 Команды лиги</h1>
+        <button type="button" class="button button-primary" id="add-team-btn">
+            + Добавить команду
+        </button>
+    </div>
+
+    <div class="teams-stats">
+        <span>Всего команд: <strong><?php echo count( $teams ); ?></strong></span>
+        <small>Загрузите логотипы для каждой команды</small>
+    </div>
     
     <!-- Модальное окно добавления команды -->
-    <div id="add-team-modal" style="display: none;">
-        <div class="postbox" style="max-width: 600px; margin: 20px auto;">
-            <div style="padding: 20px;">
-                <h2 style="margin-top: 0;">
-                    <span class="dashicons dashicons-plus-alt" style="vertical-align: middle;"></span>
-                    Добавить новую команду
-                </h2>
-                
-                <form method="post" id="add-team-form">
-                    <?php wp_nonce_field( 'arsenal_add_team' ); ?>
-                    
-                    <table class="form-table">
-                        <tr>
-                            <th><label for="team_name">Название команды <span style="color: #d63638;">*</span></label></th>
-                            <td>
-                                <input type="text" 
-                                       id="team_name" 
-                                       name="team_name" 
-                                       class="regular-text" 
-                                       required
-                                       placeholder="Например: Динамо Минск">
-                                <p class="description">Полное название команды</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th><label for="team_id">ID команды <span style="color: #d63638;">*</span></label></th>
-                            <td>
-                                <input type="text" 
-                                       id="team_id" 
-                                       name="team_id" 
-                                       maxlength="8"
-                                       required
-                                       placeholder="Уникальный ID">
-                                <p class="description">8-символьный уникальный идентификатор (хеш)</p>
-                            </td>
-                        </tr>
-                        </tr>
-                    </table>
-                    
-                    <p class="submit">
-                        <button type="submit" name="add_team" class="button button-primary button-large">
-                            <span class="dashicons dashicons-plus-alt" style="vertical-align: middle;"></span>
-                            Добавить команду
-                        </button>
-                        <button type="button" class="button button-large" id="cancel-add-team">
-                            Отмена
-                        </button>
-                    </p>
-                </form>
+    <div id="add-team-modal" class="teams-modal" style="display: none;">
+        <div class="teams-modal-content">
+            <div class="teams-modal-header">
+                <h2>Добавить новую команду</h2>
+                <button type="button" class="teams-modal-close" id="cancel-add-team">&times;</button>
             </div>
+            
+            <form method="post" id="add-team-form" class="teams-form">
+                <?php wp_nonce_field( 'arsenal_add_team' ); ?>
+                
+                <div class="teams-form-group">
+                    <label for="team_name">Название команды <span class="teams-required">*</span></label>
+                    <input type="text" 
+                           id="team_name" 
+                           name="team_name" 
+                           class="teams-form-input" 
+                           required
+                           placeholder="Например: Динамо Минск">
+                    <p class="teams-form-help">Полное название команды</p>
+                </div>
+                
+                <div class="teams-form-group">
+                    <label for="team_id">ID команды <span class="teams-required">*</span></label>
+                    <input type="text" 
+                           id="team_id" 
+                           name="team_id" 
+                           maxlength="8"
+                           class="teams-form-input"
+                           required
+                           placeholder="Уникальный ID">
+                    <p class="teams-form-help">8-символьный уникальный идентификатор (хеш)</p>
+                </div>
+                
+                <div class="teams-form-actions">
+                    <button type="submit" name="add_team" class="button button-primary">
+                        + Добавить команду
+                    </button>
+                    <button type="button" class="button" id="cancel-modal">
+                        Отмена
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 20px;">
+    <div class="teams-grid">
         <?php foreach ( $teams as $team ): ?>
-            <div class="postbox arsenal-team-card" style="padding: 0; overflow: hidden; min-width: 160px; box-sizing: border-box;">
+            <div class="teams-card">
                 <!-- Заголовок -->
-                <div style="background: #f5f5f5; 
-                            padding: 8px 10px; 
-                            border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0; color: #333; font-size: 13px; line-height: 1.3;">
-                        <?php echo esc_html( $team->name ); ?>
-                    </h3>
+                <div class="teams-card-header">
+                    <h3><?php echo esc_html( $team->name ); ?></h3>
                 </div>
                 
                 <!-- Логотип -->
-                <div style="padding: 10px; text-align: center; background: #fff; height: 90px; display: flex; align-items: center; justify-content: center;">
+                <div class="teams-card-logo">
                     <?php if ( $team->logo_url ): ?>
-                        <div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 4px; padding: 5px; box-sizing: border-box; background: #fafafa;">
-                            <img id="team-logo-preview-<?php echo $team->id; ?>" 
-                                 src="<?php echo esc_url( $team->logo_url ); ?>" 
-                                 style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">
-                        </div>
+                        <img id="team-logo-preview-<?php echo $team->id; ?>" 
+                             src="<?php echo esc_url( $team->logo_url ); ?>" 
+                             alt="<?php echo esc_attr( $team->name ); ?>">
                     <?php else: ?>
-                        <div id="team-logo-preview-<?php echo $team->id; ?>" style="color: #ccc; font-size: 11px;">
-                            <span class="dashicons dashicons-format-image" style="font-size: 40px; width: 40px; height: 40px;"></span>
-                            <br><small>Нет лого</small>
+                        <div id="team-logo-preview-<?php echo $team->id; ?>" class="teams-no-logo">
+                            <span class="dashicons dashicons-format-image"></span>
+                            <small>Нет лого</small>
                         </div>
                     <?php endif; ?>
                 </div>
                 
-                <!-- Форма загрузки -->
-                <div style="padding: 8px; background: #fafafa; border-top: 1px solid #ddd;">
-                    <form method="post" style="margin: 0;">
-                        <?php wp_nonce_field( 'arsenal_save_team_logo' ); ?>
-                        <input type="hidden" name="team_id" value="<?php echo $team->id; ?>">
-                        <input type="hidden" 
-                               name="logo_url" 
-                               id="team-logo-url-<?php echo $team->id; ?>" 
-                               value="<?php echo esc_attr( $team->logo_url ); ?>">
-                        
-                        <div style="display: flex; flex-direction: column; gap: 5px;">
-                            <button type="button" 
-                                    class="button arsenal-team-btn arsenal-team-btn-upload upload-logo-btn" 
-                                    data-team-id="<?php echo $team->id; ?>"
-                                    style="padding: 4px 6px !important; font-size: 11px !important; height: 24px !important; line-height: 1.2 !important;">
-                                <span class="dashicons dashicons-upload" style="font-size: 14px; width: 14px; height: 14px;"></span>
-                                Загрузить
-                            </button>
-                            
-                            <button type="submit" 
-                                    name="save_team_logo" 
-                                    class="button arsenal-team-btn arsenal-team-btn-save"
-                                    style="padding: 4px 6px !important; font-size: 11px !important; height: 24px !important; line-height: 1.2 !important;">
-                                <span class="dashicons dashicons-yes" style="font-size: 14px; width: 14px; height: 14px;"></span>
-                                Сохранить
-                            </button>
-                        </div>
-                        
-                        <?php if ( $team->logo_url ): ?>
-                            <button type="button" 
-                                    class="button arsenal-team-btn arsenal-team-btn-delete remove-logo-btn" 
-                                    data-team-id="<?php echo $team->id; ?>"
-                                    style="margin-top: 5px; padding: 4px 6px !important; font-size: 11px !important; height: 24px !important; line-height: 1.2 !important;">
-                                <span class="dashicons dashicons-no" style="font-size: 14px; width: 14px; height: 14px;"></span>
-                                Удалить лого
-                            </button>
-                        <?php endif; ?>
-                    </form>
+                <!-- Кнопки -->
+                <div class="teams-card-buttons">
+                    <button type="button" 
+                            class="teams-btn-upload upload-logo-btn" 
+                            data-team-id="<?php echo $team->id; ?>"
+                            title="Загрузить логотип">
+                        <span class="dashicons dashicons-upload"></span>
+                        Загрузить
+                    </button>
                     
-                    <!-- Кнопка удаления команды -->
-                    <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #ddd;">
-                        <a href="<?php echo wp_nonce_url( 
-                            admin_url( 'admin.php?page=arsenal-teams&action=delete&team_id=' . $team->id ), 
-                            'delete_team_' . $team->id 
-                        ); ?>" 
-                           class="button arsenal-team-btn arsenal-team-btn-delete"
-                           style="padding: 4px 6px !important; font-size: 11px !important; height: 24px !important; line-height: 1.2 !important; display: inline-block; text-decoration: none;"
-                           onclick="return confirm('Удалить команду <?php echo esc_js( $team->name ); ?>?');">
-                            <span class="dashicons dashicons-trash" style="font-size: 14px; width: 14px; height: 14px;"></span>
-                            Удалить
-                        </a>
-                    </div>
+                    <button type="button" 
+                            class="teams-btn-delete remove-logo-btn" 
+                            data-team-id="<?php echo $team->id; ?>"
+                            title="Удалить логотип"
+                            style="display: <?php echo $team->logo_url ? 'block' : 'none'; ?>">
+                        <span class="dashicons dashicons-no"></span>
+                        Удалить лого
+                    </button>
                     
+                    <button type="button" 
+                            class="teams-btn-delete delete-team-btn" 
+                            data-team-id="<?php echo $team->id; ?>"
+                            data-team-name="<?php echo esc_attr( $team->name ); ?>"
+                            data-nonce="<?php echo wp_create_nonce( 'delete_team_' . $team->id ); ?>"
+                            title="Удалить команду">
+                        <span class="dashicons dashicons-trash"></span>
+                        Удалить команду
+                    </button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -256,43 +216,44 @@ jQuery(document).ready(function($) {
     // Показать форму добавления команды
     $('#add-team-btn').on('click', function(e) {
         e.preventDefault();
-        $('#add-team-modal').slideDown();
-        $('html, body').animate({
-            scrollTop: $('#add-team-modal').offset().top - 50
-        }, 500);
+        $('#add-team-modal').fadeIn(200);
     });
     
     // Отменить добавление команды
-    $('#cancel-add-team').on('click', function() {
-        $('#add-team-modal').slideUp();
+    $('#cancel-add-team, #cancel-modal').on('click', function(e) {
+        e.preventDefault();
+        $('#add-team-modal').fadeOut(200);
         $('#add-team-form')[0].reset();
     });
     
-    // Загрузка логотипа
+    // Закрыть модаль при клике вне
+    $('#add-team-modal').on('click', function(e) {
+        if ($(e.target).is('#add-team-modal')) {
+            $('#add-team-modal').fadeOut(200);
+            $('#add-team-form')[0].reset();
+        }
+    });
+    
+    // Загрузка логотипа - ТОЧНО КАК В WORDPRESS
     $('.upload-logo-btn').on('click', function(e) {
         e.preventDefault();
         
         var teamId = $(this).data('team-id');
         var button = $(this);
         
-        // Создаём новый медиа загрузчик для каждого клика
-        var teamMediaUploader = wp.media({
-            title: 'Выберите логотип команды',
-            button: {
-                text: 'Использовать это изображение'
-            },
-            multiple: false,
-            library: {
-                type: 'image'
-            }
-        });
+        // Сохраняем team_id для обработчика
+        window.arsenalTeamId = teamId;
+        window.arsenalButton = button;
         
-        // Обработка выбора изображения
-        teamMediaUploader.on('select', function() {
-            var attachment = teamMediaUploader.state().get('selection').first().toJSON();
+        // Переопределяем обработчик ОДИН РАЗ перед открытием
+        wp.media.editor.send.attachment = function(props, attachment) {
+            var teamId = window.arsenalTeamId;
+            var button = window.arsenalButton;
             
-            // Конвертируем абсолютный URL в относительный
-            var relativeUrl = attachment.url;
+            var fullUrl = attachment.url;
+            
+            // Конвертируем в относительный URL
+            var relativeUrl = fullUrl;
             var homeUrl = '<?php echo home_url(); ?>';
             if (relativeUrl.indexOf(homeUrl) === 0) {
                 relativeUrl = relativeUrl.substring(homeUrl.length);
@@ -301,38 +262,25 @@ jQuery(document).ready(function($) {
                 }
             }
             
-            // Обновляем скрытое поле с ОТНОСИТЕЛЬНЫМ URL
-            $('#team-logo-url-' + teamId).val(relativeUrl);
-            
-            // Находим контейнер превью
-            var previewContainer = $('#team-logo-preview-' + teamId).parent();
-            
             // Обновляем превью
-            previewContainer.html(
-                '<div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border: 1px solid #e0e0e0; border-radius: 4px; padding: 5px; box-sizing: border-box; background: #fafafa;">' +
-                '<img id="team-logo-preview-' + teamId + '" src="' + attachment.url + '" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">' +
-                '</div>'
+            $('#team-logo-preview-' + teamId).parent().html(
+                '<img id="team-logo-preview-' + teamId + '" src="' + fullUrl + '" alt="Team Logo">'
             );
             
-            // Находим форму и проверяем наличие кнопки удаления
-            var form = button.closest('form');
-            var existingDeleteBtn = form.find('.remove-logo-btn[data-team-id="' + teamId + '"]');
+            // Показываем кнопку удаления
+            button.closest('.teams-card').find('.remove-logo-btn[data-team-id="' + teamId + '"]').show();
             
-            // Если кнопки удаления нет, добавляем
-            if (existingDeleteBtn.length === 0) {
-                button.parent().after(
-                    '<button type="button" ' +
-                    'class="button arsenal-team-btn arsenal-team-btn-delete remove-logo-btn" ' +
-                    'data-team-id="' + teamId + '" ' +
-                    'style="margin-top: 5px; padding: 4px 6px !important; font-size: 11px !important; height: 24px !important; line-height: 1.2 !important;">' +
-                    '<span class="dashicons dashicons-no" style="font-size: 14px; width: 14px; height: 14px;"></span> ' +
-                    'Удалить лого' +
-                    '</button>'
-                );
-            }
-        });
+            // AJAX сохранение
+            $.post(arsenal_ajax.ajax_url, {
+                action: 'arsenal_save_team_logo',
+                team_id: teamId,
+                logo_url: relativeUrl,
+                nonce: arsenal_ajax.save_team_logo_nonce
+            });
+        };
         
-        teamMediaUploader.open();
+        // Открываем галерею как в записях
+        wp.media.editor.open(button);
     });
     
     // Удаление логотипа
@@ -346,20 +294,41 @@ jQuery(document).ready(function($) {
         var teamId = $(this).data('team-id');
         var deleteBtn = $(this);
         
-        // Очищаем скрытое поле URL
-        $('#team-logo-url-' + teamId).val('');
-        
         // Находим контейнер превью и очищаем
         var previewContainer = $('#team-logo-preview-' + teamId).parent();
         previewContainer.html(
-            '<div id="team-logo-preview-' + teamId + '" style="color: #ccc; font-size: 11px;">' +
-            '<span class="dashicons dashicons-format-image" style="font-size: 40px; width: 40px; height: 40px;"></span>' +
-            '<br><small>Нет лого</small>' +
+            '<div id="team-logo-preview-' + teamId + '" class="teams-no-logo">' +
+            '<span class="dashicons dashicons-format-image"></span>' +
+            '<small>Нет лого</small>' +
             '</div>'
         );
         
-        // Удаляем кнопку удаления
-        deleteBtn.remove();
+        // Скрываем кнопку удаления
+        deleteBtn.hide();
+        
+        // AJAX сохранение пустого URL
+        $.post(arsenal_ajax.ajax_url, {
+            action: 'arsenal_save_team_logo',
+            team_id: teamId,
+            logo_url: '',
+            nonce: arsenal_ajax.save_team_logo_nonce
+        });
+    });
+    
+    // Удаление команды
+    $(document).on('click', '.delete-team-btn', function(e) {
+        e.preventDefault();
+        
+        var teamId = $(this).data('team-id');
+        var teamName = $(this).data('team-name');
+        var nonce = $(this).data('nonce');
+        
+        if (!confirm('Удалить команду ' + teamName + '?')) {
+            return;
+        }
+        
+        // Перенаправляем на страницу удаления
+        window.location.href = '<?php echo admin_url('admin.php?page=arsenal-teams&action=delete&team_id='); ?>' + teamId + '&_wpnonce=' + nonce;
     });
 });
 </script>

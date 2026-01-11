@@ -221,10 +221,10 @@ class Arsenal_Stadium_Admin {
         $site_url = home_url();
         
         // Вычисляем относительный путь от корня сайта
-        $relative_path = str_replace( $site_url, '', $full_url );
+        $relative_path = ( $full_url && $site_url ) ? str_replace( $site_url, '', $full_url ) : $full_url;
         
         // Убеждаемся, что путь начинается со слэша
-        if ( ! str_starts_with( $relative_path, '/' ) ) {
+        if ( $relative_path && ! str_starts_with( $relative_path, '/' ) ) {
             $relative_path = '/' . $relative_path;
         }
         

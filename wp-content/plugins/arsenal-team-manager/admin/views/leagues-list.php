@@ -11,23 +11,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="wrap">
-    <h1 class="wp-heading-inline">Лиги</h1>
-    <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-add' ); ?>" class="page-title-action">Добавить лигу</a>
-    <hr class="wp-header-end">
-
+<div class="leagues-wrapper">
     <?php if ( isset( $_GET['message'] ) ) : ?>
         <?php if ( $_GET['message'] === 'created' ) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><strong>Лига успешно создана.</strong></p>
+                <p><strong>✓ Лига успешно создана.</strong></p>
             </div>
         <?php elseif ( $_GET['message'] === 'updated' ) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><strong>Лига успешно обновлена.</strong></p>
+                <p><strong>✓ Лига успешно обновлена.</strong></p>
             </div>
         <?php elseif ( $_GET['message'] === 'deleted' ) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><strong>Лига успешно удалена.</strong></p>
+                <p><strong>✓ Лига успешно удалена.</strong></p>
             </div>
         <?php elseif ( $_GET['message'] === 'error' ) : ?>
             <div class="notice notice-error is-dismissible">
@@ -36,55 +32,69 @@ if ( ! defined( 'ABSPATH' ) ) {
         <?php endif; ?>
     <?php endif; ?>
 
-    <p>Всего лиг: <strong><?php echo $total; ?></strong></p>
+    <div class="leagues-header">
+        <h1>⚽ Лиги</h1>
+        <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-add' ); ?>" class="button button-primary">➕ Добавить лигу</a>
+    </div>
 
-    <table class="wp-list-table widefat fixed striped">
-        <thead>
-            <tr>
-                <th style="width: 60px;">ID</th>
-                <th style="width: 100px;">Код</th>
-                <th>Название лиги</th>
-                <th style="width: 150px;">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ( ! empty( $leagues ) ) : ?>
-                <?php foreach ( $leagues as $league ) : ?>
-                    <tr>
-                        <td><?php echo esc_html( $league->id ); ?></td>
-                        <td><code><?php echo esc_html( $league->league_id ); ?></code></td>
-                        <td><strong><?php echo esc_html( $league->league_name ); ?></strong></td>
-                        <td>
-                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-edit&league_id=' . $league->id ); ?>" 
-                               class="button button-small">Изменить</a>
-                            <a href="<?php echo wp_nonce_url( admin_url( 'admin-post.php?action=arsenal_delete_league&league_id=' . $league->id ), 'arsenal_delete_league_' . $league->id ); ?>" 
-                               class="button button-small button-link-delete"
-                               onclick="return confirm('Вы уверены, что хотите удалить эту лигу?');">Удалить</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <tr>
-                    <td colspan="4">Лиги не найдены.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+    <div class="leagues-stats">
+        <div class="stat-box">
+            <span class="stat-number"><?php echo $total; ?></span>
+            <span class="stat-label">Всего лиг</span>
+        </div>
+    </div>
 
-    <?php if ( $total_pages > 1 ) : ?>
-        <div class="tablenav bottom">
-            <div class="tablenav-pages">
-                <?php
-                echo paginate_links( array(
-                    'base'      => add_query_arg( 'paged', '%#%' ),
-                    'format'    => '',
-                    'prev_text' => '&laquo;',
-                    'next_text' => '&raquo;',
-                    'total'     => $total_pages,
-                    'current'   => $paged,
-                ) );
-                ?>
+    <?php if ( ! empty( $leagues ) ) : ?>
+        <div class="leagues-table">
+            <div class="leagues-row leagues-header">
+                <div class="leagues-col-id">ID</div>
+                <div class="leagues-col-code">Код</div>
+                <div class="leagues-col-name">Название лиги</div>
+                <div class="leagues-col-action">✏️</div>
+                <div class="leagues-col-action">🗑️</div>
             </div>
+
+            <?php foreach ( $leagues as $league ) : ?>
+                <div class="leagues-row">
+                    <div class="leagues-col-id"><?php echo esc_html( $league->id ); ?></div>
+                    <div class="leagues-col-code"><code><?php echo esc_html( $league->league_id ); ?></code></div>
+                    <div class="leagues-col-name">
+                        <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-edit&league_id=' . $league->id ); ?>" 
+                           class="league-name-link"><?php echo esc_html( $league->league_name ); ?></a>
+                    </div>
+                    <div class="leagues-col-action">
+                        <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-edit&league_id=' . $league->id ); ?>" 
+                           class="button" title="Редактировать">✏️</a>
+                    </div>
+                    <div class="leagues-col-action">
+                        <a href="<?php echo wp_nonce_url( admin_url( 'admin-post.php?action=arsenal_delete_league&league_id=' . $league->id ), 'arsenal_delete_league_' . $league->id ); ?>" 
+                           class="button" 
+                           onclick="return confirm('Вы уверены, что хотите удалить эту лигу?');" 
+                           title="Удалить">🗑️</a>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <?php if ( $total_pages > 1 ) : ?>
+            <div class="leagues-pagination">
+                <div class="pagination">
+                    <?php
+                    echo paginate_links( array(
+                        'base'      => add_query_arg( 'paged', '%#%' ),
+                        'format'    => '',
+                        'prev_text' => '← Предыдущая',
+                        'next_text' => 'Следующая →',
+                        'total'     => $total_pages,
+                        'current'   => $paged,
+                    ) );
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php else : ?>
+        <div class="leagues-empty-message">
+            <p>🏆 Лиги не найдены. <a href="<?php echo admin_url( 'admin.php?page=arsenal-league-add' ); ?>">Создайте первую лигу</a></p>
         </div>
     <?php endif; ?>
 </div>

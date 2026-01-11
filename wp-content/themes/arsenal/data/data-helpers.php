@@ -19,7 +19,10 @@ function arsenal_get_standings() {
         return null;
     }
     
-    $json = file_get_contents( $file );
+    $json = @file_get_contents( $file );
+    if ( ! $json ) {
+        return null;
+    }
     return json_decode( $json, true );
 }
 
@@ -33,7 +36,10 @@ function arsenal_get_team_info() {
         return null;
     }
     
-    $json = file_get_contents( $file );
+    $json = @file_get_contents( $file );
+    if ( ! $json ) {
+        return null;
+    }
     return json_decode( $json, true );
 }
 
@@ -47,7 +53,10 @@ function arsenal_get_fixtures() {
         return null;
     }
     
-    $json = file_get_contents( $file );
+    $json = @file_get_contents( $file );
+    if ( ! $json ) {
+        return null;
+    }
     return json_decode( $json, true );
 }
 
@@ -62,7 +71,7 @@ function arsenal_get_position() {
     }
     
     foreach ( $standings['teams'] as $team ) {
-        if ( strpos( strtolower( $team['name'] ), 'арсенал' ) !== false ) {
+        if ( ! empty( $team['name'] ) && strpos( strtolower( $team['name'] ), 'арсенал' ) !== false ) {
             return $team;
         }
     }
@@ -82,12 +91,14 @@ function arsenal_get_recent_matches( $limit = 5 ) {
     
     // Фильтруем только сыгранные матчи (с результатом)
     $played = array_filter( $fixtures['matches'], function( $match ) {
-        return ! empty( $match['score'] );
+        return ! empty( $match['score'] ) && ! empty( $match['date'] );
     });
     
     // Сортируем по дате (последние первыми)
     usort( $played, function( $a, $b ) {
-        return strtotime( $b['date'] ) - strtotime( $a['date'] );
+        $date_a = ! empty( $a['date'] ) ? strtotime( $a['date'] ) : 0;
+        $date_b = ! empty( $b['date'] ) ? strtotime( $b['date'] ) : 0;
+        return $date_b - $date_a;
     });
     
     return array_slice( $played, 0, $limit );
@@ -105,12 +116,14 @@ function arsenal_get_upcoming_matches( $limit = 5 ) {
     
     // Фильтруем матчи без результата
     $upcoming = array_filter( $fixtures['matches'], function( $match ) {
-        return empty( $match['score'] );
+        return empty( $match['score'] ) && ! empty( $match['date'] );
     });
     
     // Сортируем по дате
     usort( $upcoming, function( $a, $b ) {
-        return strtotime( $a['date'] ) - strtotime( $b['date'] );
+        $date_a = ! empty( $a['date'] ) ? strtotime( $a['date'] ) : 0;
+        $date_b = ! empty( $b['date'] ) ? strtotime( $b['date'] ) : 0;
+        return $date_a - $date_b;
     });
     
     return array_slice( $upcoming, 0, $limit );

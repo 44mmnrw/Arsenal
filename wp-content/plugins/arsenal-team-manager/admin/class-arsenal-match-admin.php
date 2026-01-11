@@ -29,8 +29,16 @@ class Arsenal_Match_Admin {
      */
     public function add_admin_menu() {
         // Подменю: Матчи
+        $parent_slug = 'arsenal-team';
+        
+        // Защита: убедиться, что parent_slug инициализирован
+        if ( empty( $parent_slug ) ) {
+            error_log( '[Arsenal Match Admin] Warning: parent_slug is empty in add_admin_menu()' );
+            return;
+        }
+        
         add_submenu_page(
-            'arsenal-team',                          // Родительский slug
+            $parent_slug,                          // Родительский slug
             'Матчи',                                 // Заголовок страницы
             'Матчи',                                 // Название пункта
             'manage_options',                        // Права

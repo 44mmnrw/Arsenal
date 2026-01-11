@@ -20,9 +20,9 @@ if ( isset( $_POST['arsenal_save_season'] ) && check_admin_referer( 'arsenal_sav
     update_option( 'arsenal_active_season_year', $new_year );
     if ( $season_id ) {
         update_option( 'arsenal_active_season_id', $season_id );
-        echo '<div class="notice notice-success is-dismissible"><p><strong>Активный сезон обновлён:</strong> ' . $new_year . ' (ID: ' . $season_id . ')</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p><strong>✓ Активный сезон обновлён:</strong> ' . $new_year . ' (ID: ' . $season_id . ')</p></div>';
     } else {
-        echo '<div class="notice notice-success is-dismissible"><p><strong>Активный год обновлён:</strong> ' . $new_year . '</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p><strong>✓ Активный год обновлён:</strong> ' . $new_year . '</p></div>';
     }
 }
 
@@ -121,118 +121,111 @@ $standings = (object) array(
 );
 
 ?>
-<div class="wrap">
-    <h1 class="wp-heading-inline">
-        <span class="dashicons dashicons-admin-users" style="font-size: 32px; width: 32px; height: 32px;"></span>
-        Управление ФК Арсенал Дзержинск
-    </h1>
-    <hr class="wp-header-end">
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <h1>⚽ Управление ФК Арсенал Дзержинск</h1>
+    </div>
     
     <!-- Выбор активного года сезона -->
-    <div class="postbox" style="margin-top: 20px; padding: 20px; background: #fff; border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
-        <h2 style="margin: 0 0 15px 0;">
-            <span class="dashicons dashicons-calendar" style="color: #2271b1;"></span>
-            Активный год сезона
-        </h2>
-        <form method="post" action="">
+    <div class="season-selector-card">
+        <div class="season-selector-header">
+            <h2>📅 Активный год сезона</h2>
+        </div>
+        <form method="post" action="" class="season-selector-form">
             <?php wp_nonce_field( 'arsenal_save_season_action', 'arsenal_season_nonce' ); ?>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <label for="arsenal_active_season_year" style="font-weight: 600;">
+            <div class="season-selector-content">
+                <label for="arsenal_active_season_year">
                     Выберите год для отображения статистики:
                 </label>
-                <select name="arsenal_active_season_year" id="arsenal_active_season_year" style="width: 120px;">
-                    <?php
-                    // Получаем текущий активный год
-                    $current_year = get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) );
-                    
-                    // Получаем доступные годы из БД
-                    $years = $wpdb->get_col( "SELECT DISTINCT YEAR(match_date) as year 
-                                              FROM {$wpdb->prefix}arsenal_matches 
-                                              ORDER BY year DESC" );
-                    
-                    if ( ! empty( $years ) ) {
-                        foreach ( $years as $year ) {
-                            $selected = ( $current_year == $year ) ? 'selected' : '';
-                            echo "<option value='{$year}' {$selected}>{$year}</option>";
+                <div class="season-selector-row">
+                    <select name="arsenal_active_season_year" id="arsenal_active_season_year">
+                        <?php
+                        // Получаем текущий активный год
+                        $current_year = get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) );
+                        
+                        // Получаем доступные годы из БД
+                        $years = $wpdb->get_col( "SELECT DISTINCT YEAR(match_date) as year 
+                                                  FROM {$wpdb->prefix}arsenal_matches 
+                                                  ORDER BY year DESC" );
+                        
+                        if ( ! empty( $years ) ) {
+                            foreach ( $years as $year ) {
+                                $selected = ( $current_year == $year ) ? 'selected' : '';
+                                echo "<option value='{$year}' {$selected}>{$year}</option>";
+                            }
+                        } else {
+                            // Fallback: показываем текущий год
+                            echo "<option value='{$current_year}' selected>{$current_year}</option>";
                         }
-                    } else {
-                        // Fallback: показываем текущий год
-                        echo "<option value='{$current_year}' selected>{$current_year}</option>";
-                    }
-                    ?>
-                </select>
-                <button type="submit" name="arsenal_save_season" class="button button-primary">
-                    Сохранить
-                </button>
-                <span class="description" style="color: #646970;">
-                    Этот год используется для статистики игроков на сайте
-                </span>
+                        ?>
+                    </select>
+                    <button type="submit" name="arsenal_save_season" class="button button-primary">
+                        ✓ Сохранить
+                    </button>
+                </div>
             </div>
         </form>
     </div>
-    
-    <div style="margin-top: 20px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-            
-            <!-- Карточка: Игроки -->
-            <div class="postbox" style="padding: 20px;">
-                <h2 style="margin: 0 0 10px 0;">
-                    <span class="dashicons dashicons-groups" style="color: #d9534f;"></span>
-                    Игроки в составе
-                </h2>
-                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #d9534f;">
-                    <?php echo $total_players; ?>
-                </p>
+
+    <!-- Статистика карточки -->
+    <div class="dashboard-stats-grid">
+        
+        <!-- Карточка: Игроки -->
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <h3>👥 Игроки в составе</h3>
             </div>
-            
-            <!-- Карточка: Место в турнире -->
-            <div class="postbox" style="padding: 20px;">
-                <h2 style="margin: 0 0 10px 0;">
-                    <span class="dashicons dashicons-awards" style="color: #f0ad4e;"></span>
-                    Место в турнире
-                </h2>
-                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #f0ad4e;">
-                    <?php echo $standings ? $standings->rank : '—'; ?>
-                </p>
-                <p style="margin: 5px 0;">
-                    Очков: <strong><?php echo $standings ? $standings->points : '—'; ?></strong>
-                </p>
+            <div class="stat-card-content">
+                <p class="stat-number"><?php echo $total_players; ?></p>
+                <p class="stat-description">в активном составе</p>
             </div>
-            
-            <!-- Карточка: Матчи -->
-            <div class="postbox" style="padding: 20px;">
-                <h2 style="margin: 0 0 10px 0;">
-                    <span class="dashicons dashicons-calendar-alt" style="color: #5bc0de;"></span>
-                    Матчей сыграно
-                </h2>
-                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #5bc0de;">
-                    <?php echo $total_matches; ?>
-                </p>
+        </div>
+        
+        <!-- Карточка: Место в турнире -->
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <h3>🏆 Место в турнире</h3>
             </div>
-            
-            <!-- Карточка: Голы -->
-            <div class="postbox" style="padding: 20px;">
-                <h2 style="margin: 0 0 10px 0;">
-                    <span class="dashicons dashicons-yes" style="color: #5cb85c;"></span>
-                    Голов забито
-                </h2>
-                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #5cb85c;">
-                    <?php echo $total_goals ? $total_goals : 0; ?>
-                </p>
+            <div class="stat-card-content">
+                <p class="stat-number"><?php echo $standings ? $standings->rank : '—'; ?></p>
+                <p class="stat-description">Очков: <strong><?php echo $standings ? $standings->points : '—'; ?></strong></p>
             </div>
-            
-            <!-- Карточка: Голы пропущены -->
-            <div class="postbox" style="padding: 20px;">
-                <h2 style="margin: 0 0 10px 0;">
-                    <span class="dashicons dashicons-dismiss" style="color: #d9534f;"></span>
-                    Голов пропущено
-                </h2>
-                <p style="font-size: 32px; font-weight: bold; margin: 10px 0; color: #d9534f;">
-                    <?php echo isset( $goals_against ) ? $goals_against : 0; ?>
-                </p>
+        </div>
+        
+        <!-- Карточка: Матчи -->
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <h3>⚽ Матчей сыграно</h3>
             </div>
-            
+            <div class="stat-card-content">
+                <p class="stat-number"><?php echo $total_matches; ?></p>
+                <p class="stat-description">в текущем сезоне</p>
+            </div>
+        </div>
+        
+        <!-- Карточка: Голы -->
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <h3>⚡ Голов забито</h3>
+            </div>
+            <div class="stat-card-content">
+                <p class="stat-number" style="color: #28a745;"><?php echo $total_goals ? $total_goals : 0; ?></p>
+                <p class="stat-description">за сезон</p>
+            </div>
+        </div>
+        
+        <!-- Карточка: Голы пропущены -->
+        <div class="stat-card">
+            <div class="stat-card-header">
+                <h3>🛡️ Голов пропущено</h3>
+            </div>
+            <div class="stat-card-content">
+                <p class="stat-number" style="color: #dc3545;"><?php echo isset( $goals_against ) ? $goals_against : 0; ?></p>
+                <p class="stat-description">за сезон</p>
+            </div>
         </div>
         
     </div>
+    
 </div>

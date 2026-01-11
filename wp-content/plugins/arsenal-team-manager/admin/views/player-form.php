@@ -9,6 +9,9 @@ global $wpdb;
 
 // Функция для преобразования абсолютного пути в относительный
 function get_relative_path( $url ) {
+    if ( ! $url ) {
+        return '';
+    }
     $home_url = home_url();
     if ( strpos( $url, $home_url ) === 0 ) {
         return substr( $url, strlen( $home_url ) );
@@ -91,170 +94,168 @@ if ( ! $is_new ) {
 <div class="wrap">
     <h1><?php echo $is_new ? 'Добавить игрока' : 'Редактировать игрока'; ?></h1>
     
-    <form method="post" action="">
+    <form method="post" action="" class="player-form">
         <?php wp_nonce_field( 'arsenal_player_edit' ); ?>
         
-        <table class="form-table">
-            <tr>
-                <th colspan="2">
-                    <h2>Основная информация</h2>
-                </th>
-            </tr>
-            
-            <tr>
-                <th><label for="first_name">Имя (латиница)</label></th>
-                <td>
-                    <input type="text" id="first_name" name="first_name" 
-                           value="<?php echo $player ? esc_attr( $player->first_name ) : ''; ?>" 
-                           class="regular-text">
-                </td>
-            </tr>
-            
-            <tr>
-                <th><label for="last_name">Фамилия (латиница)</label></th>
-                <td>
-                    <input type="text" id="last_name" name="last_name" 
-                           value="<?php echo $player ? esc_attr( $player->last_name ) : ''; ?>" 
-                           class="regular-text">
-                </td>
-            </tr>
-            
-            <tr>
-                <th colspan="2">
-                    <h2>Номер и позиция</h2>
-                </th>
-            </tr>
-            
-            <tr>
-                <th><label for="shirt_number">Номер на майке *</label></th>
-                <td>
-                    <input type="number" id="shirt_number" name="shirt_number" 
-                           value="<?php echo $player ? esc_attr( $player->shirt_number ) : ''; ?>" 
-                           min="1" max="99" required>
-                </td>
-            </tr>
-            
-            <tr>
-                <th><label for="position_id">Позиция *</label></th>
-                <td>
-                    <select id="position_id" name="position_id" required>
-                        <option value="">-- Выберите позицию --</option>
-                        <?php foreach ( $positions as $pos ): ?>
-                            <option value="<?php echo esc_attr( $pos->position_id ); ?>" 
-                                    <?php selected( $player ? $player->position_id : '', $pos->position_id ); ?>>
-                                <?php echo esc_html( $pos->name ); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-            </tr>
-            
-            <?php if ( ! $is_new && $squad_info ): ?>
-            <tr>
-                <th><label>Тип состава</label></th>
-                <td>
-                    <strong><?php echo esc_html( $squad_info->squad_name ); ?></strong>
-                    <p class="description">Из последнего контракта</p>
-                </td>
-            </tr>
-            <?php endif; ?>
-            
-            <tr>
-                <th colspan="2">
-                    <h2>Персональная информация</h2>
-                </th>
-            </tr>
-            
-            <tr>
-                <th><label for="birth_date">Дата рождения</label></th>
-                <td>
-                    <input type="date" id="birth_date" name="birth_date" 
-                           value="<?php echo $player ? esc_attr( $player->birth_date ) : ''; ?>">
-                    <p class="description">Формат: ГГГГ-ММ-ДД</p>
-                </td>
-            </tr>
-            
-            <tr>
-                <th><label for="citizenship">Гражданство</label></th>
-                <td>
-                    <input type="text" id="citizenship" name="citizenship" 
-                           value="<?php echo $player ? esc_attr( $player->citizenship ) : ''; ?>" 
-                           class="regular-text">
-                </td>
-            </tr>
-            
-            <tr>
-                <th><label for="height">Рост (см)</label></th>
-                <td>
-                    <input type="number" id="height" name="height" 
-                           value="<?php echo $player ? esc_attr( $player->height_cm ) : ''; ?>">
-                </td>
-            </tr>
-            
-            <tr>
-                <th><label for="weight">Вес (кг)</label></th>
-                <td>
-                    <input type="number" id="weight" name="weight" 
-                           value="<?php echo $player ? esc_attr( $player->weight_kg ) : ''; ?>">
-                </td>
-            </tr>
-            
-            <tr>
-                <th colspan="2">
-                    <h2>Изображения и ссылки</h2>
-                </th>
-            </tr>
-            
-            <tr>
-                <th><label for="photo_url">Фото игрока</label></th>
-                <td>
-                    <input type="hidden" id="photo_url" name="photo_url" 
-                           value="<?php echo $player ? esc_attr( $player->photo_url ) : ''; ?>">
-                    <button type="button" class="button" id="upload_photo_button">
-                        Выбрать из медиабиблиотеки
-                    </button>
+        <div class="player-form-wrapper">
+            <!-- ЛЕВАЯ КОЛОНКА -->
+            <div class="player-form-left">
+                <!-- Основная информация -->
+                <div class="player-form-section">
+                    <h3>👤 Основная информация</h3>
                     
-                    <?php if ( $player && ! empty( $player->photo_url ) ) : ?>
-                        <p>
-                            <img src="<?php echo esc_url( home_url( $player->photo_url ) ); ?>" 
-                                 style="max-width: 150px; height: auto; border: 1px solid #ddd; padding: 5px;">
-                        </p>
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="first_name">Имя</label>
+                            <input type="text" id="first_name" name="first_name" 
+                                   value="<?php echo $player ? esc_attr( $player->first_name ) : ''; ?>" 
+                                   class="regular-text">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="last_name">Фамилия</label>
+                            <input type="text" id="last_name" name="last_name" 
+                                   value="<?php echo $player ? esc_attr( $player->last_name ) : ''; ?>" 
+                                   class="regular-text">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Номер и позиция -->
+                <div class="player-form-section">
+                    <h3>⚽ Номер и позиция</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shirt_number">Номер на майке *</label>
+                            <input type="number" id="shirt_number" name="shirt_number" 
+                                   value="<?php echo $player ? esc_attr( $player->shirt_number ) : ''; ?>" 
+                                   min="1" max="99" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="position_id">Позиция *</label>
+                            <select id="position_id" name="position_id" required>
+                                <option value="">-- Выберите --</option>
+                                <?php foreach ( $positions as $pos ): ?>
+                                    <option value="<?php echo esc_attr( $pos->position_id ); ?>" 
+                                            <?php selected( $player ? $player->position_id : '', $pos->position_id ); ?>>
+                                        <?php echo esc_html( $pos->name ); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <?php if ( ! $is_new && $squad_info ): ?>
+                    <div class="form-group">
+                        <label>Тип состава</label>
+                        <div style="padding: 8px 10px; background: #e7f3ff; border: 1px solid #0073aa; border-radius: 4px; color: #0073aa;">
+                            <strong><?php echo esc_html( $squad_info->squad_name ); ?></strong>
+                            <p class="description">Из последнего контракта</p>
+                        </div>
+                    </div>
                     <?php endif; ?>
-                </td>
-            </tr>
+                </div>
+                
+                <!-- Персональная информация -->
+                <div class="player-form-section">
+                    <h3>📋 Персональная информация</h3>
+                    
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="birth_date">Дата рождения</label>
+                            <input type="date" id="birth_date" name="birth_date" 
+                                   value="<?php echo $player ? esc_attr( $player->birth_date ) : ''; ?>">
+                            <p class="description">Формат: ГГГГ-ММ-ДД</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="citizenship">Гражданство</label>
+                            <input type="text" id="citizenship" name="citizenship" 
+                                   value="<?php echo $player ? esc_attr( $player->citizenship ) : ''; ?>" 
+                                   class="regular-text">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="height">Рост (см)</label>
+                            <input type="number" id="height" name="height" 
+                                   value="<?php echo $player ? esc_attr( $player->height_cm ) : ''; ?>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="weight">Вес (кг)</label>
+                            <input type="number" id="weight" name="weight" 
+                                   value="<?php echo $player ? esc_attr( $player->weight_kg ) : ''; ?>">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Биография -->
+                <div class="player-form-section">
+                    <h3>📝 Биография</h3>
+                    
+                    <div class="form-group">
+                        <label for="biography">Биография игрока</label>
+                        <?php
+                        $biography_content = $player ? $player->biography : '';
+                        wp_editor( $biography_content, 'biography', array(
+                            'textarea_name' => 'biography',
+                            'textarea_rows' => 8,
+                            'media_buttons' => false,
+                            'teeny' => true,
+                            'quicktags' => false
+                        ) );
+                        ?>
+                        <p class="description">Краткая биография игрока</p>
+                    </div>
+                </div>
+            </div>
             
-            <tr>
-                <th colspan="2">
-                    <h2>Биография</h2>
-                </th>
-            </tr>
-            
-            <tr>
-                <th><label for="biography">Биография игрока</label></th>
-                <td>
-                    <?php
-                    $biography_content = $player ? $player->biography : '';
-                    wp_editor( $biography_content, 'biography', array(
-                        'textarea_name' => 'biography',
-                        'textarea_rows' => 10,
-                        'media_buttons' => false,
-                        'teeny' => true,
-                        'quicktags' => false
-                    ) );
-                    ?>
-                    <p class="description">Краткая биография игрока. Можно использовать простые HTML теги.</p>
-                </td>
-            </tr>
-        </table>
+            <!-- ПРАВАЯ КОЛОНКА -->
+            <div class="player-form-right">
+                <!-- Фото игрока -->
+                <div class="player-form-section">
+                    <h3>🖼️ Фото игрока</h3>
+                    
+                    <div class="player-photo-box">
+                        <div id="photo_preview">
+                            <?php if ( $player && ! empty( $player->photo_url ) ) : ?>
+                                <img src="<?php echo esc_url( home_url( $player->photo_url ) ); ?>" 
+                                     alt="Фото игрока">
+                            <?php else: ?>
+                                <p style="color: #999; padding: 40px 10px;">Нет фото</p>
+                            <?php endif; ?>
+                        </div>
+                        
+                        <input type="hidden" id="photo_url" name="photo_url" 
+                               value="<?php echo $player ? esc_attr( $player->photo_url ) : ''; ?>">
+                        
+                        <button type="button" class="button button-primary" id="upload_photo_button">
+                            📷 Выбрать фото
+                        </button>
+                        
+                        <?php if ( $player && ! empty( $player->photo_url ) ) : ?>
+                        <button type="button" class="button" id="remove_photo_button" style="margin-top: 8px; color: #c00;">
+                            🗑️ Удалить
+                        </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <p class="submit">
+        <!-- Кнопки действия -->
+        <div class="player-form-buttons">
             <button type="submit" name="arsenal_save_player" class="button button-primary button-large">
-                <?php echo $is_new ? 'Добавить игрока' : 'Сохранить изменения'; ?>
+                <?php echo $is_new ? '✅ Добавить игрока' : '💾 Сохранить изменения'; ?>
             </button>
             <a href="<?php echo admin_url( 'admin.php?page=arsenal-players' ); ?>" class="button button-large">
-                Отмена
+                ❌ Отмена
             </a>
-        </p>
+        </div>
     </form>
 </div>
 
@@ -275,9 +276,34 @@ jQuery(document).ready(function($) {
         mediaUploader.on('select', function() {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
             $('#photo_url').val(attachment.url);
+            
+            // Обновляем превью
+            var previewHtml = '<img src="' + attachment.url + '" alt="Фото игрока">';
+            $('#photo_preview').html(previewHtml);
+            
+            // Добавляем кнопку удаления, если её нет
+            if ($('#remove_photo_button').length === 0) {
+                $('#upload_photo_button').after('<button type="button" class="button" id="remove_photo_button" style="margin-top: 8px; color: #c00;">🗑️ Удалить</button>');
+                addRemovePhotoHandler();
+            }
         });
         
         mediaUploader.open();
     });
+    
+    // Удаление фото
+    function addRemovePhotoHandler() {
+        $('#remove_photo_button').on('click', function(e) {
+            e.preventDefault();
+            $('#photo_url').val('');
+            $('#photo_preview').html('<p style="color: #999; padding: 40px 10px;">Нет фото</p>');
+            $(this).remove();
+        });
+    }
+    
+    // Инициализируем удаление фото, если кнопка уже есть
+    if ($('#remove_photo_button').length > 0) {
+        addRemovePhotoHandler();
+    }
 });
 </script>

@@ -151,10 +151,12 @@ class Arsenal_Season_Admin {
         // Удаление сезона
         $result = Arsenal_Season_Manager::delete_season( $season_id );
         
-        if ( $result ) {
+        if ( $result['success'] ) {
             wp_redirect( admin_url( 'admin.php?page=arsenal-seasons&message=deleted' ) );
         } else {
-            wp_redirect( admin_url( 'admin.php?page=arsenal-seasons&message=error' ) );
+            // Кодируем сообщение об ошибке для передачи в URL
+            $error_message = urlencode( $result['message'] );
+            wp_redirect( admin_url( 'admin.php?page=arsenal-seasons&message=error&error_text=' . $error_message ) );
         }
         exit;
     }

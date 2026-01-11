@@ -24,46 +24,52 @@
             }
         });
         
-        // Загрузка логотипа команды
+        // Загрузка логотипа команды - ТОЧНО КАК В WORDPRESS
         $('.upload-logo-btn').on('click', function(e) {
             e.preventDefault();
             
-            // Проверяем наличие wp.media
-            if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
-                alert('Медиа библиотека WordPress не загружена.');
-                return false;
-            }
-            
             var teamId = $(this).data('team-id');
-            var fileFrame = wp.media({
-                title: 'Выберите логотип команды',
-                button: {
-                    text: 'Выбрать логотип',
-                },
-                library: {
-                    type: 'image'
-                },
-                multiple: false
-            });
+            var button = $(this);
             
-            // При выборе изображения
-            fileFrame.on('select', function() {
-                var attachment = fileFrame.state().get('selection').first().toJSON();
-                var logoUrl = attachment.url || attachment.guid;
+            // Сохраняем team_id для обработчика
+            window.arsenalTeamId = teamId;
+            window.arsenalButton = button;
+            
+            // Переопределяем обработчик перед открытием (как в Posts)
+            wp.media.editor.send.attachment = function(props, attachment) {
+                var teamId = window.arsenalTeamId;
+                var button = window.arsenalButton;
+                var fullUrl = attachment.url;
                 
-                // Сохраняем URL в поле логотипа
-                $('#team-logo-url-' + teamId).val(logoUrl);
+                // Конвертируем в относительный URL
+                var relativeUrl = fullUrl;
+                var homeUrl = '<?php echo home_url(); ?>';
+                if (relativeUrl.indexOf(homeUrl) === 0) {
+                    relativeUrl = relativeUrl.substring(homeUrl.length);
+                    if (relativeUrl.charAt(0) !== '/') {
+                        relativeUrl = '/' + relativeUrl;
+                    }
+                }
                 
                 // Обновляем превью
-                var previewHtml = '<img src="' + logoUrl + '" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">';
-                $('#team-logo-preview-' + teamId).html(previewHtml);
+                $('#team-logo-preview-' + teamId).parent().html(
+                    '<img id="team-logo-preview-' + teamId + '" src="' + fullUrl + '" alt="Team Logo">'
+                );
                 
-                // Логируем для отладки
-                console.log('Логотип выбран для команды ' + teamId + ':', logoUrl);
-            });
+                // Показываем кнопку удаления
+                button.closest('.teams-card').find('.remove-logo-btn[data-team-id="' + teamId + '"]').show();
+                
+                // AJAX сохранение
+                $.post(arsenal_ajax.ajax_url, {
+                    action: 'arsenal_save_team_logo',
+                    team_id: teamId,
+                    logo_url: relativeUrl,
+                    nonce: arsenal_ajax.save_team_logo_nonce
+                });
+            };
             
-            // Открываем окно выбора файлов
-            fileFrame.open();
+            // Открываем галерею как в записях (кнопка не станет серой!)
+            wp.media.editor.open(button);
         });
         
     });

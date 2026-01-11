@@ -219,7 +219,7 @@ $away_score = intval( $match->away_score );
                 <div class="events-timeline">
                     <?php foreach ( $events as $event ) : 
                         $is_home_event = $event->team_id === $match->home_team_id;
-                        $event_class = 'event-' . strtolower( str_replace( '_', '-', $event->event_type_name ) );
+                        $event_class = 'event-' . strtolower( $event->event_type_name ? str_replace( '_', '-', $event->event_type_name ) : 'unknown' );
                     ?>
                         <div class="event-item <?php echo $is_home_event ? 'home' : 'away'; ?> <?php echo esc_attr( $event_class ); ?>">
                             <div class="event-minute"><?php echo intval( $event->minute ); ?>'</div>

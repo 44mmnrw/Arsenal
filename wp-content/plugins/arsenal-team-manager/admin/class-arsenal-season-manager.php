@@ -123,13 +123,47 @@ class Arsenal_Season_Manager {
     }
     
     /**
+     * Проверить наличие событий в сезоне
+     *
+     * @param int $season_id ID сезона
+     * @return bool true если есть события, false если нет
+     */
+    public static function season_has_events( $season_id ) {
+        global $wpdb;
+        
+        // Получить сезон по ID
+        $season = self::get_season( $season_id );
+        if ( ! $season ) {
+            return false;
+        }
+        
+        // Проверить количество событий в матчах этого сезона
+        $count = $wpdb->get_var( $wpdb->prepare(
+            "SELECT COUNT(me.id) FROM {$wpdb->prefix}arsenal_match_events me
+             INNER JOIN {$wpdb->prefix}arsenal_matches m ON me.match_id = m.match_id
+             WHERE m.season_id = %s",
+            $season->season_id
+        ) );
+        
+        return intval( $count ) > 0;
+    }
+    
+    /**
      * Удалить сезон
      *
      * @param int $season_id ID сезона
-     * @return bool Успешность операции
+     * @return array array( 'success' => bool, 'message' => string )
      */
     public static function delete_season( $season_id ) {
         global $wpdb;
+        
+        // Проверка на наличие событий
+        if ( self::season_has_events( $season_id ) ) {
+            return array(
+                'success' => false,
+                'message' => 'Удаление невозможно, в сезоне есть события'
+            );
+        }
         
         $result = $wpdb->delete(
             $wpdb->prefix . 'arsenal_seasons',
@@ -137,6 +171,16 @@ class Arsenal_Season_Manager {
             array( '%d' )
         );
         
-        return $result !== false;
+        if ( $result !== false ) {
+            return array(
+                'success' => true,
+                'message' => 'Сезон успешно удалён'
+            );
+        } else {
+            return array(
+                'success' => false,
+                'message' => 'Ошибка при удалении сезона'
+            );
+        }
     }
 }

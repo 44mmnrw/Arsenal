@@ -27,9 +27,11 @@ $players = $wpdb->get_results( $wpdb->prepare(
         c.contract_id,
         c.contract_number,
         c.contract_start,
-        c.contract_end
+        c.contract_end,
+        pos.name as position_name
     FROM wp_arsenal_players p
     INNER JOIN wp_arsenal_team_contracts c ON p.player_id = c.player_id
+    LEFT JOIN wp_arsenal_positions pos ON p.position_id = pos.position_id
     WHERE c.contract_start <= %s 
         AND c.contract_end >= %s
     ORDER BY p.last_name, p.first_name",
@@ -39,63 +41,81 @@ $players = $wpdb->get_results( $wpdb->prepare(
 
 ?>
 <div class="wrap">
-    <h1 class="wp-heading-inline">
-        Игроки команды
-    </h1>
-    <a href="<?php echo admin_url( 'admin.php?page=arsenal-player-add' ); ?>" class="page-title-action">
-        Добавить игрока
-    </a>
-    <hr class="wp-header-end">
-    
-    <p>Всего игроков: <strong><?php echo count( $players ); ?></strong></p>
-    
-    <table class="wp-list-table widefat fixed striped">
-        <thead>
-            <tr>
-                <th style="width: 50px;">Фото</th>
-                <th>Имя</th>
-                <th style="width: 120px;">№ контракта</th>
-                <th style="width: 120px;">Дата начала</th>
-                <th style="width: 120px;">Дата конца</th>
-                <th style="width: 120px;">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ( $players ): ?>
-                <?php foreach ( $players as $player ): ?>
-                <tr>
-                    <td>
-                        <?php if ( $player->photo_url ): ?>
-                            <img src="<?php echo esc_url( $player->photo_url ); ?>" 
-                                 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                        <?php else: ?>
-                            <span class="dashicons dashicons-admin-users" style="font-size: 40px; color: #ccc;"></span>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <strong>
-                            <?php echo esc_html( ( $player->first_name ?? '' ) . ' ' . ( $player->last_name ?? '' ) ); ?>
-                        </strong>
-                    </td>
-                    <td><?php echo esc_html( $player->contract_number ); ?></td>
-                    <td><?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_start ?? '' ) ) ); ?></td>
-                    <td><?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_end ?? '' ) ) ); ?></td>
-                    <td>
-                        <a href="<?php echo admin_url( 'admin.php?page=arsenal-player-edit&player_id=' . $player->player_id ); ?>" 
-                           class="button button-small">
-                            Редактировать
-                        </a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 20px; color: #999;">
-                        Нет игроков с активными контрактами на текущую дату
-                    </td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+    <div class="players-list-wrapper">
+        <div class="players-list-header">
+            <h1>👥 Игроки команды</h1>
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-player-add' ); ?>" class="button button-primary">
+                ➕ Добавить игрока
+            </a>
+        </div>
 
+        <div class="players-list-stats">
+            <div class="stat-box">
+                <span class="stat-number"><?php echo count( $players ); ?></span>
+                <span class="stat-label">Всего игроков</span>
+            </div>
+        </div>
+
+        <div class="players-list-container">
+            <div class="players-table">
+                <div class="players-row players-header">
+                    <div class="players-col-photo">Фото</div>
+                    <div class="players-col-name">Имя</div>
+                    <div class="players-col-position">Позиция</div>
+                    <div class="players-col-number">№ контракта</div>
+                    <div class="players-col-start">Начало</div>
+                    <div class="players-col-end">Конец</div>
+                    <div class="players-col-action">Действие</div>
+                </div>
+
+                <?php if ( $players ): ?>
+                    <?php foreach ( $players as $player ): ?>
+                    <div class="players-row">
+                        <div class="players-col-photo">
+                            <?php if ( $player->photo_url ): ?>
+                                <img src="<?php echo esc_url( $player->photo_url ); ?>" 
+                                     alt="<?php echo esc_attr( $player->first_name . ' ' . $player->last_name ); ?>"
+                                     class="player-thumbnail">
+                            <?php else: ?>
+                                <div class="player-thumbnail-empty">
+                                    <span class="dashicons dashicons-admin-users"></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="players-col-name">
+                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-player-edit&player_id=' . $player->player_id ); ?>" 
+                               class="player-name-link">
+                                <?php echo esc_html( ( $player->first_name ?? '' ) . ' ' . ( $player->last_name ?? '' ) ); ?>
+                            </a>
+                        </div>
+                        <div class="players-col-position">
+                            <?php echo esc_html( $player->position_name ?? '—' ); ?>
+                        </div>
+                        <div class="players-col-number">
+                            <?php echo esc_html( $player->contract_number ?? '—' ); ?>
+                        </div>
+                        <div class="players-col-start">
+                            <?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_start ?? '' ) ) ); ?>
+                        </div>
+                        <div class="players-col-end">
+                            <?php echo esc_html( wp_date( 'd.m.Y', strtotime( $player->contract_end ?? '' ) ) ); ?>
+                        </div>
+                        <div class="players-col-action">
+                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-player-edit&player_id=' . $player->player_id ); ?>" 
+                               class="button button-small">
+                                ✏️ Редактировать
+                            </a>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="players-row players-empty">
+                        <div class="players-empty-message">
+                            ℹ️ Нет игроков с активными контрактами на текущую дату
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </div>

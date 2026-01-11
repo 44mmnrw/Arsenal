@@ -316,7 +316,7 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
                                     $logo_url = '';
                                     if ( ! empty( $team['logo_url'] ) ) {
                                         // Если логотип - полный URL, оставляем как есть
-                                        if ( strpos( $team['logo_url'], 'http' ) === 0 ) {
+                                        if ( $team['logo_url'] && strpos( $team['logo_url'], 'http' ) === 0 ) {
                                             $logo_url = $team['logo_url'];
                                         } else {
                                             // Если относительный путь, добавляем home_url

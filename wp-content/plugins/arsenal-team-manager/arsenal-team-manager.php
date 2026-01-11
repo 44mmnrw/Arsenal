@@ -379,6 +379,16 @@ class Arsenal_Team_Manager {
             true
         );
         
+        // Локализация скрипта с нонсом для AJAX
+        wp_localize_script(
+            'arsenal-admin',
+            'arsenal_ajax',
+            array(
+                'save_team_logo_nonce' => wp_create_nonce( 'arsenal_save_team_logo_ajax' ),
+                'ajax_url' => admin_url( 'admin-ajax.php' )
+            )
+        );
+        
         // Медиа библиотека для загрузки фото
         wp_enqueue_media();
     }
@@ -564,3 +574,51 @@ function arsenal_team_manager() {
 
 // Запуск!
 arsenal_team_manager();
+
+/**
+ * AJAX handler для сохранения логотипа команды
+ */
+add_action( 'wp_ajax_arsenal_save_team_logo', 'arsenal_ajax_save_team_logo' );
+
+function arsenal_ajax_save_team_logo() {
+    // Логируем входящие данные
+    error_log('AJAX save_team_logo called: ' . json_encode($_POST));
+    
+    // Проверяем права доступа
+    if ( ! current_user_can( 'manage_options' ) ) {
+        error_log('User does not have manage_options capability');
+        wp_send_json_error( array( 'message' => 'Нет доступа' ) );
+    }
+    
+    // Получаем данные
+    $team_id = intval( $_POST['team_id'] ?? 0 );
+    $logo_url = esc_url_raw( $_POST['logo_url'] ?? '' );
+    
+    error_log('Processing team_id=' . $team_id . ', logo_url=' . $logo_url);
+    
+    if ( !$team_id ) {
+        error_log('Team ID is empty');
+        wp_send_json_error( array( 'message' => 'Team ID отсутствует' ) );
+    }
+    
+    global $wpdb;
+    
+    // Обновляем логотип команды
+    $updated = $wpdb->update(
+        $wpdb->prefix . 'arsenal_teams',
+        array( 'logo_url' => $logo_url ),
+        array( 'id' => $team_id ),
+        array( '%s' ),
+        array( '%d' )
+    );
+    
+    error_log('Update result: ' . $updated);
+    
+    if ( $updated !== false ) {
+        error_log('Logo saved successfully');
+        wp_send_json_success( array( 'message' => 'Логотип сохранён' ) );
+    } else {
+        error_log('Update failed: ' . $wpdb->last_error);
+        wp_send_json_error( array( 'message' => 'Ошибка при сохранении логотипа' ) );
+    }
+}

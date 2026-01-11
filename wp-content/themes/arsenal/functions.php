@@ -696,12 +696,12 @@ if ( ! function_exists( 'arsenal_convert_logo_url' ) ) {
 		}
 		
 		// Если URL уже абсолютный (начинается с http:// или https://), возвращаем как есть
-		if ( strpos( $logo_url, 'http://' ) === 0 || strpos( $logo_url, 'https://' ) === 0 ) {
+		if ( $logo_url && ( strpos( $logo_url, 'http://' ) === 0 || strpos( $logo_url, 'https://' ) === 0 ) ) {
 			return esc_url( $logo_url );
 		}
 		
 		// Если URL относительный (начинается с /), добавляем home_url()
-		if ( strpos( $logo_url, '/' ) === 0 ) {
+		if ( $logo_url && strpos( $logo_url, '/' ) === 0 ) {
 			return esc_url( home_url( $logo_url ) );
 		}
 		

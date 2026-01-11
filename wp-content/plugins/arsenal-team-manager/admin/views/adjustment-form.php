@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<div class="wrap">
-    <h1><?php echo $is_edit ? 'Редактирование корректировки' : 'Добавить корректировку турнирной таблицы'; ?></h1>
+<div class="adjustment-form-wrapper">
+    <h1><?php echo $is_edit ? '✏️ Редактирование корректировки' : '➕ Добавить новую корректировку'; ?></h1>
 
     <?php if ( isset( $_GET['message'] ) && $_GET['message'] === 'error' ) : ?>
         <div class="notice notice-error is-dismissible">
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     <?php endif; ?>
 
-    <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>">
+    <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" class="adjustment-form">
         <input type="hidden" name="action" value="<?php echo $is_edit ? 'arsenal_update_adjustment' : 'arsenal_create_adjustment'; ?>">
         <?php wp_nonce_field( $is_edit ? 'arsenal_update_adjustment' : 'arsenal_create_adjustment' ); ?>
         
@@ -28,13 +28,12 @@ if ( ! defined( 'ABSPATH' ) ) {
             <input type="hidden" name="adjustment_id" value="<?php echo esc_attr( $adjustment->id ); ?>">
         <?php endif; ?>
 
-        <table class="form-table">
-            <tr>
-                <th scope="row">
-                    <label for="tournament_id">Турнир <span class="description">(обязательно)</span></label>
-                </th>
-                <td>
-                    <select id="tournament_id" name="tournament_id" class="regular-text" required>
+        <div class="adjustment-form-section">
+            <div class="section-header">📊 Основная информация</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="tournament_id">🏆 Турнир <span class="required">*</span></label>
+                    <select id="tournament_id" name="tournament_id" class="form-control" required>
                         <option value="">— Выберите турнир —</option>
                         <?php foreach ( $tournaments as $tournament_id => $tournament_name ) : ?>
                             <option value="<?php echo esc_attr( $tournament_id ); ?>"
@@ -43,15 +42,10 @@ if ( ! defined( 'ABSPATH' ) ) {
                             </option>
                         <?php endforeach; ?>
                     </select>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="season_id">Сезон <span class="description">(обязательно)</span></label>
-                </th>
-                <td>
-                    <select id="season_id" name="season_id" class="regular-text" required>
+                </div>
+                <div class="form-group">
+                    <label for="season_id">📅 Сезон <span class="required">*</span></label>
+                    <select id="season_id" name="season_id" class="form-control" required>
                         <option value="">— Выберите сезон —</option>
                         <?php if ( ! empty( $seasons['seasons'] ) ) : ?>
                             <?php foreach ( $seasons['seasons'] as $season ) : ?>
@@ -62,72 +56,64 @@ if ( ! defined( 'ABSPATH' ) ) {
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </select>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="team_id">Команда <span class="description">(обязательно)</span></label>
-                </th>
-                <td>
-                    <select id="team_id" name="team_id" class="regular-text" required>
-                        <option value="">— Выберите команду —</option>
-                        <?php foreach ( $teams as $team_id => $team_name ) : ?>
-                            <option value="<?php echo esc_attr( $team_id ); ?>"
-                                <?php selected( $is_edit && $adjustment->team_id === $team_id ); ?>>
-                                <?php echo esc_html( $team_name ); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="adjustment_points">Корректировка очков <span class="description">(обязательно)</span></label>
-                </th>
-                <td>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="team_id">👥 Команда <span class="required">*</span></label>
+                <select id="team_id" name="team_id" class="form-control" required>
+                    <option value="">— Выберите команду —</option>
+                    <?php foreach ( $teams as $team_id => $team_name ) : ?>
+                        <option value="<?php echo esc_attr( $team_id ); ?>"
+                            <?php selected( $is_edit && $adjustment->team_id === $team_id ); ?>>
+                            <?php echo esc_html( $team_name ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="adjustment-form-section">
+            <div class="section-header">🌟 Корректировка Очков</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="adjustment_points">Очки <span class="required">*</span></label>
                     <input type="number" 
                            id="adjustment_points" 
                            name="adjustment_points" 
-                           class="regular-text"
+                           class="form-control"
                            value="<?php echo $is_edit ? esc_attr( $adjustment->adjustment_points ) : '0'; ?>"
+                           placeholder="+3 или -6"
                            required>
-                    <p class="description">Положительное число = бонус (например, +3), отрицательное = штраф (например, -6)</p>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="applied_date">Дата применения <span class="description">(обязательно)</span></label>
-                </th>
-                <td>
+                    <div class="form-description">Положительное = бонус, отрицательное = штраф</div>
+                </div>
+                <div class="form-group">
+                    <label for="applied_date">📅 Дата применения <span class="required">*</span></label>
                     <input type="datetime-local" 
                            id="applied_date" 
                            name="applied_date" 
-                           class="regular-text"
+                           class="form-control"
                            value="<?php echo $is_edit ? esc_attr( date( 'Y-m-d\TH:i', strtotime( $adjustment->applied_date ) ) ) : date( 'Y-m-d\TH:i' ); ?>"
                            required>
-                    <p class="description">Дата и время применения корректировки</p>
-                </td>
-            </tr>
-            
-            <tr>
-                <th scope="row">
-                    <label for="comment">Комментарий (обоснование)</label>
-                </th>
-                <td>
-                    <textarea id="comment" 
-                              name="comment" 
-                              rows="5" 
-                              class="large-text"><?php echo $is_edit ? esc_textarea( $adjustment->comment ) : ''; ?></textarea>
-                    <p class="description">Детальное обоснование корректировки (например, "Штраф за неявку на матч 15.12.2025")</p>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
 
-        <?php submit_button( $is_edit ? 'Сохранить изменения' : 'Создать корректировку' ); ?>
+        <div class="adjustment-form-section">
+            <div class="section-header">🗒️ Обоснование</div>
+            <div class="form-group">
+                <label for="comment">Комментарий</label>
+                <textarea id="comment" 
+                          name="comment" 
+                          rows="5" 
+                          class="form-control"
+                          placeholder="Например: Штраф за неявку на матч 15.12.2025"><?php echo $is_edit ? esc_textarea( $adjustment->comment ) : ''; ?></textarea>
+                <div class="form-description">Детальное обоснование корректировки</div>
+            </div>
+        </div>
+
+        <div class="adjustment-form-actions">
+            <button type="submit" class="button button-primary">✓ <?php echo $is_edit ? 'Сохранить изменения' : 'Создать корректировку'; ?></button>
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-adjustments' ); ?>" class="button">← Отмена</a>
+        </div>
     </form>
-
-    <p><a href="<?php echo admin_url( 'admin.php?page=arsenal-adjustments' ); ?>">← Вернуться к списку корректировок</a></p>
 </div>
