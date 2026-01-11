@@ -132,7 +132,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <strong><?php echo esc_html( date_i18n( 'd.m.Y', strtotime( $match->match_date ) ) ); ?></strong>
                     </div>
                     <div class="matches-col-time">
-                        <?php echo ! empty( $match->match_time ) ? esc_html( $match->match_time ) : '—'; ?>
+                        <?php echo ! empty( $match->match_time ) ? esc_html( substr( $match->match_time, 0, 5 ) ) : '—'; ?>
                     </div>
                     <div class="matches-col-home">
                         <?php if ( ! empty( $match->home_logo ) ) : ?>
