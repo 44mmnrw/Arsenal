@@ -1,0 +1,177 @@
+rgba(0, 0, 0, 0.1) - 41
+#ff1a1a - 39
+#fff - 33
+#0a0a0a - 26
+#ffffff - 25
+var(--red-700, #ff1a1a) - 21
+#4a5565 - 19
+#6a7282 - 19
+#c41e3a - 18
+#f9fafb - 16
+#e0e0e0 - 16
+rgba(0,0,0,0.1) - 15
+#990000 - 13
+var(--color-text-light) - 13
+#1a1a1a - 12
+#99a1af - 11
+#e5e7eb - 11
+#333 - 11
+#666 - 11
+#cc0000 - 9
+var(--color-text-light, #ffffff) - 9
+var(--color-primary) - 9
+#fafafa - 8
+var(--color-text-dark) - 8
+var(--red-700) - 7
+#f3f4f6 - 6
+#f5f5f5 - 6
+#212121 - 5
+#ffe5e5 - 5
+#101828 - 5
+#f0f0f0 - 5
+#c8102e - 5
+rgba(255, 255, 255, 0.1) - 5
+rgba(255, 255, 255, 0.8) - 5
+rgba(255, 255, 255, 0.3) - 5
+rgba(0, 0, 0, 0.06) - 5
+rgba(0, 0, 0, 0.2) - 5
+var(--red-900, #990000) - 5
+#e5e5e5 - 4
+#364153 - 4
+#999 - 4
+rgba(0, 0, 0, 0.3) - 4
+rgba(255, 255, 255, 0.2) - 4
+rgba(255, 255, 255, 0.15) - 4
+var(--color-charcoal, #212121) - 4
+var(--color-bg-white) - 4
+var(--color-primary-light) - 4
+#d1d5dc - 3
+#008236 - 3
+#fff5f5 - 3
+rgba(255, 255, 255, 0.25) - 3
+rgb(255, 255, 255) - 3
+rgba(0, 0, 0, 0.08) - 3
+rgba(255, 26, 26, 0.4) - 3
+var(--accent-color) - 3
+var(--red-500) - 3
+var(--red-100) - 3
+var(--color-text-secondary) - 3
+var(--color-card-bg) - 3
+#093733 - 2
+#ead6be - 2
+#1e2939 - 2
+#eee - 2
+#dc2626 - 2
+#16a34a - 2
+#22c55e - 2
+#900 - 2
+#155dfc - 2
+#00a63e - 2
+#374151 - 2
+#d1d5db - 2
+#f8f8f8 - 2
+#101727 - 2
+rgba(255, 255, 255, 0.9) - 2
+rgba(255, 255, 255, 0.5) - 2
+rgba(255, 255, 255, 0.4) - 2
+rgba(255, 255, 255, 0.7) - 2
+rgba(243, 244, 246, 1) - 2
+rgba(229, 231, 235, 1) - 2
+rgba(0, 0, 0, 0.15) - 2
+rgba(255, 255, 255, 0.6) - 2
+var(--color-white, #ffffff) - 2
+var(--color-dark-green, #093733) - 2
+var(--color-beige, #ead6be) - 2
+var(--red-100, #ffe5e5) - 2
+var(--red-800, #cc0000) - 2
+var(--color-bg) - 2
+var(--primary-color) - 2
+var(--secondary-color) - 2
+var(--color-gold) - 2
+var(--color-primary-accent) - 2
+var(--color-home) - 2
+var(--color-away) - 2
+#3a3a3a - 1
+#1877f2 - 1
+#f58529 - 1
+#dd2a7b - 1
+#8134af - 1
+#515bd4 - 1
+#ff0000 - 1
+#0088cc - 1
+#0077ff - 1
+#ff3333 - 1
+#000 - 1
+#ff4d4d - 1
+#dcfce7 - 1
+#fef9c3 - 1
+#a16207 - 1
+#fee2e2 - 1
+#fff0f0 - 1
+#6b7280 - 1
+#f33 - 1
+#f0b100 - 1
+#ffdf20 - 1
+#1447e6 - 1
+#d0d0d0 - 1
+#ebebeb - 1
+#bbb - 1
+#ccc - 1
+#9810fa - 1
+#6e11b0 - 1
+#dcdcde - 1
+#e8e8e8 - 1
+#495565 - 1
+#d4f4dd - 1
+#2d7a4b - 1
+#fff9e6 - 1
+#d97706 - 1
+#fee - 1
+#e0f2fe - 1
+#0369a1 - 1
+#a01828 - 1
+#555 - 1
+#fff3f5 - 1
+#ddd - 1
+#f9f9f9 - 1
+#ffcccc - 1
+rgba(0, 0, 0, 0.8) - 1
+rgba(0, 0, 0, 0.6) - 1
+rgba(0, 0, 0, 0) - 1
+rgba(0, 0, 0, 0.95) - 1
+rgba(30, 30, 30, 0.9) - 1
+rgba(255,255,255,0.1) - 1
+rgba(0, 0, 0, 0.85) - 1
+rgba(0, 0, 0, 0.7) - 1
+rgba(0, 0, 0, 0.4) - 1
+rgba(0,0,0,0.05) - 1
+rgba(0,0,0,0.12) - 1
+rgba(0,0,0,0.6) - 1
+rgba(0,0,0,0.8) - 1
+rgba(0, 0, 0, 0.25) - 1
+rgba(255, 26, 26, 0.05) - 1
+rgba(253, 199, 0, 0.05) - 1
+rgba(255, 26, 26, 0.1) - 1
+rgba(21, 93, 252, 0.05) - 1
+rgba(255, 255, 255, 0.05) - 1
+rgba(0, 0, 0, 0.12) - 1
+rgba(255, 26, 26, 0.3) - 1
+rgba(255, 254, 254, 0.4) - 1
+rgba(255, 254, 254, 0.3) - 1
+rgba(196, 30, 58, 0.12) - 1
+rgba(0, 166, 62, 1) - 1
+rgba(0, 130, 54, 1) - 1
+rgba(255, 26, 26, 0.9) - 1
+rgba(153, 0, 0, 0.25) - 1
+rgba(255, 255, 255, 0.85) - 1
+rgba(255, 26, 26, 0.7) - 1
+var(--red-600, #ff3333) - 1
+var(--red-500, #ff4d4d) - 1
+var(--red-600) - 1
+var(--red-50, #fff0f0) - 1
+var(--color-border) - 1
+var(--color-bg-gray) - 1
+var(--color-text-muted) - 1
+var(--color-bg-light) - 1
+var(--red-900) - 1
+var(--red-800) - 1

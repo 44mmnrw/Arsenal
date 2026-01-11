@@ -96,6 +96,9 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-standings-adjustments-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-standings-adjustments-admin.php';
         
+        // Классы управления персоналом
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-staff-admin.php';
+        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -118,6 +121,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс корректировок
         $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
         $adjustments_admin->__init__();
+        
+        // Инициализируем админ-интерфейс персонала
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->init();
     }
     
     /**
@@ -171,6 +178,16 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-contracts',
             array( $this, 'render_contracts' )
+        );
+        
+        // Подменю: Персонал
+        add_submenu_page(
+            $parent_slug,
+            'Персонал',
+            'Персонал',
+            'manage_options',
+            'arsenal-staff',
+            array( $this, 'render_staff_list' )
         );
         
         // Подменю: Стадионы
@@ -291,6 +308,43 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-adjustment-edit',
             array( $this, 'render_adjustment_edit' )
+        );
+        
+        // Скрытые страницы персонала (без пункта меню)
+        add_submenu_page(
+            '',
+            'Добавить сотрудника',
+            'Добавить сотрудника',
+            'manage_options',
+            'arsenal-staff-add',
+            array( $this, 'render_staff_add' )
+        );
+        
+        add_submenu_page(
+            '',
+            'Редактировать сотрудника',
+            'Редактировать сотрудника',
+            'manage_options',
+            'arsenal-staff-edit',
+            array( $this, 'render_staff_edit' )
+        );
+        
+        add_submenu_page(
+            '',
+            'Добавить должность',
+            'Добавить должность',
+            'manage_options',
+            'arsenal-job-title-add',
+            array( $this, 'render_job_title_add' )
+        );
+        
+        add_submenu_page(
+            '',
+            'Редактировать должность',
+            'Редактировать должность',
+            'manage_options',
+            'arsenal-job-title-edit',
+            array( $this, 'render_job_title_edit' )
         );
         
         // Скрытая страница добавления матча (без пункта меню)
@@ -562,6 +616,46 @@ class Arsenal_Team_Manager {
     public function render_adjustment_edit() {
         $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
         $adjustments_admin->render_adjustment_form();
+    }
+    
+    /**
+     * Список персонала
+     */
+    public function render_staff_list() {
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->render_staff_list();
+    }
+    
+    /**
+     * Добавление сотрудника
+     */
+    public function render_staff_add() {
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->render_staff_add();
+    }
+    
+    /**
+     * Редактирование сотрудника
+     */
+    public function render_staff_edit() {
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->render_staff_edit();
+    }
+    
+    /**
+     * Добавление должности
+     */
+    public function render_job_title_add() {
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->render_job_title_add();
+    }
+    
+    /**
+     * Редактирование должности
+     */
+    public function render_job_title_edit() {
+        $staff_admin = new Arsenal_Staff_Admin();
+        $staff_admin->render_job_title_edit();
     }
 }
 

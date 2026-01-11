@@ -8,6 +8,24 @@
  */
 
 /* ==========================================================================
+   CONTAINER
+   ========================================================================== */
+
+.container {
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+}
+
+/* ==========================================================================
+   ЗАГОЛОВКИ
+   ========================================================================== */
+
+h1 {
+	font-size: 2rem;
+}
+
+/* ==========================================================================
    BANNER CAROUSEL
    ========================================================================== */
 
@@ -69,9 +87,9 @@
 	bottom: 0;
 	background: linear-gradient(
 		to right,
-		rgba(0, 0, 0, 0.8) 0%,
-		rgba(0, 0, 0, 0.6) 50%,
-		rgba(0, 0, 0, 0) 100%
+		#000000cc 0%,
+		#00000099 50%,
+		#00000000 100%
 	);
 	z-index: 1;
 }
@@ -112,7 +130,7 @@
 }
 
 .banner-subtitle {
-	color: rgba(255, 255, 255, 0.9);
+	color: #ffffffe6;
 	font-size: 1.125rem;
 	line-height: 1.6;
 	margin: 0 0 1.5rem 0;
@@ -120,7 +138,7 @@
 }
 
 .banner-info {
-	color: rgba(255, 255, 255, 0.8);
+	color: #ffffffcc;
 	font-size: 0.9375rem;
 	line-height: 1.7;
 	margin: 0 0 2rem 0;
@@ -174,19 +192,19 @@
 	align-items: center;
 	gap: 0.5rem;
 	padding: 1rem 2rem;
-	background-color: rgba(255, 255, 255, 0.1);
+	background-color: #ffffff1a;
 	color: var(--color-text-light, #ffffff);
 	font-size: 1rem;
 	font-weight: 500;
 	text-decoration: none;
-	border: 0.0625rem solid rgba(255, 255, 255, 0.3);
+	border: 0.0625rem solid #ffffff26;
 	border-radius: 0.25rem;
 	transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .banner-btn-secondary:hover {
-	background-color: rgba(255, 255, 255, 0.2);
-	border-color: rgba(255, 255, 255, 0.5);
+	background-color: #ffffff40;
+	border-color: #ffffff66;
 	transform: translateY(-0.125rem);
 }
 
@@ -199,8 +217,8 @@
 .site-banner.no-image .banner-overlay {
 	background: linear-gradient(
 		135deg,
-		rgba(0, 0, 0, 0.95) 0%,
-		rgba(30, 30, 30, 0.9) 100%
+		#f2f2f2f2 0%,
+		#1e1e1ee6 100%
 	);
 }
 
@@ -215,8 +233,8 @@
 	justify-content: center;
 	width: 3rem;
 	height: 3rem;
-	background: rgba(255, 255, 255, 0.15);
-	border: 0.0625rem solid rgba(255, 255, 255, 0.3);
+	background: #ffffff26;
+	border: 0.0625rem solid #ffffff4d;
 	border-radius: 50%;
 	cursor: pointer;
 	transition: all 0.3s ease;
@@ -232,8 +250,8 @@
 }
 
 .banner-nav-btn:hover {
-	background: rgba(255, 255, 255, 0.25);
-	border-color: rgba(255, 255, 255, 0.5);
+	background: #ffffff40;
+	border-color: #ffffff80;
 	transform: translateY(-50%) scale(1.1);
 }
 
@@ -267,7 +285,7 @@
 	width: 0.75rem;
 	height: 0.75rem;
 	padding: 0;
-	background: rgba(255, 255, 255, 0.4);
+	background: #ffffff66;
 	border: none;
 	border-radius: 50%;
 	cursor: pointer;
@@ -275,7 +293,7 @@
 }
 
 .banner-dot:hover {
-	background: rgba(255, 255, 255, 0.7);
+	background: #ffffffb3;
 	transform: scale(1.2);
 }
 
@@ -393,7 +411,7 @@
 .match-card {
 	background: #ffffff;
 	border-radius: 0.625rem;
-	box-shadow: 0 0.5rem 0.625rem -0.375rem rgba(0, 0, 0, 0.1), 0 1.25rem 1.5625rem -0.3125rem rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0.5rem 0.625rem -0.375rem #1a1a1a1a, 0 1.25rem 1.5625rem -0.3125rem #1a1a1a1a;
 	padding: 3rem 3.75rem;
 }
 
@@ -693,7 +711,7 @@ article {
 .site-info {
 	text-align: center;
 	padding-top: 1.25rem;
-	border-top: 0.0625rem solid rgba(255,255,255,0.1);
+	border-top: 0.0625rem solid #ffffffcc;
 }
 
 .site-info a {
@@ -739,9 +757,9 @@ article {
 	.banner-overlay {
 		background: linear-gradient(
 			to bottom,
-			rgba(0, 0, 0, 0.85) 0%,
-			rgba(0, 0, 0, 0.7) 50%,
-			rgba(0, 0, 0, 0.4) 100%
+			#d9d9d9d9 0%,
+			#b3b3b3b3 50%,
+			#66666666 100%
 		);
 	}
 
@@ -977,7 +995,7 @@ article {
 .news-section .container {
 	max-width: 94rem;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: var(--container-padding-y) var(--container-padding-x);
 }
 
 /* Section Header for News */
@@ -1030,7 +1048,7 @@ article {
 	background: #ffffff;
 	border-radius: 0.625rem;
 	overflow: hidden;
-	box-shadow: 0 0.5rem 0.625rem -0.375rem rgba(0, 0, 0, 0.1), 0 1.25rem 1.5625rem -0.3125rem rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0.5rem 0.625rem -0.375rem #1a1a1a1a, 0 1.25rem 1.5625rem -0.3125rem #1a1a1a1a;
 	display: flex;
 	flex-direction: column;
 }
@@ -1038,7 +1056,7 @@ article {
 .news-card__image {
 	width: 100%;
 	height: 14rem;
-	background-color: #F3F4F6;
+	background-color: #fafafa;
 	overflow: hidden;
 }
 
@@ -1238,7 +1256,7 @@ article {
 .last-games-section .container {
 	max-width: 94rem;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: var(--container-padding-y) var(--container-padding-x);
 }
 
 .last-games-section .section-header {
@@ -1289,12 +1307,12 @@ article {
 	background: #fff;
 	border-radius: 0.625rem;
 	padding: 1.25rem;
-	box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1), 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.06);
+	box-shadow: 0 0.0625rem 0.1875rem #1a1a1a1a, 0 0.0625rem 0.125rem #0d0d0d0d;
 	transition: box-shadow 0.2s ease;
 }
 
 .game-card:hover {
-	box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1), 0 0.125rem 0.25rem rgba(0, 0, 0, 0.06);
+	box-shadow: 0 0.25rem 0.375rem #1a1a1a1a, 0 0.125rem 0.25rem #0d0d0d0d;
 }
 
 /* Game Header */
@@ -1473,7 +1491,7 @@ article {
 .tournament-table-section .container {
 	max-width: 94rem;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: var(--container-padding-y) var(--container-padding-x);
 }
 
 .tournament-table-section .section-header {
@@ -1535,7 +1553,7 @@ article {
 .tournament-table-wrapper {
 	background: #fff;
 	border-radius: 0.625rem;
-	box-shadow: 0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1), 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0.25rem 0.375rem -0.125rem #1a1a1a1a, 0 0.625rem 0.9375rem -0.1875rem #1a1a1a1a;
 	overflow: hidden;
 }
 
@@ -1701,7 +1719,7 @@ article {
 .sponsors-section .container {
 	max-width: 94rem;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: var(--container-padding-y) var(--container-padding-x);
 }
 
 .sponsors-section .section-header {
@@ -1742,17 +1760,17 @@ article {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #fff;
+	background: #ffffff;
 	border-radius: 0.625rem;
 	padding: 1.5rem;
 	min-height: 6rem;
-	transition: box-shadow 0.2s ease, transform 0.2s ease;
+	box-shadow: 0 0.0625rem 0.1875rem #1a1a1a1a, 0 0.0625rem 0.125rem #0d0d0d0d;
+	transition: box-shadow 0.2s ease;
 	text-decoration: none;
 }
 
 .sponsor-card:hover {
-	box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-	transform: translateY(-0.125rem);
+	box-shadow: 0 0.25rem 0.375rem #1a1a1a1a, 0 0.125rem 0.25rem #0d0d0d0d;
 }
 
 .sponsor-logo {
@@ -1817,3 +1835,4 @@ article {
 		max-height: 2.25rem;
 	}
 }
+

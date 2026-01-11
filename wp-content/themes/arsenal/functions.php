@@ -46,6 +46,7 @@ add_action( 'admin_init', function() {
  * Подключение файлов темы
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
+require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-staff-manager.php';
 
 /**
  * Паттерны отключены - используется классический редактор
@@ -202,12 +203,18 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
-		// Стили страницы турнирной сетки (только для страницы Турнир)
-		if ( is_page_template( 'templates/page-tournament.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'tournament' ) ) ) {
+		// Стили страницы тренерского штаба (для страницы Тренеры)
+		if ( is_page_template( 'templates/page-coaches.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
 			wp_enqueue_style(
-				'arsenal-tournament',
-				ARSENAL_THEME_URI . '/assets/css/page-tournament.css',
+				'arsenal-coaches',
+				ARSENAL_THEME_URI . '/assets/css/players-grid.css',
 				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+			wp_enqueue_style(
+				'arsenal-page-coaches',
+				ARSENAL_THEME_URI . '/assets/css/page-coaches.css',
+				array( 'arsenal-coaches' ),
 				ARSENAL_VERSION
 			);
 		}

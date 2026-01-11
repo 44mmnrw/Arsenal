@@ -84,13 +84,14 @@ foreach ( $teams as $team ) {
 // ===== ПОЛУЧАЕМ ЖЁЛТЫЕ КАРТОЧКИ ДЛЯ КАЖДОЙ КОМАНДЫ (сезон 2025) =====
 $yellow_cards_data = $wpdb->get_results(
     $wpdb->prepare(
-        "SELECT me.team_id, COUNT(*) as count
+        "SELECT p.team_id, COUNT(*) as count
          FROM {$wpdb->prefix}arsenal_match_events me
          INNER JOIN {$wpdb->prefix}arsenal_matches m ON me.match_id = m.match_id
+         INNER JOIN {$wpdb->prefix}arsenal_players p ON me.player_id = p.id
          WHERE m.season_id = %s 
          AND me.event_type = 'yellow_card' 
-         AND me.team_id IS NOT NULL
-         GROUP BY me.team_id",
+         AND p.team_id IS NOT NULL
+         GROUP BY p.team_id",
         $current_season_id
     )
 );
@@ -284,31 +285,31 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
 <main id="main" class="site-main standings-page">
     <div class="container standings-container">
         <section class="tournament-standings-section">
-            <div class="container">
-                <div class="standings-header">
-                    <h1 class="standings-title">Турнирная таблица</h1>
-                    <p class="standings-season">Сезон <?php echo esc_html( $current_year ); ?></p>
-                </div>
+            <header class="standings-header">
+                <h1 class="standings-title">Турнирная таблица</h1>
+                <p class="standings-season">Сезон <?php echo esc_html( $current_year ); ?></p>
+            </header>
 
-                <div class="standings-table-wrapper">
-                    <?php if ( ! empty( $standings ) ) : ?>
-                        <table class="standings-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-position">№</th>
-                                    <th class="col-team">Клуб</th>
-                                    <th class="col-games">И</th>
-                                    <th class="col-wins">В</th>
-                                    <th class="col-draws">Н</th>
-                                    <th class="col-losses">П</th>
-                                    <th class="col-diff">ЗМ:ПМ</th>
-                                    <th class="col-points">Очки</th>
-                                </tr>
-                            </thead>
+            <div class="standings-table-wrapper" role="region" aria-label="Турнирная таблица сезона">
+                <?php if ( ! empty( $standings ) ) : ?>
+                    <table class="standings-table">
+                        <caption class="visually-hidden">Итоговая турнирная таблица сезона <?php echo esc_html( $current_year ); ?></caption>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-position">№</th>
+                                <th scope="col" class="col-team">Клуб</th>
+                                <th scope="col" class="col-games">И</th>
+                                <th scope="col" class="col-wins">В</th>
+                                <th scope="col" class="col-draws">Н</th>
+                                <th scope="col" class="col-losses">П</th>
+                                <th scope="col" class="col-diff">ЗМ:ПМ</th>
+                                <th scope="col" class="col-points">Очки</th>
+                            </tr>
+                        </thead>
                             <tbody>
-                                <?php
-                                $position = 1;
-                                foreach ( $standings as $team ) :
+                        <?php
+                        $position = 1;
+                        foreach ( $standings as $team ) :
                                     $goal_diff_str = $team['goals_for'] . ':' . $team['goals_against'];
                                     $is_arsenal = stripos( $team['name'], 'Арсенал' ) !== false;
                                     
@@ -347,43 +348,42 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
                                         </td>
                                     </tr>
                                     <?php
-                                    $position++;
-                                endforeach;
-                                ?>
-                            </tbody>
-                        </table>
-                    <?php else : ?>
-                        <p class="standings-error">Данные турнирной таблицы недоступны</p>
-                    <?php endif; ?>
-                </div>
-
-                <?php if ( ! empty( $adjustments_data ) ) : ?>
-                    <div class="standings-notes">
-                        <h3 class="notes-title">Примечания</h3>
-                        <?php foreach ( $adjustments_data as $adjustment ) : 
-                            // Выводим только если есть комментарий
-                            $comment_text = trim( $adjustment->comment );
-                            if ( empty( $comment_text ) ) {
-                                continue;
-                            }
-                            
-                            // Находим имя команды
-                            $team_name = 'Неизвестная команда';
-                            foreach ( $standings as $team ) {
-                                if ( $team['team_id'] === $adjustment->team_id ) {
-                                    $team_name = $team['name'];
-                                    break;
-                                }
-                            }
-                            ?>
-                            <p class="note-item">
-                                <strong><?php echo esc_html( $team_name ); ?>:</strong> 
-                                <?php echo esc_html( $comment_text ); ?>
-                            </p>
-                        <?php endforeach; ?>
-                    </div>
+                        $position++;
+                        endforeach;
+                        ?>
+                        </tbody>
+                    </table>
+                <?php else : ?>
+                    <p class="standings-error">Данные турнирной таблицы недоступны</p>
                 <?php endif; ?>
             </div>
+
+            <?php if ( ! empty( $adjustments_data ) ) : ?>
+                <aside class="standings-notes" aria-label="Примечания к турнирной таблице">
+                    <h2 class="notes-title">Примечания</h2>
+                    <?php foreach ( $adjustments_data as $adjustment ) : 
+                        // Выводим только если есть комментарий
+                        $comment_text = trim( $adjustment->comment );
+                        if ( empty( $comment_text ) ) {
+                            continue;
+                        }
+                        
+                        // Находим имя команды
+                        $team_name = 'Неизвестная команда';
+                        foreach ( $standings as $team ) {
+                            if ( $team['team_id'] === $adjustment->team_id ) {
+                                $team_name = $team['name'];
+                                break;
+                            }
+                        }
+                        ?>
+                        <p class="note-item">
+                            <strong><?php echo esc_html( $team_name ); ?>:</strong> 
+                            <?php echo esc_html( $comment_text ); ?>
+                        </p>
+                    <?php endforeach; ?>
+                </aside>
+            <?php endif; ?>
         </section>
     </div>
 </main>

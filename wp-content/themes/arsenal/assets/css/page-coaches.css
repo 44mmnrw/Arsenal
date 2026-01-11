@@ -1,0 +1,194 @@
+/* ==========================================================================
+   Coach Card Component (based on Player Card - without stats)
+   ========================================================================== */
+
+/* Используем существующие стили teams-section, container, teams-header, teams-title, 
+   teams-content, position-group, position-heading, players-grid из players-grid.css
+   
+   Здесь переопределяем ТОЛЬКО стили для coach-card (вместо player-card)
+*/
+
+/* ============================================
+   Coach Card (ИДЕНТИЧНО player-card но БЕЗ stats)
+   ============================================ */
+
+.coach-card {
+	background-color: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	height: 100%;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+}
+
+.coach-card:hover {
+	box-shadow: 0px 4px 12px 0px #26262626, 0px 2px 4px -1px #1a1a1a1a;
+	transform: translateY(-2px);
+}
+
+/* Левая колонка 50%: Фото (без номера) */
+.coach-card__photo {
+	position: relative;
+	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+	min-height: 150px;
+}
+
+.coach-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Правая колонка 50%: Информация */
+.coach-card__info {
+	display: flex;
+	flex-direction: column;
+	padding: 12px;
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	justify-content: space-evenly;
+}
+
+.coach-card__name {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+.coach-card__position {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+}
+
+/* ============================================
+   Responsive Design (копируем от player-card но БЕЗ stats)
+   ============================================ */
+
+/* Tablet Large (1024px) */
+@media (max-width: 1024px) {
+	.coach-card {
+		grid-template-rows: auto;
+	}
+	
+	.coach-card__photo {
+		min-height: 140px;
+	}
+	
+	.coach-card__info {
+		padding: 10px;
+	}
+	
+	.coach-card__name {
+		font-size: 1.25rem;
+	}
+	
+	.coach-card__position {
+		font-size: 0.95rem;
+	}
+}
+
+/* Tablet Portrait (768px) */
+@media (max-width: 768px) {
+	.coach-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		border-radius: 8px;
+	}
+	
+	.coach-card:hover {
+		transform: translateY(-1px);
+	}
+	
+	.coach-card__photo {
+		min-height: 130px;
+	}
+	
+	.coach-card__info {
+		padding: 8px;
+	}
+	
+	.coach-card__name {
+		font-size: 1.1rem;
+	}
+	
+	.coach-card__position {
+		font-size: 0.9rem;
+	}
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+	.coach-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		border-radius: 6px;
+		height: auto;
+	}
+	
+	.coach-card:hover {
+		transform: none;
+		box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	}
+	
+	.coach-card__photo {
+		max-height: 90px;
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+	
+	.coach-card__image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+	}
+	
+	.coach-card__info {
+		padding: 6px;
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+		justify-content: center;
+	}
+	
+	.coach-card__name {
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.15;
+		margin-bottom: 2px;
+	}
+	
+	.coach-card__position {
+		font-size: 0.8rem;
+		font-weight: 400;
+		line-height: 1.2;
+		margin-bottom: 2px;
+	}
+}
+

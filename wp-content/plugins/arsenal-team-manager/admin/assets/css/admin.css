@@ -1,193 +1,4 @@
-/* Arsenal Team Manager - Admin Styles */
-
-/* ========== Карточки команд ========== */
-.arsenal-team-card {
-    transition: box-shadow 0.2s ease, transform 0.1s ease;
-}
-
-.arsenal-team-card:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
-}
-
-/* Компактные кнопки для карточек команд */
-button.arsenal-team-btn,
-a.arsenal-team-btn,
-input.arsenal-team-btn {
-    width: 100% !important;
-    padding: 4px 6px !important;
-    font-size: 11px !important;
-    line-height: 1.3 !important;
-    height: auto !important;
-    min-height: 24px !important;
-    max-height: 26px !important;
-    text-align: center !important;
-    display: inline-block !important;
-    box-sizing: border-box !important;
-}
-
-.arsenal-team-btn .dashicons,
-button.arsenal-team-btn .dashicons,
-a.arsenal-team-btn .dashicons {
-    font-size: 14px !important;
-    width: 14px !important;
-    height: 14px !important;
-    vertical-align: middle !important;
-    line-height: 1 !important;
-}
-
-/* Кнопка загрузки - синяя */
-button.arsenal-team-btn-upload,
-a.arsenal-team-btn-upload {
-    background: #2271b1 !important;
-    border-color: #2271b1 !important;
-    color: #fff !important;
-}
-
-button.arsenal-team-btn-upload:hover,
-a.arsenal-team-btn-upload:hover {
-    background: #135e96 !important;
-    border-color: #135e96 !important;
-    color: #fff !important;
-}
-
-/* Кнопка сохранения - зелёная */
-button.arsenal-team-btn-save,
-a.arsenal-team-btn-save {
-    background: #00a32a !important;
-    border-color: #00a32a !important;
-    color: #fff !important;
-}
-
-button.arsenal-team-btn-save:hover,
-a.arsenal-team-btn-save:hover {
-    background: #008a20 !important;
-    border-color: #008a20 !important;
-    color: #fff !important;
-}
-
-/* Кнопка удаления - красная */
-button.arsenal-team-btn-delete,
-a.arsenal-team-btn-delete {
-    color: #d63638 !important;
-    border-color: #d63638 !important;
-    background: #fff !important;
-}
-
-button.arsenal-team-btn-delete:hover,
-a.arsenal-team-btn-delete:hover {
-    background: #d63638 !important;
-    color: #fff !important;
-    border-color: #d63638 !important;
-}
-
-/* Информация о команде */
-.arsenal-team-info {
-    font-size: 10px;
-    color: #666;
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.arsenal-team-info .dashicons {
-    font-size: 12px;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
-}
-
-/* ========== Dashboard ========== */
-.arsenal-dashboard-card {
-    background: #fff;
-    border: 1px solid #ccd0d4;
-    box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-.arsenal-stat-number {
-    font-size: 48px;
-    font-weight: bold;
-    color: #d9534f;
-    margin: 10px 0;
-}
-
-.arsenal-player-photo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.arsenal-position-badge {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 3px;
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.arsenal-position-G {
-    background: #5cb85c;
-    color: white;
-}
-
-.arsenal-position-D {
-    background: #5bc0de;
-    color: white;
-}
-
-.arsenal-position-M {
-    background: #f0ad4e;
-    color: white;
-}
-
-.arsenal-position-F {
-    background: #d9534f;
-    color: white;
-}
-
-/* Типы составов */
-.arsenal-badge-main {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: 600;
-    background: #0073aa;
-    color: white;
-}
-
-.arsenal-badge-reserve {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: 600;
-    background: #82878c;
-    color: white;
-}
-
-/* Таблица игроков */
-.wp-list-table .arsenal-player-row:hover {
-    background-color: #f9f9f9;
-}
-
-/* Форма редактирования */
-.form-table th {
-    width: 200px;
-}
-
-.form-table input[type="text"],
-.form-table input[type="url"],
-.form-table input[type="date"],
-.form-table select {
-    width: 100%;
-    max-width: 400px;
-}
+/* Arsenal Team Manager - Стили админки */
 
 /* ========== Форма редактирования игрока (2 колонки) ========== */
 .player-form-wrapper {
@@ -332,7 +143,7 @@ a.arsenal-team-btn-delete:hover {
     white-space: nowrap;
 }
 
-/* WP Editor в админке */
+/* WP редактор в админке */
 .player-form-section .wp-editor-container {
     margin-top: 10px;
 }
@@ -1093,13 +904,13 @@ a.arsenal-team-btn-delete:hover {
     font-size: 14px;
 }
 
-/* Hover эффект для строк */
+/* Эффект при наведении для строк */
 .players-row:not(.players-header):not(.players-empty):hover {
     background: #f9f9f9;
     box-shadow: inset 0 0 3px rgba(0,115,170,0.1);
 }
 
-/* Responsive для мобильных */
+/* Адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .players-list-header {
         flex-direction: column;
@@ -1245,7 +1056,7 @@ a.arsenal-team-btn-delete:hover {
     text-align: center;
 }
 
-/* Photo Column */
+/* Колонка с фото */
 .contract-thumbnail {
     width: 40px;
     height: 40px;
@@ -1280,7 +1091,7 @@ a.arsenal-team-btn-delete:hover {
     color: #999;
 }
 
-/* Player Column */
+/* Колонка игрока */
 .contract-player-link {
     color: #0073aa;
     text-decoration: none;
@@ -1293,14 +1104,14 @@ a.arsenal-team-btn-delete:hover {
     text-decoration: underline;
 }
 
-/* Date Columns */
+/* Колонки дат */
 .contracts-col-start,
 .contracts-col-end {
     font-size: 13px;
     color: #555;
 }
 
-/* Action Column */
+/* Колонка действий */
 .contracts-col-action {
     justify-content: center;
 }
@@ -1324,7 +1135,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #999;
 }
 
-/* Contracts Mobile Responsive */
+/* Контракты адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .contracts-header {
         flex-direction: column;
@@ -1512,7 +1323,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #005a87;
 }
 
-/* Modal Responsive */
+/* Модальное окно адаптивный дизайн */
 @media (max-width: 782px) {
     .arsenal-modal-content {
         width: 95%;
@@ -1693,7 +1504,7 @@ a.arsenal-team-btn-delete:hover {
     font-size: 14px;
 }
 
-/* Stadiums Mobile Responsive */
+/* Стадионы адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .stadiums-header {
         flex-direction: column;
@@ -1864,7 +1675,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #999;
 }
 
-/* Stadium Form Responsive */
+/* Форма стадиона адаптивный дизайн */
 @media (max-width: 782px) {
     .stadium-form {
         grid-template-columns: 1fr;
@@ -2050,7 +1861,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #0073aa;
 }
 
-/* Seasons Mobile Responsive */
+/* Сезоны адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .seasons-header {
         flex-direction: column;
@@ -2231,7 +2042,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #999;
 }
 
-/* Season Form Responsive */
+/* Форма сезона адаптивный дизайн */
 @media (max-width: 782px) {
     .season-form-wrapper {
         padding: 15px;
@@ -2407,7 +2218,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #0073aa;
 }
 
-/* Leagues Mobile Responsive */
+/* Лиги адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .leagues-header {
         flex-direction: column;
@@ -2559,7 +2370,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #999;
 }
 
-/* League Form Responsive */
+/* Форма лиги адаптивный дизайн */
 @media (max-width: 782px) {
     .league-form-wrapper {
         padding: 15px;
@@ -2741,7 +2552,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #0073aa;
 }
 
-/* Adjustments Mobile Responsive */
+/* Корректировки адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .adjustments-header {
         flex-direction: column;
@@ -2902,7 +2713,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #999;
 }
 
-/* Adjustment Form Responsive */
+/* Форма корректировки адаптивный дизайн */
 @media (max-width: 782px) {
     .adjustment-form-wrapper {
         padding: 15px;
@@ -3188,7 +2999,7 @@ a.arsenal-team-btn-delete:hover {
     border-color: #0073aa;
 }
 
-/* Matches Mobile Responsive */
+/* Матчи адаптивный дизайн для мобильных */
 @media (max-width: 782px) {
     .matches-header {
         flex-direction: column;
@@ -3254,7 +3065,7 @@ a.arsenal-team-btn-delete:hover {
     font-weight: 600;
 }
 
-/* Season Selector Card */
+/* Карточка выбора сезона */
 .season-selector-card {
     background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
     padding: 25px;
@@ -3321,7 +3132,7 @@ a.arsenal-team-btn-delete:hover {
     font-weight: 500;
 }
 
-/* Dashboard Stats Grid */
+/* Сетка статистики Dashboard */
 .dashboard-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -3375,7 +3186,7 @@ a.arsenal-team-btn-delete:hover {
     font-weight: 500;
 }
 
-/* Dashboard Responsive */
+/* Dashboard адаптивный дизайн */
 @media (max-width: 782px) {
     .dashboard-wrapper {
         padding: 15px;
@@ -3399,7 +3210,7 @@ a.arsenal-team-btn-delete:hover {
     }
 }
 
-/* ========== TEAMS PAGE ========== */
+/* ========== СТРАНИЦА КОМАНД ========== */
 
 .teams-wrapper {
     background: white;
@@ -3724,5 +3535,278 @@ a.arsenal-team-btn-delete:hover {
     .teams-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 15px;
+    }
+}
+
+/* ========== Список персонала ========== */
+.staff-list-wrapper {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.staff-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #0073aa;
+}
+
+.staff-list-header h1 {
+    margin: 0;
+    color: #0073aa;
+    font-size: 28px;
+}
+
+.staff-list-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.staff-list-stats .stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 100px;
+}
+
+.staff-list-stats .stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0073aa;
+}
+
+.staff-list-stats .stat-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Фильтры */
+.staff-filters {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.staff-filters-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+/* Таблица сотрудников */
+.staff-list-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.staff-table {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.staff-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 200px 150px 250px;
+    gap: 15px;
+    padding: 12px 15px;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.staff-row:last-child {
+    border-bottom: none;
+}
+
+.staff-header {
+    background: #0073aa;
+    color: #fff;
+    font-weight: 600;
+    padding: 15px;
+}
+
+.staff-header .staff-col-photo,
+.staff-header .staff-col-name,
+.staff-header .staff-col-job,
+.staff-header .staff-col-contract,
+.staff-header .staff-col-action {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.staff-row:hover {
+    background: #f9f9f9;
+}
+
+.staff-col-photo {
+    min-width: 60px;
+}
+
+.staff-thumbnail,
+.staff-thumbnail-empty {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+}
+
+.staff-thumbnail-empty {
+    font-size: 28px;
+    color: #999;
+}
+
+.staff-name-link {
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.staff-name-link:hover {
+    text-decoration: underline;
+}
+
+.job-title-badge {
+    background: #e7f3ff;
+    color: #0073aa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.staff-row.staff-empty {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding: 40px;
+}
+
+.staff-col-full {
+    grid-column: 1 / -1;
+}
+
+.button-delete {
+    background: #fff;
+    border-color: #d63638 !important;
+    color: #d63638 !important;
+}
+
+.button-delete:hover {
+    background: #d63638 !important;
+    color: #fff !important;
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+    .staff-row {
+        grid-template-columns: 50px 1fr 100px 150px;
+        gap: 10px;
+    }
+
+    .staff-row.staff-header {
+        display: none;
+    }
+
+    .staff-row {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .staff-col-photo {
+        grid-column: 1 / 2;
+        grid-row: 1 / 4;
+    }
+
+    .staff-col-name {
+        grid-column: 2;
+        grid-row: 1;
+        font-weight: 600;
+    }
+
+    .staff-col-job {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: 13px;
+    }
+
+    .staff-col-contract {
+        grid-column: 2;
+        grid-row: 3;
+        font-size: 12px;
+    }
+
+    .staff-col-action {
+        grid-column: 1 / -1;
+        grid-row: 4;
+        display: flex;
+        gap: 5px;
+    }
+
+    .staff-col-action .button {
+        flex: 1;
+        margin: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .staff-filters-form {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .staff-col-action .button {
+        font-size: 12px;
+        padding: 5px 8px !important;
     }
 }

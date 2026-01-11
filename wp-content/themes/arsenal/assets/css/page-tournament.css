@@ -4,6 +4,26 @@
  */
 
 /* ================================
+   CONTAINER
+   ================================ */
+
+.container {
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+}
+
+/* ================================
+   Tournament Container
+   ================================ */
+
+.tournament-container {
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+	padding: var(--container-padding-y) var(--container-padding-x);
+}
+
+/* ================================
    Tournament Header
    ================================ */
 
@@ -12,7 +32,7 @@
 	align-items: center;
 	gap: 1.5rem;
 	margin-bottom: 2.5rem;
-	padding: 1.25rem 0;
+	padding: 0rem 0;
 }
 
 .tournament-back-btn {
@@ -340,10 +360,6 @@
 /* ================================
    Match Cards
    ================================ */
-	grid-row: 6;
-	height: 0.125rem;
-	background: #e0e0e0;
-}
 
 /* 1/8 финала - ряды 7-8, 8 матчей (2 ряда по 4) */
 .eighth-match:nth-of-type(11) { grid-column: 1; grid-row: 7; }
@@ -413,7 +429,7 @@
 .bracket-match-card {
 	background: #fff;
 	border-radius: 0.625rem;
-	box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+	box-shadow: 0 0.125rem 0.5rem #14141414;
 	padding: 0.6875rem;
 	transition: all 0.3s ease;
 	border: 0.0625rem solid #e0e0e0;
@@ -422,7 +438,7 @@
 }
 
 .bracket-match-card:hover {
-	box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.12);
+	box-shadow: 0 0.25rem 1rem #1f1f1f1f;
 	transform: translateY(-0.125rem);
 	border-color: #ff1a1a;
 }
@@ -435,7 +451,7 @@
 	margin-bottom: 0.5rem;
 	text-align: center;
 	padding-bottom: 0.5rem;
-	border-bottom: 0.0625rem solid #f0f0f0;
+	border-bottom: 0.0625rem solid #f5f5f5;
 }
 
 /* ================================
@@ -459,12 +475,12 @@
 }
 
 .match-team:hover {
-	background: #f0f0f0;
+	background: #f5f5f5;
 }
 
 /* Winner Highlighting */
 .match-team.winner {
-	background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);	
+	background: linear-gradient(135deg, #ffe5e5 0%, #ffe5e5 100%);	
 }
 
 .match-team.winner .team-name {
@@ -491,7 +507,7 @@
 	align-items: center;
 	justify-content: center;
 	overflow: hidden;
-	box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0.125rem 0.375rem #1a1a1a1a;
 }
 
 .team-logo img {
@@ -536,14 +552,14 @@
 	text-align: center;
 	padding: 0.25rem 0.4375rem;
 	border-radius: 0.25rem;
-	background: #f0f0f0;
+	background: #f5f5f5;
 	flex-shrink: 0;
 }
 
 .match-team.winner .team-score {
 	background: linear-gradient(135deg, #ff1a1a 0%, #cc0000 100%);
 	color: #fff;
-	box-shadow: 0 0.125rem 0.375rem rgba(255, 26, 26, 0.3);
+	box-shadow: 0 0.125rem 0.375rem #ff1a1a4d;
 }
 
 /* ================================
@@ -785,4 +801,5 @@
 		font-size: 0.6875rem;
 	}
 }
+
 
