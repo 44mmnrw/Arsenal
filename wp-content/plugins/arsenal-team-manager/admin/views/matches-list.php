@@ -157,10 +157,6 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <strong><?php echo intval( $match->home_score ); ?> : <?php echo intval( $match->away_score ); ?></strong>
                     </div>
                     <div class="matches-col-away">
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match->id ) ); ?>" 
-                           class="match-team-link">
-                            <?php echo esc_html( $match->away_team_name ); ?>
-                        </a>
                         <?php if ( ! empty( $match->away_logo ) ) : ?>
                             <img src="<?php 
                                 $logo_url = $match->away_logo;
@@ -174,6 +170,10 @@ if ( ! defined( 'ABSPATH' ) ) {
                             ?>" alt="<?php echo esc_attr( $match->away_team_name ); ?>" 
                                  class="match-team-logo">
                         <?php endif; ?>
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match->id ) ); ?>" 
+                           class="match-team-link">
+                            <?php echo esc_html( $match->away_team_name ); ?>
+                        </a>
                     </div>
                     <div class="matches-col-status">
                         <?php
