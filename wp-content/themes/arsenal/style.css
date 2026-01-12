@@ -81,7 +81,7 @@ table {
 	/* Контейнер */
 	--container-max-width: 1280px;
 	--container-padding-x: 20px;
-	--container-padding-y: 0;
+	--container-padding-y: 20px;
 	
 	/* Красная палитра Arsenal */
 	--red-900: #990000; /* Темный бордовый для текста и акцентов */
@@ -133,7 +133,7 @@ body {
 .container {
 	max-width: var(--container-max-width, 1280px);
 	margin: 0 auto;
-	padding: var(--container-padding-y, 0) var(--container-padding-x, 20px);
+	padding: var(--container-padding-y) var(--container-padding-x);
 }
 
 /* Заголовки */

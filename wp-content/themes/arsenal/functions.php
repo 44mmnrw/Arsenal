@@ -249,6 +249,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы Стадион
+		if ( is_page_template( 'templates/page-stadium.php' ) || is_page( 'stadium' ) || is_page( 'стадион' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-stadium',
+				ARSENAL_THEME_URI . '/assets/css/page-stadium.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили для заглушек изображений
 		wp_enqueue_style(
 			'arsenal-image-placeholders',
