@@ -164,7 +164,14 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					?>
 				</div>
 				<div class="detail-item">
-					<?php arsenal_icon( 'icon-clock', 16, 16, 'detail-icon' ); ?>
+					<lottie-player 
+						src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/clock.json' ); ?>" 
+						background="transparent" 
+						speed="1" 
+						style="width: 1.75rem; height: 1.75rem; display: inline-block; vertical-align: -0.2em; margin-right: 4px; color: #ffffff; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)) drop-shadow(0 0 1px rgba(255,255,255,0.3));" 
+						loop 
+						autoplay>
+					</lottie-player>
 					<?php echo esc_html( date_i18n( 'H:i', strtotime( $match->match_time ?? '19:00' ) ) ); ?>
 				</div>
 				<div class="detail-item">

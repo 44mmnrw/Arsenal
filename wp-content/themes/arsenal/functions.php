@@ -302,6 +302,15 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			true
 		);
 
+		// Lottie player для анимированных иконок
+		wp_enqueue_script(
+			'lottie-player',
+			'https://unpkg.com/@lottiefiles/lottie-player@latest',
+			array(),
+			'1.0',
+			true
+		);
+
 		// Передача данных в JavaScript
 		wp_localize_script( 'arsenal-script', 'arsenalData', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
