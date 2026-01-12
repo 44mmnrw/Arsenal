@@ -329,6 +329,10 @@
 
 /* Планшет (1024px и ниже) */
 @media (max-width: 1024px) {
+	.calendar-section .calendar-title {
+		font-size: 1.75rem;
+	}
+
 	.calendar-match-content {
 		gap: 16px;
 		padding: 16px;
@@ -359,7 +363,7 @@
 	}
 
 	.calendar-section .calendar-title {
-		font-size: 2rem;
+		font-size: 1.5rem;
 		margin-bottom: 15px;
 	}
 
@@ -438,7 +442,7 @@
 	}
 
 	.calendar-section .calendar-title {
-		font-size: 1.75rem;
+		font-size: 1.25rem;
 		margin-bottom: 10px;
 		padding-bottom: 10px;
 	}

@@ -302,6 +302,10 @@ h1 {
    ========================================================================== */
 
 @media (max-width: 768px) {
+	h1 {
+		font-size: 1.5rem;
+	}
+
 	.page-title {
 		font-size: 28px;
 		line-height: 34px;
@@ -323,6 +327,10 @@ h1 {
 }
 
 @media (max-width: 480px) {
+	h1 {
+		font-size: 1.25rem;
+	}
+
 	.news-content {
 		padding: 16px 8px;
 	}

@@ -463,6 +463,10 @@ h1 {
    ======================================== */
 
 @media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
     .club-history-container {
         padding: 24px;
     }
@@ -519,6 +523,10 @@ h1 {
    ======================================== */
 
 @media (max-width: 480px) {
+    h1 {
+        font-size: 1.25rem;
+    }
+
     .club-history-container {
         padding: 16px;
     }
