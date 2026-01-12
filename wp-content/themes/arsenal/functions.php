@@ -43,6 +43,14 @@ add_action( 'admin_init', function() {
 }, 100 );
 
 /**
+ * Отключение Гутенберга (блочного редактора)
+ * Используется классический редактор с собственными стилями
+ */
+add_filter( 'use_block_editor_for_post_type', '__return_false' );
+add_filter( 'use_block_editor_for_post', '__return_false' );
+remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
+
+/**
  * Подключение файлов темы
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
