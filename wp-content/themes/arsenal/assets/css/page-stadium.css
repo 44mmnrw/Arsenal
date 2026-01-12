@@ -513,11 +513,16 @@
 }
 
 .contact-item__icon {
-	width: 1.25rem;
-	height: 1.25rem;
+	width: 2rem;
+	height: 2rem;
 	flex-shrink: 0;
 	color: var(--arsenal-red);
-	margin-top: 0.125rem;
+	margin-top: 0;
+	padding: 0.375rem;
+	border-radius: 0.375rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .contact-item__text {

@@ -289,8 +289,8 @@ get_header(); ?>
 							<div class="contact-item__text"><?php esc_html_e( 'ул. Спортивная, 1, Дзержинск, Минская область, 222720', 'arsenal' ); ?></div>
 						</div>
 						<div class="contact-item">
-							<svg class="contact-item__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-								<path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.8c.164.983.637 2.83 1.39 4.467a1 1 0 01-.502 1.21l-.933.467c-.41.207-.667.72-.67 1.449a16.913 16.913 0 006.57 6.57c.729-.003 1.242.26 1.449.67l.467-.933a1 1 0 011.21-.502c1.636.753 3.484 1.226 4.467 1.39a1 1 0 01.8.986v2.153a1 1 0 01-1 1h-1C9.716 20 3 13.284 3 5V4a1 1 0 011-1h2z"/>
+							<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
+								<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-phone"></use>
 							</svg>
 							<div class="contact-item__text">+375 (1716) 4-53-21</div>
 						</div>
