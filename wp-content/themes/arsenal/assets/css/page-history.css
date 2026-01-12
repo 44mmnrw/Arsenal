@@ -32,8 +32,9 @@
    Основной стиль h1
    ======================================== */
 
-h1 {
-    font-size: 2rem;
+.entry-header h1 {
+    font-size: 2rem !important;
+    text-align: left !important;
 }
 
 /* ========================================
@@ -459,6 +460,20 @@ h1 {
 }
 
 /* ========================================
+   Адаптивный дизайн (Desktops to Tablets)
+   ======================================== */
+
+@media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+	.entry-header h1 {
+    font-size: 1.75rem !important;
+    text-align: left !important;
+   }
+}
+
+/* ========================================
    Адаптивный дизайн (Tablet)
    ======================================== */
 
@@ -467,9 +482,10 @@ h1 {
         text-align: left;
     }
 
-    h1 {
-        font-size: 1.5rem;
-    }
+    .entry-header h1 {
+    font-size: 1.75rem !important;
+    padding: 0 24px !important;  
+   }
 
     .club-history-container {
         padding: 24px;

@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .teams-section {
-	background-color: #f9fafb;
-	padding: 0 0;
+	background-color: #ffffff;
+	padding: 0 0 1.5rem 0;
 }
 
 .container {
@@ -230,7 +230,7 @@ h1 {
 	}
 
 	.teams-section {
-		padding: 0 0;
+		padding: 0 0 1.5rem 0;
 	}
 	
 	.container {
@@ -253,7 +253,7 @@ h1 {
 	
 	.teams-content {
 		gap: 2.5rem;
-	}
+	}		
 	
 	.position-group {
 		padding-left: 1.5rem;
@@ -307,13 +307,9 @@ h1 {
 	}
 
 	.teams-section {
-		padding: 2.5rem 0;
-	}
-	
-	.container {
-		padding: 0 2rem;
-	}
-	
+		padding: 0 0 1.5rem 0;
+	}	
+		
 	.teams-header {
 		margin-bottom: 2rem;		
 	}
@@ -438,6 +434,7 @@ h1 {
 	
 	.position-group {
 		gap: 0.75rem;
+		padding: 0 0 0 0;
 	}
 	
 	.players-grid,

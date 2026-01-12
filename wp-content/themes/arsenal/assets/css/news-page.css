@@ -301,6 +301,23 @@ h1 {
    Адаптивность
    ========================================================================== */
 
+@media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+
+	}
+	.news-page .container {
+	padding: 24px 0;	
+   }
+   .news-content {
+		padding: 0px 24px;
+	}
+
+	.page-title {
+		font-size: 1.75rem;
+	}
+}
+
 @media (max-width: 768px) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
