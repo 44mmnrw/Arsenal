@@ -948,6 +948,11 @@ lottie-player {
 		flex-direction: column;
 	}
 
+	.detail-item lottie-player {
+		color: #ffffff;
+		filter: brightness(1.3) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+	}
+
 	.match-container {
 		padding: 0.5rem;
 	}
