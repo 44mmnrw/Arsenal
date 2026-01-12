@@ -267,6 +267,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы 404
+		if ( is_404() ) {
+			wp_enqueue_style(
+				'arsenal-page-404',
+				ARSENAL_THEME_URI . '/assets/css/page-404.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили для заглушек изображений
 		wp_enqueue_style(
 			'arsenal-image-placeholders',
@@ -308,6 +318,15 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			'https://unpkg.com/@lottiefiles/lottie-player@latest',
 			array(),
 			'1.0',
+			true
+		);
+
+		// Контроль интервала проигрывания Lottie анимаций
+		wp_enqueue_script(
+			'lottie-player-interval',
+			ARSENAL_THEME_URI . '/assets/js/lottie-player-interval.js',
+			array( 'lottie-player' ),
+			ARSENAL_VERSION,
 			true
 		);
 
@@ -1386,3 +1405,16 @@ if ( ! function_exists( 'arsenal_pluralize_position' ) ) {
 		return isset( $plurals[ $position ] ) ? $plurals[ $position ] : $position;
 	}
 }
+
+/**
+ * SEO теги для 404 страницы
+ * Добавляет robots meta tag и canonical link
+ */
+add_action( 'wp_head', function() {
+	if ( is_404() ) {
+		// Запрещаем индексирование 404 страницы
+		echo '<meta name="robots" content="noindex, follow">' . "\n";
+		// Указываем canonical link на главную страницу
+		echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
+	}
+}, 1 );

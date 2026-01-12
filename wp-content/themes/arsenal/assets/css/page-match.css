@@ -206,13 +206,13 @@
 lottie-player {
 	--lottie-player-color: #ffffff;
 	color: #ffffff;
-	filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)) drop-shadow(0 0 1px rgba(255,255,255,0.3)) brightness(1.2);
+	filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.3)) brightness(1.2);
 	opacity: 1;
 }
 
 .detail-item lottie-player {
 	color: #ffffff;
-	filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)) drop-shadow(0 0 1px rgba(255,255,255,0.3)) brightness(1.2);
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.3)) brightness(1.2);
 }
 
 .referee-info {
