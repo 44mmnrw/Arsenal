@@ -33,7 +33,7 @@ get_header(); ?>
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 							<path d="M10 2C5.58 2 2 5.58 2 10c0 5.74 7.05 8.5 8 8.5s8-2.76 8-8.5c0-4.42-3.58-8-8-8zm0 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
 						</svg>
-						<span><?php esc_html_e( 'Дзержинск, Беларусь', 'arsenal' ); ?></span>
+						<span><?php esc_html_e( 'Борисов, Беларусь', 'arsenal' ); ?></span>
 					</div>
 					<div class="stadium-hero__meta-item">
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -94,7 +94,7 @@ get_header(); ?>
 								<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
 							</svg>
 						</div>
-						<div class="stat-card__number">105 x 68 м</div>
+						<div class="stat-card__number">105x68</div>
 						<div class="stat-card__label"><?php esc_html_e( 'Размеры поля', 'arsenal' ); ?></div>
 					</div>
 				</div>
