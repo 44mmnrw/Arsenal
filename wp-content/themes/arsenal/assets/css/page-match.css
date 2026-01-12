@@ -195,8 +195,8 @@
 }
 
 .detail-icon {
-	width: 1rem;
-	height: 1rem;
+	width: 1.25rem;
+	height: 1.25rem;
 	flex-shrink: 0;
 	color: #ffffffcc;
 	stroke: #ffffffcc;
@@ -238,8 +238,8 @@
 }
 
 .section-icon {
-	width: 1.375rem;
-	height: 1.375rem;
+	width: 1.25rem;
+	height: 1.25rem;
 	flex-shrink: 0;
 	color: #FF1A1A;
 }
@@ -347,7 +347,7 @@
 /* Кнопка переключения событий */
 .toggle-events-btn {
 	margin-top: 1rem;
-	padding: 0.75rem 1.25rem;
+	padding: 0.5rem 1rem;
 	background-color: #fafafa;
 	border: 1px solid #e5e7eb;
 	border-radius: 0.5rem;
@@ -355,10 +355,6 @@
 	font-weight: 500;
 	color: #374151;
 	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.5rem;
 	transition: all 0.2s ease;
 }
 
@@ -372,14 +368,28 @@
 	border-color: #d1d5db;
 }
 
-.toggle-events-btn .toggle-icon {
-	transition: transform 0.3s ease;
+.toggle-events-btn .toggle-text {
+	display: inline;
+	white-space: nowrap;
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+}
+
+.toggle-events-btn .toggle-content {
 	display: inline-flex;
 	align-items: center;
-	justify-content: center;
-	color: currentColor;
-	flex-shrink: 0;
+	gap: 0.75rem;
+	white-space: nowrap;
+}
+
+.toggle-events-btn .toggle-icon {
+	transition: transform 0.3s ease;
+	width: 1em;
+	height: 1em;
 	transform: rotate(0deg);
+	flex-shrink: 0;
+	display: block;
 }
 
 .toggle-events-btn.expanded .toggle-icon {
@@ -559,8 +569,8 @@
 }
 
 .field-svg {
-	width: 100% 
-	height: auto 
+	width: 100%;
+	height: auto;
 	max-width: 100%;
 	display: block;
 	border: 0.25rem solid #ffffff;
@@ -1012,8 +1022,8 @@
 		justify-content: center;
 		color: currentColor;
 		flex-shrink: 0;
-		width: 16px;
-		height: 16px;
+		width: 32px;
+		height: 32px;
 		transform: rotate(0deg);
 	}
 

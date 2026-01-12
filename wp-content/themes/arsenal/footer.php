@@ -229,7 +229,7 @@
 						<div class="footer-contacts-content">
 							<?php if ( $stadium || $address ) : ?>
 							<div class="footer-contacts-group">
-								<span class="footer-contacts-icon"><?php arsenal_icon( 'icon-address', 16, 16 ); ?></span>
+								<span class="footer-contacts-icon"><?php arsenal_icon( 'icon-place', 16, 16 ); ?></span>
 								<ul class="footer-contacts-list">
 									<?php if ( $stadium ) : ?>
 										<li><?php echo esc_html( $stadium ); ?></li>
