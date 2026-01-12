@@ -676,6 +676,10 @@
 
 /* До 1024px включительно */
 @media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.match-container {
 		padding: 1rem 1.5rem;
 		max-width: 100%;
@@ -803,6 +807,10 @@
 }
 
 @media (max-width: 768px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.match-hero-header {
 		height: 21.875rem;
 	}
@@ -876,6 +884,10 @@
 }
 
 @media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.match-hero-header {
 		min-height: 18.75rem;
 		height: auto;

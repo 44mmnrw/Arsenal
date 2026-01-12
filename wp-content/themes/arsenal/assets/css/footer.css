@@ -365,6 +365,10 @@
 
 /* Планшеты: 2 колонки сверху (brand + contacts), nav на всю ширину снизу */
 @media (max-width: 991px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.footer-content {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -399,6 +403,10 @@
 
 /* Мобильные: полностью вертикальный layout */
 @media (max-width: 767px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.footer-content {
 		display: flex;
 		flex-direction: column;
@@ -418,6 +426,10 @@
 
 /* Маленькие мобильные: аккордеон-меню */
 @media (max-width: 576px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.footer-main {
 		padding: 2rem 0 0 0;
 	}

@@ -87,6 +87,10 @@
 
 /* Tablet Large (1024px) */
 @media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.coach-card {
 		grid-template-rows: auto;
 	}
@@ -110,6 +114,10 @@
 
 /* Tablet Portrait (768px) */
 @media (max-width: 768px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.coach-card {
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto;
@@ -139,6 +147,10 @@
 
 /* Mobile (480px) */
 @media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.coach-card {
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto;

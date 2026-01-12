@@ -329,6 +329,10 @@
 
 /* Планшет (1024px и ниже) */
 @media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.calendar-section .calendar-title {
 		font-size: 1.75rem;
 	}
@@ -358,6 +362,10 @@
 
 /* Планшет (768px и ниже) */
 @media (max-width: 768px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.calendar-section {
 		padding: 40px 20px;
 	}
@@ -437,6 +445,10 @@
 
 /* Мобильный (480px и ниже) */
 @media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.calendar-section {
 		padding: 30px 15px;
 	}

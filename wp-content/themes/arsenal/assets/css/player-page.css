@@ -974,6 +974,10 @@
    ======================================== */
 
 @media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	/* Профиль игрока - адаптация */
 	.player-profile-card {
 		grid-template-columns: 32% 68%;
@@ -1109,6 +1113,10 @@
    ======================================== */
 
 @media (max-width: 768px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	/* Навигация и контейнер */
 	.player-container {
 		padding: 0 20px;
@@ -1338,6 +1346,10 @@
    ======================================== */
 
 @media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	/* Контейнеры - минимальное расстояние */
 	.player-container {
 		padding: 0 12px;

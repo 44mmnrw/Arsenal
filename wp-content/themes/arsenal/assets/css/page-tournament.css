@@ -606,6 +606,10 @@
 
 /* Tablets and small desktops */
 @media (max-width: 75rem) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.tournament-title {
 		font-size: 1.75rem;
 	}
@@ -651,6 +655,10 @@
 
 /* Mobile devices */
 @media (max-width: 48rem) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	.bracket-grid-container {
 		grid-template-columns: 1fr;
 		padding: 0.9375rem;

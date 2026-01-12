@@ -757,6 +757,10 @@ article {
 		padding: 1.5rem;
 	}
 
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
 	h1 {
 		font-size: 1.5rem;
 	}
@@ -812,8 +816,15 @@ article {
 }
 
 @media (max-width: 480px) {
-	.container {
+		h1, h2, h3, h4, h5, h6 {
+			text-align: left;
+		}
+
 		padding: 1rem;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
 	}
 
 	h1 {

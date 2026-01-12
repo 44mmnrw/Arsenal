@@ -84,14 +84,13 @@ foreach ( $teams as $team ) {
 // ===== ПОЛУЧАЕМ ЖЁЛТЫЕ КАРТОЧКИ ДЛЯ КАЖДОЙ КОМАНДЫ (сезон 2025) =====
 $yellow_cards_data = $wpdb->get_results(
     $wpdb->prepare(
-        "SELECT p.team_id, COUNT(*) as count
+        "SELECT ml.team_id, COUNT(*) as count
          FROM {$wpdb->prefix}arsenal_match_events me
          INNER JOIN {$wpdb->prefix}arsenal_matches m ON me.match_id = m.match_id
-         INNER JOIN {$wpdb->prefix}arsenal_players p ON me.player_id = p.id
+         INNER JOIN {$wpdb->prefix}arsenal_match_lineups ml ON me.player_id = ml.player_id AND me.match_id = ml.match_id
          WHERE m.season_id = %s 
          AND me.event_type = 'yellow_card' 
-         AND p.team_id IS NOT NULL
-         GROUP BY p.team_id",
+         GROUP BY ml.team_id",
         $current_season_id
     )
 );
