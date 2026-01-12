@@ -30,20 +30,20 @@ get_header(); ?>
 				<h1 class="stadium-hero__title"><?php echo esc_html( get_the_title() ); ?></h1>
 				<div class="stadium-hero__meta">
 					<div class="stadium-hero__meta-item">
-						<svg class="stadium-hero__meta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path d="M10 2C5.58 2 2 5.58 2 10c0 5.74 7.05 8.5 8 8.5s8-2.76 8-8.5c0-4.42-3.58-8-8-8zm0 12c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
 						</svg>
 						<span><?php esc_html_e( 'Борисов, Беларусь', 'arsenal' ); ?></span>
 					</div>
 					<div class="stadium-hero__meta-item">
-						<svg class="stadium-hero__meta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path d="M10 2a8 8 0 100 16 8 8 0 000-16zm.5 11H9V7h1.5v6z"/>
+					<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-people"></use>
 						</svg>
 						<span><?php esc_html_e( 'Вместимость: 5 402', 'arsenal' ); ?></span>
 					</div>
 					<div class="stadium-hero__meta-item">
-						<svg class="stadium-hero__meta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm0 6a2 2 0 00-2 2v4a2 2 0 002 2h12a2 2 0 002-2v-4a2 2 0 00-2-2H4z"/>
+					<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
+						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-date"></use>
 						</svg>
 						<span><?php esc_html_e( 'Открыт: 1959 г.', 'arsenal' ); ?></span>
 					</div>
@@ -283,8 +283,8 @@ get_header(); ?>
 					<h3><?php esc_html_e( 'Контакты', 'arsenal' ); ?></h3>
 					<div class="stadium-card__content">
 						<div class="contact-item">
-							<svg class="contact-item__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-								<path d="M10 2C5.58 2 2 5.58 2 10c0 5.74 7.05 8.5 8 8.5s8-2.76 8-8.5c0-4.42-3.58-8-8-8z"/>
+						<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
 							</svg>
 							<div class="contact-item__text"><?php esc_html_e( 'ул. Спортивная, 1, Дзержинск, Минская область, 222720', 'arsenal' ); ?></div>
 						</div>
@@ -295,8 +295,8 @@ get_header(); ?>
 							<div class="contact-item__text">+375 (1716) 4-53-21</div>
 						</div>
 						<div class="contact-item">
-							<svg class="contact-item__icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-								<path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 107.748-1.153A4.5 4.5 5.5 13z"/>
+						<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-map"></use>
 							</svg>
 							<div class="contact-item__text">53.6833° N, 27.1333° E</div>
 						</div>
@@ -315,8 +315,8 @@ get_header(); ?>
 					<div class="stadium-card__content">
 						<div class="infrastructure-item">
 							<div class="infrastructure-item__icon">
-								<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-									<path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3z"/>
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-car"></use>
 								</svg>
 							</div>
 							<div class="infrastructure-item__text">
@@ -339,8 +339,8 @@ get_header(); ?>
 
 						<div class="infrastructure-item">
 							<div class="infrastructure-item__icon">
-								<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-									<path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3z"/>
+								<svg viewBox="0 0 20 20" aria-hidden="true">
+									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-dumbbell"></use>
 								</svg>
 							</div>
 							<div class="infrastructure-item__text">
@@ -351,8 +351,8 @@ get_header(); ?>
 
 						<div class="infrastructure-item">
 							<div class="infrastructure-item__icon">
-								<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-									<path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3z"/>
+								<svg viewBox="0 0 20 20" aria-hidden="true">
+									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-medicine"></use>
 								</svg>
 							</div>
 							<div class="infrastructure-item__text">
