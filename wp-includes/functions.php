@@ -1818,11 +1818,11 @@ function is_blog_installed() {
 	$wp_tables = $wpdb->tables();
 	foreach ( $wp_tables as $table ) {
 		// The existence of custom user tables shouldn't suggest an unwise state or prevent a clean installation.
-		if ( defined( 'CUSTOM_USER_TABLE' ) && CUSTOM_USER_TABLE === $table ) {
+		if ( defined( 'CUSTOM_USER_TABLE' ) && constant( 'CUSTOM_USER_TABLE' ) === $table ) {
 			continue;
 		}
 
-		if ( defined( 'CUSTOM_USER_META_TABLE' ) && CUSTOM_USER_META_TABLE === $table ) {
+		if ( defined( 'CUSTOM_USER_META_TABLE' ) && constant( 'CUSTOM_USER_META_TABLE' ) === $table ) {
 			continue;
 		}
 
@@ -2225,7 +2225,7 @@ function wp_normalize_path( $path ) {
 function get_temp_dir() {
 	static $temp = '';
 	if ( defined( 'WP_TEMP_DIR' ) ) {
-		return trailingslashit( WP_TEMP_DIR );
+		return trailingslashit( constant( 'WP_TEMP_DIR' ) );
 	}
 
 	if ( $temp ) {
@@ -3175,8 +3175,9 @@ function wp_check_filetype_and_ext( $file, $filename, $mimes = null ) {
 		$finfo     = finfo_open( FILEINFO_MIME_TYPE );
 		$real_mime = finfo_file( $finfo, $file );
 
-		if ( PHP_VERSION_ID < 80100 ) { // finfo_close() has no effect as of PHP 8.1.
-			finfo_close( $finfo );
+		if ( PHP_VERSION_ID < 80100 ) { // finfo_close() deprecated as of PHP 8.1.
+			/** @psalm-suppress DeprecatedFunction */
+			@ finfo_close( $finfo );
 		}
 
 		$google_docs_types = array(
@@ -3344,7 +3345,7 @@ function wp_get_image_mime( $file ) {
 			$mime      = ( $imagetype ) ? image_type_to_mime_type( $imagetype ) : false;
 		} elseif ( function_exists( 'getimagesize' ) ) {
 			// Don't silence errors when in debug mode, unless running unit tests.
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && ! defined( 'WP_RUN_CORE_TESTS' ) ) {
+			if ( defined( 'WP_DEBUG' ) && constant( 'WP_DEBUG' ) && ! defined( 'WP_RUN_CORE_TESTS' ) ) {
 				// Not using wp_getimagesize() here to avoid an infinite loop.
 				$imagesize = getimagesize( $file );
 			} else {
@@ -3407,8 +3408,9 @@ function wp_get_image_mime( $file ) {
 					$fileinfo  = finfo_open( FILEINFO_MIME_TYPE );
 					$mime_type = finfo_file( $fileinfo, $file );
 
-					if ( PHP_VERSION_ID < 80100 ) { // finfo_close() has no effect as of PHP 8.1.
-						finfo_close( $fileinfo );
+					if ( PHP_VERSION_ID < 80100 ) { // finfo_close() deprecated as of PHP 8.1.
+						/** @psalm-suppress DeprecatedFunction */
+						@ finfo_close( $fileinfo );
 					}
 
 					if ( wp_is_heic_image_mime_type( $mime_type ) ) {
@@ -3803,7 +3805,7 @@ function wp_die( $message = '', $title = '', $args = array() ) {
 		 * @param callable $callback Callback function name.
 		 */
 		$callback = apply_filters( 'wp_die_jsonp_handler', '_jsonp_wp_die_handler' );
-	} elseif ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) {
+	} elseif ( defined( 'XMLRPC_REQUEST' ) && constant( 'XMLRPC_REQUEST' ) ) {
 		/**
 		 * Filters the callback for killing WordPress execution for XML-RPC requests.
 		 *
@@ -3986,13 +3988,10 @@ function _default_wp_die_handler( $message, $title = '', $args = array() ) {
 			padding: 0 10px 1px;
 			cursor: pointer;
 			-webkit-border-radius: 3px;
-			-webkit-appearance: none;
-			border-radius: 3px;
-			white-space: nowrap;
-			-webkit-box-sizing: border-box;
-			-moz-box-sizing:    border-box;
-			box-sizing:         border-box;
-
+		    border-radius: 3px;
+		    -webkit-appearance: none;
+		    appearance: none;
+		    white-space: nowrap;
 			vertical-align: top;
 		}
 
@@ -4799,7 +4798,7 @@ function _mce_set_direction( $mce_init ) {
  * @return bool True if it's a WordPress REST API request, false otherwise.
  */
 function wp_is_serving_rest_request() {
-	return defined( 'REST_REQUEST' ) && REST_REQUEST;
+	return defined( 'REST_REQUEST' ) && constant( 'REST_REQUEST' );
 }
 
 /**
@@ -6480,7 +6479,7 @@ function get_main_network_id() {
 	$current_network = get_network();
 
 	if ( defined( 'PRIMARY_NETWORK_ID' ) ) {
-		$main_network_id = PRIMARY_NETWORK_ID;
+		$main_network_id = constant( 'PRIMARY_NETWORK_ID' );
 	} elseif ( isset( $current_network->id ) && 1 === (int) $current_network->id ) {
 		// If the current network has an ID of 1, assume it is the main network.
 		$main_network_id = 1;
@@ -8953,7 +8952,7 @@ function wp_get_wp_version() {
 function is_wp_version_compatible( $required ) {
 	if (
 		defined( 'WP_RUN_CORE_TESTS' )
-		&& WP_RUN_CORE_TESTS
+		&& constant( 'WP_RUN_CORE_TESTS' )
 		&& isset( $GLOBALS['_wp_tests_wp_version'] )
 	) {
 		$wp_version = $GLOBALS['_wp_tests_wp_version'];
