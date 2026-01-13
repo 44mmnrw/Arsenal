@@ -831,10 +831,7 @@ function arsenal_ajax_save_team_logo() {
     $team_id = intval( $_POST['team_id'] ?? 0 );
     $logo_url = esc_url_raw( $_POST['logo_url'] ?? '' );
     
-    error_log('Processing team_id=' . $team_id . ', logo_url=' . $logo_url);
-    
     if ( !$team_id ) {
-        error_log('Team ID is empty');
         wp_send_json_error( array( 'message' => 'Team ID отсутствует' ) );
     }
     
@@ -849,13 +846,9 @@ function arsenal_ajax_save_team_logo() {
         array( '%d' )
     );
     
-    error_log('Update result: ' . $updated);
-    
     if ( $updated !== false ) {
-        error_log('Logo saved successfully');
         wp_send_json_success( array( 'message' => 'Логотип сохранён' ) );
     } else {
-        error_log('Update failed: ' . $wpdb->last_error);
         wp_send_json_error( array( 'message' => 'Ошибка при сохранении логотипа' ) );
     }
 }
@@ -880,10 +873,7 @@ function arsenal_get_team_coaches() {
         $team_id
     ) );
     
-    error_log( 'Team ID: ' . $team_id . ' | Team HEX ID: ' . $team_hex_id );
-    
     if ( ! $team_hex_id ) {
-        error_log( 'Team not found for ID ' . $team_id );
         wp_send_json_success( array( 'data' => array() ) );
         return;
     }
@@ -900,10 +890,7 @@ function arsenal_get_team_coaches() {
         ORDER BY tc.start_date DESC
     ", $team_hex_id ) );
     
-    error_log( 'Found coaches: ' . count( $coaches ) . ' | Raw data: ' . json_encode( $coaches ) );
-    
     if ( empty( $coaches ) ) {
-        error_log( 'No coaches found for team ' . $team_hex_id );
         wp_send_json_success( array( 'data' => array() ) );
         return;
     }
