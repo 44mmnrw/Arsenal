@@ -299,7 +299,8 @@
                                             }
                                         }
                                         
-                                        var deleteButton = '<button class="delete-coach-btn" data-team-id="' + teamId + '" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap;">✕ Удалить</button>';
+                                        // Кнопка удаления только для последней (первой в отсортированном списке - самой новой) записи
+                                        var deleteButton = (index === 0) ? '<button class="delete-coach-btn" data-team-id="' + teamId + '" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap;">✕ Удалить</button>' : '';
                                         
                                         var coachHtml = '<div class="coach-item" style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border-left: 4px solid ' + borderColor + ';">' +
                                             '<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
@@ -525,7 +526,7 @@
                                 if (!coaches || coaches.length === 0) {
                                     coachesContent.html('<div style="padding: 20px; text-align: center; color: #999;">Нет данных о тренерах</div>');
                                 } else {
-                                    coaches.forEach(function(coach) {
+                                    coaches.forEach(function(coach, index) {
                                         var coachName = coach.coach_name || 'Неизвестный тренер';
                                         var startDate = coach.start_date || '';
                                         var endDate = coach.end_date || '';
@@ -552,7 +553,8 @@
                                             }
                                         }
                                         
-                                        var deleteButton = '<button class="delete-coach-btn" data-team-id="' + teamId + '" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap;">✕ Удалить</button>';
+                                        // Кнопка удаления только для последней (первой в отсортированном списке - самой новой) записи
+                                        var deleteButton = (index === 0) ? '<button class="delete-coach-btn" data-team-id="' + teamId + '" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 12px; white-space: nowrap;">✕ Удалить</button>' : '';
                                         
                                         var coachHtml = '<div class="coach-item" style="margin-bottom: 10px; padding: 10px; background: #f9f9f9; border-radius: 4px; border-left: 4px solid ' + borderColor + ';">' +
                                             '<div style="display: flex; justify-content: space-between; align-items: flex-start;">' +
