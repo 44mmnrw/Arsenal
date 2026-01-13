@@ -55,6 +55,7 @@ remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-manager.php';
+require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-players.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-sponsors.php';
 
 /**
