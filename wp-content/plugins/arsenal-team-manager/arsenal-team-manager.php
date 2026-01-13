@@ -818,12 +818,8 @@ arsenal_team_manager();
 add_action( 'wp_ajax_arsenal_save_team_logo', 'arsenal_ajax_save_team_logo' );
 
 function arsenal_ajax_save_team_logo() {
-    // Логируем входящие данные
-    error_log('AJAX save_team_logo called: ' . json_encode($_POST));
-    
     // Проверяем права доступа
     if ( ! current_user_can( 'manage_options' ) ) {
-        error_log('User does not have manage_options capability');
         wp_send_json_error( array( 'message' => 'Нет доступа' ) );
     }
     
@@ -1022,7 +1018,6 @@ function arsenal_add_coach() {
                     array( '%s' ),
                     array( '%d' )
                 );
-                error_log( 'Previous coach contract ended: coach_id ' . $current_active->coach_id . ' | end_date set to ' . $start_date );
             }
         }
     }
@@ -1040,11 +1035,8 @@ function arsenal_add_coach() {
     );
     
     if ( ! $result ) {
-        error_log( 'Failed to insert coach: ' . $wpdb->last_error );
         wp_send_json_error( array( 'message' => 'Ошибка при добавлении тренера в БД' ) );
     }
-    
-    error_log( 'Coach added: coach_id ' . $coach_id . ' to team ' . $team_hex_id . ' | start: ' . $start_date . ' | end: ' . $end_date );
     
     wp_send_json_success( array( 'message' => 'Тренер добавлен успешно' ) );
 }
@@ -1095,11 +1087,8 @@ function arsenal_delete_last_coach() {
     );
     
     if ( ! $result ) {
-        error_log( 'Failed to delete coach record: ' . $wpdb->last_error );
         wp_send_json_error( array( 'message' => 'Ошибка при удалении записи' ) );
     }
-    
-    error_log( 'Deleted coach record: id ' . $last_coach->id . ' (coach_id: ' . $last_coach->coach_id . ') from team ' . $team_hex_id );
     
     wp_send_json_success( array( 'message' => 'Запись удалена успешно' ) );
 }
@@ -1114,18 +1103,13 @@ function arsenal_get_all_coaches() {
     
     global $wpdb;
     
-    error_log( 'arsenal_get_all_coaches called' );
-    
     $coaches = $wpdb->get_results( "
         SELECT id, name, coach_id
         FROM wp_arsenal_coaches
         ORDER BY name ASC
     " );
     
-    error_log( 'Coaches from DB: ' . count( $coaches ) . ' | Data: ' . json_encode( $coaches ) );
-    
     if ( empty( $coaches ) ) {
-        error_log( 'No coaches found' );
         wp_send_json_success( array() );
     }
     
@@ -1172,11 +1156,8 @@ function arsenal_create_new_coach() {
     );
     
     if ( ! $result ) {
-        error_log( 'Failed to create coach: ' . $wpdb->last_error );
         wp_send_json_error( array( 'message' => 'Ошибка при добавлении тренера в БД' ) );
     }
-    
-    error_log( 'New coach created: ' . $coach_name . ' | coach_hex_id: ' . $new_coach_hex );
     
     wp_send_json_success( array( 'message' => 'Тренер добавлен успешно', 'coach_id' => $new_coach_hex ) );
 }
@@ -1232,11 +1213,8 @@ function arsenal_delete_coach_from_db() {
     );
     
     if ( ! $result ) {
-        error_log( 'Failed to delete coach: ' . $wpdb->last_error );
         wp_send_json_error( array( 'message' => 'Ошибка при удалении тренера из БД' ) );
     }
-    
-    error_log( 'Coach deleted: ' . $coach_name . ' | coach_id: ' . $coach_id );
     
     wp_send_json_success( array( 'message' => 'Тренер "' . $coach_name . '" удален из БД' ) );
 }
