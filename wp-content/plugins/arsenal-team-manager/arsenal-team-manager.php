@@ -969,8 +969,6 @@ function arsenal_get_team_coaches() {
         );
     }
     
-    error_log( 'Coaches returned: ' . count( $coaches_array ) . ' | Data: ' . json_encode( $coaches_array ) );
-    
     wp_send_json_success( $coaches_array );
 }
 
