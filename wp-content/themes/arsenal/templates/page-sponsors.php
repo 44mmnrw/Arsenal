@@ -36,8 +36,8 @@ get_header();
 			<!-- General Sponsor Section -->
 			<section class="sponsors-section">
 				<div class="sponsors-section-header">
-					<svg class="sponsors-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M4 7C3.45 7 3 7.45 3 8V20C3 20.55 3.45 21 4 21H20C20.55 21 21 20.55 21 20V8C21 7.45 20.55 7 20 7H4ZM8 9H16V11H8V9ZM8 13H16V15H8V13ZM4 17H20V19H4V17Z" fill="currentColor"/>
+					<svg class="sponsors-icon" width="24" height="24">
+						<use xlink:href="#icon-medal"></use>
 					</svg>
 					<h2 class="sponsors-section-title">Генеральный спонсор</h2>
 				</div>
@@ -77,8 +77,8 @@ get_header();
 			<!-- Partners Section -->
 			<section class="sponsors-section">
 				<div class="sponsors-section-header">
-					<svg class="sponsors-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<path d="M12 12C13.1 12 14 11.1 14 10C14 8.9 13.1 8 12 8C10.9 8 10 8.9 10 10C10 11.1 10.9 12 12 12ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+					<svg class="sponsors-icon" width="24" height="24">
+						<use xlink:href="#icon-partner"></use>
 					</svg>
 					<h2 class="sponsors-section-title">Партнеры клуба</h2>
 				</div>

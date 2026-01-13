@@ -82,6 +82,16 @@
 	width: 24px;
 	height: 24px;
 	color: #0a0a0a;
+	flex-shrink: 0;
+}
+
+.sponsors-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.sponsors-icon path {
+	stroke: currentColor;
 }
 
 .sponsors-section-title {
@@ -514,13 +524,6 @@
 	align-items: center;
 	gap: 8px;
 	height: 28px;
-}
-
-.sponsors-icon {
-	display: block;
-	width: 24px;
-	height: 24px;
-	color: #0a0a0a;
 }
 
 .sponsors-section-title {
