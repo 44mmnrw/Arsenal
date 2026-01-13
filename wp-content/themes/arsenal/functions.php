@@ -371,16 +371,6 @@ add_action( 'wp_enqueue_scripts', 'arsenal_enqueue_scripts' );
 if ( ! function_exists( 'arsenal_widgets_init' ) ) {
 	function arsenal_widgets_init() {
 		register_sidebar( array(
-			'name'          => __( 'Сайдбар', 'arsenal' ),
-			'id'            => 'sidebar-1',
-			'description'   => __( 'Добавьте виджеты в основной сайдбар', 'arsenal' ),
-			'before_widget' => '<section id="%1$s" class="widget %2$s">',
-			'after_widget'  => '</section>',
-			'before_title'  => '<h2 class="widget-title">',
-			'after_title'   => '</h2>',
-		) );
-
-		register_sidebar( array(
 			'name'          => __( 'Футер 1', 'arsenal' ),
 			'id'            => 'footer-1',
 			'description'   => __( 'Первая колонка футера', 'arsenal' ),
