@@ -14,7 +14,7 @@
 get_header();
 
 // Enqueue tournament styles
-wp_enqueue_style( 'arsenal-tournament', get_template_directory_uri() . '/assets/css/page-tournament.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
+wp_enqueue_style( 'arsenal-tournament', get_template_directory_uri() . '/assets/css/pages/page-tournament.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
 
 global $wpdb;
 

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-wp_enqueue_style( 'arsenal-calendar', get_template_directory_uri() . '/assets/css/page-calendar-full.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
+wp_enqueue_style( 'arsenal-calendar', get_template_directory_uri() . '/assets/css/pages/page-calendar-full.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
 
 global $wpdb;
 

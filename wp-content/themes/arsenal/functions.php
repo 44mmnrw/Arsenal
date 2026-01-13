@@ -186,7 +186,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-calendar-full.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'calendar' ) ) ) {
 			wp_enqueue_style(
 				'arsenal-calendar',
-				ARSENAL_THEME_URI . '/assets/css/page-calendar-full.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-calendar-full.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -222,7 +222,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 			wp_enqueue_style(
 				'arsenal-page-coaches',
-				ARSENAL_THEME_URI . '/assets/css/page-coaches.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-coaches.css',
 				array( 'arsenal-coaches' ),
 				ARSENAL_VERSION
 			);
@@ -272,7 +272,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-stadium.php' ) || is_page( 'stadium' ) || is_page( 'стадион' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-stadium',
-				ARSENAL_THEME_URI . '/assets/css/page-stadium.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-stadium.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -282,7 +282,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_404() ) {
 			wp_enqueue_style(
 				'arsenal-page-404',
-				ARSENAL_THEME_URI . '/assets/css/page-404.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-404.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
