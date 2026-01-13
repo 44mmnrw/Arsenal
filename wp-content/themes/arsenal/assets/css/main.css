@@ -406,7 +406,7 @@ h1 {
 
 .upcoming-match-section {
 	background-color: #F9FAFB;
-	padding: 2.5rem 0 3.75rem;
+	padding: 1.5rem 0 2.75rem;
 }
 
 .upcoming-match-container {
@@ -1049,7 +1049,7 @@ article {
 
 .news-section {
 	background-color: #ffffff;
-	padding: 3rem 0 4rem;
+	padding: 2rem 0 3rem;
 }
 
 .news-section .container {
@@ -1286,9 +1286,8 @@ article {
    ========================================================================== */
 
 .sponsors-section {
-	padding: 60px 0;
-	background-color: #ffffff;
-	border-top: 1px solid #e5e7eb;
+	padding: 2.75rem 0;
+	background-color: #ffffff;	
 	border-bottom: 1px solid #e5e7eb;
 }
 
@@ -1561,7 +1560,7 @@ article {
    ========================================================================== */
 
 .last-games-section {
-	padding: 3.75rem 0;
+	padding: 2.75rem 0;
 	background-color: #F9FAFB;
 }
 
@@ -1796,8 +1795,8 @@ article {
 }
 /* ===== TOURNAMENT TABLE SECTION ===== */
 .tournament-table-section {
-	padding: 3.75rem 0;
-	background-color: #F9FAFB;
+	padding: 2.75rem 0;
+	background-color: #FFFFFF;
 }
 
 .tournament-table-section .container {
@@ -2057,7 +2056,7 @@ article {
 
 /* ===== SPONSORS SECTION ===== */
 .sponsors-section {
-	padding: 3.75rem 0;
+	padding: 2.75rem 0;
 	background-color: #F9FAFB;
 }
 

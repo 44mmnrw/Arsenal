@@ -30,6 +30,7 @@
 
 .sponsors-header {
 	padding: 0px 0;
+	text-align: left;
 }
 
 .sponsors-title,
@@ -42,6 +43,7 @@
 	margin: 0;
 	padding: 0;
 	letter-spacing: -0.36px;
+	text-align: left;
 }
 
 /* ============================================================================
