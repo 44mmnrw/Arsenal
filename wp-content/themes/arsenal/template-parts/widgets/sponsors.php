@@ -58,7 +58,8 @@ if ( empty( $sponsors ) ) {
                                 </div>
                             <?php endif; ?>
                         </a>
-                        <?php else : ?>
+                        <?php endif; ?>
+                        <?php if ( empty( $sponsor->website_url ) ) : ?>
                         <div class="sponsor-card sponsor-card--no-link">
                             <?php if ( ! empty( $sponsor->logo_url ) ) : ?>
                                 <img 
