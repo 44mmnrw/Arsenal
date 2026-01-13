@@ -110,6 +110,36 @@ h1 {
 	justify-content: center;
 }
 
+/* Горизонтальное выравнивание */
+.banner-content.align-left {
+	align-items: flex-start;
+}
+
+.banner-content.align-center {
+	align-items: center;
+	text-align: center;
+}
+
+.banner-content.align-right {
+	align-items: flex-end;
+	text-align: right;
+}
+
+/* Вертикальное выравнивание */
+.banner-content.valign-top {
+	justify-content: flex-start;
+	padding-top: 5rem;
+}
+
+.banner-content.valign-center {
+	justify-content: center;
+}
+
+.banner-content.valign-bottom {
+	justify-content: flex-end;
+	padding-bottom: 5rem;
+}
+
 .banner-label {
 	display: inline-block;
 	color: var(--red-500, #FF4D4D);
@@ -772,6 +802,13 @@ article {
 	.banner-content {
 		padding: 3rem 1.5rem;
 		min-height: 25rem;
+	}
+
+	/* Выравнивание баннера на мобильной версии */
+	.banner-content.align-center,
+	.banner-content.align-right {
+		text-align: left;
+		align-items: flex-start;
 	}
 
 	.banner-title {

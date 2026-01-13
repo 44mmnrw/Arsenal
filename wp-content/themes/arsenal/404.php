@@ -8,7 +8,7 @@
 get_header(); 
 ?>
 
-<main id="primary" class="site-main 404-page">
+<main id="primary" class="site-main page-404">
 	<div class="not-found-container">
 		<!-- Main 404 Content -->
 		<div class="not-found-wrapper">

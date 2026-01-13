@@ -302,6 +302,54 @@ function arsenal_customize_register( $wp_customize ) {
 				'type'    => 'url',
 			)
 		);
+
+		// Горизонтальное выравнивание контента
+		$wp_customize->add_setting(
+			'arsenal_banner_slide_' . $i . '_align_horizontal',
+			array(
+				'default'           => 'left',
+				'sanitize_callback' => 'sanitize_text_field',
+				'transport'         => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			'arsenal_banner_slide_' . $i . '_align_horizontal',
+			array(
+				'label'   => __( 'Выравнивание по горизонтали', 'arsenal' ),
+				'section' => 'arsenal_banner_slide_' . $i . '_section',
+				'type'    => 'select',
+				'choices' => array(
+					'left'   => __( 'Слева', 'arsenal' ),
+					'center' => __( 'По центру', 'arsenal' ),
+					'right'  => __( 'Справа', 'arsenal' ),
+				),
+			)
+		);
+
+		// Вертикальное выравнивание контента
+		$wp_customize->add_setting(
+			'arsenal_banner_slide_' . $i . '_align_vertical',
+			array(
+				'default'           => 'center',
+				'sanitize_callback' => 'sanitize_text_field',
+				'transport'         => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			'arsenal_banner_slide_' . $i . '_align_vertical',
+			array(
+				'label'   => __( 'Выравнивание по вертикали', 'arsenal' ),
+				'section' => 'arsenal_banner_slide_' . $i . '_section',
+				'type'    => 'select',
+				'choices' => array(
+					'top'    => __( 'Вверху', 'arsenal' ),
+					'center' => __( 'По центру', 'arsenal' ),
+					'bottom' => __( 'Внизу', 'arsenal' ),
+				),
+			)
+		);
 	}
 
 	/*

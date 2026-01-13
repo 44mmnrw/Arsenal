@@ -64,27 +64,31 @@ for ( $i = 1; $i <= 5; $i++ ) {
 			}
 			
 			$slides[] = array(
-				'image'     => $image,
-				'label'     => $label,
-				'title'     => $title,
-				'subtitle'  => $subtitle,
-				'info'      => $info,
-				'btn1_text' => $btn1_text,
-				'btn1_url'  => $btn1_url,
-				'btn2_text' => $btn2_text,
-				'btn2_url'  => $btn2_url,
+				'image'             => $image,
+				'label'             => $label,
+				'title'             => $title,
+				'subtitle'          => $subtitle,
+				'info'              => $info,
+				'btn1_text'         => $btn1_text,
+				'btn1_url'          => $btn1_url,
+				'btn2_text'         => $btn2_text,
+				'btn2_url'          => $btn2_url,
+				'align_horizontal'  => get_theme_mod( 'arsenal_banner_slide_1_align_horizontal', 'left' ),
+				'align_vertical'    => get_theme_mod( 'arsenal_banner_slide_1_align_vertical', 'center' ),
 			);
 		} else {
 			$slides[] = array(
-				'image'     => $image,
-				'label'     => get_theme_mod( 'arsenal_banner_slide_' . $i . '_label', '' ),
-				'title'     => get_theme_mod( 'arsenal_banner_slide_' . $i . '_title', '' ),
-				'subtitle'  => get_theme_mod( 'arsenal_banner_slide_' . $i . '_subtitle', '' ),
-				'info'      => get_theme_mod( 'arsenal_banner_slide_' . $i . '_info', '' ),
-				'btn1_text' => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn1_text', '' ),
-				'btn1_url'  => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn1_url', '#' ),
-				'btn2_text' => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn2_text', '' ),
-				'btn2_url'  => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn2_url', '#' ),
+				'image'             => $image,
+				'label'             => get_theme_mod( 'arsenal_banner_slide_' . $i . '_label', '' ),
+				'title'             => get_theme_mod( 'arsenal_banner_slide_' . $i . '_title', '' ),
+				'subtitle'          => get_theme_mod( 'arsenal_banner_slide_' . $i . '_subtitle', '' ),
+				'info'              => get_theme_mod( 'arsenal_banner_slide_' . $i . '_info', '' ),
+				'btn1_text'         => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn1_text', '' ),
+				'btn1_url'          => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn1_url', '#' ),
+				'btn2_text'         => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn2_text', '' ),
+				'btn2_url'          => get_theme_mod( 'arsenal_banner_slide_' . $i . '_btn2_url', '#' ),
+				'align_horizontal'  => get_theme_mod( 'arsenal_banner_slide_' . $i . '_align_horizontal', 'left' ),
+				'align_vertical'    => get_theme_mod( 'arsenal_banner_slide_' . $i . '_align_vertical', 'center' ),
 			);
 		}
 	}
@@ -95,15 +99,17 @@ if ( empty( $slides ) ) {
 	$old_image = get_theme_mod( 'arsenal_banner_image', '' );
 	if ( ! empty( $old_image ) ) {
 		$slides[] = array(
-			'image'     => $old_image,
-			'label'     => get_theme_mod( 'arsenal_banner_label', 'Добро пожаловать' ),
-			'title'     => get_theme_mod( 'arsenal_banner_title', 'ФК АРСЕНАЛ' ),
-			'subtitle'  => get_theme_mod( 'arsenal_banner_subtitle', 'Держим вас в курсе последних новостей, результатов матчей и предстоящих игр команды.' ),
-			'info'      => get_theme_mod( 'arsenal_banner_info', 'Регион: Нижегородская обл. Стадион: «Капролактамовец». Страна: Россия.' ),
-			'btn1_text' => get_theme_mod( 'arsenal_banner_btn1_text', 'Наша команда' ),
-			'btn1_url'  => get_theme_mod( 'arsenal_banner_btn1_url', '#' ),
-			'btn2_text' => get_theme_mod( 'arsenal_banner_btn2_text', 'Календарь матчей' ),
-			'btn2_url'  => get_theme_mod( 'arsenal_banner_btn2_url', '#' ),
+			'image'             => $old_image,
+			'label'             => get_theme_mod( 'arsenal_banner_label', 'Добро пожаловать' ),
+			'title'             => get_theme_mod( 'arsenal_banner_title', 'ФК АРСЕНАЛ' ),
+			'subtitle'          => get_theme_mod( 'arsenal_banner_subtitle', 'Держим вас в курсе последних новостей, результатов матчей и предстоящих игр команды.' ),
+			'info'              => get_theme_mod( 'arsenal_banner_info', 'Регион: Нижегородская обл. Стадион: «Капролактамовец». Страна: Россия.' ),
+			'btn1_text'         => get_theme_mod( 'arsenal_banner_btn1_text', 'Наша команда' ),
+			'btn1_url'          => get_theme_mod( 'arsenal_banner_btn1_url', '#' ),
+			'btn2_text'         => get_theme_mod( 'arsenal_banner_btn2_text', 'Календарь матчей' ),
+			'btn2_url'          => get_theme_mod( 'arsenal_banner_btn2_url', '#' ),
+			'align_horizontal'  => 'left',
+			'align_vertical'    => 'center',
 		);
 	}
 }
@@ -139,7 +145,12 @@ $banner_class = $is_carousel ? 'site-banner has-carousel' : 'site-banner';
 				<div class="banner-overlay"></div>
 				
 				<!-- Контент слайда -->
-				<div class="banner-content">
+				<?php
+					$content_classes = 'banner-content';
+					$content_classes .= ' align-' . esc_attr( $slide['align_horizontal'] );
+					$content_classes .= ' valign-' . esc_attr( $slide['align_vertical'] );
+				?>
+				<div class="<?php echo esc_attr( $content_classes ); ?>">
 					
 					<?php if ( ! empty( $slide['label'] ) ) : ?>
 						<span class="banner-label"><?php echo esc_html( $slide['label'] ); ?></span>
