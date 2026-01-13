@@ -16,18 +16,17 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-global $wpdb;
-
 // ===== ПОЛУЧАЕМ ПАРАМЕТРЫ ИЗ URL =====
-// Параметры: ?team_id=813F7502&date=2025-03-13
+// Параметры: ?team_id=813F75&date=2025-03-13
 // ИЛИ: ?team_name=Арсенал&date=2025-03-13
 
 $team_id = isset( $_GET['team_id'] ) ? sanitize_text_field( $_GET['team_id'] ) : '';
 $team_name = isset( $_GET['team_name'] ) ? sanitize_text_field( $_GET['team_name'] ) : '';
-$match_date = isset( $_GET['date'] ) ? sanitize_text_field( $_GET['date'] ) : '';
+$match_date_param = isset( $_GET['date'] ) ? sanitize_text_field( $_GET['date'] ) : '';
 
 // Если передано имя команды вместо ID - получаем ID
 if ( ! $team_id && $team_name ) {
+    global $wpdb;
     $team_obj = $wpdb->get_row(
         $wpdb->prepare(
             "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name = %s LIMIT 1",
@@ -39,100 +38,39 @@ if ( ! $team_id && $team_name ) {
     }
 }
 
-if ( ! $team_id || ! $match_date ) {
+if ( ! $team_id || ! $match_date_param ) {
     echo '<p class="match-error">Не указаны параметры: team_id (или team_name) и date в формате YYYY-MM-DD</p>';
     return;
 }
 
-// ===== НАХОДИМ МАТЧ ПО КОМАНДЕ И ДАТЕ =====
-$match = $wpdb->get_row(
-    $wpdb->prepare(
-        "SELECT m.*, 
-                ht.name as home_team_name, ht.logo_url as home_logo, ht.team_id as home_team_id,
-                at.name as away_team_name, at.logo_url as away_logo, at.team_id as away_team_id
-         FROM {$wpdb->prefix}arsenal_matches m
-         LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
-         LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
-         WHERE m.match_date = %s 
-         AND (m.home_team_id = %s OR m.away_team_id = %s)
-         LIMIT 1",
-        $match_date, $team_id, $team_id
-    )
-);
+// ===== ПОЛУЧАЕМ МАТЧ ПО КОМАНДЕ И ДАТЕ (используя функцию) =====
+require_once get_template_directory() . '/inc/functions/match-functions.php';
+
+$match = arsenal_get_match_by_date_and_team( $match_date_param, $team_id );
 
 if ( ! $match ) {
-    echo '<p class="match-error">Матч не найден для команды в дату ' . esc_html( $match_date ) . '</p>';
+    echo '<p class="match-error">Матч не найден для команды в дату ' . esc_html( $match_date_param ) . '</p>';
     return;
 }
 
-// ===== ПОЛУЧАЕМ СОБЫТИЯ МАТЧА =====
-$events = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT me.*, et.name as event_type_name, p.name as player_name
-         FROM {$wpdb->prefix}arsenal_match_events me
-         LEFT JOIN {$wpdb->prefix}arsenal_event_types et ON me.event_type_id = et.id
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON me.player_id = p.id
-         WHERE me.match_id = %d
-         ORDER BY me.minute ASC",
-        $match->match_id
-    )
-);
+// ===== ПОЛУЧАЕМ СОБЫТИЯ МАТЧА (используя функцию) =====
+$events = arsenal_get_match_events( $match->match_id );
 
-// ===== ПОЛУЧАЕМ СОСТАВЫ КОМАНД =====
-$home_lineup = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT ml.*, p.name as player_name, pos.name as position_name
-         FROM {$wpdb->prefix}arsenal_match_lineups ml
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON ml.player_id = p.id
-         LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.id
-         WHERE ml.match_id = %d AND ml.team_id = %s AND ml.lineup_type = 'starting'
-         ORDER BY ml.shirt_number ASC",
-        $match->match_id, $match->home_team_id
-    )
-);
+// ===== ПОЛУЧАЕМ СОСТАВЫ КОМАНД (используя функцию) =====
+$lineups_all = arsenal_get_match_lineups( $match->match_id );
+$lineups_organized = arsenal_organize_lineups( $lineups_all, $match->home_team_id );
 
-$away_lineup = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT ml.*, p.name as player_name, pos.name as position_name
-         FROM {$wpdb->prefix}arsenal_match_lineups ml
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON ml.player_id = p.id
-         LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.id
-         WHERE ml.match_id = %d AND ml.team_id = %s AND ml.lineup_type = 'starting'
-         ORDER BY ml.shirt_number ASC",
-        $match->match_id, $match->away_team_id
-    )
-);
-
-$home_bench = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT ml.*, p.name as player_name, pos.name as position_name
-         FROM {$wpdb->prefix}arsenal_match_lineups ml
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON ml.player_id = p.id
-         LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.id
-         WHERE ml.match_id = %d AND ml.team_id = %s AND ml.lineup_type = 'substitute'
-         ORDER BY ml.shirt_number ASC",
-        $match->match_id, $match->home_team_id
-    )
-);
-
-$away_bench = $wpdb->get_results(
-    $wpdb->prepare(
-        "SELECT ml.*, p.name as player_name, pos.name as position_name
-         FROM {$wpdb->prefix}arsenal_match_lineups ml
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON ml.player_id = p.id
-         LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.id
-         WHERE ml.match_id = %d AND ml.team_id = %s AND ml.lineup_type = 'substitute'
-         ORDER BY ml.shirt_number ASC",
-        $match->match_id, $match->away_team_id
-    )
-);
+$home_starting = $lineups_organized['home_starting'];
+$home_subs = $lineups_organized['home_subs'];
+$away_starting = $lineups_organized['away_starting'];
+$away_subs = $lineups_organized['away_subs'];
 
 // Форматируем логотипы
 $home_logo_url = ! empty( $match->home_logo ) ? home_url() . $match->home_logo : '';
 $away_logo_url = ! empty( $match->away_logo ) ? home_url() . $match->away_logo : '';
 
 // Форматируем дату и время
-$match_date = date_i18n( 'd.m.Y', strtotime( $match->match_date ) );
+$match_date_formatted = date_i18n( 'd.m.Y', strtotime( $match->match_date ) );
 $match_time = date_i18n( 'H:i', strtotime( $match->match_time ) );
 
 // Определяем статус матча
@@ -149,9 +87,9 @@ $away_score = intval( $match->away_score );
             <div class="match-info-header">
                 <div class="match-meta">
                     <span class="match-tour">ТУР <?php echo intval( $match->tour ); ?></span>
-                    <span class="match-date"><?php echo esc_html( $match_date ); ?> <?php echo esc_html( $match_time ); ?></span>
-                    <span class="match-status <?php echo $is_finished ? 'finished' : 'live'; ?>">
-                        <?php echo $is_finished ? 'ЗАВЕРШЕНО' : $match->status; ?>
+                    <span class="match-date"><?php echo esc_html( $match_date_formatted ); ?> <?php echo esc_html( $match_time ); ?></span>
+                    <span class="match-status <?php echo $match->status === 'FT' ? 'finished' : 'live'; ?>">
+                        <?php echo $match->status === 'FT' ? 'ЗАВЕРШЕНО' : $match->status; ?>
                     </span>
                 </div>
             </div>
@@ -169,9 +107,9 @@ $away_score = intval( $match->away_score );
                 <!-- СЧЁТ -->
                 <div class="score-block">
                     <div class="score-display">
-                        <span class="score-home"><?php echo $home_score; ?></span>
+                        <span class="score-home"><?php echo intval( $match->home_score ); ?></span>
                         <span class="score-separator">:</span>
-                        <span class="score-away"><?php echo $away_score; ?></span>
+                        <span class="score-away"><?php echo intval( $match->away_score ); ?></span>
                     </div>
                 </div>
 
@@ -244,14 +182,14 @@ $away_score = intval( $match->away_score );
                 <div class="team-lineup home">
                     <h4 class="lineup-team-name"><?php echo esc_html( $match->home_team_name ); ?></h4>
                     
-                    <?php if ( ! empty( $home_lineup ) ) : ?>
+                    <?php if ( ! empty( $home_starting ) ) : ?>
                         <div class="lineup-section">
                             <h5 class="lineup-subtitle">Основной состав</h5>
                             <ul class="players-list">
-                                <?php foreach ( $home_lineup as $player ) : ?>
+                                <?php foreach ( $home_starting as $player ) : ?>
                                     <li class="player-item">
                                         <span class="player-number"><?php echo intval( $player->shirt_number ); ?></span>
-                                        <span class="player-name"><?php echo esc_html( $player->player_name ); ?></span>
+                                        <span class="player-name"><?php echo esc_html( $player->full_name ); ?></span>
                                         <?php if ( ! empty( $player->position_name ) ) : ?>
                                             <span class="player-position"><?php echo esc_html( $player->position_name ); ?></span>
                                         <?php endif; ?>
@@ -261,14 +199,14 @@ $away_score = intval( $match->away_score );
                         </div>
                     <?php endif; ?>
 
-                    <?php if ( ! empty( $home_bench ) ) : ?>
+                    <?php if ( ! empty( $home_subs ) ) : ?>
                         <div class="lineup-section">
                             <h5 class="lineup-subtitle">Запасные</h5>
                             <ul class="players-list">
-                                <?php foreach ( $home_bench as $player ) : ?>
+                                <?php foreach ( $home_subs as $player ) : ?>
                                     <li class="player-item">
                                         <span class="player-number"><?php echo intval( $player->shirt_number ); ?></span>
-                                        <span class="player-name"><?php echo esc_html( $player->player_name ); ?></span>
+                                        <span class="player-name"><?php echo esc_html( $player->full_name ); ?></span>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -280,14 +218,14 @@ $away_score = intval( $match->away_score );
                 <div class="team-lineup away">
                     <h4 class="lineup-team-name"><?php echo esc_html( $match->away_team_name ); ?></h4>
                     
-                    <?php if ( ! empty( $away_lineup ) ) : ?>
+                    <?php if ( ! empty( $away_starting ) ) : ?>
                         <div class="lineup-section">
                             <h5 class="lineup-subtitle">Основной состав</h5>
                             <ul class="players-list">
-                                <?php foreach ( $away_lineup as $player ) : ?>
+                                <?php foreach ( $away_starting as $player ) : ?>
                                     <li class="player-item">
                                         <span class="player-number"><?php echo intval( $player->shirt_number ); ?></span>
-                                        <span class="player-name"><?php echo esc_html( $player->player_name ); ?></span>
+                                        <span class="player-name"><?php echo esc_html( $player->full_name ); ?></span>
                                         <?php if ( ! empty( $player->position_name ) ) : ?>
                                             <span class="player-position"><?php echo esc_html( $player->position_name ); ?></span>
                                         <?php endif; ?>
@@ -297,14 +235,14 @@ $away_score = intval( $match->away_score );
                         </div>
                     <?php endif; ?>
 
-                    <?php if ( ! empty( $away_bench ) ) : ?>
+                    <?php if ( ! empty( $away_subs ) ) : ?>
                         <div class="lineup-section">
                             <h5 class="lineup-subtitle">Запасные</h5>
                             <ul class="players-list">
-                                <?php foreach ( $away_bench as $player ) : ?>
+                                <?php foreach ( $away_subs as $player ) : ?>
                                     <li class="player-item">
                                         <span class="player-number"><?php echo intval( $player->shirt_number ); ?></span>
-                                        <span class="player-name"><?php echo esc_html( $player->player_name ); ?></span>
+                                        <span class="player-name"><?php echo esc_html( $player->full_name ); ?></span>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
