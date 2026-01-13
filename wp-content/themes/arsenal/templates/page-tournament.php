@@ -33,7 +33,7 @@ $active_season_year = get_option( 'arsenal_active_season_year', intval( date( 'Y
 		
 		<!-- Турнирное дерево -->
 		<?php
-		get_template_part( 'template-parts/blocks/tournament-bracket' );
+		get_template_part( 'template-parts/sections/tournament-bracket' );
 		?>
 		
 	</div><!-- .container -->

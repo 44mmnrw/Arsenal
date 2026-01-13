@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Перенаправляем на новый компонент
-get_template_part( 'template-parts/components/standings-table' );
+// По выполнению вся логика ниже вэтом файле
 
 
 global $wpdb;

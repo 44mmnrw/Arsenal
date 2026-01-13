@@ -387,7 +387,7 @@ if ( ! empty( $available_seasons ) ) {
 			
 			<!-- События игрока -->
 			<?php
-			get_template_part( 'template-parts/blocks/player-events-table', null, array(
+			get_template_part( 'template-parts/widgets/player-events-table', null, array(
 				'player_events' => $player_events,
 				'selected_tournament_name' => $selected_tournament_name,
 				'position_code' => $position_code,

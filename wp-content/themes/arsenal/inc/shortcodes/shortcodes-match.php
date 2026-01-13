@@ -32,7 +32,7 @@ if ( ! function_exists( 'arsenal_match_details_shortcode' ) ) {
 
         // Получаем шаблон в буфер обмена
         ob_start();
-        get_template_part( 'template-parts/blocks/match-details' );
+        get_template_part( 'template-parts/sections/match-details' );
         $output = ob_get_clean();
 
         return $output;
@@ -66,7 +66,7 @@ if ( ! function_exists( 'arsenal_tournament_shortcode' ) ) {
 
         // Получаем шаблон в буфер обмена
         ob_start();
-        get_template_part( 'template-parts/blocks/tournament-bracket' );
+        get_template_part( 'template-parts/sections/tournament-bracket' );
         $output = ob_get_clean();
 
         return $output;
