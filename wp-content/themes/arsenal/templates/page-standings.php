@@ -23,7 +23,7 @@
 get_header();
 
 // Явное подключение стилей страницы
-wp_enqueue_style( 'arsenal-standings', get_template_directory_uri() . '/assets/css/standings.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
+wp_enqueue_style( 'arsenal-standings', get_template_directory_uri() . '/assets/css/pages/page-standings.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
 
 global $wpdb;
 

@@ -196,7 +196,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 	if ( is_page_template( 'templates/page-news.php' ) || is_home() || is_archive() || is_single() ) {
 		wp_enqueue_style(
 			'arsenal-news-page',
-			ARSENAL_THEME_URI . '/assets/css/news-page.css',
+			ARSENAL_THEME_URI . '/assets/css/pages/page-news.css',
 			array( 'arsenal-footer' ),
 			ARSENAL_VERSION
 		);
@@ -232,7 +232,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-standings.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'standings' ) ) ) {
 			wp_enqueue_style(
 				'arsenal-standings',
-				ARSENAL_THEME_URI . '/assets/css/standings.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-standings.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
