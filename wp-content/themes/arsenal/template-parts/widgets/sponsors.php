@@ -37,6 +37,7 @@ if ( empty( $sponsors ) ) {
             <div class="sponsors-carousel" id="sponsors-carousel">
                 <?php foreach ( $sponsors as $sponsor ) : ?>
                     <div class="sponsor-slide">
+                        <?php if ( ! empty( $sponsor->website_url ) ) : ?>
                         <a 
                             href="<?php echo esc_url( $sponsor->website_url ); ?>" 
                             class="sponsor-card" 
@@ -57,6 +58,22 @@ if ( empty( $sponsors ) ) {
                                 </div>
                             <?php endif; ?>
                         </a>
+                        <?php else : ?>
+                        <div class="sponsor-card sponsor-card--no-link">
+                            <?php if ( ! empty( $sponsor->logo_url ) ) : ?>
+                                <img 
+                                    src="<?php echo esc_url( $sponsor->logo_url ); ?>" 
+                                    alt="<?php echo esc_attr( $sponsor->name ); ?>" 
+                                    class="sponsor-logo"
+                                    loading="lazy"
+                                >
+                            <?php else : ?>
+                                <div class="sponsor-placeholder">
+                                    <span><?php echo esc_html( $sponsor->name ); ?></span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
