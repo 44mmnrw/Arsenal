@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-require_once get_template_directory() . '/inc/class-arsenal-staff-manager.php';
+require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
 // Получаем все сотрудники с фильтрацией
 $job_title_id = isset( $_GET['job_title'] ) ? intval( $_GET['job_title'] ) : null;

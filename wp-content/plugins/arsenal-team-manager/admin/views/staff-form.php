@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-require_once get_template_directory() . '/inc/class-arsenal-staff-manager.php';
+require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
 $staff_id = isset( $_GET['staff_id'] ) ? intval( $_GET['staff_id'] ) : 0;
 $staff = null;

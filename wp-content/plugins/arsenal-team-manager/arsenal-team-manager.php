@@ -740,7 +740,7 @@ class Arsenal_Team_Manager {
             wp_die( 'Ошибка проверки безопасности.' );
         }
 
-        require_once get_template_directory() . '/inc/class-arsenal-sponsors.php';
+        require_once get_template_directory() . '/inc/classes/class-arsenal-sponsors.php';
 
         $sponsor_data = array(
             'name'        => sanitize_text_field( $_POST['sponsor_name'] ?? '' ),

@@ -54,8 +54,8 @@ remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
  * Подключение файлов темы
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
-require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-staff-manager.php';
-require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-sponsors.php';
+require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-manager.php';
+require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-sponsors.php';
 
 /**
  * Паттерны отключены - используется классический редактор
@@ -242,7 +242,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-match.php' ) || ( get_query_var( 'match_date' ) && get_query_var( 'team_id' ) ) ) {
 			wp_enqueue_style(
 				'arsenal-page-match',
-				ARSENAL_THEME_URI . '/assets/css/page-match.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-match.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -252,7 +252,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page( 'history' ) || is_page( 'история' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-history',
-				ARSENAL_THEME_URI . '/assets/css/page-history.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-history.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -262,7 +262,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-sponsors.php' ) || is_page( 'sponsors' ) || is_page( 'спонсоры' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-sponsors',
-				ARSENAL_THEME_URI . '/assets/css/page-sponsors.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-sponsors.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -415,7 +415,7 @@ add_action( 'widgets_init', 'arsenal_widgets_init' );
 /**
  * Подключение shortcodes
  */
-require_once ARSENAL_THEME_DIR . '/inc/shortcodes-match.php';
+require_once ARSENAL_THEME_DIR . '/inc/shortcodes/shortcodes-match.php';
 
 /**
  * Настройка размеров изображений
@@ -1293,9 +1293,9 @@ if ( ! function_exists( 'arsenal_pluralize' ) ) {
 /**
  * Подключение дополнительных файлов
  */
-require_once ARSENAL_THEME_DIR . '/inc/template-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/player-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/match-functions.php';
+require_once ARSENAL_THEME_DIR . '/inc/functions/template-functions.php';
+require_once ARSENAL_THEME_DIR . '/inc/functions/player-functions.php';
+require_once ARSENAL_THEME_DIR . '/inc/functions/match-functions.php';
 require_once ARSENAL_THEME_DIR . '/inc/customizer.php';
 /**
  * Функция расчёта турнирной таблицы по сезону

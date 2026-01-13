@@ -248,22 +248,22 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( ! empty( $data['birth_date'] ) ) {
-			$insert['birth_date'] = sanitize_text_field( $data['birth_date'] );
+			$insert['birth_date'] = sanitize_text_field( $data['birth_date'] ?? '' );
 			$format[] = '%s';
 		}
 
 		if ( ! empty( $data['contract_start'] ) ) {
-			$insert['contract_start'] = sanitize_text_field( $data['contract_start'] );
+			$insert['contract_start'] = sanitize_text_field( $data['contract_start'] ?? '' );
 			$format[] = '%s';
 		}
 
 		if ( ! empty( $data['contract_end'] ) ) {
-			$insert['contract_end'] = sanitize_text_field( $data['contract_end'] );
+			$insert['contract_end'] = sanitize_text_field( $data['contract_end'] ?? '' );
 			$format[] = '%s';
 		}
 
 		if ( ! empty( $data['phone'] ) ) {
-			$insert['phone'] = sanitize_text_field( $data['phone'] );
+			$insert['phone'] = sanitize_text_field( $data['phone'] ?? '' );
 			$format[] = '%s';
 		}
 
@@ -305,12 +305,12 @@ class Arsenal_Staff_Manager {
 		$format = array();
 
 		if ( isset( $data['first_name'] ) ) {
-			$update['first_name'] = sanitize_text_field( $data['first_name'] );
+			$update['first_name'] = sanitize_text_field( $data['first_name'] ?? '' );
 			$format[] = '%s';
 		}
 
 		if ( isset( $data['second_name'] ) ) {
-			$update['second_name'] = sanitize_text_field( $data['second_name'] );
+			$update['second_name'] = sanitize_text_field( $data['second_name'] ?? '' );
 			$format[] = '%s';
 		}
 
@@ -335,7 +335,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( isset( $data['phone'] ) ) {
-			$update['phone'] = sanitize_text_field( $data['phone'] );
+			$update['phone'] = sanitize_text_field( $data['phone'] ?? '' );
 			$format[] = '%s';
 		}
 

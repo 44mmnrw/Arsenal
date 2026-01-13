@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 // Загрузить стили страницы матча
-wp_enqueue_style( 'arsenal-page-match', get_template_directory_uri() . '/assets/css/page-match.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
+wp_enqueue_style( 'arsenal-page-match', get_template_directory_uri() . '/assets/css/pages/page-match.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
 
 // Получить параметры URL
 $match_date = get_query_var( 'match_date' );

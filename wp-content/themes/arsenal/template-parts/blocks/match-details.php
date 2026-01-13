@@ -22,9 +22,9 @@ global $wpdb;
 // Параметры: ?team_id=813F7502&date=2025-03-13
 // ИЛИ: ?team_name=Арсенал&date=2025-03-13
 
-$team_id = isset( $_GET['team_id'] ) ? sanitize_text_field( $_GET['team_id'] ) : null;
-$team_name = isset( $_GET['team_name'] ) ? sanitize_text_field( $_GET['team_name'] ) : null;
-$match_date = isset( $_GET['date'] ) ? sanitize_text_field( $_GET['date'] ) : null;
+$team_id = isset( $_GET['team_id'] ) ? sanitize_text_field( $_GET['team_id'] ) : '';
+$team_name = isset( $_GET['team_name'] ) ? sanitize_text_field( $_GET['team_name'] ) : '';
+$match_date = isset( $_GET['date'] ) ? sanitize_text_field( $_GET['date'] ) : '';
 
 // Если передано имя команды вместо ID - получаем ID
 if ( ! $team_id && $team_name ) {

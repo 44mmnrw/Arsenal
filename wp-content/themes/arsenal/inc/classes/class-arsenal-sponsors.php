@@ -116,14 +116,14 @@ class Arsenal_Sponsors {
 		$inserted = $wpdb->insert(
 			"{$wpdb->prefix}arsenal_sponsors",
 			array(
-				'name'        => sanitize_text_field( $data['name'] ),
-				'description' => wp_kses_post( $data['description'] ),
-				'type'        => sanitize_text_field( $data['type'] ),
-				'industry'    => sanitize_text_field( $data['industry'] ),
-				'logo_url'    => esc_url_raw( $data['logo_url'] ),
-				'website_url' => esc_url_raw( $data['website_url'] ),
-				'is_active'   => absint( $data['is_active'] ),
-				'order_index' => absint( $data['order_index'] ),
+				'name'        => sanitize_text_field( $data['name'] ?? '' ),
+				'description' => wp_kses_post( $data['description'] ?? '' ),
+				'type'        => sanitize_text_field( $data['type'] ?? '' ),
+				'industry'    => sanitize_text_field( $data['industry'] ?? '' ),
+				'logo_url'    => esc_url_raw( $data['logo_url'] ?? '' ),
+				'website_url' => esc_url_raw( $data['website_url'] ?? '' ),
+				'is_active'   => absint( $data['is_active'] ?? 0 ),
+				'order_index' => absint( $data['order_index'] ?? 0 ),
 			),
 			array( '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d' )
 		);
@@ -144,16 +144,16 @@ class Arsenal_Sponsors {
 		$update_data = array();
 
 		if ( isset( $data['name'] ) ) {
-			$update_data['name'] = sanitize_text_field( $data['name'] );
+			$update_data['name'] = sanitize_text_field( $data['name'] ?? '' );
 		}
 		if ( isset( $data['description'] ) ) {
-			$update_data['description'] = wp_kses_post( $data['description'] );
+			$update_data['description'] = wp_kses_post( $data['description'] ?? '' );
 		}
 		if ( isset( $data['type'] ) ) {
-			$update_data['type'] = sanitize_text_field( $data['type'] );
+			$update_data['type'] = sanitize_text_field( $data['type'] ?? '' );
 		}
 		if ( isset( $data['industry'] ) ) {
-			$update_data['industry'] = sanitize_text_field( $data['industry'] );
+			$update_data['industry'] = sanitize_text_field( $data['industry'] ?? '' );
 		}
 		if ( isset( $data['logo_url'] ) ) {
 			$update_data['logo_url'] = esc_url_raw( $data['logo_url'] );

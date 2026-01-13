@@ -12,7 +12,7 @@ global $wpdb;
 $tournament_id = isset($_GET['tournament_id']) ? sanitize_text_field($_GET['tournament_id']) : 'E4DE8DC0'; // Кубок Беларуси
 
 // Получаем последний доступный сезон для этого турнира
-$season_id = isset($_GET['season_id']) ? sanitize_text_field($_GET['season_id']) : null;
+$season_id = isset($_GET['season_id']) ? sanitize_text_field($_GET['season_id']) : '';
 
 // Если сезон не указан, берём самый свежий из доступных для турнира
 if (!$season_id) {

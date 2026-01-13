@@ -29,7 +29,7 @@ class Arsenal_Sponsors_Admin {
 		}
 
 		// Подключаем класс спонсоров
-		require_once get_template_directory() . '/inc/class-arsenal-sponsors.php';
+		require_once get_template_directory() . '/inc/classes/class-arsenal-sponsors.php';
 
 		// Получение данных
 		$sponsors = Arsenal_Sponsors::get_sponsors( array( 'orderby' => 'order_index', 'is_active' => false ) );
@@ -48,7 +48,7 @@ class Arsenal_Sponsors_Admin {
 		}
 
 		// Подключаем класс спонсоров
-		require_once get_template_directory() . '/inc/class-arsenal-sponsors.php';
+		require_once get_template_directory() . '/inc/classes/class-arsenal-sponsors.php';
 
 		$sponsor = null;
 		$is_edit = false;

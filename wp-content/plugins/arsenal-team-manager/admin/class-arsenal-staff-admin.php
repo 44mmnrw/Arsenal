@@ -44,7 +44,7 @@ class Arsenal_Staff_Admin {
             wp_send_json_error( 'ID сотрудника не указан' );
         }
 
-        require_once get_template_directory() . '/inc/class-arsenal-staff-manager.php';
+        require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
         $result = Arsenal_Staff_Manager::delete_staff( $staff_id );
 
@@ -71,7 +71,7 @@ class Arsenal_Staff_Admin {
             wp_send_json_error( 'ID должности не указан' );
         }
 
-        require_once get_template_directory() . '/inc/class-arsenal-staff-manager.php';
+        require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
         $result = Arsenal_Staff_Manager::delete_job_title( $job_title_id );
 

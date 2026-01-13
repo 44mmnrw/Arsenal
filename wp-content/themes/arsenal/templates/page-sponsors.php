@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Подключаем класс управления спонсорами
-require_once get_template_directory() . '/inc/class-arsenal-sponsors.php';
+require_once get_template_directory() . '/inc/classes/class-arsenal-sponsors.php';
 
 // Получаем спонсоров из БД
 $general_sponsor = Arsenal_Sponsors::get_general_sponsor();
