@@ -983,27 +983,6 @@
     border-radius: 4px;
 }
 
-.contracts-stats .stat-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    min-width: 100px;
-}
-
-.contracts-stats .stat-number {
-    font-size: 28px;
-    font-weight: bold;
-    color: #0073aa;
-}
-
-.contracts-stats .stat-label {
-    font-size: 12px;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
 .contracts-table {
     display: grid;
     width: auto;
@@ -3253,22 +3232,13 @@
 }
 
 .teams-stats {
-    background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
-    padding: 15px 20px;
-    border-left: 4px solid #0073aa;
-    border-radius: 2px;
+    display: flex;
+    gap: 20px;
     margin-bottom: 30px;
-    font-size: 14px;
-}
-
-.teams-stats span {
-    display: block;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.teams-stats small {
-    color: #666;
+    padding: 20px;
+    background: #f5f5f5;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
 }
 
 .teams-modal {
@@ -4043,5 +4013,153 @@
 
     .player-form-wrapper {
         grid-template-columns: 1fr;
+    }
+}
+/* ========== TEAMS COACHES MODAL ========== */
+
+.teams-card-coaches {
+    display: flex;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+}
+
+.teams-btn-coaches {
+    flex: 1;
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+    height: 28px !important;
+    line-height: 1.2 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+    border-radius: 2px;
+    white-space: nowrap;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.teams-btn-coaches:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.teams-btn-coaches .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+#coaches-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+#coaches-modal.active {
+    display: flex !important;
+}
+
+.arsenal-modal-content {
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.arsenal-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.arsenal-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+.arsenal-modal-body {
+    padding: 20px;
+}
+
+.arsenal-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+}
+
+.arsenal-modal-footer .button {
+    padding: 8px 15px !important;
+    font-size: 13px !important;
+    height: auto !important;
+    line-height: 1.5 !important;
+}
+
+.arsenal-modal-close {
+    background: none !important;
+    border: none !important;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    transition: color 0.2s ease;
+}
+
+.arsenal-modal-close:hover {
+    color: #333;
+}
+
+.coach-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
+    border-left: 4px solid #28a745;
+}
+
+.coach-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Адаптив для модалей */
+@media (max-width: 600px) {
+    .arsenal-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .arsenal-modal-footer {
+        flex-direction: column;
+    }
+
+    .arsenal-modal-footer .button {
+        width: 100%;
     }
 }

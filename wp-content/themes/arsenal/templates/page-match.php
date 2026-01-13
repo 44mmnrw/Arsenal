@@ -14,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Подключаем функции для работы со страницей матча
+require_once get_template_directory() . '/inc/functions/match-functions.php';
+
 get_header();
 
 // Загрузить стили страницы матча
@@ -50,6 +53,10 @@ if ( ! $match ) {
 $events    = arsenal_get_match_events( $match->match_id );
 $lineups   = arsenal_get_match_lineups( $match->match_id );
 $organized = arsenal_organize_lineups( $lineups, $match->home_team_id );
+
+// Получить тренеров обеих команд
+$home_coach = arsenal_get_team_coach( $match->home_team_id, $match_date );
+$away_coach = arsenal_get_team_coach( $match->away_team_id, $match_date );
 
 // Получить информацию о стадионе для фона
 $stadium = arsenal_get_stadium_by_id( $match->stadium_id );
@@ -260,11 +267,18 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<!-- Панель домашней команды -->
 				<div class="lineup-panel home-panel">
 					<div class="lineup-header home-header">
-					<h3 class="team-name"><?php echo esc_html( $match->home_team_name ); ?></h3>					
+					<h3 class="team-name"><?php echo esc_html( $match->home_team_name ); ?></h3>
+
 					</div>
 					<div class="lineup-body">
 						<?php if ( ! empty( $organized['home_starting_by_position'] ) ) { ?>
 						<div class="players-group">
+							<?php if ( ! empty( $home_coach ) ) : ?>
+							<div class="coach-entry">
+								<div class="coach-label">Тренер</div>
+								<div class="coach-name"><?php echo esc_html( $home_coach->name ); ?></div>
+								</div>
+							<?php endif; ?>
 							<h4 class="group-label">Основной состав</h4>
 							<?php foreach ( $organized['home_starting_by_position'] as $position => $players ) { ?>
 							<div class="position-section">
@@ -319,42 +333,6 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					<div class="pitch-title">Поле</div>
 					<div class="pitch-field">
 						<?php
-						// Функция для генерации координат на основе количества игроков
-						function arsenal_get_player_coords( $player_count, $y_position, $field_width = 667, $side_padding = 50 ) {
-							$coords = array();
-							$playable_width = $field_width - ( 2 * $side_padding );
-							$center = $field_width / 2;
-							
-							if ( $player_count === 1 ) {
-								$coords[] = array( $center, $y_position );
-							} elseif ( $player_count === 2 ) {
-								$coords[] = array( $center - 80, $y_position );
-								$coords[] = array( $center + 80, $y_position );
-							} elseif ( $player_count === 3 ) {
-								$coords[] = array( $center - 120, $y_position );
-								$coords[] = array( $center, $y_position );
-								$coords[] = array( $center + 120, $y_position );
-							} elseif ( $player_count === 4 ) {
-								$coords[] = array( $center - 150, $y_position );
-								$coords[] = array( $center - 50, $y_position );
-								$coords[] = array( $center + 50, $y_position );
-								$coords[] = array( $center + 150, $y_position );
-							} elseif ( $player_count === 5 ) {
-								$coords[] = array( $center - 160, $y_position );
-								$coords[] = array( $center - 80, $y_position );
-								$coords[] = array( $center, $y_position );
-								$coords[] = array( $center + 80, $y_position );
-								$coords[] = array( $center + 160, $y_position );
-							} else {
-							// Для 6+ игроков распределить равномерно
-								$step = $playable_width / ( $player_count + 1 );
-								for ( $i = 1; $i <= $player_count; $i++ ) {
-									$coords[] = array( $side_padding + ( $step * $i ), $y_position );
-								}
-							}
-							
-							return $coords;
-						}
 						
 						// Подготовить позиции игроков для визуализации
 						$home_players = array();
@@ -508,67 +486,6 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 
 						<!-- ГОРИЗОНТАЛЬНОЕ ПОЛЕ (для планшетов 1024px+) -->
 						<?php
-						// Функция для получения координат горизонтального поля
-						function arsenal_get_player_coords_horizontal( $player_count, $x_position, $field_height = 198.81, $side_padding = 20 ) {
-							$coords = array();
-							$playable_height = $field_height - ( 2 * $side_padding );
-							$center = $field_height / 2;
-							
-							if ( $player_count === 1 ) {
-								$coords[] = array( $x_position, $center );
-							} elseif ( $player_count === 2 ) {
-								$coords[] = array( $x_position, $center - 40 );
-								$coords[] = array( $x_position, $center + 40 );
-							} elseif ( $player_count === 3 ) {
-								$coords[] = array( $x_position, $center - 60 );
-								$coords[] = array( $x_position, $center );
-								$coords[] = array( $x_position, $center + 60 );
-							} elseif ( $player_count === 4 ) {
-								$coords[] = array( $x_position, $center - 70 );
-								$coords[] = array( $x_position, $center - 25 );
-								$coords[] = array( $x_position, $center + 25 );
-								$coords[] = array( $x_position, $center + 70 );
-							} elseif ( $player_count === 5 ) {
-								$coords[] = array( $x_position, $center - 80 );
-								$coords[] = array( $x_position, $center - 40 );
-								$coords[] = array( $x_position, $center );
-								$coords[] = array( $x_position, $center + 40 );
-								$coords[] = array( $x_position, $center + 80 );
-							} elseif ( $player_count === 6 ) {
-								$coords[] = array( $x_position, $center - 68 );
-								$coords[] = array( $x_position, $center - 44 );
-								$coords[] = array( $x_position, $center - 20 );
-								$coords[] = array( $x_position, $center + 20 );
-								$coords[] = array( $x_position, $center + 44 );
-								$coords[] = array( $x_position, $center + 68 );
-							} elseif ( $player_count === 7 ) {
-								$coords[] = array( $x_position, $center - 72 );
-								$coords[] = array( $x_position, $center - 48 );
-								$coords[] = array( $x_position, $center - 24 );
-								$coords[] = array( $x_position, $center );
-								$coords[] = array( $x_position, $center + 24 );
-								$coords[] = array( $x_position, $center + 48 );
-								$coords[] = array( $x_position, $center + 72 );
-							} elseif ( $player_count === 8 ) {
-								$coords[] = array( $x_position, $center - 60 );
-								$coords[] = array( $x_position, $center - 40 );
-								$coords[] = array( $x_position, $center - 20 );
-								$coords[] = array( $x_position, $center );
-								$coords[] = array( $x_position, $center + 20 );
-								$coords[] = array( $x_position, $center + 40 );
-								$coords[] = array( $x_position, $center + 60 );
-								$coords[] = array( $x_position, $center + 80 );
-							} else {
-								// Для 9+ игроков распределить равномерно
-								$step = $playable_height / ( $player_count + 1 );
-								for ( $i = 1; $i <= $player_count; $i++ ) {
-									$coords[] = array( $x_position, $side_padding + ( $step * $i ) );
-								}
-							}
-							
-							return $coords;
-						}
-						
 						// Карты позиций для горизонтального поля
 						// Масштаб: 298.22 × 198.81 px
 						$home_positions_map_horizontal = array(
@@ -674,11 +591,18 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				<!-- Панель гостевой команды -->
 				<div class="lineup-panel away-panel">
 					<div class="lineup-header away-header">
-					<h3 class="team-name"><?php echo esc_html( $match->away_team_name ); ?></h3>					
+					<h3 class="team-name"><?php echo esc_html( $match->away_team_name ); ?></h3>
+
 					</div>
 					<div class="lineup-body">
 						<?php if ( ! empty( $organized['away_starting_by_position'] ) ) { ?>
 						<div class="players-group">
+							<?php if ( ! empty( $away_coach ) ) : ?>
+							<div class="coach-entry">
+								<div class="coach-label">Тренер</div>
+								<div class="coach-name"><?php echo esc_html( $away_coach->name ); ?></div>
+								</div>
+							<?php endif; ?>
 							<h4 class="group-label">Основной состав</h4>
 							<?php foreach ( $organized['away_starting_by_position'] as $position => $players ) { ?>
 							<div class="position-section">

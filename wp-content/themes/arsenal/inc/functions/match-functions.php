@@ -243,3 +243,141 @@ function arsenal_get_player_url_if_has_contract( $player_id ) {
 	// Если контракт есть, возвращаем URL на страницу игрока
 	return arsenal_get_player_url( $player_id );
 }
+
+/**
+ * Получить координаты игроков на вертикальном поле (667×1000px)
+ *
+ * @param int $player_count Количество игроков на линии
+ * @param int $y_position   Y координата линии
+ * @param int $field_width  Ширина поля (по умолчанию 667)
+ * @param int $side_padding Отступ с краёв (по умолчанию 50)
+ * @return array            Массив координат [x, y]
+ */
+function arsenal_get_player_coords( $player_count, $y_position, $field_width = 667, $side_padding = 50 ) {
+	$coords = array();
+	$playable_width = $field_width - ( 2 * $side_padding );
+	$center = $field_width / 2;
+	
+	if ( $player_count === 1 ) {
+		$coords[] = array( $center, $y_position );
+	} elseif ( $player_count === 2 ) {
+		$coords[] = array( $center - 80, $y_position );
+		$coords[] = array( $center + 80, $y_position );
+	} elseif ( $player_count === 3 ) {
+		$coords[] = array( $center - 120, $y_position );
+		$coords[] = array( $center, $y_position );
+		$coords[] = array( $center + 120, $y_position );
+	} elseif ( $player_count === 4 ) {
+		$coords[] = array( $center - 130, $y_position );
+		$coords[] = array( $center - 50, $y_position );
+		$coords[] = array( $center + 50, $y_position );
+		$coords[] = array( $center + 130, $y_position );
+	} elseif ( $player_count === 5 ) {
+		$coords[] = array( $center - 150, $y_position );
+		$coords[] = array( $center - 75, $y_position );
+		$coords[] = array( $center, $y_position );
+		$coords[] = array( $center + 75, $y_position );
+		$coords[] = array( $center + 150, $y_position );
+	} elseif ( $player_count === 6 ) {
+		$coords[] = array( $center - 160, $y_position );
+		$coords[] = array( $center - 100, $y_position );
+		$coords[] = array( $center - 40, $y_position );
+		$coords[] = array( $center + 40, $y_position );
+		$coords[] = array( $center + 100, $y_position );
+		$coords[] = array( $center + 160, $y_position );
+	} elseif ( $player_count === 7 ) {
+		$coords[] = array( $center - 170, $y_position );
+		$coords[] = array( $center - 115, $y_position );
+		$coords[] = array( $center - 60, $y_position );
+		$coords[] = array( $center, $y_position );
+		$coords[] = array( $center + 60, $y_position );
+		$coords[] = array( $center + 115, $y_position );
+		$coords[] = array( $center + 170, $y_position );
+	} elseif ( $player_count === 8 ) {
+		$coords[] = array( $center - 180, $y_position );
+		$coords[] = array( $center - 125, $y_position );
+		$coords[] = array( $center - 70, $y_position );
+		$coords[] = array( $center - 15, $y_position );
+		$coords[] = array( $center + 15, $y_position );
+		$coords[] = array( $center + 70, $y_position );
+		$coords[] = array( $center + 125, $y_position );
+		$coords[] = array( $center + 180, $y_position );
+	} else {
+		// Для 9+ игроков распределить равномерно
+		$step = $playable_width / ( $player_count + 1 );
+		for ( $i = 1; $i <= $player_count; $i++ ) {
+			$coords[] = array( $side_padding + ( $step * $i ), $y_position );
+		}
+	}
+	
+	return $coords;
+}
+
+/**
+ * Получить координаты игроков на горизонтальном поле (298×198px)
+ *
+ * @param int $player_count Количество игроков в линии
+ * @param int $x_position   X координата линии
+ * @param int $field_height Высота поля (по умолчанию 198.81)
+ * @param int $side_padding Отступ с краёв (по умолчанию 20)
+ * @return array            Массив координат [x, y]
+ */
+function arsenal_get_player_coords_horizontal( $player_count, $x_position, $field_height = 198.81, $side_padding = 20 ) {
+	$coords = array();
+	$playable_height = $field_height - ( 2 * $side_padding );
+	$center = $field_height / 2;
+	
+	if ( $player_count === 1 ) {
+		$coords[] = array( $x_position, $center );
+	} elseif ( $player_count === 2 ) {
+		$coords[] = array( $x_position, $center - 40 );
+		$coords[] = array( $x_position, $center + 40 );
+	} elseif ( $player_count === 3 ) {
+		$coords[] = array( $x_position, $center - 60 );
+		$coords[] = array( $x_position, $center );
+		$coords[] = array( $x_position, $center + 60 );
+	} elseif ( $player_count === 4 ) {
+		$coords[] = array( $x_position, $center - 70 );
+		$coords[] = array( $x_position, $center - 25 );
+		$coords[] = array( $x_position, $center + 25 );
+		$coords[] = array( $x_position, $center + 70 );
+	} elseif ( $player_count === 5 ) {
+		$coords[] = array( $x_position, $center - 80 );
+		$coords[] = array( $x_position, $center - 40 );
+		$coords[] = array( $x_position, $center );
+		$coords[] = array( $x_position, $center + 40 );
+		$coords[] = array( $x_position, $center + 80 );
+	} elseif ( $player_count === 6 ) {
+		$coords[] = array( $x_position, $center - 68 );
+		$coords[] = array( $x_position, $center - 44 );
+		$coords[] = array( $x_position, $center - 20 );
+		$coords[] = array( $x_position, $center + 20 );
+		$coords[] = array( $x_position, $center + 44 );
+		$coords[] = array( $x_position, $center + 68 );
+	} elseif ( $player_count === 7 ) {
+		$coords[] = array( $x_position, $center - 72 );
+		$coords[] = array( $x_position, $center - 48 );
+		$coords[] = array( $x_position, $center - 24 );
+		$coords[] = array( $x_position, $center );
+		$coords[] = array( $x_position, $center + 24 );
+		$coords[] = array( $x_position, $center + 48 );
+		$coords[] = array( $x_position, $center + 72 );
+	} elseif ( $player_count === 8 ) {
+		$coords[] = array( $x_position, $center - 60 );
+		$coords[] = array( $x_position, $center - 40 );
+		$coords[] = array( $x_position, $center - 20 );
+		$coords[] = array( $x_position, $center );
+		$coords[] = array( $x_position, $center + 20 );
+		$coords[] = array( $x_position, $center + 40 );
+		$coords[] = array( $x_position, $center + 60 );
+		$coords[] = array( $x_position, $center + 80 );
+	} else {
+		// Для 9+ игроков распределить равномерно
+		$step = $playable_height / ( $player_count + 1 );
+		for ( $i = 1; $i <= $player_count; $i++ ) {
+			$coords[] = array( $x_position, $side_padding + ( $step * $i ) );
+		}
+	}
+	
+	return $coords;
+}

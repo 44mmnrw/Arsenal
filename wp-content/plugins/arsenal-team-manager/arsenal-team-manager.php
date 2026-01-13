@@ -470,7 +470,9 @@ class Arsenal_Team_Manager {
             'arsenal_ajax',
             array(
                 'save_team_logo_nonce' => wp_create_nonce( 'arsenal_save_team_logo_ajax' ),
-                'ajax_url' => admin_url( 'admin-ajax.php' )
+                'get_team_coaches_nonce' => wp_create_nonce( 'arsenal_get_team_coaches' ),
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'nonce' => wp_create_nonce( 'arsenal_admin_nonce' )
             )
         );
         
@@ -857,3 +859,401 @@ function arsenal_ajax_save_team_logo() {
         wp_send_json_error( array( 'message' => 'Ошибка при сохранении логотипа' ) );
     }
 }
+/**
+ * AJAX обработчик для получения тренеров команды
+ */
+function arsenal_get_team_coaches() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    $team_id = intval( $_POST['team_id'] ?? 0 );
+    
+    if ( empty( $team_id ) ) {
+        wp_send_json_error( array( 'message' => 'Не указан ID команды' ) );
+    }
+    
+    // Получаем тренеров для команды
+    // Сначала получаем team_id (HEX строка) по ID команды
+    $team_hex_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT team_id FROM wp_arsenal_teams WHERE id = %d",
+        $team_id
+    ) );
+    
+    error_log( 'Team ID: ' . $team_id . ' | Team HEX ID: ' . $team_hex_id );
+    
+    if ( ! $team_hex_id ) {
+        error_log( 'Team not found for ID ' . $team_id );
+        wp_send_json_success( array( 'data' => array() ) );
+        return;
+    }
+    
+    // Теперь получаем тренеров по HEX ID
+    $coaches = $wpdb->get_results( $wpdb->prepare( "
+        SELECT 
+            c.name as coach_name,
+            tc.start_date,
+            tc.end_date
+        FROM wp_arsenal_team_coaches tc
+        LEFT JOIN wp_arsenal_coaches c ON tc.coach_id = c.coach_id
+        WHERE tc.team_id = %s
+        ORDER BY tc.start_date DESC
+    ", $team_hex_id ) );
+    
+    error_log( 'Found coaches: ' . count( $coaches ) . ' | Raw data: ' . json_encode( $coaches ) );
+    
+    if ( empty( $coaches ) ) {
+        error_log( 'No coaches found for team ' . $team_hex_id );
+        wp_send_json_success( array( 'data' => array() ) );
+        return;
+    }
+    
+    // Объединяем последовательные периоды одного тренера
+    usort( $coaches, function( $a, $b ) {
+        return strtotime( $a->start_date ) - strtotime( $b->start_date );
+    });
+    
+    $merged = array();
+    $current_coach = null;
+    $current_start = null;
+    $current_end = null;
+    
+    foreach ( $coaches as $coach ) {
+        if ( $current_coach === null ) {
+            $current_coach = $coach->coach_name;
+            $current_start = $coach->start_date;
+            $current_end = $coach->end_date;
+        } elseif ( $current_coach === $coach->coach_name ) {
+            if ( strtotime( $coach->start_date ) < strtotime( $current_start ) ) {
+                $current_start = $coach->start_date;
+            }
+            if ( $current_end === '0000-00-00' || $current_end === null ) {
+                // Текущий период активен
+            } elseif ( $coach->end_date === '0000-00-00' || $coach->end_date === null ) {
+                $current_end = $coach->end_date;
+            } elseif ( strtotime( $coach->end_date ) > strtotime( $current_end ) ) {
+                $current_end = $coach->end_date;
+            }
+        } else {
+            $merged[] = (object) array(
+                'coach_name' => $current_coach,
+                'start_date' => $current_start,
+                'end_date' => $current_end
+            );
+            $current_coach = $coach->coach_name;
+            $current_start = $coach->start_date;
+            $current_end = $coach->end_date;
+        }
+    }
+    
+    if ( $current_coach !== null ) {
+        $merged[] = (object) array(
+            'coach_name' => $current_coach,
+            'start_date' => $current_start,
+            'end_date' => $current_end
+        );
+    }
+    
+    // Сортируем по дате начала (новые сверху)
+    usort( $merged, function( $a, $b ) {
+        return strtotime( $b->start_date ) - strtotime( $a->start_date );
+    });
+    
+    // Преобразуем объекты в массивы для JSON
+    $coaches_array = array();
+    foreach ( $merged as $coach ) {
+        $coaches_array[] = array(
+            'coach_name' => $coach->coach_name,
+            'start_date' => $coach->start_date,
+            'end_date' => $coach->end_date
+        );
+    }
+    
+    error_log( 'Coaches returned: ' . count( $coaches_array ) . ' | Data: ' . json_encode( $coaches_array ) );
+    
+    wp_send_json_success( $coaches_array );
+}
+
+add_action( 'wp_ajax_arsenal_get_team_coaches', 'arsenal_get_team_coaches' );
+
+/**
+ * AJAX handler для добавления тренера из списка (ТОЛЬКО ВЫБОР, БЕЗ СОЗДАНИЯ)
+ */
+function arsenal_add_coach() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    $team_id = intval( $_POST['team_id'] ?? 0 );
+    $coach_id = sanitize_text_field( $_POST['coach_id'] ?? '' ); // HEX coach_id из dropdown
+    $start_date = sanitize_text_field( $_POST['start_date'] ?? '' );
+    $end_date = sanitize_text_field( $_POST['end_date'] ?? '' );
+    
+    if ( empty( $team_id ) || empty( $coach_id ) || empty( $start_date ) ) {
+        wp_send_json_error( array( 'message' => 'Не заполнены обязательные поля' ) );
+    }
+    
+    // Получаем HEX ID команды
+    $team_hex_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT team_id FROM wp_arsenal_teams WHERE id = %d",
+        $team_id
+    ) );
+    
+    if ( ! $team_hex_id ) {
+        wp_send_json_error( array( 'message' => 'Команда не найдена' ) );
+    }
+    
+    // Проверяем, что тренер существует в БД
+    $coach_exists = $wpdb->get_var( $wpdb->prepare(
+        "SELECT coach_id FROM wp_arsenal_coaches WHERE coach_id = %s",
+        $coach_id
+    ) );
+    
+    if ( ! $coach_exists ) {
+        wp_send_json_error( array( 'message' => 'Тренер не найден в системе' ) );
+    }
+    
+    // Если дата окончания не указана, используем 0000-00-00 (активный контракт)
+    if ( empty( $end_date ) ) {
+        $end_date = '0000-00-00';
+        
+        // Если новый тренер с активным контрактом (без конечной даты),
+        // то завершаем контракт у предыдущего активного тренера этой команды
+        if ( $end_date === '0000-00-00' ) {
+            // Получаем текущего активного тренера (если есть)
+            $current_active = $wpdb->get_row( $wpdb->prepare(
+                "SELECT id, coach_id FROM wp_arsenal_team_coaches 
+                 WHERE team_id = %s AND end_date = '0000-00-00'
+                 ORDER BY start_date DESC LIMIT 1",
+                $team_hex_id
+            ) );
+            
+            // Если есть активный тренер - завершаем его контракт на дату начала нового
+            if ( $current_active ) {
+                $wpdb->update(
+                    'wp_arsenal_team_coaches',
+                    array( 'end_date' => $start_date ),
+                    array( 'id' => $current_active->id ),
+                    array( '%s' ),
+                    array( '%d' )
+                );
+                error_log( 'Previous coach contract ended: coach_id ' . $current_active->coach_id . ' | end_date set to ' . $start_date );
+            }
+        }
+    }
+    
+    // Добавляем запись в wp_arsenal_team_coaches (coach_id - это уже HEX из выпадающего списка)
+    $result = $wpdb->insert(
+        'wp_arsenal_team_coaches',
+        array(
+            'team_id' => $team_hex_id,
+            'coach_id' => $coach_id,
+            'start_date' => $start_date,
+            'end_date' => $end_date
+        ),
+        array( '%s', '%s', '%s', '%s' )
+    );
+    
+    if ( ! $result ) {
+        error_log( 'Failed to insert coach: ' . $wpdb->last_error );
+        wp_send_json_error( array( 'message' => 'Ошибка при добавлении тренера в БД' ) );
+    }
+    
+    error_log( 'Coach added: coach_id ' . $coach_id . ' to team ' . $team_hex_id . ' | start: ' . $start_date . ' | end: ' . $end_date );
+    
+    wp_send_json_success( array( 'message' => 'Тренер добавлен успешно' ) );
+}
+
+add_action( 'wp_ajax_arsenal_add_coach', 'arsenal_add_coach' );
+
+/**
+ * AJAX handler для удаления последней записи о тренере команды
+ */
+function arsenal_delete_last_coach() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    $team_id = intval( $_POST['team_id'] ?? 0 );
+    
+    if ( empty( $team_id ) ) {
+        wp_send_json_error( array( 'message' => 'Команда не указана' ) );
+    }
+    
+    // Получаем HEX ID команды
+    $team_hex_id = $wpdb->get_var( $wpdb->prepare(
+        "SELECT team_id FROM wp_arsenal_teams WHERE id = %d",
+        $team_id
+    ) );
+    
+    if ( ! $team_hex_id ) {
+        wp_send_json_error( array( 'message' => 'Команда не найдена' ) );
+    }
+    
+    // Получаем последнюю запись по дате начала
+    $last_coach = $wpdb->get_row( $wpdb->prepare(
+        "SELECT id, coach_id, start_date FROM wp_arsenal_team_coaches 
+         WHERE team_id = %s
+         ORDER BY start_date DESC LIMIT 1",
+        $team_hex_id
+    ) );
+    
+    if ( ! $last_coach ) {
+        wp_send_json_error( array( 'message' => 'Нет записей для удаления' ) );
+    }
+    
+    // Удаляем последнюю запись
+    $result = $wpdb->delete(
+        'wp_arsenal_team_coaches',
+        array( 'id' => $last_coach->id ),
+        array( '%d' )
+    );
+    
+    if ( ! $result ) {
+        error_log( 'Failed to delete coach record: ' . $wpdb->last_error );
+        wp_send_json_error( array( 'message' => 'Ошибка при удалении записи' ) );
+    }
+    
+    error_log( 'Deleted coach record: id ' . $last_coach->id . ' (coach_id: ' . $last_coach->coach_id . ') from team ' . $team_hex_id );
+    
+    wp_send_json_success( array( 'message' => 'Запись удалена успешно' ) );
+}
+
+add_action( 'wp_ajax_arsenal_delete_last_coach', 'arsenal_delete_last_coach' );
+
+/**
+ * AJAX handler для получения списка всех тренеров
+ */
+function arsenal_get_all_coaches() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    error_log( 'arsenal_get_all_coaches called' );
+    
+    $coaches = $wpdb->get_results( "
+        SELECT id, name, coach_id
+        FROM wp_arsenal_coaches
+        ORDER BY name ASC
+    " );
+    
+    error_log( 'Coaches from DB: ' . count( $coaches ) . ' | Data: ' . json_encode( $coaches ) );
+    
+    if ( empty( $coaches ) ) {
+        error_log( 'No coaches found' );
+        wp_send_json_success( array() );
+    }
+    
+    wp_send_json_success( $coaches );
+}
+
+add_action( 'wp_ajax_arsenal_get_all_coaches', 'arsenal_get_all_coaches' );
+
+/**
+ * AJAX handler для создания нового тренера
+ */
+function arsenal_create_new_coach() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    $coach_name = sanitize_text_field( $_POST['coach_name'] ?? '' );
+    
+    if ( empty( $coach_name ) ) {
+        wp_send_json_error( array( 'message' => 'Имя тренера не указано' ) );
+    }
+    
+    // Проверяем, не существует ли уже такой тренер
+    $existing_coach = $wpdb->get_var( $wpdb->prepare(
+        "SELECT coach_id FROM wp_arsenal_coaches WHERE name = %s",
+        $coach_name
+    ) );
+    
+    if ( $existing_coach ) {
+        wp_send_json_error( array( 'message' => 'Тренер с таким именем уже существует в системе' ) );
+    }
+    
+    // Генерируем новый HEX ID
+    $new_coach_hex = bin2hex( random_bytes( 4 ) );
+    
+    // Создаем нового тренера
+    $result = $wpdb->insert(
+        'wp_arsenal_coaches',
+        array(
+            'coach_id' => $new_coach_hex,
+            'name' => $coach_name
+        ),
+        array( '%s', '%s' )
+    );
+    
+    if ( ! $result ) {
+        error_log( 'Failed to create coach: ' . $wpdb->last_error );
+        wp_send_json_error( array( 'message' => 'Ошибка при добавлении тренера в БД' ) );
+    }
+    
+    error_log( 'New coach created: ' . $coach_name . ' | coach_hex_id: ' . $new_coach_hex );
+    
+    wp_send_json_success( array( 'message' => 'Тренер добавлен успешно', 'coach_id' => $new_coach_hex ) );
+}
+
+add_action( 'wp_ajax_arsenal_create_new_coach', 'arsenal_create_new_coach' );
+
+/**
+ * AJAX handler для удаления тренера из БД
+ */
+function arsenal_delete_coach_from_db() {
+    check_ajax_referer( 'arsenal_admin_nonce', 'nonce' );
+    
+    global $wpdb;
+    
+    $coach_id = sanitize_text_field( $_POST['coach_id'] ?? '' );
+    
+    if ( empty( $coach_id ) ) {
+        wp_send_json_error( array( 'message' => 'ID тренера не указан' ) );
+    }
+    
+    // Проверяем, не используется ли этот тренер в активных контрактах
+    $active_contracts = $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_arsenal_team_coaches 
+         WHERE coach_id = %s AND (end_date = '0000-00-00' OR end_date IS NULL OR end_date = '')",
+        $coach_id
+    ) );
+    
+    if ( $active_contracts > 0 ) {
+        wp_send_json_error( array( 'message' => 'Невозможно удалить тренера - у него есть активные контракты. Завершите их перед удалением.' ) );
+    }
+    
+    // Проверяем, есть ли вообще какие-то контракты этого тренера
+    $any_contracts = $wpdb->get_var( $wpdb->prepare(
+        "SELECT COUNT(*) FROM wp_arsenal_team_coaches WHERE coach_id = %s",
+        $coach_id
+    ) );
+    
+    if ( $any_contracts > 0 ) {
+        wp_send_json_error( array( 'message' => 'Невозможно удалить тренера - у него есть контракты в истории. Удалите их перед удалением тренера.' ) );
+    }
+    
+    // Получаем имя тренера перед удалением
+    $coach_name = $wpdb->get_var( $wpdb->prepare(
+        "SELECT name FROM wp_arsenal_coaches WHERE coach_id = %s",
+        $coach_id
+    ) );
+    
+    // Удаляем тренера
+    $result = $wpdb->delete(
+        'wp_arsenal_coaches',
+        array( 'coach_id' => $coach_id ),
+        array( '%s' )
+    );
+    
+    if ( ! $result ) {
+        error_log( 'Failed to delete coach: ' . $wpdb->last_error );
+        wp_send_json_error( array( 'message' => 'Ошибка при удалении тренера из БД' ) );
+    }
+    
+    error_log( 'Coach deleted: ' . $coach_name . ' | coach_id: ' . $coach_id );
+    
+    wp_send_json_success( array( 'message' => 'Тренер "' . $coach_name . '" удален из БД' ) );
+}
+
+add_action( 'wp_ajax_arsenal_delete_coach_from_db', 'arsenal_delete_coach_from_db' );

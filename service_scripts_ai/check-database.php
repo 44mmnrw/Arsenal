@@ -174,7 +174,7 @@ if ( empty( $fk_check ) ) {
 }
 
 // 5. Проверить версию БД
-$db_version = $wpdb->get_option( 'arsenal_db_version' );
+$db_version = get_option( 'arsenal_db_version' );
 echo "╔════════════════════════════════════════════════════════════════════╗\n";
 echo "║                    Database Version Info                            ║\n";
 echo "╚════════════════════════════════════════════════════════════════════╝\n\n";

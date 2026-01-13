@@ -404,11 +404,6 @@ if ( ! function_exists( 'arsenal_widgets_init' ) ) {
 add_action( 'widgets_init', 'arsenal_widgets_init' );
 
 /**
- * Подключение shortcodes
- */
-require_once ARSENAL_THEME_DIR . '/inc/shortcodes/shortcodes-match.php';
-
-/**
  * Настройка размеров изображений
  */
 add_image_size( 'arsenal-featured', 1200, 600, true );
