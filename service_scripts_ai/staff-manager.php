@@ -136,9 +136,8 @@ function add_sample_job_title() {
 		$wpdb->prefix . 'arsenal_staff_job_titles',
 		array(
 			'job_title_name' => $title,
-			'is_active' => 1,
 		),
-		array( '%s', '%d' )
+		array( '%s' )
 	);
 	
 	if ( $result ) {
@@ -156,7 +155,7 @@ function add_sample_staff() {
 	
 	// Получить доступные должности
 	$job_titles = $wpdb->get_results( 
-		"SELECT id, job_title_name FROM {$wpdb->prefix}arsenal_staff_job_titles WHERE is_active = 1" 
+		"SELECT id, job_title_name FROM {$wpdb->prefix}arsenal_staff_job_titles" 
 	);
 	
 	if ( empty( $job_titles ) ) {
@@ -200,9 +199,8 @@ function add_sample_staff() {
 			'birth_date' => $birth_date,
 			'contract_start' => $contract_start,
 			'contract_end' => $contract_end,
-			'is_active' => 1,
 		),
-		array( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%d' )
+		array( '%s', '%s', '%s', '%d', '%s', '%s', '%s' )
 	);
 	
 	if ( $result ) {
@@ -221,7 +219,7 @@ function show_job_titles() {
 	echo "\n--- Все должности ---\n\n";
 	
 	$titles = $wpdb->get_results( 
-		"SELECT id, job_title_name, is_active, created_at FROM {$wpdb->prefix}arsenal_staff_job_titles ORDER BY id" 
+		"SELECT id, job_title_name, created_at FROM {$wpdb->prefix}arsenal_staff_job_titles ORDER BY id" 
 	);
 	
 	if ( empty( $titles ) ) {
@@ -229,12 +227,11 @@ function show_job_titles() {
 		return;
 	}
 	
-	echo sprintf( "%-5s %-40s %-10s %-20s\n", "ID", "Название", "Активно", "Добавлено" );
-	echo str_repeat( "-", 75 ) . "\n";
-	
+echo sprintf( "%-5s %-40s %-20s\n", "ID", "Название", "Добавлено" );
+	echo str_repeat( "-", 65 ) . "\n";
+
 	foreach ( $titles as $title ) {
-		$active = $title->is_active ? '✓' : '✗';
-		echo sprintf( "%-5d %-40s %-10s %-20s\n", $title->id, $title->job_title_name, $active, $title->created_at );
+		echo sprintf( "%-5d %-40s %-20s\n", $title->id, $title->job_title_name, $title->created_at );
 	}
 	
 	echo "\n";
@@ -249,7 +246,7 @@ function show_staff() {
 	echo "\n--- Все сотрудники ---\n\n";
 	
 	$staff = $wpdb->get_results( 
-		"SELECT s.id, s.first_name, s.second_name, j.job_title_name, s.contract_start, s.contract_end, s.is_active
+		"SELECT s.id, s.first_name, s.second_name, j.job_title_name, s.contract_start, s.contract_end
 		 FROM {$wpdb->prefix}arsenal_staff s
 		 LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles j ON s.job_title_id = j.id
 		 ORDER BY s.id" 

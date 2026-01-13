@@ -174,10 +174,6 @@ class Arsenal_Staff_Manager {
 				  LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles j ON s.job_title_id = j.id
 				  WHERE 1=1";
 
-		if ( $args['active_only'] ) {
-			$query .= " AND s.is_active = 1";
-		}
-
 		if ( ! empty( $args['job_title_id'] ) ) {
 			$query .= $wpdb->prepare( " AND s.job_title_id = %d", $args['job_title_id'] );
 		}
@@ -396,10 +392,6 @@ class Arsenal_Staff_Manager {
 		global $wpdb;
 
 		$query = "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_staff";
-
-		if ( $active_only ) {
-			$query .= " WHERE is_active = 1";
-		}
 
 		return (int) $wpdb->get_var( $query );
 	}
