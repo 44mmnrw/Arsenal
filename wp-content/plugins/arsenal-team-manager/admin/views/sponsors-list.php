@@ -33,6 +33,13 @@ $partners = Arsenal_Sponsors::count_sponsors( 'partner' );
 			</div>
 		<?php endif; ?>
 
+		<?php if ( get_transient( 'arsenal_previous_general_changed' ) ) : ?>
+			<div class="notice notice-info is-dismissible" style="margin: 20px 0;">
+				<p><strong>ℹ️ Информация:</strong> Предыдущий генеральный спонсор автоматически переведён в "Партнеры".</p>
+			</div>
+			<?php delete_transient( 'arsenal_previous_general_changed' ); ?>
+		<?php endif; ?>
+
 		<?php if ( isset( $_GET['deleted'] ) && $_GET['deleted'] == 1 ) : ?>
 			<div class="notice notice-success is-dismissible" style="margin: 20px 0;">
 				<p><?php esc_html_e( 'Спонсор успешно удалён!', 'arsenal-team-manager' ); ?></p>

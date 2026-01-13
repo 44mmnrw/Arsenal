@@ -760,6 +760,33 @@ class Arsenal_Team_Manager {
         // Проверяем - это редактирование или создание?
         $is_edit = isset( $_GET['id'] ) ? true : false;
         
+        // Если выбран тип "Генеральный спонсор" - переводим предыдущего в партнеры
+        if ( 'general_sponsor' === $sponsor_data['type'] ) {
+            global $wpdb;
+            $current_id = $is_edit ? absint( $_GET['id'] ) : 0;
+            
+            // Найти существующего генерального спонсора (кроме текущего при редактировании)
+            $existing_general = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT id FROM {$wpdb->prefix}arsenal_sponsors 
+                     WHERE type = 'general_sponsor' AND id != %d",
+                    $current_id
+                )
+            );
+            
+            if ( $existing_general ) {
+                // Переводим его в партнеры
+                $wpdb->update(
+                    "{$wpdb->prefix}arsenal_sponsors",
+                    array( 'type' => 'partner' ),
+                    array( 'id' => $existing_general ),
+                    array( '%s' ),
+                    array( '%d' )
+                );
+                set_transient( 'arsenal_previous_general_changed', 1, 10 );
+            }
+        }
+        
         if ( $is_edit ) {
             $sponsor_id = absint( $_GET['id'] );
             Arsenal_Sponsors::update_sponsor( $sponsor_id, $sponsor_data );
