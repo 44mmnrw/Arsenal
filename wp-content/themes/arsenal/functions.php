@@ -176,7 +176,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( get_query_var( 'player_id' ) ) {
 			wp_enqueue_style(
 				'arsenal-player-page',
-				ARSENAL_THEME_URI . '/assets/css/player-page.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-player.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
