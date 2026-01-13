@@ -89,7 +89,7 @@ $players = $wpdb->get_results( $wpdb->prepare(
                             </a>
                         </div>
                         <div class="players-col-position">
-                            <?php echo esc_html( $player->position_name ?? '—' ); ?>
+                            <span class="player-position-badge"><?php echo esc_html( $player->position_name ?? '—' ); ?></span>
                         </div>
                         <div class="players-col-number">
                             <?php echo esc_html( $player->contract_number ?? '—' ); ?>
