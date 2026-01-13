@@ -55,6 +55,7 @@ remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
  */
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
 require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-staff-manager.php';
+require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-sponsors.php';
 
 /**
  * Паттерны отключены - используется классический редактор
@@ -257,6 +258,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы Спонсоры и партнеры
+		if ( is_page_template( 'templates/page-sponsors.php' ) || is_page( 'sponsors' ) || is_page( 'спонсоры' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-sponsors',
+				ARSENAL_THEME_URI . '/assets/css/page-sponsors.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы Стадион
 		if ( is_page_template( 'templates/page-stadium.php' ) || is_page( 'stadium' ) || is_page( 'стадион' ) ) {
 			wp_enqueue_style(
@@ -289,6 +300,15 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		wp_enqueue_script(
 			'arsenal-banner-carousel',
 			ARSENAL_THEME_URI . '/assets/js/banner-carousel.js',
+			array(),
+			ARSENAL_VERSION,
+			true
+		);
+
+		// Скрипт карусели спонсоров
+		wp_enqueue_script(
+			'arsenal-sponsors-carousel',
+			ARSENAL_THEME_URI . '/assets/js/sponsors-carousel.js',
 			array(),
 			ARSENAL_VERSION,
 			true

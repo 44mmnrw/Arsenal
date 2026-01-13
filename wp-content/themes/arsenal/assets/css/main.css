@@ -1252,6 +1252,258 @@ article {
 }
 
 /* ==========================================================================
+   SPONSORS CAROUSEL SECTION
+   ========================================================================== */
+
+.sponsors-section {
+	padding: 60px 0;
+	background-color: #ffffff;
+	border-top: 1px solid #e5e7eb;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.sponsors-section .section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 40px;
+	text-align: left;
+}
+
+.sponsors-section .section-title {
+	color: var(--red-700, #FF1A1A);
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin: 0;
+}
+
+.sponsors-section .section-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--red-700, #FF1A1A);
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+}
+
+.sponsors-section .section-link:hover {
+	opacity: 0.8;
+}
+
+.sponsors-section .section-link .arrow {
+	font-size: 0.875rem;
+}
+
+/* Carousel Wrapper */
+.sponsors-carousel-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0;
+	width: 100%;
+}
+
+/* Carousel Container */
+.sponsors-carousel {
+	display: flex;
+	flex-wrap: nowrap;
+	flex: 1;
+	gap: 24px;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	padding: 20px 0;
+	padding-right: 24px;
+	scroll-snap-type: x mandatory;
+	align-items: center;
+	
+	/* Hide scrollbar but keep functionality */
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.sponsors-carousel::-webkit-scrollbar {
+	display: none;
+}
+
+/* Slide */
+.sponsor-slide {
+	scroll-snap-align: center;
+	flex-shrink: 0;
+	min-width: 240px;
+}
+
+/* Sponsor Card - Carousel */
+.sponsors-carousel .sponsor-card {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	padding: 16px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	overflow: hidden;
+}
+
+.sponsors-carousel .sponsor-card:hover {
+	background: #f3f4f6;
+	border-color: #d1d5db;
+	transform: translateY(-4px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Sponsor Logo */
+.sponsor-logo {
+	width: 110px;
+	height: 20px;
+	object-fit: contain;
+}
+
+/* Sponsor Placeholder */
+.sponsor-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+	border-radius: 4px;
+	padding: 16px;
+	text-align: center;
+}
+
+.sponsor-placeholder span {
+	font-size: 14px;
+	font-weight: 600;
+	color: #6b7280;
+	word-break: break-word;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+	.sponsors-section {
+		padding: 48px 0;
+	}
+
+	.sponsors-carousel-wrapper {
+		gap: 16px;
+	}
+
+	.sponsors-carousel {
+		gap: 16px;
+	}
+
+	.sponsor-slide {
+		min-width: 180px;
+	}
+
+	.sponsor-card {
+		height: 160px;
+		padding: 20px;
+	}
+}
+
+@media (max-width: 768px) {
+	.sponsors-section {
+		padding: 40px 0;
+	}
+
+	.sponsors-section .section-title {
+		font-size: 22px;
+	}
+
+	.sponsors-carousel-wrapper {
+		gap: 12px;
+	}
+
+	.sponsors-carousel {
+		gap: 12px;
+		padding: 16px 0;
+	}
+
+	.sponsor-slide {
+		min-width: 150px;
+	}
+
+	.sponsor-card {
+		height: 140px;
+		padding: 16px;
+		border-radius: 6px;
+	}
+
+	.sponsor-logo {
+		width: 180px;
+		height: 120px;
+	}
+
+	.carousel-nav {
+		width: 36px;
+		height: 36px;
+		border-width: 1px;
+	}
+
+	.carousel-nav .arrow {
+		font-size: 14px;
+	}
+
+	.sponsor-placeholder span {
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sponsors-section {
+		padding: 32px 0;
+	}
+
+	.sponsors-section .section-title {
+		font-size: 18px;
+	}
+
+	.sponsors-carousel-wrapper {
+		gap: 8px;
+	}
+
+	.sponsors-carousel {
+		gap: 8px;
+		padding: 12px 0;
+	}
+
+	.sponsor-slide {
+		min-width: 130px;
+	}
+
+	.sponsor-card {
+		height: 120px;
+		padding: 12px;
+	}
+
+	.sponsor-logo {
+		width: 160px;
+		height: 100px;
+	}
+
+	.carousel-nav {
+		width: 32px;
+		height: 32px;
+		border-width: 1px;
+	}
+
+	.carousel-nav .arrow {
+		font-size: 12px;
+	}
+
+	.sponsor-placeholder span {
+		font-size: 11px;
+	}
+}
+
+/* ==========================================================================
    RESPONSIVE - FOOTER & CONTENT
    ========================================================================== */
 
@@ -1819,7 +2071,8 @@ article {
 	gap: 1.5rem;
 }
 
-.sponsor-card {
+/* Sponsor Card - Grid */
+.sponsors-grid .sponsor-card {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1832,15 +2085,13 @@ article {
 	text-decoration: none;
 }
 
-.sponsor-card:hover {
+.sponsors-grid .sponsor-card:hover {
 	box-shadow: 0 0.25rem 0.375rem #1a1a1a1a, 0 0.125rem 0.25rem #0d0d0d0d;
 }
 
 .sponsor-logo {
-	max-width: 100%;
-	max-height: 3rem;
-	width: auto;
-	height: auto;
+	width: 200px;
+	height: 140px;
 	object-fit: contain;
 	filter: grayscale(100%);
 	opacity: 0.7;

@@ -1,0 +1,950 @@
+/**
+ * Спонсоры и партнеры - Page CSS
+ * @package Arsenal
+ * @since 1.0.0
+ */
+
+/* ============================================================================
+   Container & Layout
+   ============================================================================ */
+
+.sponsors-page {
+	background-color: #f9fafb;
+	min-height: calc(100vh - 64px);
+}
+
+.sponsors-page .container {
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+}
+
+.sponsors-container {
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+}
+
+/* ============================================================================
+   Page Header
+   ============================================================================ */
+
+.sponsors-header {
+	padding: 0px 0;
+}
+
+.sponsors-title,
+.page-title {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-weight: 700;
+	font-size: 2rem;
+	line-height: 43.2px;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.36px;
+}
+
+/* ============================================================================
+   Main Content
+   ============================================================================ */
+
+.sponsors-content {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	padding-bottom: 32px;
+}
+
+/* ============================================================================
+   Page Sections (for page-sponsors.php, NOT component)
+   ============================================================================ */
+
+.sponsors-page-section {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	padding: 32px;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.sponsors-section-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 28px;
+}
+
+.sponsors-icon {
+	display: block;
+	width: 24px;
+	height: 24px;
+	color: #0a0a0a;
+}
+
+.sponsors-section-title {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 28px;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.2px;
+}
+
+/* ============================================================================
+   General Sponsor Card
+   ============================================================================ */
+
+.sponsors-general-card {
+	background: #ffffff;
+	border: 2px solid rgba(255, 26, 26, 0.2);
+	border-radius: 16.4px;
+	padding: 34px;
+	display: flex;
+	gap: 24px;
+	align-items: flex-start;
+	background-image: linear-gradient(171.9deg, rgba(249, 250, 251, 1) 0%, rgba(255, 255, 255, 1) 100%);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sponsors-general-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.sponsors-general-logo {
+	width: 96px;
+	height: 96px;
+	flex-shrink: 0;
+}
+
+.sponsors-logo-wrapper {
+	width: 100%;
+	height: 100%;
+	background: #ffffff;
+	border-radius: 16.4px;
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.sponsors-logo-emoji {
+	font-size: 60px;
+	line-height: 60px;
+	display: block;
+	height: 60px;
+	width: auto;
+	color: #0a0a0a;
+}
+
+.sponsors-logo-image {
+	max-width: 90%;
+	max-height: 90%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.sponsors-general-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.sponsors-general-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	height: 33.594px;
+}
+
+.sponsors-general-name {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 33.6px;
+	color: #101828;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.24px;
+}
+
+.sponsors-badge {
+	background: #ff1a1a;
+	color: #ffffff;
+	padding: 4px 12px;
+	border-radius: 33554400px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	white-space: nowrap;
+}
+
+.sponsors-general-description {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 25.6px;
+	color: #364153;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.16px;
+}
+
+.sponsors-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	color: #ff1a1a;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	width: fit-content;
+}
+
+.sponsors-link:hover {
+	opacity: 0.8;
+}
+
+.sponsors-link-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 16px;
+}
+
+/* ============================================================================
+   Partners Grid
+   ============================================================================ */
+
+.sponsors-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 24px;
+	width: 100%;
+}
+
+.sponsors-partner-card {
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 16.4px;
+	padding: 25px;
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sponsors-partner-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.sponsors-partner-logo {
+	width: 64px;
+	height: 64px;
+	flex-shrink: 0;
+	background: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.sponsors-partner-emoji {
+	font-size: 36px;
+	line-height: 40px;
+	display: block;
+	height: 40px;
+	width: auto;
+	color: #0a0a0a;
+}
+
+.sponsors-partner-logo-image {
+	max-width: 90%;
+	max-height: 90%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.sponsors-partner-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sponsors-partner-name {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 25.2px;
+	color: #101828;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.18px;
+}
+
+.sponsors-partner-category {
+	display: inline-block;
+	background: #e5e7eb;
+	color: #364153;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 16px;
+	width: fit-content;
+}
+
+.sponsors-partner-description {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 22.4px;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.14px;
+}
+
+.sponsors-partner-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	color: #ff1a1a;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	width: fit-content;
+}
+
+.sponsors-partner-link:hover {
+	opacity: 0.8;
+}
+
+.sponsors-partner-link-icon {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	font-size: 14px;
+	line-height: 14px;
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+	.sponsors-container {
+		padding: 0 16px;
+	}
+
+	.sponsors-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.sponsors-general-card {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.sponsors-general-content {
+		gap: 12px;
+	}
+
+	.sponsors-general-header {
+		justify-content: center;
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 768px) {
+	.sponsors-title {
+		font-size: 28px;
+		line-height: 33.6px;
+	}
+
+	.sponsors-header {
+		padding: 24px 0;
+	}
+
+	.sponsors-general-card {
+		padding: 20px;
+		border-radius: 12px;
+		gap: 16px;
+	}
+
+	.sponsors-general-logo {
+		width: 80px;
+		height: 80px;
+	}
+
+	.sponsors-logo-wrapper {
+		border-radius: 12px;
+	}
+
+	.sponsors-logo-emoji {
+		font-size: 48px;
+		line-height: 48px;
+		height: 48px;
+	}
+
+	.sponsors-general-name {
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	.sponsors-partner-card {
+		padding: 16px;
+		border-radius: 12px;
+	}
+
+	.sponsors-partner-logo {
+		width: 56px;
+		height: 56px;
+		border-radius: 8px;
+	}
+
+	.sponsors-partner-emoji {
+		font-size: 32px;
+		line-height: 36px;
+		height: 36px;
+	}
+
+	.sponsors-partner-name {
+		font-size: 16px;
+		line-height: 22.4px;
+	}
+
+	.sponsors-content {
+		gap: 24px;
+		padding-bottom: 24px;
+	}
+
+	.sponsors-page-section {
+		gap: 16px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sponsors-container {
+		padding: 0 12px;
+	}
+
+	.sponsors-title {
+		font-size: 24px;
+		line-height: 28.8px;
+	}
+
+	.sponsors-header {
+		padding: 16px 0;
+	}
+
+	.sponsors-content {
+		gap: 20px;
+	}
+
+	.sponsors-page-section {
+		gap: 12px;
+	}
+
+	.sponsors-section-title {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.sponsors-general-card {
+		padding: 16px;
+		gap: 12px;
+	}
+
+	.sponsors-general-name {
+		font-size: 18px;
+		line-height: 25.2px;
+	}
+
+	.sponsors-general-description {
+		font-size: 14px;
+		line-height: 22.4px;
+	}
+
+	.sponsors-link {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.sponsors-partner-card {
+		padding: 12px;
+	}
+
+	.sponsors-partner-name {
+		font-size: 15px;
+		line-height: 21px;
+	}
+
+	.sponsors-partner-description {
+		font-size: 13px;
+		line-height: 20.8px;
+	}
+}
+
+.sponsors-section-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 28px;
+}
+
+.sponsors-icon {
+	display: block;
+	width: 24px;
+	height: 24px;
+	color: #0a0a0a;
+}
+
+.sponsors-section-title {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 28px;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.2px;
+}
+
+/* ============================================================================
+   General Sponsor Card
+   ============================================================================ */
+
+.sponsors-general-card {
+	background: #ffffff;
+	border: 2px solid rgba(255, 26, 26, 0.2);
+	border-radius: 16.4px;
+	padding: 34px;
+	display: flex;
+	gap: 24px;
+	align-items: flex-start;
+	background-image: linear-gradient(171.9deg, rgba(249, 250, 251, 1) 0%, rgba(255, 255, 255, 1) 100%);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sponsors-general-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.sponsors-general-logo {
+	width: 96px;
+	height: 96px;
+	flex-shrink: 0;
+}
+
+.sponsors-logo-wrapper {
+	width: 100%;
+	height: 100%;
+	background: #ffffff;
+	border-radius: 16.4px;
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.sponsors-logo-emoji {
+	font-size: 60px;
+	line-height: 60px;
+	display: block;
+	height: 60px;
+	width: auto;
+	color: #0a0a0a;
+}
+
+.sponsors-logo-image {
+	max-width: 90%;
+	max-height: 90%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.sponsors-general-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.sponsors-general-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	height: 33.594px;
+}
+
+.sponsors-general-name {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 33.6px;
+	color: #101828;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.24px;
+}
+
+.sponsors-badge {
+	background: #ff1a1a;
+	color: #ffffff;
+	padding: 4px 12px;
+	border-radius: 33554400px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	white-space: nowrap;
+}
+
+.sponsors-general-description {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 25.6px;
+	color: #364153;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.16px;
+}
+
+.sponsors-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	color: #ff1a1a;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	width: fit-content;
+}
+
+.sponsors-link:hover {
+	opacity: 0.8;
+}
+
+.sponsors-link-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+	line-height: 16px;
+}
+
+/* ============================================================================
+   Partners Grid
+   ============================================================================ */
+
+.sponsors-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 24px;
+	width: 100%;
+}
+
+.sponsors-partner-card {
+	background: #f9fafb;
+	border: 1px solid #e5e7eb;
+	border-radius: 16.4px;
+	padding: 25px;
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sponsors-partner-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.sponsors-partner-logo {
+	width: 64px;
+	height: 64px;
+	flex-shrink: 0;
+	background: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.sponsors-partner-emoji {
+	font-size: 36px;
+	line-height: 40px;
+	display: block;
+	height: 40px;
+	width: auto;
+	color: #0a0a0a;
+}
+
+.sponsors-partner-logo-image {
+	max-width: 90%;
+	max-height: 90%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.sponsors-partner-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.sponsors-partner-name {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 25.2px;
+	color: #101828;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.18px;
+}
+
+.sponsors-partner-category {
+	display: inline-block;
+	background: #e5e7eb;
+	color: #364153;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 16px;
+	width: fit-content;
+}
+
+.sponsors-partner-description {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 22.4px;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+	letter-spacing: -0.14px;
+}
+
+.sponsors-partner-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	color: #ff1a1a;
+	text-decoration: none;
+	transition: opacity 0.2s ease;
+	width: fit-content;
+}
+
+.sponsors-partner-link:hover {
+	opacity: 0.8;
+}
+
+.sponsors-partner-link-icon {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	font-size: 14px;
+	line-height: 14px;
+}
+
+/* ============================================================================
+   Responsive Design
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+	.sponsors-container {
+		padding: 0 16px;
+	}
+
+	.sponsors-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.sponsors-general-card {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.sponsors-general-content {
+		gap: 12px;
+	}
+
+	.sponsors-general-header {
+		justify-content: center;
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 768px) {
+	.sponsors-title {
+		font-size: 28px;
+		line-height: 33.6px;
+	}
+
+	.sponsors-header {
+		padding: 24px 0;
+	}
+
+	.sponsors-general-card {
+		padding: 20px;
+		border-radius: 12px;
+		gap: 16px;
+	}
+
+	.sponsors-general-logo {
+		width: 80px;
+		height: 80px;
+	}
+
+	.sponsors-logo-wrapper {
+		border-radius: 12px;
+	}
+
+	.sponsors-logo-emoji {
+		font-size: 48px;
+		line-height: 48px;
+		height: 48px;
+	}
+
+	.sponsors-general-name {
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	.sponsors-partner-card {
+		padding: 16px;
+		border-radius: 12px;
+	}
+
+	.sponsors-partner-logo {
+		width: 56px;
+		height: 56px;
+		border-radius: 8px;
+	}
+
+	.sponsors-partner-emoji {
+		font-size: 32px;
+		line-height: 36px;
+		height: 36px;
+	}
+
+	.sponsors-partner-name {
+		font-size: 16px;
+		line-height: 22.4px;
+	}
+
+	.sponsors-content {
+		gap: 24px;
+		padding-bottom: 24px;
+	}
+
+	.sponsors-section {
+		gap: 16px;
+	}
+}
+
+@media (max-width: 480px) {
+	.sponsors-container {
+		padding: 0 12px;
+	}
+
+	.sponsors-title {
+		font-size: 24px;
+		line-height: 28.8px;
+	}
+
+	.sponsors-header {
+		padding: 16px 0;
+	}
+
+	.sponsors-content {
+		gap: 20px;
+	}
+
+	.sponsors-section {
+		gap: 12px;
+	}
+
+	.sponsors-section-title {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
+	.sponsors-general-card {
+		padding: 16px;
+		gap: 12px;
+	}
+
+	.sponsors-general-name {
+		font-size: 18px;
+		line-height: 25.2px;
+	}
+
+	.sponsors-general-description {
+		font-size: 14px;
+		line-height: 22.4px;
+	}
+
+	.sponsors-link {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.sponsors-partner-card {
+		padding: 12px;
+	}
+
+	.sponsors-partner-name {
+		font-size: 15px;
+		line-height: 21px;
+	}
+
+	.sponsors-partner-description {
+		font-size: 13px;
+		line-height: 20.8px;
+	}
+}
+

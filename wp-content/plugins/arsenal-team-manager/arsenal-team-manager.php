@@ -49,6 +49,7 @@ class Arsenal_Team_Manager {
      * Инициализация хуков
      */
     private function init_hooks() {
+        add_action( 'admin_init', array( $this, 'handle_sponsor_form_submission' ) );
         add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
         add_action( 'after_setup_theme', array( $this, 'register_image_sizes' ) );
@@ -228,6 +229,36 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-adjustments',
             array( $this, 'render_adjustments_list' )
+        );
+        
+        // Подменю: Спонсоры и партнеры
+        add_submenu_page(
+            $parent_slug,
+            'Спонсоры и партнеры',
+            'Спонсоры и партнеры',
+            'manage_options',
+            'arsenal-sponsors',
+            array( $this, 'render_sponsors_list' )
+        );
+        
+        // Скрытая страница добавления спонсора (без пункта меню)
+        add_submenu_page(
+            '',
+            'Добавить спонсора',
+            'Добавить спонсора',
+            'manage_options',
+            'arsenal-sponsor-add',
+            array( $this, 'render_sponsor_add' )
+        );
+        
+        // Скрытая страница редактирования спонсора (без пункта меню)
+        add_submenu_page(
+            '',
+            'Редактировать спонсора',
+            'Редактировать спонсора',
+            'manage_options',
+            'arsenal-sponsor-edit',
+            array( $this, 'render_sponsor_edit' )
         );
         
         // Скрытая страница добавления стадиона (без пункта меню)
@@ -656,6 +687,89 @@ class Arsenal_Team_Manager {
     public function render_job_title_edit() {
         $staff_admin = new Arsenal_Staff_Admin();
         $staff_admin->render_job_title_edit();
+    }
+    
+    /**
+     * Спонсоры и партнеры
+     */
+    public function render_sponsors_list() {
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
+        $sponsors_admin = new Arsenal_Sponsors_Admin();
+        $sponsors_admin->render_sponsors_list();
+    }
+    
+    /**
+     * Добавление спонсора
+     */
+    public function render_sponsor_add() {
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
+        $sponsors_admin = new Arsenal_Sponsors_Admin();
+        $sponsors_admin->render_sponsor_form();
+    }
+    
+    /**
+     * Редактирование спонсора
+     */
+    public function render_sponsor_edit() {
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
+        $sponsors_admin = new Arsenal_Sponsors_Admin();
+        $sponsors_admin->render_sponsor_form();
+    }
+
+    /**
+     * Обработка отправки формы спонсора (admin_init - ПЕРЕД выводом контента!)
+     */
+    public function handle_sponsor_form_submission() {
+        // Проверяем, была ли отправлена форма спонсора
+        if ( ! isset( $_POST['save_sponsor'] ) ) {
+            return;
+        }
+
+        // Только на нужных страницах
+        if ( ! isset( $_GET['page'] ) || ( $_GET['page'] !== 'arsenal-sponsor-add' && $_GET['page'] !== 'arsenal-sponsor-edit' ) ) {
+            return;
+        }
+
+        // Проверка прав
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( 'У вас нет прав для доступа к этому разделу.' );
+        }
+
+        // Verify nonce
+        if ( ! isset( $_POST['sponsor_nonce'] ) || ! wp_verify_nonce( $_POST['sponsor_nonce'], 'save_sponsor' ) ) {
+            wp_die( 'Ошибка проверки безопасности.' );
+        }
+
+        require_once get_template_directory() . '/inc/class-arsenal-sponsors.php';
+
+        $sponsor_data = array(
+            'name'        => sanitize_text_field( $_POST['sponsor_name'] ?? '' ),
+            'description' => wp_kses_post( $_POST['sponsor_description'] ?? '' ),
+            'type'        => sanitize_text_field( $_POST['sponsor_type'] ?? 'partner' ),
+            'industry'    => sanitize_text_field( $_POST['sponsor_industry'] ?? '' ),
+            'logo_url'    => esc_url_raw( $_POST['sponsor_logo_url'] ?? '' ),
+            'website_url' => esc_url_raw( $_POST['sponsor_website_url'] ?? '' ),
+            'is_active'   => isset( $_POST['sponsor_is_active'] ) ? 1 : 0,
+            'order_index' => absint( $_POST['sponsor_order_index'] ?? 0 ),
+        );
+
+        if ( empty( $sponsor_data['name'] ) ) {
+            wp_die( 'Пожалуйста, заполните название спонсора.' );
+        }
+
+        // Проверяем - это редактирование или создание?
+        $is_edit = isset( $_GET['id'] ) ? true : false;
+        
+        if ( $is_edit ) {
+            $sponsor_id = absint( $_GET['id'] );
+            Arsenal_Sponsors::update_sponsor( $sponsor_id, $sponsor_data );
+        } else {
+            Arsenal_Sponsors::create_sponsor( $sponsor_data );
+        }
+
+        // РЕДИРЕКТ ПРОИСХОДИТ ДО ВСЕГО ОСТАЛЬНОГО ВЫВОДА!
+        wp_safe_redirect( add_query_arg( 'success', 1, admin_url( 'admin.php?page=arsenal-sponsors' ) ) );
+        exit;
     }
 }
 
