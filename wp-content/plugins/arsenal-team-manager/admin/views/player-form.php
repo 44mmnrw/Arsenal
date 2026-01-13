@@ -167,7 +167,7 @@ if ( ! $is_new ) {
                             <label for="birth_date">Дата рождения</label>
                             <input type="date" id="birth_date" name="birth_date" 
                                    value="<?php echo $player ? esc_attr( $player->birth_date ) : ''; ?>">
-                            <p class="description">Формат: ГГГГ-ММ-ДД</p>
+                            <p class="description">Формат: ДД-ММ-ГГГГ</p>
                         </div>
                         
                         <div class="form-group">
