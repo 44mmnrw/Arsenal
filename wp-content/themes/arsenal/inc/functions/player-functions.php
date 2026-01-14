@@ -13,7 +13,7 @@ function arsenal_get_player_data( $player_id ) {
 	// Игрок может быть идентифицирован по id (число) или player_id (строка)
 	// Пробуем по player_id сначала, потом по id
 	$player = $wpdb->get_row( $wpdb->prepare(
-		"SELECT p.id, p.player_id, p.full_name, p.first_name, p.last_name, p.position_id, p.birth_date, p.citizenship, p.height_cm, p.weight_kg, p.photo_url, p.shirt_number, p.biography, pos.name as position_name 
+		"SELECT p.id, p.player_id, p.full_name, p.first_name, p.last_name, p.position_id, p.birth_date, p.citizenship, p.height_cm, p.weight_kg, p.dominant_foot, p.photo_url, p.shirt_number, p.biography, pos.name as position_name 
 		 FROM {$wpdb->prefix}arsenal_players p 
 		 LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.position_id
 		 WHERE p.player_id = %s LIMIT 1",
@@ -23,7 +23,7 @@ function arsenal_get_player_data( $player_id ) {
 	// Если не найден по player_id, пробуем по числовому id
 	if ( ! $player && is_numeric( $player_id ) ) {
 		$player = $wpdb->get_row( $wpdb->prepare(
-			"SELECT p.id, p.player_id, p.full_name, p.first_name, p.last_name, p.position_id, p.birth_date, p.citizenship, p.height_cm, p.weight_kg, p.photo_url, p.shirt_number, p.biography, pos.name as position_name 
+			"SELECT p.id, p.player_id, p.full_name, p.first_name, p.last_name, p.position_id, p.birth_date, p.citizenship, p.height_cm, p.weight_kg, p.dominant_foot, p.photo_url, p.shirt_number, p.biography, pos.name as position_name 
 			 FROM {$wpdb->prefix}arsenal_players p 
 			 LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.position_id
 			 WHERE p.id = %d LIMIT 1",

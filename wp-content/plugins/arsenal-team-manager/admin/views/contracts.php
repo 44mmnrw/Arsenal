@@ -109,7 +109,7 @@ $contracts = $wpdb->get_results( "
 
 // Получить список доступных игроков
 $players = $wpdb->get_results( "
-    SELECT player_id, first_name, last_name 
+    SELECT player_id, first_name, last_name, shirt_number 
     FROM wp_arsenal_players 
     ORDER BY last_name, first_name
 " );
@@ -233,7 +233,11 @@ $squads = $wpdb->get_results( "
                     <option value="">-- Выберите игрока --</option>
                     <?php foreach ( $players as $player ): ?>
                         <option value="<?php echo esc_attr( $player->player_id ); ?>">
-                            <?php echo esc_html( ( $player->last_name ?? '' ) . ' ' . ( $player->first_name ?? '' ) ); ?>
+                            <?php 
+                                $player_name = ( $player->last_name ?? '' ) . ' ' . ( $player->first_name ?? '' );
+                                $shirt_number = isset( $player->shirt_number ) && $player->shirt_number ? ' #' . intval( $player->shirt_number ) : '';
+                                echo esc_html( $player_name . $shirt_number );
+                            ?>
                         </option>
                     <?php endforeach; ?>
                 </select>

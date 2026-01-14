@@ -188,12 +188,19 @@ if ( ! empty( $available_seasons ) ) {
 							</div>
 						<?php endif; ?>
 						
+						<?php if ( ! empty( $player->dominant_foot ) ) : ?>
+							<div class="stat-box">
+								<div class="stat-box-label">Ведущая нога</div>
+								<div class="stat-box-value"><?php echo esc_html( ucfirst( $player->dominant_foot ) ); ?></div>
+							</div>
+						<?php endif; ?>
+						
 						<div class="stat-box">
 							<div class="stat-box-label">Команда</div>
 							<div class="stat-box-value"><?php echo esc_html( $squad_type ); ?></div>
 						</div>
 						
-						<div class="stat-box full-width">
+						<div class="stat-box">
 							<div class="stat-box-label">Гражданство</div>
 							<div class="stat-box-value"><?php echo esc_html( $citizenship ); ?></div>
 						</div>

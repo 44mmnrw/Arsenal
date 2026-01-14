@@ -25,60 +25,61 @@ if ( empty( $sponsors ) ) {
 ?>
 
 <section class="sponsors-section">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="section-title"><?php esc_html_e( 'Наши спонсоры', 'arsenal' ); ?></h2>
-            <a href="<?php echo esc_url( home_url( '/sponsors/' ) ); ?>" class="section-link">
-                <?php esc_html_e( 'Все спонсоры', 'arsenal' ); ?> <?php arsenal_icon( 'icon-arrow-right' ); ?>
-            </a>
-        </div>
+	<div class="container">
+		<div class="section-header">
+			<h2 class="section-title"><?php esc_html_e( 'Наши партнёры', 'arsenal' ); ?></h2>
+			<a href="<?php echo esc_url( home_url( '/sponsors/' ) ); ?>" class="section-link">
+				<?php esc_html_e( 'Все партнёры', 'arsenal' ); ?>
+				<?php arsenal_icon( 'icon-arrow-right', 14, 14 ); ?>
+			</a>
+		</div>
 
-        <div class="sponsors-carousel-wrapper">
-            <div class="sponsors-carousel" id="sponsors-carousel">
-                <?php foreach ( $sponsors as $sponsor ) : ?>
-                    <div class="sponsor-slide">
-                        <?php if ( ! empty( $sponsor->website_url ) ) : ?>
-                        <a 
-                            href="<?php echo esc_url( $sponsor->website_url ); ?>" 
-                            class="sponsor-card" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            title="<?php echo esc_attr( $sponsor->name ); ?>"
-                        >
-                            <?php if ( ! empty( $sponsor->logo_url ) ) : ?>
-                                <img 
-                                    src="<?php echo esc_url( $sponsor->logo_url ); ?>" 
-                                    alt="<?php echo esc_attr( $sponsor->name ); ?>" 
-                                    class="sponsor-logo"
-                                    loading="lazy"
-                                >
-                            <?php else : ?>
-                                <div class="sponsor-placeholder">
-                                    <span><?php echo esc_html( $sponsor->name ); ?></span>
-                                </div>
-                            <?php endif; ?>
-                        </a>
-                        <?php endif; ?>
-                        <?php if ( empty( $sponsor->website_url ) ) : ?>
-                        <div class="sponsor-card sponsor-card--no-link">
-                            <?php if ( ! empty( $sponsor->logo_url ) ) : ?>
-                                <img 
-                                    src="<?php echo esc_url( $sponsor->logo_url ); ?>" 
-                                    alt="<?php echo esc_attr( $sponsor->name ); ?>" 
-                                    class="sponsor-logo"
-                                    loading="lazy"
-                                >
-                            <?php else : ?>
-                                <div class="sponsor-placeholder">
-                                    <span><?php echo esc_html( $sponsor->name ); ?></span>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
+		<div class="sponsors-carousel-wrapper">
+			<div class="sponsors-carousel" id="sponsors-carousel">
+				<?php foreach ( $sponsors as $sponsor ) : ?>
+					<div class="sponsor-slide">
+						<?php if ( ! empty( $sponsor->website_url ) ) : ?>
+						<a 
+							href="<?php echo esc_url( $sponsor->website_url ); ?>" 
+							class="sponsor-card" 
+							target="_blank" 
+							rel="noopener noreferrer"
+							title="<?php echo esc_attr( $sponsor->name ); ?>"
+						>
+							<?php if ( ! empty( $sponsor->logo_url ) ) : ?>
+								<img 
+									src="<?php echo esc_url( $sponsor->logo_url ); ?>" 
+									alt="<?php echo esc_attr( $sponsor->name ); ?>" 
+									class="sponsor-logo"
+									loading="lazy"
+								>
+							<?php else : ?>
+								<div class="sponsor-placeholder">
+									<span><?php echo esc_html( $sponsor->name ); ?></span>
+								</div>
+							<?php endif; ?>
+						</a>
+						<?php endif; ?>
+						<?php if ( empty( $sponsor->website_url ) ) : ?>
+						<div class="sponsor-card sponsor-card--no-link">
+							<?php if ( ! empty( $sponsor->logo_url ) ) : ?>
+								<img 
+									src="<?php echo esc_url( $sponsor->logo_url ); ?>" 
+									alt="<?php echo esc_attr( $sponsor->name ); ?>" 
+									class="sponsor-logo"
+									loading="lazy"
+								>
+							<?php else : ?>
+								<div class="sponsor-placeholder">
+									<span><?php echo esc_html( $sponsor->name ); ?></span>
+								</div>
+							<?php endif; ?>
+						</div>
+						<?php endif; ?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
 </section>
 

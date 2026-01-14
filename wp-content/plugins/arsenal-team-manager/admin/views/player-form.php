@@ -35,11 +35,12 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
         'citizenship' => sanitize_text_field( $_POST['citizenship'] ),
         'height_cm' => ! empty( $_POST['height'] ) ? intval( $_POST['height'] ) : 0,
         'weight_kg' => ! empty( $_POST['weight'] ) ? intval( $_POST['weight'] ) : 0,
+        'dominant_foot' => sanitize_text_field( $_POST['dominant_foot'] ?? '' ),
         'photo_url' => ! empty( $_POST['photo_url'] ) ? get_relative_path( $_POST['photo_url'] ) : '',
         'biography' => isset( $_POST['biography'] ) ? wp_kses_post( $_POST['biography'] ) : null
     );
     
-    $format = array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s' );
+    $format = array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s' );
     
     if ( $is_new ) {
         // Для новых игроков добавляем player_id
@@ -191,6 +192,17 @@ if ( ! $is_new ) {
                                    value="<?php echo $player ? esc_attr( $player->weight_kg ) : ''; ?>">
                         </div>
                     </div>
+                    
+                    <div class="form-row full">
+                        <div class="form-group">
+                            <label for="dominant_foot">Ведущая нога</label>
+                            <select id="dominant_foot" name="dominant_foot">
+                                <option value="">-- Не указано --</option>
+                                <option value="левая" <?php echo $player && $player->dominant_foot === 'левая' ? 'selected' : ''; ?>>левая</option>
+                                <option value="правая" <?php echo $player && $player->dominant_foot === 'правая' ? 'selected' : ''; ?>>правая</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Биография -->
@@ -200,7 +212,7 @@ if ( ! $is_new ) {
                     <div class="form-group">
                         <label for="biography">Биография игрока</label>
                         <?php
-                        $biography_content = $player ? $player->biography : '';
+                        $biography_content = $player ? ( $player->biography ?? '' ) : '';
                         wp_editor( $biography_content, 'biography', array(
                             'textarea_name' => 'biography',
                             'textarea_rows' => 8,

@@ -240,7 +240,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					if (!toggleBtn) {
 						toggleBtn = document.createElement('button');
 						toggleBtn.className = 'toggle-lineup-btn';
-						toggleBtn.innerHTML = '<span class="toggle-text">Показать всех</span><svg class="toggle-icon" width="48" height="48"><use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use></svg>';
+						toggleBtn.innerHTML = '<span class="toggle-text">Показать всех</span><svg class="toggle-icon" style="width: 1rem; height: 1rem; display: inline-block; vertical-align: -0.15em;"><use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use></svg>';
 						body.parentNode.appendChild(toggleBtn);
 					}
 					
@@ -843,7 +843,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					?>
 				</div>
 				<button class="toggle-events-btn" data-toggle-events>
-					<div class="toggle-content"><span class="toggle-text">Показать все события</span><svg class="toggle-icon" width="24" height="24"><use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use></svg></div>
+					<div class="toggle-content"><span class="toggle-text">Показать все события</span><svg class="toggle-icon" style="width: 1rem; height: 1rem; display: inline-block; vertical-align: -0.15em;"><use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg?v=' . wp_get_theme()->get( 'Version' ) ); ?>#icon-arrow-down"></use></svg></div>
 				</button>
 			</div>
 		</section>

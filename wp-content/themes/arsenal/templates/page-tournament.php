@@ -18,8 +18,9 @@ wp_enqueue_style( 'arsenal-tournament', get_template_directory_uri() . '/assets/
 
 global $wpdb;
 
-// Получаем активный год сезона
+// Получаем активный год сезона из настроек (управляется в дашборде плагина)
 $active_season_year = get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) );
+$active_season_id = get_option( 'arsenal_active_season_id', null );
 ?>
 
 <main id="main" class="site-main tournament-page">

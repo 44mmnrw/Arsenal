@@ -8,8 +8,8 @@
 
 global $wpdb;
 
-// Получаем ID турнира из параметров URL
-$tournament_id = isset($_GET['tournament_id']) ? sanitize_text_field($_GET['tournament_id']) : 'E4DE8DC0'; // Кубок Беларуси
+// ID турнира Кубка Беларуси
+$tournament_id = 'E4DE8DC0';
 
 // Получаем последний доступный сезон для этого турнира
 $season_id = isset($_GET['season_id']) ? sanitize_text_field($_GET['season_id']) : '';
