@@ -30,6 +30,11 @@ if ( $staff_id ) {
 if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_staff'] ) ) {
     check_admin_referer( 'arsenal_staff_nonce' );
 
+    // Обработка achievements: разбить многострочный текст и сохранить как JSON
+    $achievements_input = sanitize_textarea_field( $_POST['achievements'] ?? '' );
+    $achievements_array = array_filter( array_map( 'trim', explode( "\n", $achievements_input ) ) );
+    $achievements_json = ! empty( $achievements_array ) ? wp_json_encode( $achievements_array ) : null;
+
     $data = array(
         'first_name' => sanitize_text_field( $_POST['first_name'] ?? '' ),
         'second_name' => sanitize_text_field( $_POST['second_name'] ?? '' ),
@@ -42,6 +47,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_staff'] ) ) {
         'email' => sanitize_email( $_POST['email'] ?? '' ),
         'photo_url' => ! empty( $_POST['photo_url'] ) ? esc_url_raw( $_POST['photo_url'] ) : '',
         'bio' => sanitize_textarea_field( $_POST['bio'] ?? '' ),
+        'experience' => ! empty( $_POST['experience'] ) ? intval( $_POST['experience'] ) : null,
+        'citizenship' => sanitize_text_field( $_POST['citizenship'] ?? '' ),
+        'achievements' => $achievements_json,
     );
 
     // Валидация: проверить соответствие должности и отдела
@@ -192,6 +200,27 @@ $departments = Arsenal_Staff_Manager::get_departments( true );
             <div class="form-group">
                 <label for="bio">Биография</label>
                 <textarea id="bio" name="bio" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><?php echo esc_textarea( $staff->bio ?? '' ); ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Опыт работы (лет)</label>
+                <input type="number" id="experience" name="experience" min="0" max="100"
+                       value="<?php echo esc_attr( $staff->experience ?? '' ); ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="citizenship">Гражданство</label>
+                <input type="text" id="citizenship" name="citizenship" placeholder="Например: Беларусь"
+                       value="<?php echo esc_attr( $staff->citizenship ?? '' ); ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="achievements">Достижения <span style="color: #999; font-size: 12px;">(по одному на строку)</span></label>
+                <textarea id="achievements" name="achievements" rows="5" placeholder="Чемпион Беларуси&#10;Лучший тренер сезона&#10;3 Кубка Беларуси"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><?php 
+                    $achievements_array = json_decode( $staff->achievements ?? 'null', true );
+                    echo esc_textarea( is_array( $achievements_array ) ? implode( "\n", $achievements_array ) : '' ); 
+                ?></textarea>
             </div>
 
             <h3>Контракт</h3>

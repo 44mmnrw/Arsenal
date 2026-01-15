@@ -298,6 +298,21 @@ class Arsenal_Staff_Manager {
 			$format[] = '%s';
 		}
 
+		if ( ! empty( $data['experience'] ) ) {
+			$insert['experience'] = (int) $data['experience'];
+			$format[] = '%d';
+		}
+
+		if ( ! empty( $data['citizenship'] ) ) {
+			$insert['citizenship'] = sanitize_text_field( $data['citizenship'] );
+			$format[] = '%s';
+		}
+
+		if ( ! empty( $data['achievements'] ) ) {
+			$insert['achievements'] = $data['achievements']; // Уже в JSON формате
+			$format[] = '%s';
+		}
+
 		$result = $wpdb->insert(
 			$wpdb->prefix . 'arsenal_staff',
 			$insert,
@@ -372,6 +387,21 @@ class Arsenal_Staff_Manager {
 
 		if ( isset( $data['bio'] ) ) {
 			$update['bio'] = sanitize_textarea_field( $data['bio'] );
+			$format[] = '%s';
+		}
+
+		if ( isset( $data['experience'] ) ) {
+			$update['experience'] = empty( $data['experience'] ) ? null : (int) $data['experience'];
+			$format[] = null === $update['experience'] ? '%s' : '%d';
+		}
+
+		if ( isset( $data['citizenship'] ) ) {
+			$update['citizenship'] = sanitize_text_field( $data['citizenship'] ?? '' );
+			$format[] = '%s';
+		}
+
+		if ( isset( $data['achievements'] ) ) {
+			$update['achievements'] = $data['achievements']; // Уже в JSON формате
 			$format[] = '%s';
 		}
 

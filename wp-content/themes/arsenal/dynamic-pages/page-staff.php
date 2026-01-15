@@ -78,18 +78,21 @@ if ( $staff ) {
 		$staff_position = $job_title ? $job_title->job_title_name : '';
 	}
 	$staff_birthdate = $staff->birth_date ?: '';
-	$staff_experience = '';
+	$staff_experience = $staff->experience ?: '';
 	$staff_photo_url = ! empty( $staff->photo_url ) ? $staff->photo_url : '';
 	$staff_photo_src = function_exists( 'arsenal_convert_logo_url' ) ? arsenal_convert_logo_url( $staff_photo_url ) : $staff_photo_url;
 	$staff_bio = ! empty( $staff->bio ) ? $staff->bio : '';
-	$staff_achievements = array(); // Можно загрузить из post_meta если нужно
+	// Загружаем achievements из JSON поля
+	$staff_achievements = array();
+	if ( ! empty( $staff->achievements ) ) {
+		$achievements_json = json_decode( $staff->achievements, true );
+		$staff_achievements = is_array( $achievements_json ) ? $achievements_json : array();
+	}
 	$staff_career = array(); // Можно загрузить из post_meta если нужно
 	$staff_contract_start = ! empty( $staff->contract_start ) ? $staff->contract_start : '';
-	$staff_nationality = '';
-	if ( property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
+	$staff_nationality = ! empty( $staff->citizenship ) ? $staff->citizenship : '';
+	if ( ! $staff_nationality && property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
 		$staff_nationality = $staff->nationality;
-	} elseif ( property_exists( $staff, 'citizenship' ) && ! empty( $staff->citizenship ) ) {
-		$staff_nationality = $staff->citizenship;
 	}
 } else {
 	// Fallback: получить данные из post_meta (старая система)
@@ -156,10 +159,9 @@ if ( empty( $staff_nationality ) ) {
 		<div class="player-hero__content player-container">
 			<div class="player-hero__inner">
 				<!-- Main Info Container -->
-				<div class="player-hero__main">
+				<div class="staff-hero__main">
 					<!-- Photo -->
-					<div class="staff-photo-wrapper">
-						<div class="staff-photo">
+					<div class="staff-photo-wrapper">						
 							<?php
 							// ВАЖНО: если сотрудник найден в БД, фото берем строго из wp_arsenal_staff.photo_url
 							if ( $staff && ! empty( $staff_photo_src ) ) {
@@ -172,10 +174,8 @@ if ( empty( $staff_nationality ) ) {
 							} else {
 								echo '<div class="staff-photo-placeholder">Фото не загружено</div>';
 							}
-							?>
-						</div>
+							?>						
 					</div>
-
 					<!-- Info Block -->
 					<div class="staff-info-block">
 						<!-- Position Badge -->

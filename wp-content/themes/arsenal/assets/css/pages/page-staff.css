@@ -58,12 +58,13 @@
 	box-sizing: border-box;
 }
 
-.player-hero__main {
-	margin-top: 40px;
+.staff-hero__main {
 	display: grid;
 	grid-template-columns: 32% 68%;
-	gap: 64px;
-	align-items: center;
+	gap: 6rem;
+	justify-content: space-between;
+	align-items: stretch;
+	min-height: 430px;
 }
 /*---------------------------------------------------
 Обёртка для фото: фиксированный квадрат с обводкой
@@ -83,17 +84,7 @@
 	box-shadow: 0 30px 90px #4d4d4d4d;
 }
 
-.staff-photo {
-	position: relative;
-	z-index: 1;
-	width: 100%;
-	height: 100%;
-	border-radius: 16px;
-	overflow: hidden;
-	border: 8px solid rgba(255, 255, 255, 0.2);
-	background: rgba(255, 255, 255, 0.05);
-	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
+
 
 .staff-photo-img {
 	height: 100%;
@@ -120,7 +111,7 @@
 
 .staff-info-block {
 	color: #ffffff;
-	padding-top: 26px;
+	padding-top: 8rem;
 }
 
 .staff-position-badge {
@@ -146,6 +137,7 @@
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 24px;
+	padding-top: 4rem;
 }
 
 .staff-detail-item {
@@ -466,11 +458,11 @@
 }
 
 @media (max-width: 900px) {
-	.staff-hero__inner {
+	.player-hero__inner {
 		padding: 24px 24px 0;
 	}
 
-	.player-hero__main {
+	.staff-hero__main {
 		grid-template-columns: repeat(1, minmax(0, 1fr));
 		gap: 24px;
 	}
@@ -536,11 +528,11 @@
 }
 
 @media (max-width: 540px) {
-	.staff-hero__inner {
+	.player-hero__inner {
 		padding: 20px 16px 0;
 	}
 
-	.player-hero__main {
+	.staff-hero__main {
 		gap: 20px;
 	}
 
