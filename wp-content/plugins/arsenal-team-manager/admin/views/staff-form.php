@@ -35,6 +35,24 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_staff'] ) ) {
     $achievements_array = array_filter( array_map( 'trim', explode( "\n", $achievements_input ) ) );
     $achievements_json = ! empty( $achievements_array ) ? wp_json_encode( $achievements_array ) : null;
 
+    // Обработка career_positions: парсить многострочный текст в структурированный JSON
+    $career_input = sanitize_textarea_field( $_POST['career_positions_text'] ?? '' );
+    $career_positions = array();
+    if ( ! empty( $career_input ) ) {
+        $lines = array_filter( array_map( 'trim', explode( "\n", $career_input ) ) );
+        foreach ( $lines as $line ) {
+            $parts = array_map( 'trim', explode( '|', $line ) );
+            if ( count( $parts ) >= 1 && ! empty( $parts[0] ) ) {
+                $career_positions[] = array(
+                    'title' => $parts[0] ?? '',
+                    'organization' => $parts[1] ?? '',
+                    'experience' => $parts[2] ?? '',
+                );
+            }
+        }
+    }
+    $career_positions_json = ! empty( $career_positions ) ? wp_json_encode( $career_positions ) : null;
+
     $data = array(
         'first_name' => sanitize_text_field( $_POST['first_name'] ?? '' ),
         'second_name' => sanitize_text_field( $_POST['second_name'] ?? '' ),
@@ -49,7 +67,9 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_staff'] ) ) {
         'bio' => sanitize_textarea_field( $_POST['bio'] ?? '' ),
         'experience' => ! empty( $_POST['experience'] ) ? intval( $_POST['experience'] ) : null,
         'citizenship' => sanitize_text_field( $_POST['citizenship'] ?? '' ),
+        'interesting_fact' => sanitize_textarea_field( $_POST['interesting_fact'] ?? '' ),
         'achievements' => $achievements_json,
+        'career_positions' => $career_positions_json,
     );
 
     // Валидация: проверить соответствие должности и отдела
@@ -215,11 +235,37 @@ $departments = Arsenal_Staff_Manager::get_departments( true );
             </div>
 
             <div class="form-group">
+                <label for="interesting_fact">Интересный факт</label>
+                <textarea id="interesting_fact" name="interesting_fact" rows="3" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><?php echo esc_textarea( $staff->interesting_fact ?? '' ); ?></textarea>
+            </div>
+
+            <div class="form-group">
                 <label for="achievements">Достижения <span style="color: #999; font-size: 12px;">(по одному на строку)</span></label>
                 <textarea id="achievements" name="achievements" rows="5" placeholder="Чемпион Беларуси&#10;Лучший тренер сезона&#10;3 Кубка Беларуси"
                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><?php 
                     $achievements_array = json_decode( $staff->achievements ?? 'null', true );
                     echo esc_textarea( is_array( $achievements_array ) ? implode( "\n", $achievements_array ) : '' ); 
+                ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="career_positions_text">История должностей <span style="color: #999; font-size: 12px;">(Должность | Организация | Опыт/Период)</span></label>
+                <textarea id="career_positions_text" name="career_positions_text" rows="5" placeholder="Главный тренер | ФК Арсенал Дзержинск | 2020-2024&#10;Главный тренер | ФК Динамо | 2015-2020"
+                          style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"><?php 
+                    $career_positions = array();
+                    if ( ! empty( $staff->career_positions ) ) {
+                        $career_json = json_decode( $staff->career_positions, true );
+                        $career_positions = is_array( $career_json ) ? $career_json : array();
+                    }
+                    $career_lines = array();
+                    foreach ( $career_positions as $position ) {
+                        $career_lines[] = implode( ' | ', array(
+                            $position['title'] ?? '',
+                            $position['organization'] ?? '',
+                            $position['experience'] ?? '',
+                        ));
+                    }
+                    echo esc_textarea( implode( "\n", $career_lines ) );
                 ?></textarea>
             </div>
 

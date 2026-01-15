@@ -308,8 +308,18 @@ class Arsenal_Staff_Manager {
 			$format[] = '%s';
 		}
 
+		if ( ! empty( $data['interesting_fact'] ) ) {
+			$insert['interesting_fact'] = sanitize_textarea_field( $data['interesting_fact'] );
+			$format[] = '%s';
+		}
+
 		if ( ! empty( $data['achievements'] ) ) {
 			$insert['achievements'] = $data['achievements']; // Уже в JSON формате
+			$format[] = '%s';
+		}
+
+		if ( ! empty( $data['career_positions'] ) ) {
+			$insert['career_positions'] = $data['career_positions']; // Уже в JSON формате
 			$format[] = '%s';
 		}
 
@@ -400,8 +410,18 @@ class Arsenal_Staff_Manager {
 			$format[] = '%s';
 		}
 
+		if ( isset( $data['interesting_fact'] ) ) {
+			$update['interesting_fact'] = sanitize_textarea_field( $data['interesting_fact'] ?? '' );
+			$format[] = '%s';
+		}
+
 		if ( isset( $data['achievements'] ) ) {
 			$update['achievements'] = $data['achievements']; // Уже в JSON формате
+			$format[] = '%s';
+		}
+
+		if ( isset( $data['career_positions'] ) ) {
+			$update['career_positions'] = $data['career_positions']; // Уже в JSON формате
 			$format[] = '%s';
 		}
 

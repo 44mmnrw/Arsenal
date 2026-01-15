@@ -88,9 +88,17 @@ if ( $staff ) {
 		$achievements_json = json_decode( $staff->achievements, true );
 		$staff_achievements = is_array( $achievements_json ) ? $achievements_json : array();
 	}
-	$staff_career = array(); // Можно загрузить из post_meta если нужно
+	
+	// Загружаем career_positions из JSON поля
+	$staff_career = array();
+	if ( ! empty( $staff->career_positions ) ) {
+		$career_json = json_decode( $staff->career_positions, true );
+		$staff_career = is_array( $career_json ) ? $career_json : array();
+	}
+	
 	$staff_contract_start = ! empty( $staff->contract_start ) ? $staff->contract_start : '';
 	$staff_nationality = ! empty( $staff->citizenship ) ? $staff->citizenship : '';
+	$staff_interesting_fact = ! empty( $staff->interesting_fact ) ? $staff->interesting_fact : '';
 	if ( ! $staff_nationality && property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
 		$staff_nationality = $staff->nationality;
 	}
@@ -307,7 +315,7 @@ if ( empty( $staff_nationality ) ) {
 				<div class="staff-section__content staff-career">
 					<?php
 					if ( ! empty( $staff_career ) && is_array( $staff_career ) ) {
-						foreach ( $staff_career as $job ) {
+						foreach ( $staff_career as $position ) {
 							?>
 							<div class="staff-career-item">
 								<div class="staff-career-icon">
@@ -317,13 +325,13 @@ if ( empty( $staff_nationality ) ) {
 								</div>
 								<div class="staff-career-info">
 									<h4 class="staff-career-title">
-										<?php echo esc_html( isset( $job['title'] ) ? $job['title'] : '' ); ?>
+										<?php echo esc_html( $position['title'] ?? '' ); ?>
 									</h4>
 									<p class="staff-career-club">
-										<?php echo esc_html( isset( $job['club'] ) ? $job['club'] : '' ); ?>
+										<?php echo esc_html( $position['organization'] ?? '' ); ?>
 									</p>
 									<p class="staff-career-period">
-										<?php echo esc_html( isset( $job['period'] ) ? $job['period'] : '' ); ?>
+										<?php echo esc_html( $position['experience'] ?? '' ); ?>
 									</p>
 								</div>
 							</div>
@@ -383,10 +391,7 @@ if ( empty( $staff_nationality ) ) {
 					</div>
 					<h3 class="staff-fact-title">Интересный факт</h3>
 					<p class="staff-fact-text">
-						<?php
-						$fact = get_post_meta( $post_id, '_staff_interesting_fact', true );
-						echo esc_html( $fact ?: 'Чемпион второй лиги 2022' );
-						?>
+						<?php echo esc_html( $staff_interesting_fact ?: 'Интересный факт не указан' ); ?>
 					</p>
 				</div>
 			</aside>
