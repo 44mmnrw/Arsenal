@@ -158,16 +158,40 @@ class Arsenal_Match_Manager {
             }
         }
         
+        // Генерация match_id на основе названий команд и даты матча
+        $home_team_id = sanitize_text_field( $data['home_team_id'] );
+        $away_team_id = sanitize_text_field( $data['away_team_id'] );
+        $match_date = sanitize_text_field( $data['match_date'] );
+        
+        // Получить названия команд
+        $home_team = $wpdb->get_row( $wpdb->prepare(
+            "SELECT name FROM {$wpdb->prefix}arsenal_teams WHERE team_id = %s",
+            $home_team_id
+        ) );
+        $away_team = $wpdb->get_row( $wpdb->prepare(
+            "SELECT name FROM {$wpdb->prefix}arsenal_teams WHERE team_id = %s",
+            $away_team_id
+        ) );
+        
+        $home_name = $home_team ? $home_team->name : 'HOME';
+        $away_name = $away_team ? $away_team->name : 'AWAY';
+        
+        // Генерируем match_id как хеш из: home_team_name + away_team_name + match_date
+        $match_id_source = strtoupper( str_replace( ' ', '', substr( $home_name, 0, 3 ) ) ) . 
+                          strtoupper( str_replace( ' ', '', substr( $away_name, 0, 3 ) ) ) . 
+                          str_replace( '-', '', $match_date );
+        $match_id = strtoupper( substr( md5( $match_id_source ), 0, 8 ) );
+        
         // Подготовка данных
         $insert_data = array(
-            'match_id' => null, // Будет сгенерирован триггером БД
+            'match_id' => $match_id,
             'league_id' => ! empty( $data['league_id'] ) ? sanitize_text_field( $data['league_id'] ) : null,
             'season_id' => ! empty( $data['season_id'] ) ? sanitize_text_field( $data['season_id'] ) : null,
             'tournament_id' => sanitize_text_field( $data['tournament_id'] ),
-            'match_date' => sanitize_text_field( $data['match_date'] ),
+            'match_date' => $match_date,
             'match_time' => ! empty( $data['match_time'] ) ? sanitize_text_field( $data['match_time'] ) : null,
-            'home_team_id' => sanitize_text_field( $data['home_team_id'] ),
-            'away_team_id' => sanitize_text_field( $data['away_team_id'] ),
+            'home_team_id' => $home_team_id,
+            'away_team_id' => $away_team_id,
             'home_score' => isset( $data['home_score'] ) ? intval( $data['home_score'] ) : null,
             'away_score' => isset( $data['away_score'] ) ? intval( $data['away_score'] ) : null,
             'status' => sanitize_text_field( $data['status'] ?? 'NS' ),

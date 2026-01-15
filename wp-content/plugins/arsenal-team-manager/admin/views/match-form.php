@@ -20,8 +20,22 @@ $form_action = $is_edit ? 'arsenal_update_match' : 'arsenal_create_match';
     <!-- Сообщения об ошибке -->
     <?php if ( isset( $_GET['error'] ) && $_GET['error'] == 1 ) : ?>
         <div class="notice notice-error is-dismissible">
-            <p><strong>Произошла ошибка при сохранении матча!</strong></p>
-            <p>Убедитесь, что заполнены все обязательные поля, особенно <strong>Стадион</strong>.</p>
+            <p><strong>⚠️ Ошибка при сохранении матча!</strong></p>
+            <p>Заполните все обязательные поля:</p>
+            <ul>
+                <?php if ( ! empty( $_GET['missing'] ) ) : 
+                    $missing_fields = explode( ', ', sanitize_text_field( $_GET['missing'] ) );
+                    foreach ( $missing_fields as $field ) : ?>
+                        <li><strong><?php echo esc_html( $field ); ?></strong></li>
+                    <?php endforeach;
+                else: ?>
+                    <li><strong>Дата матча</strong></li>
+                    <li><strong>Домашняя команда</strong></li>
+                    <li><strong>Гостевая команда</strong></li>
+                    <li><strong>Турнир</strong></li>
+                    <li><strong>Стадион</strong></li>
+                <?php endif; ?>
+            </ul>
             <button type="button" class="notice-dismiss"><span class="screen-reader-text">Закрыть уведомление</span></button>
         </div>
     <?php endif; ?>

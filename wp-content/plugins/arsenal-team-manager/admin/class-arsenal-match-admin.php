@@ -149,8 +149,27 @@ class Arsenal_Match_Admin {
         }
         
         // Валидация обязательных полей
+        $validation_errors = array();
+        
+        if ( empty( $_POST['match_date'] ) ) {
+            $validation_errors[] = 'Дата матча';
+        }
+        if ( empty( $_POST['home_team_id'] ) ) {
+            $validation_errors[] = 'Домашняя команда';
+        }
+        if ( empty( $_POST['away_team_id'] ) ) {
+            $validation_errors[] = 'Гостевая команда';
+        }
+        if ( empty( $_POST['tournament_id'] ) ) {
+            $validation_errors[] = 'Турнир';
+        }
         if ( empty( $_POST['stadium_id'] ) ) {
-            wp_redirect( admin_url( 'admin.php?page=arsenal-match-add&error=1' ) );
+            $validation_errors[] = 'Стадион';
+        }
+        
+        if ( ! empty( $validation_errors ) ) {
+            $error_msg = implode( ', ', $validation_errors );
+            wp_redirect( admin_url( 'admin.php?page=arsenal-match-add&error=1&missing=' . urlencode( $error_msg ) ) );
             exit;
         }
         
@@ -214,8 +233,27 @@ class Arsenal_Match_Admin {
         }
         
         // Валидация обязательных полей
+        $validation_errors = array();
+        
+        if ( empty( $_POST['match_date'] ) ) {
+            $validation_errors[] = 'Дата матча';
+        }
+        if ( empty( $_POST['home_team_id'] ) ) {
+            $validation_errors[] = 'Домашняя команда';
+        }
+        if ( empty( $_POST['away_team_id'] ) ) {
+            $validation_errors[] = 'Гостевая команда';
+        }
+        if ( empty( $_POST['tournament_id'] ) ) {
+            $validation_errors[] = 'Турнир';
+        }
         if ( empty( $_POST['stadium_id'] ) ) {
-            wp_redirect( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match_id . '&error=1' ) );
+            $validation_errors[] = 'Стадион';
+        }
+        
+        if ( ! empty( $validation_errors ) ) {
+            $error_msg = implode( ', ', $validation_errors );
+            wp_redirect( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match_id . '&error=1&missing=' . urlencode( $error_msg ) ) );
             exit;
         }
         
