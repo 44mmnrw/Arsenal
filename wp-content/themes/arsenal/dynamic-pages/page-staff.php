@@ -92,6 +92,13 @@ if ( $staff ) {
 	if ( ! $staff_nationality && property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
 		$staff_nationality = $staff->nationality;
 	}
+	
+	// Применяем склонение к experience если это число
+	if ( ! empty( $staff_experience ) && is_numeric( $staff_experience ) ) {
+		if ( function_exists( 'arsenal_pluralize_years' ) ) {
+			$staff_experience = arsenal_pluralize_years( (int) $staff_experience );
+		}
+	}
 }
 
 // Форматирование даты рождения
@@ -99,7 +106,7 @@ $staff_birthdate_display = 'Не указано';
 if ( ! empty( $staff_birthdate ) ) {
 	$birth_timestamp = strtotime( $staff_birthdate );
 	if ( $birth_timestamp ) {
-		$staff_birthdate_display = wp_date( 'j F Y', $birth_timestamp );
+		$staff_birthdate_display = date_i18n( 'j F Y', $birth_timestamp );
 	} else {
 		$staff_birthdate_display = $staff_birthdate;
 	}
@@ -177,7 +184,7 @@ if ( empty( $staff_nationality ) ) {
 							<div class="staff-detail-item">
 								<span class="staff-detail-label">Дата рождения</span>
 								<span class="staff-detail-value">
-									<?php echo esc_html( $staff_birthdate ?: 'Не указано' ); ?>
+									<?php echo esc_html( $staff_birthdate_display ?: 'Не указано' ); ?>
 								</span>
 							</div>
 

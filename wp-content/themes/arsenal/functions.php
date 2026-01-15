@@ -216,18 +216,12 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 	// Стили страницы тренерского штаба (для страницы Тренеры)
 	if ( is_page_template( 'templates/page-coaches-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
 		wp_enqueue_style(
-			'arsenal-coaches',
-				ARSENAL_THEME_URI . '/assets/css/players-grid.css',
-				array( 'arsenal-footer' ),
-				ARSENAL_VERSION
-			);
-			wp_enqueue_style(
-				'arsenal-page-coaches',
-				ARSENAL_THEME_URI . '/assets/css/pages/page-coaches-grid.css',
-				array( 'arsenal-coaches' ),
-				ARSENAL_VERSION
-			);
-		}
+			'arsenal-staff-grid',
+			ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
+			array( 'arsenal-footer' ),
+			ARSENAL_VERSION
+		);
+	}
 
 		// Стили страницы турнирной таблицы (только для страницы Standings)
 		if ( is_page_template( 'templates/page-standings.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'standings' ) ) ) {

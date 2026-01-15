@@ -1,0 +1,720 @@
+/* ==========================================================================
+   Staff Grid Component (Players + Coaches)
+   Used by: page-squad-grid.php, page-coaches-grid.php
+   ========================================================================== */
+
+.teams-section {
+	background-color: #ffffff;
+	padding: 0 0 1.5rem 0;
+}
+
+.container {
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+}
+
+/* Основной стиль h1 */
+h1 {
+	font-size: 2rem;
+}
+
+/* Header */
+.teams-header {
+	margin-bottom: 3rem;
+}
+
+.teams-title {
+	font-family: 'Inter', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+/* Content Wrapper */
+.teams-content {
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+}
+
+/* Position Group */
+.position-group {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.position-heading {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.3;
+	color: #990000;
+	margin: 0;
+	padding: 0;
+}
+
+/* Grid Layouts */
+.players-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 1rem;
+}
+
+/* ============================================
+   Player Card
+   ============================================ */
+
+.player-card {
+	background-color: white;
+	border-radius: 0.625rem;
+	overflow: hidden;
+	box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto 3.5rem;
+	height: 100%;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+}
+
+.player-card:hover {
+	box-shadow: 0px 4px 12px 0px #26262626, 0px 2px 4px -1px #1a1a1a1a;
+	transform: translateY(-0.125rem);
+}
+
+/* Левая колонка 50%: Фото + Номер */
+.player-card__photo {
+	position: relative;
+	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+	min-height: 9.375rem;
+}
+
+.player-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+/* Номер игрока */
+.player-card__number {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	width: 2rem;
+	height: 2rem;
+	background-color: #ff1a1a;
+	border: 0.125rem solid white;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Inter', sans-serif;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: white;
+	line-height: 1;
+	box-shadow: 0 0.25rem 0.5rem #33333333;
+}
+
+/* Правая колонка 50%: Информация */
+.player-card__info {
+	display: flex;
+	flex-direction: column;
+	
+	padding: 0.75rem;
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	justify-content: space-evenly;
+}
+
+.player-card__name {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+.player-card__position {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+}
+
+.player-card__meta {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #6a7282;
+	margin: 0;
+	padding: 0;
+}
+
+/* Нижняя строка 100%: Статистика */
+.player-card__stats {
+	background-color: #f9fafb;
+	border-top: 1px solid #fafafa;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.375rem;
+	padding: 0.375rem;
+	grid-row: 2 / 3;
+	grid-column: 1 / 3;
+}
+
+.player-stat {
+	display: flex;
+	flex-direction: column;
+	gap: 0.0625rem;
+	text-align: center;
+}
+
+.player-stat__label {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.2;
+	color: #6a7282;
+	display: block;
+}
+
+.player-stat__value {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #101828;
+	display: block;
+}
+
+/* ============================================
+   Coach Card (без номера и статистики)
+   ============================================ */
+
+.coach-card {
+	background-color: white;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto;
+	height: 100%;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.3s ease;
+}
+
+.coach-card:hover {
+	box-shadow: 0px 4px 12px 0px #26262626, 0px 2px 4px -1px #1a1a1a1a;
+	transform: translateY(-2px);
+}
+
+.coach-card__photo {
+	position: relative;
+	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	grid-row: 1 / 2;
+	grid-column: 1 / 2;
+	min-height: 150px;
+}
+
+.coach-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.coach-card__info {
+	display: flex;
+	flex-direction: column;
+	padding: 12px;
+	grid-row: 1 / 2;
+	grid-column: 2 / 3;
+	justify-content: space-evenly;
+}
+
+.coach-card__name {
+	font-family: 'Inter', sans-serif;
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #0a0a0a;
+	margin: 0;
+	padding: 0;
+}
+
+.coach-card__position {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #4a5565;
+	margin: 0;
+	padding: 0;
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.no-players-message {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	color: #6a7282;
+	text-align: center;
+	padding: 2.5rem;
+	margin: 0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+/* Tablet Large (1024px) */
+@media (max-width: 1024px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
+	.teams-section {
+		padding: 0 0 1.5rem 0;
+	}
+	
+	.container {
+		padding: 1.5rem 0 0 0;
+	}
+	
+	.teams-header {
+		margin-bottom: 2.5rem;
+		padding: 0 1.5rem;
+	}
+	
+	.teams-title {
+		font-size: 1.75rem;
+	}
+	
+	.position-heading {
+		font-size: 1.375rem;
+		margin-bottom: 1.25rem;
+	}
+	
+	.teams-content {
+		gap: 2.5rem;
+	}		
+	
+	.position-group {
+		padding-left: 1.5rem;
+		gap: 1.25rem;
+	}
+	
+	.players-grid,
+	.players-grid--multi,
+	.players-grid--single {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.875rem;
+	}
+	
+	.player-card {
+		grid-template-rows: auto 3rem;
+	}
+	
+	.player-card__photo {
+		min-height: 8.75rem;
+	}
+	
+	.player-card__info {
+		padding: 0.625rem;
+	}
+	
+	.player-card__name {
+		font-size: 1.25rem;
+	}
+	
+	.player-card__position {
+		font-size: 0.95rem;
+	}
+	
+	.player-card__meta {
+		font-size: 0.9rem;
+	}
+	
+	.player-stat__label {
+		font-size: 0.9rem;
+	}
+	
+	.player-stat__value {
+		font-size: 0.9rem;
+	}
+
+	.coach-card {
+		grid-template-rows: auto;
+	}
+	
+	.coach-card__photo {
+		min-height: 140px;
+	}
+	
+	.coach-card__info {
+		padding: 10px;
+	}
+	
+	.coach-card__name {
+		font-size: 1.25rem;
+	}
+	
+	.coach-card__position {
+		font-size: 0.95rem;
+	}
+}
+
+/* Tablet Portrait (768px) */
+@media (max-width: 768px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
+	.teams-section {
+		padding: 0 0 1.5rem 0;
+	}	
+		
+	.teams-header {
+		margin-bottom: 2rem;		
+	}
+	
+	.teams-title {
+		font-size: 1.75rem;
+		line-height: 1.25;
+	}
+	
+	.position-heading {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+	}
+	
+	.teams-content {
+		gap: 2rem;
+	}
+	
+	.position-group {
+		gap: 1rem;
+	}
+	
+	.players-grid,
+	.players-grid--multi,
+	.players-grid--single {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.75rem;
+	}
+	
+	.player-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto 2.8rem;
+		border-radius: 0.5rem;
+	}
+	
+	.player-card:hover {
+		transform: translateY(-1px);
+	}
+	
+	.player-card__photo {
+		min-height: 8.125rem;
+	}
+	
+	.player-card__number {
+		width: 1.75rem;
+		height: 1.75rem;
+		top: 0.375rem;
+		right: 0.375rem;
+		font-size: 0.6875rem;
+	}
+	
+	.player-card__info {
+		padding: 0.5rem;
+	}
+	
+	.player-card__name {
+		font-size: 1.1rem;
+	}
+	
+	.player-card__position {
+		font-size: 0.9rem;
+	}
+	
+	.player-card__meta {
+		font-size: 0.85rem;
+	}
+	
+	.player-card__stats {
+		padding: 0.25rem;
+		gap: 0.25rem;
+	}
+	
+	.player-stat__label {
+		font-size: 0.8rem;
+	}
+	
+	.player-stat__value {
+		font-size: 0.85rem;
+	}
+	
+	.coach-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		border-radius: 8px;
+	}
+	
+	.coach-card:hover {
+		transform: translateY(-1px);
+	}
+	
+	.coach-card__photo {
+		min-height: 130px;
+	}
+	
+	.coach-card__info {
+		padding: 8px;
+	}
+	
+	.coach-card__name {
+		font-size: 1.1rem;
+	}
+	
+	.coach-card__position {
+		font-size: 0.9rem;
+	}
+	
+	.no-players-message {
+		font-size: 0.875rem;
+		padding: 1.875rem;
+	}
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
+	.teams-section {
+		padding: 1.5rem 0;
+	}
+	
+	.container {
+		padding: 0 1rem;
+	}
+	
+	.teams-header {
+		margin-bottom: 1.5rem;
+	}
+	
+	.teams-title {
+		font-size: 1.5rem;
+		font-weight: 700;
+		line-height: 1.2;
+		text-align: center;
+	}
+	
+	.position-heading {
+		font-size: 1.125rem;
+		font-weight: 600;
+		margin-bottom: 0.75rem;
+		text-align: left;
+	}
+	
+	.teams-content {
+		gap: 1.5rem;
+	}
+	
+	.position-group {
+		gap: 0.75rem;
+		padding: 0 0 0 0;
+	}
+	
+	.players-grid,
+	.players-grid--multi,
+	.players-grid--single {
+		grid-template-columns: 1fr;
+		gap: 0.625rem;
+	}
+	
+	.player-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto 2.5rem;
+		border-radius: 0.375rem;
+		height: auto;
+	}
+	
+	.player-card:hover {
+		transform: none;
+		box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	}
+	
+	.player-card__photo {
+		max-height: 5.625rem;
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+	
+	.player-card__image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+	}
+	
+	.player-card__number {
+		width: 1.5rem;
+		height: 1.5rem;
+		top: 0.25rem;
+		right: 0.25rem;
+		border-width: 0.09375rem;
+		font-size: 0.625rem;
+	}
+	
+	.player-card__info {
+		padding: 0.375rem;
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+		justify-content: center;
+	}
+	
+	.player-card__name {
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.15;
+		margin-bottom: 0.125rem;
+	}
+	
+	.player-card__position {
+		font-size: 0.8rem;
+		font-weight: 400;
+		line-height: 1.2;
+		margin-bottom: 0.125rem;
+	}
+	
+	.player-card__meta {
+		font-size: 0.75rem;
+		font-weight: 400;
+		line-height: 1.2;
+	}
+	
+	.player-card__stats {
+		background-color: #f9fafb;
+		border-top: 1px solid #fafafa;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.125rem;
+		padding: 0.25rem;
+		grid-row: 2 / 3;
+		grid-column: 1 / 3;
+	}
+	
+	.player-stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		text-align: center;
+	}
+	
+	.player-stat__label {
+		font-size: 0.7rem;
+		font-weight: 400;
+		line-height: 1.1;
+		color: #6a7282;
+	}
+	
+	.player-stat__value {
+		font-size: 0.8rem;
+		font-weight: 600;
+		line-height: 1.1;
+		color: #101828;
+	}
+
+	.coach-card {
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto;
+		border-radius: 0.375rem;
+	}
+
+	.coach-card:hover {
+		transform: none;
+		box-shadow: 0px 1px 3px 0px #1a1a1a1a, 0px 1px 2px -1px #1a1a1a1a;
+	}
+
+	.coach-card__photo {
+		max-height: 5.625rem;
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	.coach-card__image {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.coach-card__info {
+		padding: 0.375rem;
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+		justify-content: center;
+	}
+
+	.coach-card__name {
+		font-size: 1rem;
+		font-weight: 600;
+		line-height: 1.15;
+		margin-bottom: 0.125rem;
+	}
+
+	.coach-card__position {
+		font-size: 0.8rem;
+		font-weight: 400;
+		line-height: 1.2;
+		margin-bottom: 0.125rem;
+	}
+	
+	.no-players-message {
+		font-size: 0.8125rem;
+		padding: 1.25rem;
+		line-height: 1.5;
+	}
+}
