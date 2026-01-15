@@ -74,12 +74,14 @@ class Arsenal_Season_Manager {
     public static function create_season( $data ) {
         global $wpdb;
         
-        // Генерируем HEX ID для season_id
-        $season_id = strtoupper( substr( md5( uniqid( mt_rand(), true ) ), 0, 8 ) );
+        // Генерируем season_id на основе названия сезона
+        $season_name = sanitize_text_field( $data['season_name'] );
+        $season_id_source = strtoupper( str_replace( ' ', '', substr( $season_name, 0, 15 ) ) );
+        $season_id = strtoupper( substr( md5( $season_id_source ), 0, 8 ) );
         
         $insert_data = array(
             'season_id' => $season_id,
-            'season_name' => sanitize_text_field( $data['season_name'] ),
+            'season_name' => $season_name,
             'start_date' => sanitize_text_field( $data['start_date'] ),
             'end_date' => sanitize_text_field( $data['end_date'] ),
             'is_active' => isset( $data['is_active'] ) ? intval( $data['is_active'] ) : 1,
