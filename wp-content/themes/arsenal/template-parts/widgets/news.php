@@ -52,7 +52,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 
-<section class="news-section">
+<section class="news-section" style="background-color: #f9fafb;">
 	<div class="container">
 		<div class="section-header">
 			<h2 class="section-title"><?php esc_html_e( 'Актуальные новости', 'arsenal' ); ?></h2>

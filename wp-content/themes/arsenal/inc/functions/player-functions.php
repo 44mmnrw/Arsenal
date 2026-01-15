@@ -35,6 +35,38 @@ function arsenal_get_player_data( $player_id ) {
 }
 
 /**
+ * Подсчитать количество сыгранных минут в матче для игрока.
+ *
+ * @param int        $is_starting   Признак выхода в стартовом составе (1/0).
+ * @param int|string $sub_in_minute Минута выхода на замену (если была), может быть null.
+ * @param int|string $sub_out_minute Минута ухода с поля (если была), может быть null.
+ * @return int Количество сыгранных минут.
+ */
+function arsenal_calculate_match_minutes( $is_starting, $sub_in_minute, $sub_out_minute ) {
+	$is_starting    = intval( $is_starting );
+	$sub_in_minute  = is_numeric( $sub_in_minute ) ? intval( $sub_in_minute ) : null;
+	$sub_out_minute = is_numeric( $sub_out_minute ) ? intval( $sub_out_minute ) : null;
+
+	if ( $is_starting ) {
+		if ( null !== $sub_out_minute ) {
+			return max( 0, $sub_out_minute );
+		}
+
+		return 90;
+	}
+
+	if ( null !== $sub_in_minute ) {
+		if ( null !== $sub_out_minute ) {
+			return max( 0, $sub_out_minute - $sub_in_minute );
+		}
+
+		return max( 0, 90 - $sub_in_minute );
+	}
+
+	return 0;
+}
+
+/**
  * Получить список доступных турниров для игрока за ВСЕ годы
  */
 function arsenal_get_player_seasons( $player_id ) {
@@ -84,25 +116,6 @@ function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = nu
 	
 	// ШАГ 2: Ищем матчи и минуты игрока в этих матчах
 	$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
-	$params = array_merge( array( $player_id ), $match_ids );
-	
-	// Проверяем сколько записей в lineups для этого игрока
-	$lineup_count = $wpdb->get_var( $wpdb->prepare(
-		"SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_lineups WHERE player_id = %s AND match_id IN ($placeholders)",
-		$params
-	) );
-	
-	$lineups = $wpdb->get_row( 
-		$wpdb->prepare(
-			"SELECT 
-				COUNT(*) as matches_played,
-				SUM(CASE WHEN is_starting = 1 THEN 1 ELSE 0 END) as matches_started,
-				SUM(CASE WHEN is_starting = 1 THEN 90 ELSE 0 END) as minutes_played
-			 FROM {$wpdb->prefix}arsenal_match_lineups
-			 WHERE player_id = %s AND match_id IN ($placeholders)",
-			$params
-		) 
-	);
 	
 	// ШАГ 3: Вычисляем реальные минуты на основе подстановок
 	// Для каждого матча где был игрок в lineups, ищем события sub_out/sub_in
@@ -123,32 +136,23 @@ function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = nu
 		) 
 	);
 	
-	// Считаем минуты для каждого матча
-	$total_minutes = 0;
-	foreach ($minutes_data as $m) {
-		// Если вышел из игры
-		if ($m->sub_out) {
-			$total_minutes += $m->sub_out;
-		} 
-		// Если вошел в игру (играл с этой минуты до конца)
-		elseif ($m->sub_in) {
-			$total_minutes += (90 - $m->sub_in);
-		}
-		// Если ни вышел ни вошел
-		else {
-			// Если был в стартовом составе - играл 90 минут
-			if ($m->is_starting) {
-				$total_minutes += 90;
-			}
-			// Иначе не выходил вообще - 0 минут
-			else {
-				$total_minutes += 0;
-			}
-		}
-	}
+	$matches_played_count  = 0;
+	$matches_started_count = 0;
+	$total_minutes         = 0;
 	
-	// Обновляем minutes_played в lineups
-	$lineups->minutes_played = $total_minutes;
+	foreach ( $minutes_data as $match_record ) {
+		$minutes_for_match = arsenal_calculate_match_minutes( $match_record->is_starting, $match_record->sub_in, $match_record->sub_out );
+		
+		if ( intval( $match_record->is_starting ) === 1 ) {
+			$matches_started_count++;
+		}
+		
+		if ( $minutes_for_match > 0 || intval( $match_record->is_starting ) === 1 ) {
+			$matches_played_count++;
+		}
+		
+		$total_minutes += $minutes_for_match;
+	}
 	
 	$events = $wpdb->get_row( 
 		$wpdb->prepare(
@@ -164,9 +168,9 @@ function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = nu
 	);
 	
 	return (object) array(
-		'matches_played' => $lineups->matches_played ?? 0,
-		'matches_started' => $lineups->matches_started ?? 0,
-		'minutes_played' => $lineups->minutes_played ?? 0,
+		'matches_played' => $matches_played_count,
+		'matches_started' => $matches_started_count,
+		'minutes_played' => $total_minutes,
 		'goals' => $events->goals ?? 0,
 		'assists' => $events->assists ?? 0,
 		'yellow_cards' => $events->yellow_cards ?? 0,
@@ -226,24 +230,17 @@ function arsenal_get_player_events( $player_id, $tournament_id, $year = null ) {
 	) );
 	
 	// ШАГ 3: Для каждого матча рассчитаем минуты
+	$filtered_events = array();
+
 	foreach ( $events as &$match ) {
-		if ( $match->sub_out ) {
-			$match->minutes_played = $match->sub_out;
-		} elseif ( $match->sub_in ) {
-			$match->minutes_played = 90 - $match->sub_in;
-		} else {
-			// Если ни вышел ни вошел
-			if ( $match->is_starting ) {
-				// Был в стартовом составе - 90 минут
-				$match->minutes_played = 90;
-			} else {
-				// Не выходил вообще - 0 минут
-				$match->minutes_played = 0;
-			}
+		$match->minutes_played = arsenal_calculate_match_minutes( $match->is_starting, $match->sub_in, $match->sub_out );
+
+		if ( $match->minutes_played > 0 || intval( $match->is_starting ) === 1 ) {
+			$filtered_events[] = $match;
 		}
 	}
-	
-	return $events;
+
+	return $filtered_events;
 }
 
 /**
@@ -375,16 +372,7 @@ function arsenal_get_tournament_yearly_stats( $player_id, $tournament_id ) {
 			$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
 			$params_lineups = array_merge( array( $player_id ), $match_ids );
 			
-			// Получаем составы
-			$lineups = $wpdb->get_row( $wpdb->prepare(
-				"SELECT 
-					COUNT(*) as matches_played
-				 FROM {$wpdb->prefix}arsenal_match_lineups
-				 WHERE player_id = %s AND match_id IN ($placeholders)",
-				$params_lineups
-			) );
-			
-			// Считаем минуты
+			// Считаем минуты и количество сыгранных матчей
 			$minutes_data = $wpdb->get_results( $wpdb->prepare(
 				"SELECT 
 					ml.match_id,
@@ -398,18 +386,17 @@ function arsenal_get_tournament_yearly_stats( $player_id, $tournament_id ) {
 				$params_lineups
 			) );
 			
-			// Считаем минуты для каждого матча
-			$total_minutes = 0;
-			foreach ( $minutes_data as $m ) {
-				if ( $m->sub_out ) {
-					$total_minutes += $m->sub_out;
-				} elseif ( $m->sub_in ) {
-					$total_minutes += (90 - $m->sub_in);
-				} else {
-					if ( $m->is_starting ) {
-						$total_minutes += 90;
-					}
+			$matches_played_count  = 0;
+			$total_minutes         = 0;
+	
+			foreach ( $minutes_data as $match_record ) {
+				$minutes_for_match = arsenal_calculate_match_minutes( $match_record->is_starting, $match_record->sub_in, $match_record->sub_out );
+		
+				if ( $minutes_for_match > 0 || intval( $match_record->is_starting ) === 1 ) {
+					$matches_played_count++;
 				}
+		
+				$total_minutes += $minutes_for_match;
 			}
 			
 			// Получаем события
@@ -436,7 +423,7 @@ function arsenal_get_tournament_yearly_stats( $player_id, $tournament_id ) {
 			
 			$years_stats[] = (object) array(
 				'year' => $year,
-				'matches_played' => $lineups->matches_played ?? 0,
+				'matches_played' => $matches_played_count,
 				'minutes_played' => $total_minutes,
 				'goals' => $events->goals ?? 0,
 				'assists' => $events->assists ?? 0,

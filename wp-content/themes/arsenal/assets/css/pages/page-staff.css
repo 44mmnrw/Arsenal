@@ -1,16 +1,9 @@
-/**
+/*
  * Page Staff - Страница персонала (тренер, стафф)
- * Адаптация под макет Figma
+ * 
  */
 
-/* ==========================================================================
-   БАЗОВАЯ СЦЕНА
-	/* ---------------------------------------------------
-	   Основной макет героя: сетка для контента
-	   --------------------------------------------------- */
-   ========================================================================== */
-
-.staff-detail-page {
+.player-page {
 	background: #f9fafb;
 	min-height: 100vh;
 	padding-bottom: 80px;
@@ -20,7 +13,7 @@
    HERO SECTION
    ========================================================================== */
 
-.staff-hero {
+.player-hero {
 	position: relative;
 	height: 31rem;
 	padding: 40px 0;
@@ -38,7 +31,7 @@
 /* ---------------------------------------------------
    Полупрозрачный декоративный слой на герое
    --------------------------------------------------- */
-.staff-hero__overlay {
+.player-hero__overlay {
 	position: absolute;
 	inset: 0;
 	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 432"><circle cx="100" cy="50" r="60" fill="rgba(255,255,255,0.05)"/><circle cx="1500" cy="400" r="100" fill="rgba(255,255,255,0.03)"/></svg>') no-repeat center;
@@ -46,7 +39,7 @@
 	opacity: 0.1;
 }
 
-.staff-hero__content {
+.player-hero__content {
 	position: relative;
 	z-index: 2;
 	display: flex;
@@ -55,7 +48,7 @@
 	height: 100%;
 }
 
-.staff-hero__inner {
+.player-hero__inner {
 	width: 100%;
 	max-width: var(--container-max-width);
 	margin: 0 auto;
@@ -65,7 +58,7 @@
 	box-sizing: border-box;
 }
 
-.staff-hero__main {
+.player-hero__main {
 	margin-top: 40px;
 	display: grid;
 	grid-template-columns: 32% 68%;
@@ -76,7 +69,7 @@
 Обёртка для фото: фиксированный квадрат с обводкой
 --------------------------------------------------- */
 
-.staff-hero__photo-wrapper {
+.staff-photo-wrapper {
 	width: 100%;
 	max-width: 100%;
 	height: auto;
@@ -90,7 +83,7 @@
 	box-shadow: 0 30px 90px #4d4d4d4d;
 }
 
-.staff-hero__photo {
+.staff-photo {
 	position: relative;
 	z-index: 1;
 	width: 100%;
@@ -102,7 +95,7 @@
 	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.staff-hero__photo-img {
+.staff-photo-img {
 	height: 100%;
 	width: 100%;
 	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
@@ -112,7 +105,7 @@
 	flex-shrink: 0;
 }
 
-.staff-hero__photo-placeholder {
+.staff-photo-placeholder {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -125,12 +118,12 @@
 	padding: 20px;
 }
 
-.staff-hero__info {
+.staff-info-block {
 	color: #ffffff;
 	padding-top: 26px;
 }
 
-.staff-hero__position {
+.staff-position-badge {
 	display: inline-flex;
 	align-items: center;
 	padding: 8px 16px;
@@ -142,32 +135,32 @@
 	margin-bottom: 20px;
 }
 
-.staff-hero__title {
+.staff-title {
 	margin: 0 0 24px;
 	font-size: 60px;
 	line-height: 72px;
 	font-weight: 700;
 }
 
-.staff-hero__details {
+.staff-details-grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 24px;
 }
 
-.staff-hero__detail-item {
+.staff-detail-item {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 }
 
-.staff-hero__detail-label {
+.staff-detail-label {
 	font-size: 14px;
 	line-height: 20px;
 	color: rgba(255, 255, 255, 0.8);
 }
 
-.staff-hero__detail-value {
+.staff-detail-value {
 	font-size: 24px;
 	line-height: 32px;
 	font-weight: 400;
@@ -177,7 +170,7 @@
    MAIN CONTENT
    ========================================================================== */
 
-.staff-container {
+.staff-detail-container {
 	margin: 48px auto 0;
 	padding: var(--container-padding-y) var(--container-padding-x);
 	max-width: var(--container-max-width);
@@ -185,7 +178,7 @@
 	box-sizing: border-box;
 }
 
-.staff-container__inner {
+.staff-detail-inner {
 	display: grid;
 	grid-template-columns: minmax(0, 992px) 480px;
 	gap: 32px;
@@ -437,11 +430,11 @@
    ========================================================================== */
 
 @media (max-width: 1400px) {
-	.staff-container {
+	.staff-detail-container {
 		padding: 0 40px;
 	}
 
-	.staff-container__inner {
+	.staff-detail-inner {
 		grid-template-columns: 1fr;
 	}
 
@@ -466,7 +459,7 @@
 		gap: 40px;
 	}
 
-	.staff-hero__photo-wrapper {
+	.staff-photo-wrapper {
 		width: 220px;
 		height: 220px;
 	}
@@ -477,49 +470,49 @@
 		padding: 24px 24px 0;
 	}
 
-	.staff-hero__main {
+	.player-hero__main {
 		grid-template-columns: repeat(1, minmax(0, 1fr));
 		gap: 24px;
 	}
 
-	.staff-hero__info {
+	.staff-info-block {
 		padding-top: 0;
 	}
 
-	.staff-hero__title {
+	.staff-title {
 		font-size: 42px;
 		line-height: 52px;
 	}
 
-	.staff-hero__details {
+	.staff-details-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
 @media (max-width: 768px) {
-	.staff-detail-page {
+	.player-page {
 		padding-bottom: 48px;
 	}
 
-	.staff-hero {
+	.player-hero {
 		height: auto;
 		padding-bottom: 32px;
 	}
 
-	.staff-hero__main {
+	.player-hero__main {
 		margin-top: 32px;
 	}
 
-	.staff-hero__details {
+	.staff-details-grid {
 		grid-template-columns: 1fr;
 	}
 
-	.staff-hero__detail-value {
+	.staff-detail-value {
 		font-size: 20px;
 		line-height: 28px;
 	}
 
-	.staff-container {
+	.staff-detail-container {
 		padding: 0 20px;
 		margin-top: 32px;
 	}
@@ -547,27 +540,27 @@
 		padding: 20px 16px 0;
 	}
 
-	.staff-hero__main {
+	.player-hero__main {
 		gap: 20px;
 	}
 
-	.staff-hero__photo-wrapper {
+	.staff-photo-wrapper {
 		width: 160px;
 		height: 160px;
 	}
 
-	.staff-hero__title {
+	.staff-title {
 		font-size: 32px;
 		line-height: 40px;
 		margin-bottom: 16px;
 	}
 
-	.staff-hero__position {
+	.staff-position-badge {
 		font-size: 12px;
 		padding: 6px 12px;
 	}
 
-	.staff-container {
+	.staff-detail-container {
 		padding: 0 12px;
 	}
 

@@ -74,6 +74,7 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                     <div class="staff-col-photo">Фото</div>
                     <div class="staff-col-name">ФИО</div>
                     <div class="staff-col-job">Должность</div>
+                    <div class="staff-col-dept">Отдел</div>
                     <div class="staff-col-contract">Контракт</div>
                     <div class="staff-col-action">Действие</div>
                 </div>
@@ -104,6 +105,18 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                         <div class="staff-col-job">
                             <span class="job-title-badge">
                                 <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
+                            </span>
+                        </div>
+                        <div class="staff-col-dept">
+                            <span class="department-badge">
+                                <?php 
+                                if ( $person->department_id ) {
+                                    $dept = Arsenal_Staff_Manager::get_department( $person->department_id );
+                                    echo esc_html( $dept ? $dept->department_name : '—' );
+                                } else {
+                                    echo '—';
+                                }
+                                ?>
                             </span>
                         </div>
                         <div class="staff-col-contract">

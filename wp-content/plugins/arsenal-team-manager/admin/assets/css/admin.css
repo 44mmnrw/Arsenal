@@ -3634,7 +3634,7 @@
 
 .staff-row {
     display: grid;
-    grid-template-columns: 60px 1fr 200px 150px 250px;
+    grid-template-columns: 60px 1fr 200px 150px 150px 250px;
     gap: 15px;
     padding: 12px 15px;
     align-items: center;
@@ -3655,6 +3655,7 @@
 .staff-header .staff-col-photo,
 .staff-header .staff-col-name,
 .staff-header .staff-col-job,
+.staff-header .staff-col-dept,
 .staff-header .staff-col-contract,
 .staff-header .staff-col-action {
     font-size: 13px;
@@ -3701,6 +3702,16 @@
 .job-title-badge {
     background: #e7f3ff;
     color: #0073aa;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.department-badge {
+    background: #ffe7e7;
+    color: #990000;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
@@ -4180,6 +4191,195 @@
     }
 
     .arsenal-modal-footer .button {
+        width: 100%;
+    }
+}
+
+/* ========== ТУРНИРЫ ========== */
+
+.tournaments-wrapper {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.tournaments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.tournaments-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+.tournaments-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
+}
+
+.tournaments-table {
+    display: grid;
+    width: auto;
+    grid-template-columns: auto;
+    gap: 0;
+}
+
+.tournaments-row,
+.tournaments-row.tournaments-header {
+    display: grid;
+    grid-template-columns: 10rem 1fr 2fr 6rem 6rem;
+    gap: 0;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+    background: #fff;
+    font-size: 13px;
+}
+
+.tournaments-row.tournaments-header {
+    background: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+    min-height: 40px;
+}
+
+.tournaments-row > div {
+    padding: 16px 12px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.tournaments-row.tournaments-header > div {
+    padding: 16px 12px;
+    color: #666;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.tournament-name-link {
+    color: #0073aa;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.tournament-name-link:hover {
+    color: #005a87;
+    text-decoration: underline;
+}
+
+.tournaments-col-action {
+    justify-content: center;
+    gap: 8px;
+}
+
+.tournaments-col-action .button {
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    min-width: auto;
+    height: auto;
+}
+
+.tournaments-col-action .button:hover {
+    background-color: #e0e0e0;
+    color: #333;
+    border-color: #999;
+}
+
+.tournaments-empty-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    padding: 40px 20px;
+}
+
+.tournaments-pagination {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.tournaments-pagination .pagination {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.tournaments-pagination a,
+.tournaments-pagination .page-numbers {
+    padding: 6px 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #0073aa;
+    transition: background 0.2s;
+}
+
+.tournaments-pagination a:hover {
+    background: #e8e8e8;
+}
+
+.tournaments-pagination .page-numbers.current {
+    background: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+}
+
+/* Турниры адаптивный дизайн для мобильных */
+@media (max-width: 782px) {
+    .tournaments-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tournaments-header h1 {
+        margin-bottom: 10px;
+    }
+
+    .tournaments-header .button {
+        width: 100%;
+    }
+
+    .tournaments-table,
+    .tournaments-row,
+    .tournaments-row.tournaments-header {
+        grid-template-columns: 40px 1fr 50px 50px;
+    }
+
+    .tournaments-col-description {
+        display: none;
+    }
+
+    .tournaments-stats {
+        flex-direction: column;
+    }
+
+    .tournaments-stats .stat-box {
         width: 100%;
     }
 }

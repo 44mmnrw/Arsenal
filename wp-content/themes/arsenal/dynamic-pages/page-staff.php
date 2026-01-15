@@ -149,42 +149,42 @@ if ( empty( $staff_nationality ) ) {
 
 ?>
 
-<main class="staff-detail-page">
+	<main class="player-page">
 	<!-- HERO SECTION -->
-	<div class="staff-hero">
-		<div class="staff-hero__overlay"></div>
-		<div class="staff-hero__content">
-			<div class="staff-hero__inner">
+	<div class="player-hero">
+		<div class="player-hero__overlay"></div>
+		<div class="player-hero__content player-container">
+			<div class="player-hero__inner">
 				<!-- Main Info Container -->
-				<div class="staff-hero__main">
+				<div class="player-hero__main">
 					<!-- Photo -->
-					<div class="staff-hero__photo-wrapper">
-						<div class="staff-hero__photo">
+					<div class="staff-photo-wrapper">
+						<div class="staff-photo">
 							<?php
 							// ВАЖНО: если сотрудник найден в БД, фото берем строго из wp_arsenal_staff.photo_url
 							if ( $staff && ! empty( $staff_photo_src ) ) {
-								echo '<img src="' . esc_url( $staff_photo_src ) . '" alt="' . esc_attr( trim( $staff->first_name . ' ' . $staff->second_name ) ) . '" class="staff-hero__photo-img" loading="lazy">';
+								echo '<img src="' . esc_url( $staff_photo_src ) . '" alt="' . esc_attr( trim( $staff->first_name . ' ' . $staff->second_name ) ) . '" class="staff-photo-img" loading="lazy">';
 							} elseif ( has_post_thumbnail( $post_id ) ) {
 								echo get_the_post_thumbnail( $post_id, 'large', array(
-								'class' => 'staff-hero__photo-img',
+								'class' => 'staff-photo-img',
 								'alt'   => get_the_title( $post_id ),
 							) );
 							} else {
-								echo '<div class="staff-hero__photo-placeholder">Фото не загружено</div>';
+								echo '<div class="staff-photo-placeholder">Фото не загружено</div>';
 							}
 							?>
 						</div>
 					</div>
 
 					<!-- Info Block -->
-					<div class="staff-hero__info">
+					<div class="staff-info-block">
 						<!-- Position Badge -->
-						<div class="staff-hero__position">
+						<div class="staff-position-badge">
 							<?php echo esc_html( $staff_position ); ?>
 						</div>
 
 						<!-- Name -->
-						<h1 class="staff-hero__title">
+						<h1 class="staff-title">
 							<?php 
 							if ( $staff ) {
 								echo esc_html( $staff->first_name . ' ' . $staff->second_name );
@@ -195,17 +195,17 @@ if ( empty( $staff_nationality ) ) {
 						</h1>
 
 						<!-- Details Grid -->
-						<div class="staff-hero__details">
-							<div class="staff-hero__detail-item">
-								<span class="staff-hero__detail-label">Дата рождения</span>
-								<span class="staff-hero__detail-value">
+						<div class="staff-details-grid">
+							<div class="staff-detail-item">
+								<span class="staff-detail-label">Дата рождения</span>
+								<span class="staff-detail-value">
 									<?php echo esc_html( $staff_birthdate ?: 'Не указано' ); ?>
 								</span>
 							</div>
 
-							<div class="staff-hero__detail-item">
-								<span class="staff-hero__detail-label">Опыт работы</span>
-								<span class="staff-hero__detail-value">
+							<div class="staff-detail-item">
+								<span class="staff-detail-label">Опыт работы</span>
+								<span class="staff-detail-value">
 									<?php echo esc_html( $staff_experience ?: 'Не указано' ); ?>
 								</span>
 							</div>
@@ -217,8 +217,8 @@ if ( empty( $staff_nationality ) ) {
 	</div>
 
 	<!-- CONTENT SECTION -->
-	<div class="staff-container">
-		<div class="staff-container__inner">
+	<div class="staff-detail-container container">
+		<div class="staff-detail-inner">
 			<div class="staff-content">
 			<!-- BIOGRAPHY -->
 			<div class="staff-section staff-section--biography">

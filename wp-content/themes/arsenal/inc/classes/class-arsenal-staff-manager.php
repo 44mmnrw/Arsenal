@@ -73,19 +73,29 @@ class Arsenal_Staff_Manager {
 	 * @param string $job_title_name Название должности
 	 * @param string $description Описание (опционально)
 	 * @param int $sort_order Порядок сортировки
+	 * @param int $department_id ID отдела (опционально)
 	 * @return int|false ID созданной должности или false
 	 */
-	public static function add_job_title( $job_title_name, $description = '', $sort_order = 0 ) {
+	public static function add_job_title( $job_title_name, $description = '', $sort_order = 0, $department_id = null ) {
 		global $wpdb;
+
+		$insert = array(
+			'job_title_name' => sanitize_text_field( $job_title_name ),
+			'description' => sanitize_textarea_field( $description ),
+			'sort_order' => (int) $sort_order,
+		);
+
+		$format = array( '%s', '%s', '%d' );
+
+		if ( ! empty( $department_id ) ) {
+			$insert['department_id'] = (int) $department_id;
+			$format[] = '%d';
+		}
 
 		$result = $wpdb->insert(
 			$wpdb->prefix . 'arsenal_staff_job_titles',
-			array(
-				'job_title_name' => sanitize_text_field( $job_title_name ),
-				'description' => sanitize_textarea_field( $description ),
-				'sort_order' => (int) $sort_order,
-			),
-			array( '%s', '%s', '%d' )
+			$insert,
+			$format
 		);
 
 		return $result ? $wpdb->insert_id : false;
@@ -95,7 +105,7 @@ class Arsenal_Staff_Manager {
 	 * Обновить должность
 	 *
 	 * @param int $job_title_id ID должности
-	 * @param array $data Данные для обновления
+	 * @param array $data Данные для обновления (job_title_name, description, department_id)
 	 * @return bool Результат обновления
 	 */
 	public static function update_job_title( $job_title_id, $data ) {
@@ -112,6 +122,11 @@ class Arsenal_Staff_Manager {
 		if ( isset( $data['description'] ) ) {
 			$update['description'] = sanitize_textarea_field( $data['description'] );
 			$format[] = '%s';
+		}
+
+		if ( isset( $data['department_id'] ) ) {
+			$update['department_id'] = empty( $data['department_id'] ) ? null : (int) $data['department_id'];
+			$format[] = '%d';
 		}
 
 		if ( isset( $data['sort_order'] ) ) {
@@ -243,6 +258,11 @@ class Arsenal_Staff_Manager {
 			$format[] = '%d';
 		}
 
+		if ( ! empty( $data['department_id'] ) ) {
+			$insert['department_id'] = (int) $data['department_id'];
+			$format[] = '%d';
+		}
+
 		if ( ! empty( $data['birth_date'] ) ) {
 			$insert['birth_date'] = sanitize_text_field( $data['birth_date'] ?? '' );
 			$format[] = '%s';
@@ -310,9 +330,14 @@ class Arsenal_Staff_Manager {
 			$format[] = '%s';
 		}
 
-		if ( isset( $data['job_title_id'] ) ) {
+		if ( array_key_exists( 'job_title_id', $data ) ) {
 			$update['job_title_id'] = empty( $data['job_title_id'] ) ? null : (int) $data['job_title_id'];
-			$format[] = '%d';
+			$format[] = null === $update['job_title_id'] ? '%s' : '%d';
+		}
+
+		if ( array_key_exists( 'department_id', $data ) ) {
+			$update['department_id'] = empty( $data['department_id'] ) ? null : (int) $data['department_id'];
+			$format[] = null === $update['department_id'] ? '%s' : '%d';
 		}
 
 		if ( isset( $data['birth_date'] ) ) {
@@ -356,6 +381,10 @@ class Arsenal_Staff_Manager {
 		}
 
 		$format[] = '%d'; // для WHERE
+
+		error_log( '=== update_staff() ===' );
+		error_log( 'Update array: ' . json_encode( $update ) );
+		error_log( 'Format array: ' . json_encode( $format ) );
 
 		return $wpdb->update(
 			$wpdb->prefix . 'arsenal_staff',
@@ -409,6 +438,38 @@ class Arsenal_Staff_Manager {
 				'job_title_id' => $job_title_id,
 				'active_only' => $active_only,
 				'orderby' => 'second_name',
+			)
+		);
+	}
+
+	/**
+	 * Получить все отделы
+	 *
+	 * @param bool $active_only Только активные отделы
+	 * @return array Массив отделов
+	 */
+	public static function get_departments( $active_only = false ) {
+		global $wpdb;
+
+		$query = "SELECT * FROM {$wpdb->prefix}arsenal_staff_department";
+		$query .= " ORDER BY sort_order ASC, department_name ASC";
+
+		return $wpdb->get_results( $query );
+	}
+
+	/**
+	 * Получить отдел по ID
+	 *
+	 * @param int $department_id ID отдела
+	 * @return object|null Объект отдела или null
+	 */
+	public static function get_department( $department_id ) {
+		global $wpdb;
+
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}arsenal_staff_department WHERE id = %d",
+				$department_id
 			)
 		);
 	}

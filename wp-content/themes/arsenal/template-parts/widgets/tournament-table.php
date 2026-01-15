@@ -56,7 +56,7 @@ if ( $arsenal_position >= 0 ) {
 }
 ?>
 
-<section class="tournament-table-section">
+<section class="tournament-table-section" style="background-color: #f9fafb;">
     <div class="container">
         <div class="section-header">
             <h2 class="section-title">Высшая лига Беларуси <?php echo esc_html( $active_season_year ); ?></h2>

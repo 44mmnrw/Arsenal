@@ -29,11 +29,13 @@ $upcoming_match = $wpdb->get_row( $wpdb->prepare( "
 		m.home_score as home_score,
 		m.away_score as away_score,
 		s.name as stadium_name,
-		s.city as stadium_city
+		s.city as stadium_city,
+		t.name as tournament_name
 	FROM {$wpdb->prefix}arsenal_matches m
 	LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 	LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
 	LEFT JOIN {$wpdb->prefix}arsenal_stadiums s ON m.stadium_id = s.stadium_id
+	LEFT JOIN {$wpdb->prefix}arsenal_tournaments t ON m.tournament_id = t.tournament_id
 	WHERE (m.home_team_id = %s OR m.away_team_id = %s)
 		AND m.match_date >= NOW()
 		AND (m.home_score IS NULL OR m.away_score IS NULL)
@@ -51,11 +53,13 @@ if ( ! $upcoming_match ) {
 			m.home_score as home_score,
 			m.away_score as away_score,
 			s.name as stadium_name,
-			s.city as stadium_city
+			s.city as stadium_city,
+			t.name as tournament_name
 		FROM {$wpdb->prefix}arsenal_matches m
 		LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 		LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
 		LEFT JOIN {$wpdb->prefix}arsenal_stadiums s ON m.stadium_id = s.stadium_id
+		LEFT JOIN {$wpdb->prefix}arsenal_tournaments t ON m.tournament_id = t.tournament_id
 		WHERE (m.home_team_id = %s OR m.away_team_id = %s)
 			AND m.home_score IS NOT NULL
 			AND m.away_score IS NOT NULL
@@ -84,7 +88,7 @@ if ( $upcoming_match ) :
 	}
 ?>
 
-<section class="upcoming-match-section">
+<section class="upcoming-match-section" style="background-color: #ffffff;">
 	<div class="upcoming-match-container">
 		<div class="section-header">
 			<h2 class="section-title">
@@ -97,8 +101,17 @@ if ( $upcoming_match ) :
 		
 		<div class="match-card">
 			<div class="match-card-inner">
-				<!-- Команда хозяев -->
-				<div class="match-team">
+				<!-- Название турнира (верхняя строчка) -->
+				<?php if ( ! empty( $upcoming_match->tournament_name ) ) : ?>
+					<div class="match-tournament-badge">
+						<?php echo esc_html( $upcoming_match->tournament_name ); ?>
+					</div>
+				<?php endif; ?>
+				
+				<!-- Основное содержимое карточки -->
+				<div class="match-card-content">
+					<!-- Команда хозяев -->
+					<div class="match-team">
 					<div class="team-logo <?php echo $is_home ? 'home-team' : 'away-team'; ?>">
 						<img 
 							src="<?php echo esc_url( arsenal_get_team_logo_url( $upcoming_match->home_team ) ); ?>" 
@@ -148,6 +161,8 @@ if ( $upcoming_match ) :
 					</div>
 					<h3 class="team-name"><?php echo esc_html( $upcoming_match->away_team ); ?></h3>
 				</div>
+				</div>
+				<!-- Конец match-card-content -->
 			</div>
 		</div>
 	</div>

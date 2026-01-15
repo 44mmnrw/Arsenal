@@ -204,26 +204,26 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 	}
 
 	// Стили страницы команды (только для страницы Команда)
-	if ( is_page_template( 'page-squad.php' ) || is_page_template( 'templates/page-squad.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'squad' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'team' ) ) || is_page( 'main-squad' ) ) {
-			wp_enqueue_style(
-				'arsenal-players-grid',
-				ARSENAL_THEME_URI . '/assets/css/players-grid.css',
-				array( 'arsenal-footer' ),
-				ARSENAL_VERSION
-			);
-		}
+	if ( is_page_template( 'page-squad-grid.php' ) || is_page_template( 'templates/page-squad-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'squad' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'team' ) ) || is_page( 'main-squad' ) ) {
+		wp_enqueue_style(
+			'arsenal-players-grid',
+			ARSENAL_THEME_URI . '/assets/css/pages/page-squad-grid.css',
+			array( 'arsenal-footer' ),
+			ARSENAL_VERSION
+		);
+	}
 
-		// Стили страницы тренерского штаба (для страницы Тренеры)
-		if ( is_page_template( 'templates/page-coaches.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
-			wp_enqueue_style(
-				'arsenal-coaches',
+	// Стили страницы тренерского штаба (для страницы Тренеры)
+	if ( is_page_template( 'templates/page-coaches-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
+		wp_enqueue_style(
+			'arsenal-coaches',
 				ARSENAL_THEME_URI . '/assets/css/players-grid.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
 			wp_enqueue_style(
 				'arsenal-page-coaches',
-				ARSENAL_THEME_URI . '/assets/css/pages/page-coaches.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-coaches-grid.css',
 				array( 'arsenal-coaches' ),
 				ARSENAL_VERSION
 			);
@@ -240,7 +240,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		}
 
 		// Стили страницы матча
-		if ( is_page_template( 'templates/page-match.php' ) || ( get_query_var( 'match_date' ) && get_query_var( 'team_id' ) ) ) {
+		if ( is_page_template( 'dynamic-pages/page-match.php' ) || ( get_query_var( 'match_date' ) && get_query_var( 'team_id' ) ) ) {
 			wp_enqueue_style(
 				'arsenal-page-match',
 				ARSENAL_THEME_URI . '/assets/css/pages/page-match.css',
@@ -274,6 +274,17 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-stadium',
 				ARSENAL_THEME_URI . '/assets/css/pages/page-stadium.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
+		// Стили страницы персонала (тренер, стафф)
+		// ВАЖНО: страница может быть динамической (/staff/{id}/), тогда is_page_template() не сработает.
+		if ( get_query_var( 'staff_id' ) || is_page_template( 'dynamic-pages/page-staff.php' ) || is_page( 'staff' ) || is_page( 'персонал' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-staff',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-staff.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -457,7 +468,7 @@ if ( ! function_exists( 'arsenal_create_required_pages' ) ) {
 				'title'    => 'Основной состав',
 				'slug'     => 'squad',
 				'content'  => '',
-				'template' => 'templates/page-squad.php',
+				'template' => 'templates/page-squad-grid.php',
 			),
 			'calendar' => array(
 				'title'    => 'Календарь',
@@ -781,7 +792,7 @@ if ( ! function_exists( 'arsenal_get_player_stats_url' ) ) {
 		$page = get_posts( array(
 			'post_type'      => 'page',
 			'meta_key'       => '_wp_page_template',
-			'meta_value'     => 'page-player.php',
+			'meta_value'     => 'dynamic-pages/page-player.php',
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
 		) );
@@ -828,7 +839,7 @@ if ( ! function_exists( 'arsenal_player_template_include' ) ) {
 		$player_id = get_query_var( 'player_id' );
 		
 		if ( $player_id ) {
-			$player_template = ARSENAL_THEME_DIR . '/templates/page-player.php';
+			$player_template = ARSENAL_THEME_DIR . '/dynamic-pages/page-player.php';
 			
 			if ( file_exists( $player_template ) ) {
 				return $player_template;
@@ -849,6 +860,75 @@ if ( ! function_exists( 'arsenal_get_player_url' ) ) {
 		return home_url( '/player/' . $safe_id . '/' );
 	}
 }
+
+/**
+ * ===== ДИНАМИЧЕСКИЕ URL ДЛЯ СОТРУДНИКОВ (STAFF) =====
+ * Паттерн: /staff/{ID}/
+ */
+
+// Регистрация rewrite rule для URL вида /staff/123/
+if ( ! function_exists( 'arsenal_staff_rewrite_rules' ) ) {
+	function arsenal_staff_rewrite_rules() {
+		add_rewrite_rule(
+			'^staff/([0-9]+)/?$',
+			'index.php?staff_id=$matches[1]',
+			'top'
+		);
+	}
+}
+add_action( 'init', 'arsenal_staff_rewrite_rules' );
+
+// Регистрация query var для staff_id
+if ( ! function_exists( 'arsenal_staff_query_vars' ) ) {
+	function arsenal_staff_query_vars( $vars ) {
+		$vars[] = 'staff_id';
+		return $vars;
+	}
+}
+add_filter( 'query_vars', 'arsenal_staff_query_vars' );
+
+// Загрузка шаблона для страницы сотрудника
+if ( ! function_exists( 'arsenal_staff_template_include' ) ) {
+	function arsenal_staff_template_include( $template ) {
+		$staff_id = get_query_var( 'staff_id' );
+
+		if ( $staff_id ) {
+			$staff_template = ARSENAL_THEME_DIR . '/dynamic-pages/page-staff.php';
+
+			if ( file_exists( $staff_template ) ) {
+				return $staff_template;
+			}
+		}
+
+		return $template;
+	}
+}
+add_filter( 'template_include', 'arsenal_staff_template_include' );
+
+// Получение URL сотрудника
+if ( ! function_exists( 'arsenal_get_staff_url' ) ) {
+	function arsenal_get_staff_url( $staff_id ) {
+		$safe_id = absint( $staff_id );
+		return home_url( '/staff/' . $safe_id . '/' );
+	}
+}
+
+/**
+ * Однократный flush rewrite rules после обновлений темы.
+ * Нужен, чтобы новые правила (например staff) начали работать без ручного сохранения пермалинков.
+ */
+if ( ! function_exists( 'arsenal_maybe_flush_rewrite_rules' ) ) {
+	function arsenal_maybe_flush_rewrite_rules() {
+		$option_key = 'arsenal_rewrite_rules_flushed_v1';
+		if ( get_option( $option_key ) ) {
+			return;
+		}
+
+		flush_rewrite_rules( false );
+		update_option( $option_key, 1 );
+	}
+}
+add_action( 'init', 'arsenal_maybe_flush_rewrite_rules', 20 );
 
 /**
  * ===== ДИНАМИЧЕСКИЕ URL ДЛЯ МАТЧЕЙ =====
@@ -884,7 +964,7 @@ if ( ! function_exists( 'arsenal_match_template_include' ) ) {
 		$match_date = get_query_var( 'match_date' );
 		
 		if ( $team_id && $match_date ) {
-			$match_template = ARSENAL_THEME_DIR . '/templates/page-match.php';
+			$match_template = ARSENAL_THEME_DIR . '/dynamic-pages/page-match.php';
 			
 			if ( file_exists( $match_template ) ) {
 				return $match_template;

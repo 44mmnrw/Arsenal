@@ -26,6 +26,7 @@ define( 'ARSENAL_MATCH_MANAGER_DIR', plugin_dir_path( __FILE__ ) );
 class Arsenal_Team_Manager {
     
     private static $instance = null;
+    public $tournament_admin = null;
     
     /**
      * Singleton
@@ -89,6 +90,10 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-season-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-season-admin.php';
         
+        // Классы управления турнирами
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-tournament-manager.php';
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-tournament-admin.php';
+        
         // Классы управления лигами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-league-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-league-admin.php';
@@ -114,6 +119,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс сезонов
         $season_admin = new Arsenal_Season_Admin();
         $season_admin->__init__();
+        
+        // Инициализируем админ-интерфейс турниров
+        $this->tournament_admin = new Arsenal_Tournament_Admin();
+        $this->tournament_admin->__init__();
         
         // Инициализируем админ-интерфейс лиг
         $league_admin = new Arsenal_League_Admin();
@@ -211,6 +220,16 @@ class Arsenal_Team_Manager {
             array( $this, 'render_seasons_list' )
         );
         
+        // Подменю: Турниры
+        add_submenu_page(
+            $parent_slug,
+            'Турниры',
+            'Турниры',
+            'manage_options',
+            'arsenal-tournaments',
+            array( $this->tournament_admin, 'render_tournaments_list' )
+        );
+        
         // Подменю: Лиги
         add_submenu_page(
             $parent_slug,
@@ -299,6 +318,26 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-season-edit',
             array( $this, 'render_season_edit' )
+        );
+        
+        // Скрытая страница добавления турнира (без пункта меню)
+        add_submenu_page(
+            '',
+            'Добавить турнир',
+            'Добавить турнир',
+            'manage_options',
+            'arsenal-tournament-add',
+            array( $this->tournament_admin, 'render_tournament_form' )
+        );
+        
+        // Скрытая страница редактирования турнира (без пункта меню)
+        add_submenu_page(
+            '',
+            'Редактировать турнир',
+            'Редактировать турнир',
+            'manage_options',
+            'arsenal-tournament-edit',
+            array( $this->tournament_admin, 'render_tournament_form' )
         );
         
         // Скрытая страница добавления лиги (без пункта меню)
@@ -1218,5 +1257,33 @@ function arsenal_delete_coach_from_db() {
     
     wp_send_json_success( array( 'message' => 'Тренер "' . $coach_name . '" удален из БД' ) );
 }
+
+/**
+ * AJAX: Получить department_id для должности
+ */
+function arsenal_get_job_title_department() {
+    check_ajax_referer( 'arsenal_nonce' );
+    
+    $job_title_id = isset( $_POST['job_title_id'] ) ? intval( $_POST['job_title_id'] ) : 0;
+    
+    if ( ! $job_title_id ) {
+        wp_send_json_error( array( 'message' => 'ID должности не указан' ) );
+    }
+    
+    require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
+    
+    $job_title = Arsenal_Staff_Manager::get_job_title( $job_title_id );
+    
+    if ( ! $job_title ) {
+        wp_send_json_error( array( 'message' => 'Должность не найдена' ) );
+    }
+    
+    wp_send_json_success( array(
+        'department_id' => $job_title->department_id,
+        'job_title_name' => $job_title->job_title_name,
+    ) );
+}
+
+add_action( 'wp_ajax_arsenal_get_job_title_department', 'arsenal_get_job_title_department' );
 
 add_action( 'wp_ajax_arsenal_delete_coach_from_db', 'arsenal_delete_coach_from_db' );

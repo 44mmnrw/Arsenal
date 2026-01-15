@@ -61,7 +61,7 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 }
 ?>
 
-<section class="last-games-section">
+<section class="last-games-section" style="background-color: #ffffff;">
 	<div class="container">
 		<div class="section-header">
 			<h2 class="section-title">РЕЗУЛЬТАТЫ ПРОШЕДШИХ ИГР</h2>

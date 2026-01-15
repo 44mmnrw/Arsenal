@@ -24,7 +24,7 @@ if ( empty( $sponsors ) ) {
 }
 ?>
 
-<section class="sponsors-section">
+<section class="sponsors-section" style="background-color: #ffffff;">
 	<div class="container">
 		<div class="section-header">
 			<h2 class="section-title"><?php esc_html_e( 'Наши партнёры', 'arsenal' ); ?></h2>

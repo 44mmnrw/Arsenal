@@ -53,14 +53,18 @@ foreach ( $staff as $person ) {
 							<div class="players-grid">
 								<?php foreach ( $job_staff as $person ) : 
 									$photo_url = ! empty( $person->photo_url ) ? $person->photo_url : '';
+									$photo_src = function_exists( 'arsenal_convert_logo_url' ) ? arsenal_convert_logo_url( $photo_url ) : $photo_url;
 									$name_display = ! empty( $person->full_name ) ? trim( $person->full_name ) : 'Неизвестно';
 									$position = ! empty( $person->job_title ) ? $person->job_title : 'Специалист';
+								
+									// Динамический URL сотрудника (по аналогии со страницей игрока)
+									$staff_url = ! empty( $person->id ) ? arsenal_get_staff_url( $person->id ) : '#';
 								?>
-									<a href="#" class="coach-card" title="<?php echo esc_attr( $name_display ); ?>">
+									<a href="<?php echo esc_url( $staff_url ); ?>" class="coach-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото -->
 										<div class="coach-card__photo">
 											<img 
-												src="<?php echo esc_url( $photo_url ); ?>" 
+												src="<?php echo esc_url( $photo_src ); ?>" 
 												alt="<?php echo esc_attr( $name_display ); ?>"
 												class="coach-card__image"
 												loading="lazy"

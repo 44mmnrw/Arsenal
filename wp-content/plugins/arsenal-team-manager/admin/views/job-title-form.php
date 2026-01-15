@@ -26,6 +26,7 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_job_title'] ) 
     $data = array(
         'job_title_name' => sanitize_text_field( $_POST['job_title_name'] ?? '' ),
         'description' => sanitize_textarea_field( $_POST['description'] ?? '' ),
+        'department_id' => ! empty( $_POST['department_id'] ) ? intval( $_POST['department_id'] ) : null,
     );
 
     if ( empty( $data['job_title_name'] ) ) {
@@ -57,6 +58,10 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_job_title'] ) 
 <div class="wrap">
     <h1><?php echo $is_edit ? '✏️ Редактирование должности' : '➕ Добавление новой должности'; ?></h1>
 
+    <?php
+    $departments = Arsenal_Staff_Manager::get_departments( true );
+    ?>
+
     <form method="post" style="max-width: 600px; margin: 20px 0;">
         <?php wp_nonce_field( 'arsenal_job_title_nonce' ); ?>
         <input type="hidden" name="save_job_title" value="1">
@@ -69,6 +74,21 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_job_title'] ) 
                        value="<?php echo esc_attr( $job_title->job_title_name ?? '' ); ?>"
                        placeholder="Например: Тренер, Врач команды, Сертификатор">
                 <small style="color: #666; display: block; margin-top: 5px;">Введите название должности</small>
+            </div>
+
+            <div class="form-group">
+                <label for="department_id">Отдел</label>
+                <select id="department_id" name="department_id"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">— Не указан —</option>
+                    <?php foreach ( $departments as $dept ): ?>
+                        <option value="<?php echo $dept->id; ?>"
+                                <?php selected( $job_title->department_id ?? null, $dept->id ); ?>>
+                            <?php echo esc_html( $dept->department_name ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <small style="color: #666; display: block; margin-top: 5px;">Выберите отдел, к которому относится должность</small>
             </div>
 
             <div class="form-group">
