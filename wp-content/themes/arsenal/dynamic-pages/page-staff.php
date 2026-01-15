@@ -42,16 +42,6 @@ if ( $staff_id ) {
 			return $staff_full_name;
 		}, 999 );
 	}
-} else {
-	// Старый режим: ищем сотрудника по названию страницы
-	$post_title = get_the_title( $post_id );
-	global $wpdb;
-	$staff = $wpdb->get_row( $wpdb->prepare(
-		"SELECT * FROM {$wpdb->prefix}arsenal_staff 
-		 WHERE CONCAT(first_name, ' ', second_name) = %s 
-		 LIMIT 1",
-		$post_title
-	) );
 }
 
 // Если это динамический URL и сотрудник не найден — показываем понятную ошибку
@@ -101,26 +91,6 @@ if ( $staff ) {
 	$staff_interesting_fact = ! empty( $staff->interesting_fact ) ? $staff->interesting_fact : '';
 	if ( ! $staff_nationality && property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
 		$staff_nationality = $staff->nationality;
-	}
-} else {
-	// Fallback: получить данные из post_meta (старая система)
-	$staff_position = get_post_meta( $post_id, '_staff_position', true ) ?: 'Главный тренер';
-	$staff_birthdate = get_post_meta( $post_id, '_staff_birthdate', true ) ?: '';
-	$staff_experience = get_post_meta( $post_id, '_staff_experience', true ) ?: '';
-	$staff_photo_url = '';
-	$staff_photo_src = '';
-	$staff_bio = '';
-	$staff_achievements = get_post_meta( $post_id, '_staff_achievements', true ) ?: array();
-	$staff_career = get_post_meta( $post_id, '_staff_career', true ) ?: array();
-	$staff_contract_start = '';
-	$staff_nationality = get_post_meta( $post_id, '_staff_nationality', true );
-
-	// Если achievement и career в виде JSON, распарсить их
-	if ( is_string( $staff_achievements ) ) {
-		$staff_achievements = json_decode( $staff_achievements, true ) ?: array();
-	}
-	if ( is_string( $staff_career ) ) {
-		$staff_career = json_decode( $staff_career, true ) ?: array();
 	}
 }
 
