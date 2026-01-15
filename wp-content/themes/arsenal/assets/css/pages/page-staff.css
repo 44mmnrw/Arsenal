@@ -1,0 +1,616 @@
+/**
+ * Page Staff - Страница персонала (тренер, стафф)
+ * Адаптация под макет Figma
+ */
+
+/* ==========================================================================
+   БАЗОВАЯ СЦЕНА
+	/* ---------------------------------------------------
+	   Основной макет героя: сетка для контента
+	   --------------------------------------------------- */
+   ========================================================================== */
+
+.staff-detail-page {
+	background: #f9fafb;
+	min-height: 100vh;
+	padding-bottom: 80px;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
+.staff-hero {
+	position: relative;
+	height: 31rem;
+	padding: 40px 0;
+	background: linear-gradient(
+		165.07deg,
+		#990000 0%,
+		#cc0000 50%,
+		#101828 100%
+	);
+	overflow: hidden;
+	box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------
+   Полупрозрачный декоративный слой на герое
+   --------------------------------------------------- */
+.staff-hero__overlay {
+	position: absolute;
+	inset: 0;
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1620 432"><circle cx="100" cy="50" r="60" fill="rgba(255,255,255,0.05)"/><circle cx="1500" cy="400" r="100" fill="rgba(255,255,255,0.03)"/></svg>') no-repeat center;
+	background-size: cover;
+	opacity: 0.1;
+}
+
+.staff-hero__content {
+	position: relative;
+	z-index: 2;
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+.staff-hero__inner {
+	width: 100%;
+	max-width: var(--container-max-width);
+	margin: 0 auto;
+	padding: 20px 40px 0;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+}
+
+.staff-hero__main {
+	margin-top: 40px;
+	display: grid;
+	grid-template-columns: 32% 68%;
+	gap: 64px;
+	align-items: center;
+}
+/*---------------------------------------------------
+Обёртка для фото: фиксированный квадрат с обводкой
+--------------------------------------------------- */
+
+.staff-hero__photo-wrapper {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;	
+	border-radius: 36px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 4.5px solid #ffffff26;
+	box-shadow: 0 30px 90px #4d4d4d4d;
+}
+
+.staff-hero__photo {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+	border-radius: 16px;
+	overflow: hidden;
+	border: 8px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.staff-hero__photo-img {
+	height: 100%;
+	width: 100%;
+	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
+	aspect-ratio: 1 / 1;
+	object-fit: contain;
+	display: block;
+	flex-shrink: 0;
+}
+
+.staff-hero__photo-placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.1);
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 14px;
+	text-align: center;
+	padding: 20px;
+}
+
+.staff-hero__info {
+	color: #ffffff;
+	padding-top: 26px;
+}
+
+.staff-hero__position {
+	display: inline-flex;
+	align-items: center;
+	padding: 8px 16px;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 9999px;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	margin-bottom: 20px;
+}
+
+.staff-hero__title {
+	margin: 0 0 24px;
+	font-size: 60px;
+	line-height: 72px;
+	font-weight: 700;
+}
+
+.staff-hero__details {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
+}
+
+.staff-hero__detail-item {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.staff-hero__detail-label {
+	font-size: 14px;
+	line-height: 20px;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.staff-hero__detail-value {
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: 400;
+}
+
+/* ==========================================================================
+   MAIN CONTENT
+   ========================================================================== */
+
+.staff-container {
+	margin: 48px auto 0;
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.staff-container__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 992px) 480px;
+	gap: 32px;
+	align-items: flex-start;
+}
+
+.staff-content {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+.staff-section {
+	background: #ffffff;
+	border-radius: 16px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.staff-section__header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 24px;
+	color: #ffffff;
+	background: linear-gradient(180deg, #990000 0%, #ff1a1a 100%);
+}
+
+.staff-section__header--achievements {
+	background: linear-gradient(180deg, #990000 0%, #cc0000 100%);
+}
+
+.staff-section__header--career {
+	background: linear-gradient(180deg, #990000 0%, #ff1a1a 100%);
+}
+
+.staff-section__icon {
+	width: 24px;
+	height: 24px;
+	color: currentColor;
+	flex-shrink: 0;
+}
+
+.staff-section__title {
+	margin: 0;
+	font-size: 24px;
+	line-height: 31.2px;
+	font-weight: 600;
+}
+
+.staff-section__content {
+	padding: 24px;
+}
+
+.staff-section__text {
+	margin: 0;
+	font-size: 16px;
+	line-height: 25.6px;
+	color: #364153;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.staff-achievements,
+.staff-career {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.staff-achievement-item,
+.staff-career-item {
+	display: flex;
+	gap: 16px;
+	padding: 16px;
+	min-height: 80px;
+	background: #f9fafb;
+	border-radius: 10px;
+	align-items: flex-start;
+}
+
+.staff-achievement-icon,
+.staff-career-icon {
+	width: 48px;
+	height: 48px;
+	border-radius: 9999px;
+	background: #ffe5e5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ff1a1a;
+	flex-shrink: 0;
+}
+
+.staff-achievement-icon svg,
+.staff-career-icon svg {
+	width: 24px;
+	height: 24px;
+	fill: currentColor;
+}
+
+.staff-achievement-text {
+	margin: 0;
+	font-size: 16px;
+	line-height: 25.6px;
+	color: #1e2939;
+	flex: 1;
+}
+
+.staff-career-info {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	flex: 1;
+}
+
+.staff-career-title {
+	margin: 0;
+	font-size: 16px;
+	line-height: 22.4px;
+	font-weight: 600;
+	color: #0a0a0a;
+}
+
+.staff-career-club {
+	margin: 0;
+	font-size: 14px;
+	line-height: 22.4px;
+	color: #4a5565;
+}
+
+.staff-career-period {
+	margin: 0;
+	font-size: 14px;
+	line-height: 22.4px;
+	color: #6a7282;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.staff-sidebar {
+	position: sticky;
+	top: 120px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.staff-info-card {
+	background: #ffffff;
+	border-radius: 16px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+.staff-info-card__header {
+	background: #990000;
+	padding: 16px 24px;
+}
+
+.staff-info-card__title {
+	margin: 0;
+	font-size: 20px;
+	line-height: 28px;
+	font-weight: 600;
+	color: #ffffff;
+}
+
+.staff-info-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	padding: 24px;
+}
+
+.staff-info-card__row {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.staff-info-card__row:last-child {
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.staff-info-card__label {
+	font-size: 14px;
+	line-height: 20px;
+	color: #4a5565;
+}
+
+.staff-info-card__value {
+	font-size: 18px;
+	line-height: 28px;
+	color: #0a0a0a;
+}
+
+.staff-fact-card {
+	background: linear-gradient(180deg, #fff0f0 0%, #ffe5e5 100%);
+	border: 1px solid #ffcccc;
+	border-radius: 16px;
+	padding: 24px;
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.staff-fact-card .staff-fact-icon {
+	margin-bottom: 16px;
+}
+
+.staff-fact-icon {
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 9999px;
+	background: #990000;
+	color: #ffffff;
+}
+
+.staff-fact-icon svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
+}
+
+.staff-fact-title {
+	margin: 0 0 12px;
+	font-size: 18px;
+	line-height: 25.2px;
+	font-weight: 600;
+	color: #990000;
+}
+
+.staff-fact-text {
+	margin: 0;
+	font-size: 14px;
+	line-height: 22.4px;
+	color: #364153;
+}
+
+/* ==========================================================================
+   АДАПТИВНОСТЬ
+   ========================================================================== */
+
+@media (max-width: 1400px) {
+	.staff-container {
+		padding: 0 40px;
+	}
+
+	.staff-container__inner {
+		grid-template-columns: 1fr;
+	}
+
+	.staff-sidebar {
+		position: static;
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.staff-fact-card {
+		max-width: 480px;
+	}
+
+	.staff-info-card {
+		max-width: 480px;
+	}
+}
+
+@media (max-width: 1100px) {
+	.staff-hero__main {
+		grid-template-columns: 220px 1fr;
+		gap: 40px;
+	}
+
+	.staff-hero__photo-wrapper {
+		width: 220px;
+		height: 220px;
+	}
+}
+
+@media (max-width: 900px) {
+	.staff-hero__inner {
+		padding: 24px 24px 0;
+	}
+
+	.staff-hero__main {
+		grid-template-columns: repeat(1, minmax(0, 1fr));
+		gap: 24px;
+	}
+
+	.staff-hero__info {
+		padding-top: 0;
+	}
+
+	.staff-hero__title {
+		font-size: 42px;
+		line-height: 52px;
+	}
+
+	.staff-hero__details {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 768px) {
+	.staff-detail-page {
+		padding-bottom: 48px;
+	}
+
+	.staff-hero {
+		height: auto;
+		padding-bottom: 32px;
+	}
+
+	.staff-hero__main {
+		margin-top: 32px;
+	}
+
+	.staff-hero__details {
+		grid-template-columns: 1fr;
+	}
+
+	.staff-hero__detail-value {
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	.staff-container {
+		padding: 0 20px;
+		margin-top: 32px;
+	}
+
+	.staff-content {
+		gap: 24px;
+	}
+
+	.staff-section__header {
+		padding: 20px;
+	}
+
+	.staff-section__content {
+		padding: 20px;
+	}
+
+	.staff-achievement-item,
+	.staff-career-item {
+		min-height: unset;
+	}
+}
+
+@media (max-width: 540px) {
+	.staff-hero__inner {
+		padding: 20px 16px 0;
+	}
+
+	.staff-hero__main {
+		gap: 20px;
+	}
+
+	.staff-hero__photo-wrapper {
+		width: 160px;
+		height: 160px;
+	}
+
+	.staff-hero__title {
+		font-size: 32px;
+		line-height: 40px;
+		margin-bottom: 16px;
+	}
+
+	.staff-hero__position {
+		font-size: 12px;
+		padding: 6px 12px;
+	}
+
+	.staff-container {
+		padding: 0 12px;
+	}
+
+	.staff-section {
+		border-radius: 12px;
+	}
+
+	.staff-section__header {
+		padding: 16px;
+	}
+
+	.staff-section__title {
+		font-size: 20px;
+		line-height: 24px;
+	}
+
+	.staff-section__content {
+		padding: 16px;
+	}
+
+	.staff-achievement-item,
+	.staff-career-item {
+		padding: 12px;
+		gap: 12px;
+	}
+
+	.staff-achievement-icon,
+	.staff-career-icon {
+		width: 40px;
+		height: 40px;
+	}
+
+	.staff-fact-card {
+		padding: 20px;
+	}
+
+	.staff-info-card,
+	.staff-fact-card {
+		max-width: 100%;
+	}
+
+	.staff-fact-title {
+		font-size: 16px;
+		line-height: 22px;
+	}
+}
