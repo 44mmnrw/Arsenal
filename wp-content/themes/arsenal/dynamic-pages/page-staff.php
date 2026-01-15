@@ -253,28 +253,6 @@ if ( empty( $staff_nationality ) ) {
 							</div>
 							<?php
 						}
-					} else {
-						// Дефолтные достижения для демо
-						$default_achievements = array(
-							'Чемпион второй лиги 2022',
-							'Тренер года 2023',
-							'Вывел команду в первую лигу',
-							'Обладатель лицензии UEFA Pro',
-						);
-						foreach ( $default_achievements as $achievement ) {
-							?>
-							<div class="staff-achievement-item">
-								<div class="staff-achievement-icon">
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-										<path d="M12 2L15.09 8.26H22L16.54 12.82L18.63 19.08L12 14.54L5.37 19.08L7.46 12.82L2 8.26H8.91L12 2Z" fill="currentColor"/>
-									</svg>
-								</div>
-								<p class="staff-achievement-text">
-									<?php echo esc_html( $achievement ); ?>
-								</p>
-							</div>
-							<?php
-						}
 					}
 					?>
 				</div>
@@ -314,21 +292,6 @@ if ( empty( $staff_nationality ) ) {
 							</div>
 							<?php
 						}
-					} else {
-						?>
-						<div class="staff-career-item">
-							<div class="staff-career-icon">
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-									<path d="M20 6H16V4C16 2.9 15.1 2 14 2H10C8.9 2 8 2.9 8 4V6H4C2.9 6 2 6.9 2 8V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V8C22 6.9 21.1 6 20 6ZM10 4H14V6H10V4ZM20 19H4V8H20V19Z" fill="currentColor"/>
-								</svg>
-							</div>
-							<div class="staff-career-info">
-								<h4 class="staff-career-title">Главный тренер</h4>
-								<p class="staff-career-club">ФК Арсенал Дзержинск</p>
-								<p class="staff-career-period">Опыт: 15 лет</p>
-							</div>
-						</div>
-						<?php
 					}
 					?>
 				</div>

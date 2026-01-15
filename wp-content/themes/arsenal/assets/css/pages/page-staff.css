@@ -419,50 +419,21 @@
    АДАПТИВНОСТЬ
    ========================================================================== */
 
-@media (max-width: 1400px) {
-	.staff-detail-container {
-		padding: 0 40px;
-	}
-
-	.staff-detail-inner {
-		grid-template-columns: 1fr;
-	}
-
-	.staff-sidebar {
-		position: static;
-		width: 100%;
-		flex-direction: column;
-	}
-
-	.staff-fact-card {
-		max-width: 480px;
-	}
-
-	.staff-info-card {
-		max-width: 480px;
-	}
-}
-
-@media (max-width: 1100px) {
-	.staff-hero__main {
-		grid-template-columns: 220px 1fr;
-		gap: 40px;
+/* Desktop Large (1024px) */
+@media (max-width: 1024px) {
+	.player-container {
+		padding: 0 30px;
+		height: auto;
 	}
 
 	.staff-photo-wrapper {
-		width: 220px;
-		height: 220px;
-	}
-}
-
-@media (max-width: 900px) {
-	.player-hero__inner {
-		padding: 24px 24px 0;
+		width: 100%;
+		height: 100%;
 	}
 
 	.staff-hero__main {
-		grid-template-columns: repeat(1, minmax(0, 1fr));
-		gap: 24px;
+		grid-template-columns: 1fr 1.2fr;
+		gap: 40px;
 	}
 
 	.staff-info-block {
@@ -476,9 +447,48 @@
 
 	.staff-details-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 20px;
+	}
+
+	.staff-detail-value {
+		font-size: 20px;
+		line-height: 28px;
+	}
+
+	.staff-detail-container {
+		padding: 0 30px;
+		margin-top: 32px;
+	}
+
+	.staff-detail-inner {
+		grid-template-columns: 1fr;
+	}
+
+	.staff-sidebar {
+		position: static;
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.staff-info-card,
+	.staff-fact-card {
+		max-width: 100%;
+	}
+
+	.staff-section {
+		padding: 30px;
+	}
+
+	.staff-section__header {
+		margin-bottom: 20px;
+	}
+
+	.staff-content {
+		gap: 24px;
 	}
 }
 
+/* Tablet (768px) */
 @media (max-width: 768px) {
 	.player-page {
 		padding-bottom: 48px;
@@ -486,15 +496,64 @@
 
 	.player-hero {
 		height: auto;
-		padding-bottom: 32px;
+		padding: 25px 0;
 	}
 
-	.player-hero__main {
-		margin-top: 32px;
+	.player-hero__inner {
+		padding: 0 20px;
+	}
+
+	.player-container {
+		padding: 0 20px;
+	}
+
+	.staff-hero__main {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		padding: 0;
+		align-items: start;
+	}
+
+	.staff-photo-wrapper {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		border-radius: 24px;
+	}
+
+	.staff-info-block {
+		padding-top: 0;
+		text-align: left;
+		background: #ffffff40;
+		border-radius: 12px;
+		padding: 20px;
+		height: auto;
+	}
+
+	.staff-position-badge {
+		padding: 5px 12px;
+		font-size: 12px;
+		width: fit-content;
+	}
+
+	.staff-title {
+		font-size: 28px;
+		line-height: 36px;
+		margin-bottom: 8px;
 	}
 
 	.staff-details-grid {
-		grid-template-columns: 1fr;
+		grid-template-columns: 1fr 1fr;
+		gap: 15px;
+		padding-top: 2rem;
+	}
+
+	.staff-detail-item {
+		gap: 2px;
+	}
+
+	.staff-detail-label {
+		font-size: 12px;
 	}
 
 	.staff-detail-value {
@@ -507,72 +566,38 @@
 		margin-top: 32px;
 	}
 
+	.content-container {
+		padding: 0 20px;
+	}
+
+	.staff-detail-inner {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	.staff-sidebar {
+		position: static;
+		width: 100%;
+	}
+
 	.staff-content {
 		gap: 24px;
 	}
 
-	.staff-section__header {
+	.staff-section {
 		padding: 20px;
+		border-radius: 12px;
 	}
 
-	.staff-section__content {
-		padding: 20px;
+	.staff-section__header {
+		font-size: 18px;
+		margin-bottom: 20px;
+		padding-left: 12px;
 	}
 
 	.staff-achievement-item,
 	.staff-career-item {
 		min-height: unset;
-	}
-}
-
-@media (max-width: 540px) {
-	.player-hero__inner {
-		padding: 20px 16px 0;
-	}
-
-	.staff-hero__main {
-		gap: 20px;
-	}
-
-	.staff-photo-wrapper {
-		width: 160px;
-		height: 160px;
-	}
-
-	.staff-title {
-		font-size: 32px;
-		line-height: 40px;
-		margin-bottom: 16px;
-	}
-
-	.staff-position-badge {
-		font-size: 12px;
-		padding: 6px 12px;
-	}
-
-	.staff-detail-container {
-		padding: 0 12px;
-	}
-
-	.staff-section {
-		border-radius: 12px;
-	}
-
-	.staff-section__header {
-		padding: 16px;
-	}
-
-	.staff-section__title {
-		font-size: 20px;
-		line-height: 24px;
-	}
-
-	.staff-section__content {
-		padding: 16px;
-	}
-
-	.staff-achievement-item,
-	.staff-career-item {
 		padding: 12px;
 		gap: 12px;
 	}
@@ -583,17 +608,237 @@
 		height: 40px;
 	}
 
-	.staff-fact-card {
-		padding: 20px;
+	.staff-achievement-text,
+	.staff-career-info {
+		font-size: 14px;
 	}
 
-	.staff-info-card,
+	.staff-info-card {
+		border-radius: 12px;
+	}
+
+	.staff-info-card__header {
+		padding: 14px 20px;
+	}
+
+	.staff-info-card__body {
+		padding: 20px;
+		gap: 12px;
+	}
+
+	.staff-info-card__title {
+		font-size: 18px;
+		line-height: 24px;
+	}
+
 	.staff-fact-card {
-		max-width: 100%;
+		padding: 18px;
+		border-radius: 12px;
 	}
 
 	.staff-fact-title {
 		font-size: 16px;
 		line-height: 22px;
+	}
+
+	.staff-fact-text {
+		font-size: 13px;
+		line-height: 20px;
+	}
+}
+
+/* Mobile (480px) */
+@media (max-width: 480px) {
+	h1, h2, h3, h4, h5, h6 {
+		text-align: left;
+	}
+
+	.player-container {
+		padding: 0 12px;
+		height: auto;
+	}
+
+	.content-container {
+		padding: 0 12px;
+	}
+
+	.player-hero {
+		height: auto;
+		padding: 15px 0;
+	}
+
+	.player-hero__inner {
+		padding: 20px 16px 0;
+	}
+
+	.staff-hero__main {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.staff-photo-wrapper {
+		width: 100%;
+		height: auto;
+		border-radius: 16px;
+		border: 3px solid #ffffff26;
+	}
+
+	.staff-info-block {
+		padding: 16px;
+		border-radius: 10px;
+		gap: 16px;
+		height: auto;
+	}
+
+	.staff-position-badge {
+		font-size: 11px;
+		padding: 4px 10px;
+		border-radius: 20px;
+	}
+
+	.staff-title {
+		font-size: 24px;
+		line-height: 32px;
+		margin-bottom: 6px;
+	}
+
+	.staff-details-grid {
+		grid-template-columns: 1fr;
+		gap: 8px;
+		padding-top: 1.5rem;
+	}
+
+	.staff-detail-item {
+		gap: 2px;
+	}
+
+	.staff-detail-label {
+		font-size: 11px;
+		line-height: 16px;
+	}
+
+	.staff-detail-value {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.staff-detail-container {
+		padding: 0 12px;
+	}
+
+	.staff-detail-inner {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+
+	.staff-sidebar {
+		position: static;
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.staff-content {
+		gap: 16px;
+	}
+
+	.staff-section {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.staff-section__header {
+		font-size: 16px;
+		margin-bottom: 16px;
+		padding-left: 12px;
+	}
+
+	.staff-section__title {
+		font-size: 16px;
+		line-height: 20px;
+	}
+
+	.staff-section__text {
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	.staff-achievement-item,
+	.staff-career-item {
+		padding: 10px;
+		gap: 10px;
+		min-height: unset;
+		border-radius: 8px;
+	}
+
+	.staff-achievement-icon,
+	.staff-career-icon {
+		width: 36px;
+		height: 36px;
+	}
+
+	.staff-achievement-text {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.staff-career-title {
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.staff-career-club,
+	.staff-career-period {
+		font-size: 12px;
+		line-height: 18px;
+	}
+
+	.staff-info-card {
+		border-radius: 10px;
+	}
+
+	.staff-info-card__header {
+		padding: 12px 16px;
+	}
+
+	.staff-info-card__title {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.staff-info-card__body {
+		padding: 16px;
+		gap: 12px;
+	}
+
+	.staff-info-card__label {
+		font-size: 12px;
+		line-height: 18px;
+	}
+
+	.staff-info-card__value {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.staff-fact-card {
+		padding: 16px;
+		border-radius: 10px;
+	}
+
+	.staff-fact-icon {
+		width: 36px;
+		height: 36px;
+	}
+
+	.staff-fact-title {
+		font-size: 14px;
+		line-height: 20px;
+		margin-bottom: 10px;
+	}
+
+	.staff-fact-text {
+		font-size: 12px;
+		line-height: 18px;
 	}
 }
