@@ -247,7 +247,7 @@
 	min-height: 80px;
 	background: #f9fafb;
 	border-radius: 10px;
-	align-items: flex-start;
+	align-items: center;
 }
 
 .staff-achievement-icon,
@@ -845,4 +845,11 @@
 		font-size: 12px;
 		line-height: 18px;
 	}
+}
+
+/* Уменьшение иконок в достижениях и карьере на 25% */
+.staff-achievement-icon,
+.staff-career-icon {
+	transform: scale(0.75);
+	transform-origin: left center;
 }

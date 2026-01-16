@@ -236,7 +236,7 @@ if ( empty( $staff_nationality ) ) {
 						foreach ( $staff_achievements as $achievement ) {
 							?>
 							<div class="staff-achievement-item">
-								<div class="staff-achievement-icon">
+							<div class="staff-achievement-icon">
 									<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-checkbox"></use></svg>
 								</div>
 								<p class="staff-achievement-text">
