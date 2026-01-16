@@ -208,9 +208,7 @@ if ( empty( $staff_nationality ) ) {
 			<!-- BIOGRAPHY -->
 			<div class="staff-section staff-section--biography">
 				<div class="staff-section__header staff-section__header--biography">
-					<svg class="staff-section__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11C11 9.75 13 8.5 13 7C13 5.9 12.1 5 11 5C9.9 5 9 5.9 9 7H7C7 4.79 8.79 3 11 3C13.21 3 15 4.79 15 7C15 8.5 17 9.75 17 13H13Z" fill="currentColor"/>
-					</svg>
+					<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-bio"></use></svg>
 					<h2 class="staff-section__title">Биография</h2>
 				</div>
 
@@ -230,9 +228,7 @@ if ( empty( $staff_nationality ) ) {
 			<!-- ACHIEVEMENTS -->
 			<div class="staff-section staff-section--achievements">
 				<div class="staff-section__header staff-section__header--achievements">
-					<svg class="staff-section__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<path d="M12 2L15.09 8.26H22L16.54 12.82L18.63 19.08L12 14.54L5.37 19.08L7.46 12.82L2 8.26H8.91L12 2Z" fill="currentColor"/>
-					</svg>
+					<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-cup"></use></svg>
 					<h2 class="staff-section__title">Достижения</h2>
 				</div>
 
@@ -243,9 +239,7 @@ if ( empty( $staff_nationality ) ) {
 							?>
 							<div class="staff-achievement-item">
 								<div class="staff-achievement-icon">
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-										<path d="M12 2L15.09 8.26H22L16.54 12.82L18.63 19.08L12 14.54L5.37 19.08L7.46 12.82L2 8.26H8.91L12 2Z" fill="currentColor"/>
-									</svg>
+									<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-checkbox"></use></svg>
 								</div>
 								<p class="staff-achievement-text">
 									<?php echo esc_html( $achievement ); ?>
@@ -261,9 +255,7 @@ if ( empty( $staff_nationality ) ) {
 			<!-- CAREER -->
 			<div class="staff-section staff-section--career">
 				<div class="staff-section__header staff-section__header--career">
-					<svg class="staff-section__icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<path d="M20 6H16V4C16 2.9 15.1 2 14 2H10C8.9 2 8 2.9 8 4V6H4C2.9 6 2 6.9 2 8V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V8C22 6.9 21.1 6 20 6ZM10 4H14V6H10V4ZM20 19H4V8H20V19Z" fill="currentColor"/>
-					</svg>
+					<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-career"></use></svg>
 					<h2 class="staff-section__title">Карьера</h2>
 				</div>
 
@@ -274,9 +266,7 @@ if ( empty( $staff_nationality ) ) {
 							?>
 							<div class="staff-career-item">
 								<div class="staff-career-icon">
-									<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-										<path d="M20 6H16V4C16 2.9 15.1 2 14 2H10C8.9 2 8 2.9 8 4V6H4C2.9 6 2 6.9 2 8V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V8C22 6.9 21.1 6 20 6ZM10 4H14V6H10V4ZM20 19H4V8H20V19Z" fill="currentColor"/>
-									</svg>
+									<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-checkbox"></use></svg>
 								</div>
 								<div class="staff-career-info">
 									<h4 class="staff-career-title">
@@ -318,11 +308,12 @@ if ( empty( $staff_nationality ) ) {
 							<span class="staff-info-card__value"><?php echo esc_html( $staff_experience ?: 'Не указано' ); ?></span>
 						</div>
 						<div class="staff-info-card__row">
-							<span class="staff-info-card__label">Национальность</span>
+							<span class="staff-info-card__label">Гражданство</span>
 							<span class="staff-info-card__value"><?php echo esc_html( $staff_nationality ?: 'Не указано' ); ?></span>
 						</div>
 					</div>
 				</div>
+				<?php if ( ! empty( $staff_interesting_fact ) ) : ?>
 				<div class="staff-fact-card">
 					<div class="staff-fact-icon">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -331,9 +322,10 @@ if ( empty( $staff_nationality ) ) {
 					</div>
 					<h3 class="staff-fact-title">Интересный факт</h3>
 					<p class="staff-fact-text">
-						<?php echo esc_html( $staff_interesting_fact ?: 'Интересный факт не указан' ); ?>
+						<?php echo esc_html( $staff_interesting_fact ); ?>
 					</p>
 				</div>
+				<?php endif; ?>
 			</aside>
 		</div>
 	</div>

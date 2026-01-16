@@ -393,17 +393,69 @@ if ( ! empty( $available_seasons ) ) {
 			</div>
 			
 			<!-- События игрока -->
-			<?php
-			get_template_part( 'template-parts/widgets/player-events-table', null, array(
-				'player_events' => $player_events,
-				'selected_tournament_name' => $selected_tournament_name,
-				'position_code' => $position_code,
-			) );
-			?>
+			<div class="recent-matches-section" data-player-events-section>
+				<h2 class="section-title">
+					<svg><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-staff-stat"></use></svg>
+					События турнира <?php echo esc_html( $selected_tournament_name ); ?>
+				</h2>
+				<?php if ( ! empty( $player_events ) ) : ?>
+					<div class="matches-wrapper" data-matches-table>
+						<table class="matches-table">
+							<thead>
+								<tr>
+									<th>Дата</th>
+									<th>Матч</th>
+									<th>Счёт</th>
+									<th>Минут</th>
+									<th>Голы</th>
+									<th>Ассисты</th>
+									<th>ЖК</th>
+									<th>КК</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ( $player_events as $match ) : ?>
+									<tr>
+										<td data-label="Дата"><?php echo esc_html( date( 'd.m.Y', strtotime( $match->match_date ) ) ); ?></td>
+										<td data-label="Матч">
+											<a href="<?php echo esc_url( home_url( '/match/' . $match->home_team_id . '/' . date( 'Y-m-d', strtotime( $match->match_date ) ) . '/' ) ); ?>" class="match-link">
+												<?php echo esc_html( $match->home_team . ' - ' . $match->away_team ); ?>
+											</a>
+										</td>
+										<td data-label="Счёт" class="match-score">
+											<?php 
+											if ( $match->home_score !== null && $match->away_score !== null ) {
+												echo esc_html( $match->home_score . ':' . $match->away_score );
+											} else {
+												echo '—';
+											}
+											?>
+										</td>
+										<td data-label="Минут"><?php echo esc_html( $match->minutes_played ); ?></td>
+										<td data-label="Голы"><?php echo $match->goals ? '⚽ ' . esc_html( $match->goals ) : '—'; ?></td>
+										<td data-label="Ассисты"><?php echo $match->assists ? '👟 ' . esc_html( $match->assists ) : '—'; ?></td>
+										<td data-label="ЖК"><?php echo $match->yellow_cards ? '🟨 ' . esc_html( $match->yellow_cards ) : '—'; ?></td>
+										<td data-label="КК"><?php echo $match->red_cards ? '🟥 ' . esc_html( $match->red_cards ) : '—'; ?></td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<button class="toggle-matches-btn" data-toggle-matches>
+						<span class="toggle-text">Показать все матчи</span>
+						<svg class="toggle-icon" viewBox="0 0 24 24">
+							<path fill="white" stroke="none" d="M7.33 24l9.3 0c1.26,0 2.25,-0.14 3.19,-0.49 0.99,-0.32 2.07,-1.05 2.71,-1.83 0.42,-0.56 0.73,-1.12 0.98,-1.79 0.31,-0.91 0.49,-1.93 0.49,-3.19l0 -9.4c0,-1.23 -0.18,-2.25 -0.49,-3.16 -0.46,-1.37 -1.26,-2.32 -2.42,-3.09 -1.2,-0.77 -2.91,-1.05 -4.49,-1.05l-9.16 0c-4.84,0 -7.44,2.49 -7.44,7.33l0 9.3c0,1.58 0.28,3.26 1.05,4.46 1.48,2.17 3.58,2.91 6.28,2.91l0 0z"/>
+							<path fill="#FF1A1A" stroke="none" d="M12.11 13.16l4.21 -4.18c0.35,-0.38 1.01,-1.16 1.68,-1.16 1.09,0 1.96,1.23 0.63,2.43l-1.09 1.08c-0.94,0.95 -3.29,3.16 -3.89,3.86 -1.69,2 -2.25,0.99 -3.68,-0.45l-4.6 -4.6c-0.32,-0.32 -0.67,-0.56 -0.67,-1.19 0,-0.67 0.56,-1.27 1.3,-1.27 0.81,0 1.3,0.71 1.72,1.13 0.6,0.59 4.07,4.1 4.39,4.35l0 0z"/>
+						</svg>
+					</button>
+				<?php else : ?>
+					<p class="no-stats-message">📊 Нет данных о матчах игрока в этом турнире.</p>
+				<?php endif; ?>
+			</div>
 			<!-- Биография -->
 			<div class="biography-section">
 				<h2 class="section-title">
-					<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+					<svg><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-bio"></use></svg>
 					Биография
 				</h2>
 				<div class="biography-text">
@@ -419,7 +471,7 @@ if ( ! empty( $available_seasons ) ) {
 			<?php if ( ! empty( $years_stats ) ) : ?>
 				<div class="seasons-table-section">
 					<h2 class="section-title">
-						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+						<svg><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-staff-stat"></use></svg>
 						Статистика по годам в <?php echo esc_html( $selected_tournament_name ); ?>
 					</h2>
 					<table class="stats-table">

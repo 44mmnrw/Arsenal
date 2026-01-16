@@ -792,8 +792,8 @@
 
 .toggle-icon {
 	transition: transform 0.3s ease;
-	width: 18px;
-	height: 18px;
+	width: 1rem;
+	height: 1rem;
 }
 
 .toggle-matches-btn.expanded .toggle-icon {
