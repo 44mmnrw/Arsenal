@@ -84,17 +84,8 @@ foreach ( $players as $player ) {
 									$current_year = intval( get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) ) );
 									
 									// Получаем первый доступный турнир текущего года
-									$first_tournament = $wpdb->get_var( $wpdb->prepare(
-										"SELECT tournament_id FROM {$wpdb->prefix}arsenal_matches 
-										 WHERE YEAR(match_date) = %d
-										 LIMIT 1",
-										$current_year
-									) );
-									
-									if ( ! $first_tournament ) {
-										$first_tournament = '71CFDAA6'; // По умолчанию
-									}
-									
+					// ВАЖНО: используем дефолтный турнир, как на странице игрока, чтобы применялись корректировки
+					$first_tournament = '71CFDAA6'; // По умолчанию
 									// Используем функцию arsenal_get_player_stats из inc/player-functions.php
 									if ( function_exists( 'arsenal_get_player_stats' ) && ! empty( $player->player_id ) ) {
 										$player_stats = arsenal_get_player_stats( $player->player_id, $first_tournament, $current_year );
