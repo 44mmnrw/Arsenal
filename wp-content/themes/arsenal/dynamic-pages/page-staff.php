@@ -1,6 +1,5 @@
 <?php
 /**
- * Template Name: Staff (Персонал)
  * Description: Страница деталей о сотруднике клуба (тренер, стафф)
  * 
  * @package Arsenal
@@ -151,13 +150,9 @@ if ( empty( $staff_nationality ) ) {
 							// ВАЖНО: если сотрудник найден в БД, фото берем строго из wp_arsenal_staff.photo_url
 							if ( $staff && ! empty( $staff_photo_src ) ) {
 								echo '<img src="' . esc_url( $staff_photo_src ) . '" alt="' . esc_attr( trim( $staff->first_name . ' ' . $staff->second_name ) ) . '" class="staff-photo-img" loading="lazy">';
-							} elseif ( has_post_thumbnail( $post_id ) ) {
-								echo get_the_post_thumbnail( $post_id, 'large', array(
-								'class' => 'staff-photo-img',
-								'alt'   => get_the_title( $post_id ),
-							) );
+
 							} else {
-								echo '<div class="staff-photo-placeholder">Фото не загружено</div>';
+								arsenal_render_camera_placeholder();
 							}
 							?>						
 					</div>

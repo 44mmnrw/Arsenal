@@ -1,7 +1,7 @@
 <?php
 /**
- * Template Name: Тренеры
- * Description: Displays list of coaches and staff members grouped by position
+ * Template Name: Страница с персоналом
+ * Description: Displays list of coaching staff and specialists grouped by position
  * 
  * @package Arsenal
  * @since 1.0.0
@@ -11,15 +11,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Подключаем стили страницы
+if ( function_exists( 'wp_enqueue_style' ) && defined( 'ARSENAL_THEME_URI' ) ) {
+	wp_enqueue_style(
+		'arsenal-page-staff-grid',
+		ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
+		array( 'arsenal-footer' ),
+		defined( 'ARSENAL_VERSION' ) ? ARSENAL_VERSION : null
+	);
+}
+
 get_header();
+
+require_once get_template_directory() . '/inc/classes/class-arsenal-staff-department-manager.php';
 
 global $wpdb;
 
-// Запрос: все тренеры и штаб с их должностями
-$sql = "SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
-	FROM {$wpdb->prefix}arsenal_staff s
-	LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
-	ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
+// Получить фильтр отдела из post_meta текущей страницы
+$post_id = get_the_ID();
+$department_id = get_post_meta( $post_id, '_arsenal_staff_department_filter', true );
+
+// Запрос: все сотрудники (или отфильтрованные по отделу) с их должностями
+if ( ! empty( $department_id ) ) {
+	$sql = $wpdb->prepare(
+		"SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
+		FROM {$wpdb->prefix}arsenal_staff s
+		LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
+		WHERE s.department_id = %d
+		ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC",
+		$department_id
+	);
+} else {
+	$sql = "SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
+		FROM {$wpdb->prefix}arsenal_staff s
+		LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
+		ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
+}
 
 $staff = $wpdb->get_results( $sql );
 
@@ -63,12 +90,16 @@ foreach ( $staff as $person ) {
 									<a href="<?php echo esc_url( $staff_url ); ?>" class="coach-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото -->
 										<div class="coach-card__photo">
-											<img 
-												src="<?php echo esc_url( $photo_src ); ?>" 
-												alt="<?php echo esc_attr( $name_display ); ?>"
-												class="coach-card__image"
-												loading="lazy"
-											>
+											<?php if ( ! empty( $photo_url ) ) : ?>
+												<img 
+													src="<?php echo esc_url( $photo_src ); ?>" 
+													alt="<?php echo esc_attr( $name_display ); ?>"
+													class="coach-card__image"
+													loading="lazy"
+												>
+											<?php else : ?>
+												<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%; min-height: 300px;"></lottie-player>
+											<?php endif; ?>
 										</div>
 
 										<!-- Правая колонка 50%: Информация -->

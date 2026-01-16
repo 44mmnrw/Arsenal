@@ -105,6 +105,10 @@ class Arsenal_Team_Manager {
         // Классы управления персоналом
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-staff-admin.php';
         
+        // Классы управления корректировками статистики игроков
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
+        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -135,6 +139,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс персонала
         $staff_admin = new Arsenal_Staff_Admin();
         $staff_admin->init();
+        
+        // Инициализируем админ-интерфейс корректировок статистики
+        $stats_corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
+        $stats_corrections_admin->init();
     }
     
     /**
@@ -248,6 +256,16 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-adjustments',
             array( $this, 'render_adjustments_list' )
+        );
+        
+        // Подменю: Корректировки статистики игроков
+        add_submenu_page(
+            $parent_slug,
+            'Корректировки статистики игроков',
+            'Корректировки статистики игроков',
+            'manage_options',
+            'arsenal-player-stats-corrections',
+            array( $this, 'render_player_stats_corrections' )
         );
         
         // Подменю: Спонсоры и партнеры
@@ -515,6 +533,15 @@ class Arsenal_Team_Manager {
             )
         );
         
+        // Подключение JavaScript для корректировок статистики
+        wp_enqueue_script(
+            'arsenal-player-stats-corrections',
+            ARSENAL_TM_PLUGIN_URL . 'admin/assets/js/player-stats-corrections.js',
+            array(),
+            ARSENAL_TM_VERSION,
+            true
+        );
+        
         // Медиа библиотека для загрузки фото
         wp_enqueue_media();
     }
@@ -755,6 +782,14 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
         $sponsors_admin = new Arsenal_Sponsors_Admin();
         $sponsors_admin->render_sponsor_form();
+    }
+    
+    /**
+     * Список корректировок статистики игроков
+     */
+    public function render_player_stats_corrections() {
+        $corrections_admin = Arsenal_Player_Stats_Corrections_Admin::get_instance();
+        $corrections_admin->render_page();
     }
 
     /**

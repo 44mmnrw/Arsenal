@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</a>
 							<?php else : ?>
 								<a href="<?php the_permalink(); ?>">
-									<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/news-placeholder.jpg' ); ?>" alt="<?php the_title_attribute(); ?>">
+								<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%; min-height: 250px;"></lottie-player>
 								</a>
 							<?php endif; ?>
 						</div>

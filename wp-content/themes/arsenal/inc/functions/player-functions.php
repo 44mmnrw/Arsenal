@@ -300,6 +300,7 @@ function arsenal_get_player_full_data( $player_id, $selected_tournament_id, $sel
 		'events'              => arsenal_get_player_events( $player_id, $selected_tournament_id, $selected_year ),
 		'years'               => arsenal_get_tournament_years( $selected_tournament_id ),
 		'yearly_stats'        => arsenal_get_tournament_yearly_stats( $player_id, $selected_tournament_id ), // Возвращает ВСЕ годы, не только текущий
+		'selected_year'       => $selected_year, // Текущий выбранный год для применения коррекций
 	);
 }
 
@@ -506,4 +507,269 @@ function arsenal_get_player_team_by_year( $player_id, $tournament_id, $year ) {
 	) );
 	
 	return $team ? $team->team_name : '—';
+}
+
+/**
+ * Получить примененные коррекции статистики игрока для турнира
+ *
+ * @param string $player_id ID игрока
+ * @param string $tournament_id ID турнира
+ * @return array Массив примененных коррекций
+ */
+function arsenal_get_player_corrections( $player_id, $tournament_id ) {
+	// Используем класс из плагина, если он загружен
+	if ( class_exists( 'Arsenal_Player_Stats_Corrections' ) ) {
+		$corrections_manager = Arsenal_Player_Stats_Corrections::get_instance();
+		// Получаем ТОЛЬКО примененные коррекции
+		return $corrections_manager->get_corrections( $player_id, $tournament_id, true );
+	}
+	return array();
+}
+
+/**
+ * Применить коррекции к статистике игрока
+ *
+ * Если есть примененные коррекции для конкретного года, добавляет их дельты к исходной статистике.
+ * Использует тот же подход фильтрации по году, что и arsenal_apply_player_corrections_to_yearly_stats().
+ *
+ * @param object $stats Объект статистики игрока (из arsenal_get_player_stats)
+ * @param string $player_id ID игрока
+ * @param string $tournament_id ID турнира
+ * @param int $year Год, для которого применяются коррекции
+ * @return object Исправленный объект статистики
+ */
+function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $year = null ) {
+	global $wpdb;
+	
+	if ( ! $stats ) {
+		return $stats;
+	}
+	
+	// Если год не передан, используем текущий год
+	if ( $year === null ) {
+		$year = intval( date( 'Y' ) );
+	} else {
+		// ВАЖНО: конвертируем год в int для правильного сравнения!
+		$year = intval( $year );
+	}
+	
+	// DEBUG
+	$debug = isset( $_GET['debug_corrections'] ) && $_GET['debug_corrections'] === '1';
+	if ( $debug ) {
+		error_log( "=== arsenal_apply_player_corrections DEBUG ===" );
+		error_log( "Player ID: $player_id, Tournament: $tournament_id, Year: $year" );
+	}
+	
+	// Получаем примененные коррекции с годом из таблицы seasons
+	$corrections_with_years = $wpdb->get_results( $wpdb->prepare(
+		"SELECT 
+			c.*,
+			YEAR(COALESCE(s.start_date, '2000-01-01')) as correction_year
+		 FROM {$wpdb->prefix}arsenal_player_stats_corrections c
+			LEFT JOIN {$wpdb->prefix}arsenal_seasons s ON c.season_id = s.season_id
+			WHERE c.player_id = %s 
+			AND c.tournament_id = %s 
+			AND c.is_applied = 1
+			ORDER BY c.created_at DESC",
+		$player_id,
+		$tournament_id
+	) );
+	
+	if ( $debug ) {
+		error_log( "Found corrections: " . count( $corrections_with_years ?? array() ) );
+	}
+	
+	if ( empty( $corrections_with_years ) ) {
+		return $stats;
+	}
+	
+	// Преобразуем в массив для проще работы с stdClass
+	$corrected_stats = clone $stats;
+	
+	// Суммируем коррекции только для нужного года
+	$corrections_for_year = array(
+		'minutes_played_delta' => 0,
+		'matches_played_delta' => 0,
+		'goals_delta' => 0,
+		'goals_conceded_delta' => 0,
+		'assists_delta' => 0,
+		'yellow_cards_delta' => 0,
+		'red_cards_delta' => 0,
+	);
+	
+	// Применяем коррекцию если:
+	// 1. Она указана для конкретного года И год совпадает, ИЛИ
+	// 2. Она не указана для конкретного года (season_id IS NULL)
+	foreach ( $corrections_with_years as $correction ) {
+		$correction_year = intval( $correction->correction_year );
+		
+		$should_apply = false;
+		
+		if ( ! empty( $correction->season_id ) ) {
+			// Коррекция для конкретного сезона - применяем только если года совпадают
+			$should_apply = ( $correction_year === $year );
+		} else {
+			// Коррекция без season_id - применяем для всех лет (можно включить/выключить по необходимости)
+			$should_apply = true;
+		}
+		
+		if ( $debug ) {
+			error_log( "Correction {$correction->correction_id}: year=$correction_year, target_year=$year, should_apply=" . ( $should_apply ? 'YES' : 'NO' ) );
+		}
+		
+		if ( $should_apply ) {
+			if ( isset( $correction->minutes_played_delta ) ) {
+				$corrections_for_year['minutes_played_delta'] += intval( $correction->minutes_played_delta );
+			}
+			if ( isset( $correction->matches_played_delta ) ) {
+				$corrections_for_year['matches_played_delta'] += intval( $correction->matches_played_delta );
+			}
+			if ( isset( $correction->goals_delta ) ) {
+				$corrections_for_year['goals_delta'] += intval( $correction->goals_delta );
+			}
+			if ( isset( $correction->goals_conceded_delta ) ) {
+				$corrections_for_year['goals_conceded_delta'] += intval( $correction->goals_conceded_delta );
+			}
+			if ( isset( $correction->assists_delta ) ) {
+				$corrections_for_year['assists_delta'] += intval( $correction->assists_delta );
+			}
+			if ( isset( $correction->yellow_cards_delta ) ) {
+				$corrections_for_year['yellow_cards_delta'] += intval( $correction->yellow_cards_delta );
+			}
+			if ( isset( $correction->red_cards_delta ) ) {
+				$corrections_for_year['red_cards_delta'] += intval( $correction->red_cards_delta );
+			}
+		}
+	}
+	
+	if ( $debug ) {
+		error_log( "Accumulated corrections: " . json_encode( $corrections_for_year ) );
+	}
+	
+	// Применяем коррекции к статистике
+	$corrected_stats->minutes_played = intval( $corrected_stats->minutes_played ) + $corrections_for_year['minutes_played_delta'];
+	$corrected_stats->matches_played = intval( $corrected_stats->matches_played ) + $corrections_for_year['matches_played_delta'];
+	$corrected_stats->goals = intval( $corrected_stats->goals ) + $corrections_for_year['goals_delta'];
+	$corrected_stats->goals_conceded = intval( $corrected_stats->goals_conceded ?? 0 ) + $corrections_for_year['goals_conceded_delta'];
+	$corrected_stats->assists = intval( $corrected_stats->assists ) + $corrections_for_year['assists_delta'];
+	$corrected_stats->yellow_cards = intval( $corrected_stats->yellow_cards ) + $corrections_for_year['yellow_cards_delta'];
+	$corrected_stats->red_cards = intval( $corrected_stats->red_cards ) + $corrections_for_year['red_cards_delta'];
+	
+	if ( $debug ) {
+		error_log( "Final stats: minutes=" . $corrected_stats->minutes_played . ", goals=" . $corrected_stats->goals . ", assists=" . $corrected_stats->assists );
+	}
+	
+	return $corrected_stats;
+}
+
+/**
+ * Применить коррекции к статистике по годам
+ *
+ * Применяет коррекции только к тому году, который указан в season_id коррекции
+ *
+ * @param array $yearly_stats Массив статистики по годам
+ * @param string $player_id ID игрока
+ * @param string $tournament_id ID турнира
+ * @return array Исправленный массив статистики по годам
+ */
+function arsenal_apply_player_corrections_to_yearly_stats( $yearly_stats, $player_id, $tournament_id ) {
+	global $wpdb;
+	
+	if ( empty( $yearly_stats ) ) {
+		return $yearly_stats;
+	}
+	
+	// Получаем примененные коррекции с годом из таблицы seasons
+	// Используем LEFT JOIN чтобы обработать коррекции БЕЗ season_id (которые применяются ко всем годам)
+	$corrections_with_years = $wpdb->get_results( $wpdb->prepare(
+		"SELECT 
+			c.*,
+			YEAR(COALESCE(s.start_date, '2000-01-01')) as correction_year
+		FROM {$wpdb->prefix}arsenal_player_stats_corrections c
+		LEFT JOIN {$wpdb->prefix}arsenal_seasons s ON c.season_id = s.season_id
+		WHERE c.player_id = %s 
+		AND c.tournament_id = %s 
+		AND c.is_applied = 1
+		ORDER BY c.created_at DESC",
+		$player_id,
+		$tournament_id
+	) );
+	
+	if ( empty( $corrections_with_years ) ) {
+		return $yearly_stats;
+	}
+	
+	// Применяем коррекции к каждому году
+	$corrected_stats = array();
+	
+	foreach ( $yearly_stats as $stat ) {
+		$corrected_stat = clone $stat;
+		$year = intval( $stat->year );
+		
+		// Суммируем коррекции только для этого года
+		$year_corrections = array(
+			'minutes_played_delta' => 0,
+			'matches_played_delta' => 0,
+			'goals_delta' => 0,
+			'goals_conceded_delta' => 0,
+			'assists_delta' => 0,
+			'yellow_cards_delta' => 0,
+			'red_cards_delta' => 0,
+		);
+		
+		// Проходим по коррекциям и суммируем только те, что подходят для этого года
+		foreach ( $corrections_with_years as $correction ) {
+			$correction_year = intval( $correction->correction_year );
+			
+			// Применяем коррекцию если:
+			// 1. Она указана для конкретного года И год совпадает, ИЛИ
+			// 2. Она не указана для конкретного года (season_id IS NULL)
+			$should_apply = false;
+			
+			if ( ! empty( $correction->season_id ) ) {
+				// Коррекция для конкретного сезона - применяем только если года совпадают
+				$should_apply = ( $correction_year === $year );
+			} else {
+				// Коррекция без season_id - применяем для всех лет (можно включить/выключить по необходимости)
+				$should_apply = true;
+			}
+			
+			if ( $should_apply ) {
+				if ( isset( $correction->minutes_played_delta ) ) {
+					$year_corrections['minutes_played_delta'] += intval( $correction->minutes_played_delta );
+				}
+				if ( isset( $correction->matches_played_delta ) ) {
+					$year_corrections['matches_played_delta'] += intval( $correction->matches_played_delta );
+				}
+				if ( isset( $correction->goals_delta ) ) {
+					$year_corrections['goals_delta'] += intval( $correction->goals_delta );
+				}
+				if ( isset( $correction->goals_conceded_delta ) ) {
+					$year_corrections['goals_conceded_delta'] += intval( $correction->goals_conceded_delta );
+				}
+				if ( isset( $correction->assists_delta ) ) {
+					$year_corrections['assists_delta'] += intval( $correction->assists_delta );
+				}
+				if ( isset( $correction->yellow_cards_delta ) ) {
+					$year_corrections['yellow_cards_delta'] += intval( $correction->yellow_cards_delta );
+				}
+				if ( isset( $correction->red_cards_delta ) ) {
+					$year_corrections['red_cards_delta'] += intval( $correction->red_cards_delta );
+				}
+			}
+		}
+		
+		// Применяем коррекции к данному году
+		$corrected_stat->minutes_played = intval( $corrected_stat->minutes_played ) + $year_corrections['minutes_played_delta'];
+		$corrected_stat->matches_played = intval( $corrected_stat->matches_played ) + $year_corrections['matches_played_delta'];
+		$corrected_stat->goals = intval( $corrected_stat->goals ) + $year_corrections['goals_delta'];
+		$corrected_stat->goals_conceded = intval( $corrected_stat->goals_conceded ?? 0 ) + $year_corrections['goals_conceded_delta'];
+		$corrected_stat->assists = intval( $corrected_stat->assists ) + $year_corrections['assists_delta'];
+		$corrected_stat->yellow_cards = intval( $corrected_stat->yellow_cards ) + $year_corrections['yellow_cards_delta'];
+		$corrected_stat->red_cards = intval( $corrected_stat->red_cards ) + $year_corrections['red_cards_delta'];
+		
+		$corrected_stats[] = $corrected_stat;
+	}
+	
+	return $corrected_stats;
 }

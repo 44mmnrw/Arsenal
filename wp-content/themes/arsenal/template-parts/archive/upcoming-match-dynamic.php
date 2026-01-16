@@ -100,10 +100,7 @@ if ( $upcoming_match ) :
 				<!-- Команда хозяев -->
 				<div class="match-team">
 					<div class="team-logo <?php echo $is_home ? 'home-team' : 'away-team'; ?>">
-						<img 
-							src="<?php echo esc_url( arsenal_get_team_logo_url( $upcoming_match->home_team ) ); ?>" 
-							alt="<?php echo esc_attr( $upcoming_match->home_team ); ?>"
-						>
+						<?php arsenal_render_team_logo( $upcoming_match->home_team ); ?>
 					</div>
 					<h3 class="team-name"><?php echo esc_html( $upcoming_match->home_team ); ?></h3>
 					<?php if ( $upcoming_match->venue ) : ?>
@@ -143,10 +140,7 @@ if ( $upcoming_match ) :
 				<!-- Команда гостей -->
 				<div class="match-team">
 					<div class="team-logo <?php echo !$is_home ? 'home-team' : 'away-team'; ?>">
-						<img 
-							src="<?php echo esc_url( arsenal_get_team_logo_url( $upcoming_match->away_team ) ); ?>" 
-							alt="<?php echo esc_attr( $upcoming_match->away_team ); ?>"
-						>
+						<?php arsenal_render_team_logo( $upcoming_match->away_team ); ?>
 					</div>
 					<h3 class="team-name"><?php echo esc_html( $upcoming_match->away_team ); ?></h3>
 				</div>

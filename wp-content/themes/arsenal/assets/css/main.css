@@ -850,6 +850,9 @@ article {
 	height: 14rem;
 	background-color: #fafafa;
 	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .news-card__image img {
@@ -857,6 +860,13 @@ article {
 	height: 100%;
 	object-fit: cover;
 	transition: transform 0.3s ease;
+}
+
+.news-card__image lottie-player {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+	min-height: 14rem;
 }
 
 .news-card:hover .news-card__image img {
@@ -1044,6 +1054,12 @@ article {
 	width: 220px;
 	height: 100px;
 	object-fit: contain;
+}
+
+.sponsor-card lottie-player {
+	width: 220px !important;
+	height: 100px !important;
+	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
 }
 
 .sponsor-placeholder {
@@ -1368,6 +1384,13 @@ article {
 	width: 1.5rem;
 	height: 1.5rem;
 	object-fit: contain;
+	flex-shrink: 0;
+}
+
+.tournament-table .col-team .team-badge-placeholder {
+	width: 2.5rem !important;
+	height: 2.5rem !important;
+	display: inline-block !important;
 	flex-shrink: 0;
 }
 

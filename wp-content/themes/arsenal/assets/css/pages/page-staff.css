@@ -853,3 +853,22 @@
 	transform: scale(0.75);
 	transform-origin: left center;
 }
+/* ========================================================================== 
+   Анимированный плейсхолдер фото (Lottie камера веб-компонент)
+   ========================================================================== */
+
+lottie-player {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+	border-radius: 8px;
+}
+
+/* Мобильный вид */
+@media (max-width: 768px) {
+	lottie-player {
+		min-height: 200px !important;
+	}
+}
+

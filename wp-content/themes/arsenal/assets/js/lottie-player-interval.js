@@ -1,6 +1,6 @@
 /**
  * Lottie Player Interval Control
- * Проигрывает анимации lottie-player с интервалом каждые 3 секунды
+ * Проигрывает анимации lottie-player с интервалом каждые 7 секунд
  * Оптимизировано: один setInterval для всех плееров, отключается когда вкладка неактивна
  *
  * @package Arsenal
@@ -10,6 +10,8 @@
 (function() {
 	let isPageVisible = true;
 	let intervalId = null;
+	const ANIMATION_SPEED = 1;     // Скорость воспроизведения
+	const ANIMATION_INTERVAL = 7000; // Интервал повторения в мс
 
 	// Слушаем видимость вкладки
 	document.addEventListener('visibilitychange', () => {
@@ -29,8 +31,11 @@
 
 		if (players.length === 0) return;
 
-		// Первый запуск для всех
-		players.forEach(player => player.play());
+		// Применяем скорость ко всем плеерам
+		players.forEach(player => {
+			player.speed = ANIMATION_SPEED;
+			player.play();
+		});
 
 		// Один setInterval для всех плееров
 		function startInterval() {
@@ -39,7 +44,7 @@
 					player.seek('0%'); // вернуть в начало
 					player.play();     // запустить
 				});
-			}, 7000); // каждые 7 секунд
+			}, ANIMATION_INTERVAL);
 		}
 
 		if (isPageVisible) {

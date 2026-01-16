@@ -174,10 +174,7 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 					<lottie-player 
 						src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/clock.json' ); ?>" 
 						background="transparent" 
-						speed="1" 
-					style="width: 1.25rem; height: 1.25rem; display: inline-block; vertical-align: -0.15em; margin-right: 4px;" 
-
-					autoplay>
+					style="width: 1.25rem; height: 1.25rem; display: inline-block; vertical-align: -0.15em; margin-right: 4px;">
 					</lottie-player>
 					<?php echo esc_html( date_i18n( 'H:i', strtotime( $match->match_time ?? '19:00' ) ) ); ?>
 				</div>

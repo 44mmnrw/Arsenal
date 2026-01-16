@@ -4383,3 +4383,603 @@
         width: 100%;
     }
 }
+
+/* ========================================
+   PLAYER STATS CORRECTIONS PAGE STYLES
+   ======================================== */
+
+.corrections-wrapper {
+    background: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.corrections-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #0073aa;
+}
+
+.corrections-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.corrections-header .button {
+    white-space: nowrap;
+    background-color: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+.corrections-header .button:hover {
+    background-color: #005a87;
+    border-color: #005a87;
+}
+
+.corrections-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-left: 4px solid #0073aa;
+    border-radius: 4px;
+}
+
+.corrections-stats .stat-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 100px;
+}
+
+.corrections-stats .stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0073aa;
+}
+
+.corrections-stats .stat-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+/* Форма добавления корректировки */
+.corrections-form-box {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.corrections-form-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #0073aa;
+}
+
+.corrections-form-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.corrections-form-content {
+    padding: 0;
+}
+
+/* Форма сетка */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group label .required {
+    color: #d63638;
+    margin-left: 2px;
+}
+
+.form-group select,
+.form-group input[type="number"],
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group select:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group .description {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Дельта-параметры сетка */
+.corrections-deltas-header {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.corrections-deltas-header h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.corrections-deltas-header .description {
+    margin: 5px 0 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.corrections-deltas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.corrections-deltas-grid .form-group {
+    margin-bottom: 0;
+}
+
+.delta-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.delta-input:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+.delta-icon {
+    margin-right: 5px;
+}
+
+/* Текстовая область для причины */
+.reason-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Кнопки формы */
+.corrections-form-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 15px 0;
+    justify-content: center;
+}
+
+.corrections-form-buttons .button {
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    height: auto;
+    line-height: 1.5;
+    border-radius: 4px;
+}
+
+/* Список и фильтры корректировок */
+.corrections-list-box {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.corrections-list-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #0073aa;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 15px;
+}
+
+.corrections-list-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.corrections-list-count {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
+/* Форма фильтрации */
+.corrections-filters {
+    background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.corrections-filter-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.corrections-filter-form .filter-group {
+    flex: 1;
+    min-width: 160px;
+}
+
+.corrections-filter-form .filter-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+    font-size: 13px;
+}
+
+.corrections-filter-form .filter-group select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.corrections-filter-form .button {
+    padding: 8px 16px;
+    font-size: 13px;
+    height: auto;
+    white-space: nowrap;
+}
+
+/* Таблица корректировок */
+.corrections-table {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 80px 1fr 1fr 1fr 1fr 100px 100px 120px;
+    gap: 0;
+}
+
+.corrections-row,
+.corrections-row.corrections-header {
+    display: contents;
+}
+
+.corrections-row.corrections-header {
+}
+
+.corrections-row > div {
+    padding: 14px 12px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+    font-size: 13px;
+}
+
+.corrections-row.corrections-header > div {
+    padding: 14px 12px;
+    color: #333;
+    text-align: left;
+    background: #f5f5f5;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.corrections-col-id {
+    text-align: center;
+}
+
+.corrections-col-id code {
+    background: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: "Courier New", monospace;
+    color: #666;
+}
+
+.corrections-col-player {
+    font-weight: 500;
+    color: #0073aa;
+}
+
+.corrections-col-season {
+    text-align: center;
+    font-size: 12px;
+}
+
+.corrections-col-reason {
+    color: #666;
+    font-size: 12px;
+}
+
+.reason-text {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    cursor: help;
+}
+
+.corrections-col-status {
+    justify-content: center;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-status-applied {
+    background: #d4edda;
+    color: #155724;
+}
+
+.badge-status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.corrections-col-date {
+    text-align: center;
+    color: #666;
+}
+
+.corrections-col-actions {
+    justify-content: center;
+    gap: 6px;
+}
+
+.corrections-col-actions .button {
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    min-width: auto;
+    height: auto;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.corrections-col-actions .button:hover {
+    background-color: #e0e0e0;
+    border-color: #999;
+    color: #333;
+}
+
+/* Эффект при наведении для строк */
+.corrections-row:not(.corrections-header):hover {
+    background: #f9f9f9;
+    box-shadow: inset 0 0 3px rgba(0, 115, 170, 0.1);
+}
+
+/* Пaginация */
+.corrections-pagination {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.corrections-pagination .pagination {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.corrections-pagination a,
+.corrections-pagination .page-numbers {
+    padding: 6px 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #0073aa;
+    transition: background 0.2s;
+    font-size: 13px;
+}
+
+.corrections-pagination a:hover {
+    background: #e8e8e8;
+}
+
+.corrections-pagination .page-numbers.current {
+    background: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+    font-weight: 600;
+}
+
+/* Пустое состояние */
+.corrections-empty-message {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    padding: 40px 20px;
+}
+
+.corrections-empty-message a {
+    color: #0073aa;
+    text-decoration: none;
+}
+
+.corrections-empty-message a:hover {
+    text-decoration: underline;
+}
+
+/* Плавная прокрутка к форме */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Адаптивный дизайн для мобильных */
+@media (max-width: 1024px) {
+    .corrections-row,
+    .corrections-row.corrections-header {
+        grid-template-columns: 4rem 10rem 10rem 12rem 8rem 8rem 8rem;
+    }
+
+    .corrections-col-deltas {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 782px) {
+    .corrections-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .corrections-header .button {
+        width: 100%;
+    }
+
+    .corrections-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .corrections-deltas-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .corrections-filter-form {
+        flex-direction: column;
+    }
+
+    .corrections-filter-form .filter-group {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .corrections-filter-form .button {
+        width: 100%;
+    }
+
+    .corrections-table,
+    .corrections-row,
+    .corrections-row.corrections-header {
+        grid-template-columns: 1fr;
+    }
+
+    .corrections-row.corrections-header {
+        display: none;
+    }
+
+    .corrections-row > div {
+        padding: 8px 12px;
+        font-size: 12px;
+        justify-content: space-between;
+    }
+
+    .corrections-row > div::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #666;
+        display: block;
+        min-width: 100px;
+    }
+
+    .corrections-col-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 4px;
+    }
+
+    .corrections-col-actions .button {
+        width: 100%;
+    }
+
+    .corrections-form-buttons {
+        flex-direction: column;
+    }
+
+    .corrections-form-buttons .button {
+        width: 100%;
+    }
+}

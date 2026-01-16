@@ -745,6 +745,51 @@ if ( ! function_exists( 'arsenal_get_team_logo_url' ) ) {
 }
 
 /**
+ * Выводит логотип команды с заглушкой (анимированная камера)
+ * 
+ * @param string $team_name Название команды
+ * @param array  $attrs     Дополнительные атрибуты img/lottie-player
+ */
+if ( ! function_exists( 'arsenal_render_team_logo' ) ) {
+	function arsenal_render_team_logo( $team_name, $attrs = array() ) {
+		global $wpdb;
+		
+		$default_attrs = array(
+			'alt'     => esc_attr( $team_name ),
+			'class'   => 'team-logo-img',
+			'loading' => 'lazy',
+		);
+		$attrs = wp_parse_args( $attrs, $default_attrs );
+		
+		// Ищем логотип в БД (не используем функцию, чтобы избежать fallback)
+		$logo_url = $wpdb->get_var( $wpdb->prepare(
+			"SELECT logo_url FROM {$wpdb->prefix}arsenal_teams 
+			 WHERE (name = %s OR name LIKE %s) 
+			 AND logo_url IS NOT NULL 
+			 AND logo_url != '' 
+			 AND logo_url NOT LIKE '%placeholder%'
+			 LIMIT 1",
+			$team_name,
+			'%' . $wpdb->esc_like( $team_name ) . '%'
+		) );
+		
+		if ( ! empty( $logo_url ) ) {
+			// Конвертируем URL
+			$logo_url = arsenal_convert_logo_url( $logo_url );
+			// Выводим картинку
+			echo '<img src="' . esc_url( $logo_url ) . '"';
+			foreach ( $attrs as $key => $value ) {
+				echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			}
+			echo '>';
+		} else {
+			// Выводим заглушку с анимацией (нет картинки в БД)
+			echo '<lottie-player src="' . esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ) . '" background="transparent" style="width: 100%; height: 100%; min-height: 60px;"></lottie-player>';
+		}
+	}
+}
+
+/**
  * Конвертирует относительный или абсолютный URL логотипа в правильный формат для HTML
  * Если URL относительный (/wp-content/...), добавляет home_url()
  * Если URL абсолютный или сам по себе, возвращает esc_url()
@@ -1498,3 +1543,28 @@ add_action( 'wp_head', function() {
 		echo '<link rel="canonical" href="' . esc_url( home_url( '/' ) ) . '">' . "\n";
 	}
 }, 1 );
+
+/**
+ * Вывод анимированной иконки камеры для плейсхолдера изображения
+ * Используется когда изображение не загружено
+ * Автоматически управляется через lottie-player-interval.js
+ *
+ * @return void
+ */
+if ( ! function_exists( 'arsenal_render_camera_placeholder' ) ) {
+	function arsenal_render_camera_placeholder() {
+		$icon_url = ARSENAL_THEME_URI . '/assets/animations/wired-outline-61-camera-hover-flash.json';
+		echo '<lottie-player src="' . esc_attr( $icon_url ) . '" background="transparent" style="width: 100%; height: 100%; min-height: 300px;"></lottie-player>';
+	}
+}
+
+/**
+ * Подключение класса Arsenal_Staff_Department_Manager
+ * для управления отделами сотрудников
+ */
+require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-department-manager.php';
+
+/**
+ * Подключение метаокса для фильтра отдела на странице сотрудников
+ */
+require_once ARSENAL_THEME_DIR . '/inc/staff-department-metabox.php';

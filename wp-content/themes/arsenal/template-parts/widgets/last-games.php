@@ -114,10 +114,7 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 							<div class="game-teams">
 								<div class="team home-team">
 									<div class="team-logo">
-										<img 
-											src="<?php echo esc_url( arsenal_get_team_logo_url( $match->home_team ) ); ?>" 
-											alt="<?php echo esc_attr( $match->home_team ); ?>"
-										>
+										<?php arsenal_render_team_logo( $match->home_team ); ?>
 									</div>
 									<span class="team-name"><?php echo esc_html( $match->home_team ); ?></span>
 								</div>
@@ -130,10 +127,7 @@ function arsenal_match_result( $match, $arsenal_team_id ) {
 								
 								<div class="team away-team">
 									<div class="team-logo">
-										<img 
-											src="<?php echo esc_url( arsenal_get_team_logo_url( $match->away_team ) ); ?>" 
-											alt="<?php echo esc_attr( $match->away_team ); ?>"
-										>
+										<?php arsenal_render_team_logo( $match->away_team ); ?>
 									</div>
 									<span class="team-name"><?php echo esc_html( $match->away_team ); ?></span>
 								</div>

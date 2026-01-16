@@ -110,6 +110,12 @@ $selected_season_stats = $player_data['stats'];
 $player_events = $player_data['events'] ?? array();
 $available_years = $player_data['years'] ?? array();
 $years_stats = $player_data['yearly_stats'] ?? array(); // Гарантируем что это всегда массив
+$selected_year = $player_data['selected_year'] ?? intval( date( 'Y' ) ); // Получаем год из данных
+
+// Применяем коррекции статистики (если они есть в таблице wp_arsenal_player_stats_corrections)
+// Передаем год чтобы применять коррекции только для конкретного года
+$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
+$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
 
 // Определяем название выбранного турнира
 $selected_tournament_name = '';
@@ -130,6 +136,10 @@ if ( ! empty( $available_seasons ) ) {
 		$selected_season_stats = $player_data['stats'];
 		$player_events = $player_data['events'];
 		$years_stats = $player_data['yearly_stats'];
+		$selected_year = $player_data['selected_year'] ?? intval( date( 'Y' ) );
+		// Применяем коррекции для новыого турнира
+		$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
+		$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
 	}
 }
 
@@ -142,11 +152,11 @@ if ( ! empty( $available_seasons ) ) {
 			<!-- Профиль игрока -->
 			<div class="player-profile-card">
 				<!-- Фото -->
-				<div class="player-photo-wrapper">
+				<div class="player-photo-wrapper<?php echo empty( $player->photo_url ) ? ' player-photo-wrapper--placeholder' : ''; ?>">
 					<?php if ( ! empty( $player->photo_url ) ) : ?>
 						<img src="<?php echo esc_url( home_url( $player->photo_url ) ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" loading="lazy">
 					<?php else : ?>
-						<span class="no-photo"><?php echo esc_html( mb_substr( $display_name, 0, 1 ) ); ?></span>
+						<?php arsenal_render_camera_placeholder(); ?>
 					<?php endif; ?>
 				</div>
 				
