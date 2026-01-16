@@ -99,6 +99,11 @@ foreach ( $players as $player ) {
 									if ( function_exists( 'arsenal_get_player_stats' ) && ! empty( $player->player_id ) ) {
 										$player_stats = arsenal_get_player_stats( $player->player_id, $first_tournament, $current_year );
 										
+										// Применяем корректировки статистики (как на странице игрока)
+										if ( $player_stats && function_exists( 'arsenal_apply_player_corrections' ) ) {
+											$player_stats = arsenal_apply_player_corrections( $player_stats, $player->player_id, $first_tournament, $current_year );
+										}
+										
 										$matches_count = ( $player_stats && ! empty( $player_stats->matches_played ) ) ? intval( $player_stats->matches_played ) : 0;
 										$goals_count = ( $player_stats && ! empty( $player_stats->goals ) ) ? intval( $player_stats->goals ) : 0;
 										$assists_count = ( $player_stats && ! empty( $player_stats->assists ) ) ? intval( $player_stats->assists ) : 0;
