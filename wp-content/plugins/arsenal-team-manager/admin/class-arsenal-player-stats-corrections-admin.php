@@ -109,32 +109,20 @@ class Arsenal_Player_Stats_Corrections_Admin {
      * Обработка AJAX запроса сохранения корректировки
      */
     public function handle_save_correction() {
-        error_log( '[Arsenal Corrections SAVE] === AJAX handler called ===' );
-        error_log( '[Arsenal Corrections SAVE] $_POST содержит: ' . json_encode( $_POST ) );
-        
         // Проверка nonce с обработкой ошибки
         if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'arsenal_correction_nonce' ) ) {
-            error_log( '[Arsenal Corrections SAVE] ❌ Nonce verification failed' );
             wp_send_json_error( 'Ошибка безопасности (nonce)' );
         }
-        error_log( '[Arsenal Corrections SAVE] ✓ Nonce проверен успешно' );
         
         if ( ! current_user_can( 'manage_options' ) ) {
-            error_log( '[Arsenal Corrections SAVE] ❌ Permission denied' );
             wp_send_json_error( 'Доступ запрещён' );
         }
-        error_log( '[Arsenal Corrections SAVE] ✓ Права проверены' );
         
         $player_id = sanitize_text_field( $_POST['player_id'] ?? '' );
         $tournament_id = sanitize_text_field( $_POST['tournament_id'] ?? '' );
         $season_id = sanitize_text_field( $_POST['season_id'] ?? '' );
         
-        error_log( '[Arsenal Corrections SAVE] player_id: ' . $player_id );
-        error_log( '[Arsenal Corrections SAVE] tournament_id: ' . $tournament_id );
-        error_log( '[Arsenal Corrections SAVE] season_id: ' . $season_id );
-        
         if ( empty( $player_id ) || empty( $tournament_id ) ) {
-            error_log( '[Arsenal Corrections SAVE] ❌ ERROR: Missing player_id or tournament_id' );
             wp_send_json_error( 'Игрок и турнир обязательны' );
         }
         
@@ -150,12 +138,7 @@ class Arsenal_Player_Stats_Corrections_Admin {
         
         $reason = sanitize_textarea_field( $_POST['correction_reason'] ?? '' );
         
-        error_log( '[Arsenal Corrections SAVE] Deltas: ' . json_encode( $deltas ) );
-        error_log( '[Arsenal Corrections SAVE] Reason: ' . $reason );
-        
         try {
-            error_log( '[Arsenal Corrections SAVE] Вызываю add_correction()...' );
-            
             $correction_id = $this->corrections_manager->add_correction(
                 $player_id,
                 $tournament_id,
@@ -164,24 +147,14 @@ class Arsenal_Player_Stats_Corrections_Admin {
                 $season_id ?: null
             );
             
-            error_log( '[Arsenal Corrections SAVE] add_correction() вернул: ' . var_export( $correction_id, true ) );
-            
             if ( $correction_id ) {
-                error_log( '[Arsenal Corrections SAVE] ✓ SUCCESS! correction_id: ' . $correction_id );
                 wp_send_json_success( array( 'correction_id' => $correction_id ) );
             } else {
-                error_log( '[Arsenal Corrections SAVE] ❌ ERROR: add_correction() вернул false или пусто' );
-                error_log( '[Arsenal Corrections SAVE] wpdb->last_error: ' . $this->corrections_manager->wpdb->last_error );
-                error_log( '[Arsenal Corrections SAVE] wpdb->last_query: ' . $this->corrections_manager->wpdb->last_query );
                 wp_send_json_error( 'Ошибка при сохранении корректировки (добавление не удалось)' );
             }
         } catch ( Exception $e ) {
-            error_log( '[Arsenal Corrections SAVE] ❌ EXCEPTION: ' . $e->getMessage() );
-            error_log( '[Arsenal Corrections SAVE] Stack trace: ' . $e->getTraceAsString() );
             wp_send_json_error( 'Исключение: ' . $e->getMessage() );
         } catch ( Throwable $t ) {
-            error_log( '[Arsenal Corrections SAVE] ❌ THROWABLE: ' . $t->getMessage() );
-            error_log( '[Arsenal Corrections SAVE] Stack trace: ' . $t->getTraceAsString() );
             wp_send_json_error( 'Ошибка: ' . $t->getMessage() );
         }
     }
@@ -190,43 +163,29 @@ class Arsenal_Player_Stats_Corrections_Admin {
      * Обработка AJAX запроса удаления корректировки
      */
     public function handle_delete_correction() {
-        error_log( '[Arsenal Corrections Delete] === AJAX handler called ===' );
-        
         // Проверка nonce с обработкой ошибки
         if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'arsenal_correction_nonce' ) ) {
-            error_log( '[Arsenal Corrections Delete] ❌ Nonce verification failed' );
             wp_send_json_error( 'Ошибка безопасности (nonce)' );
         }
-        error_log( '[Arsenal Corrections Delete] ✓ Nonce проверен успешно' );
         
         if ( ! current_user_can( 'manage_options' ) ) {
-            error_log( '[Arsenal Corrections Delete] ❌ Permission denied' );
             wp_send_json_error( 'Доступ запрещён' );
         }
-        error_log( '[Arsenal Corrections Delete] ✓ Права проверены' );
         
         $correction_id = sanitize_text_field( $_POST['correction_id'] ?? '' );
-        error_log( '[Arsenal Corrections Delete] correction_id: ' . $correction_id );
         
         if ( empty( $correction_id ) ) {
-            error_log( '[Arsenal Corrections Delete] ❌ ERROR: correction_id is empty' );
             wp_send_json_error( 'correction_id не предоставлен' );
         }
         
         try {
-            error_log( '[Arsenal Corrections Delete] Attempting to delete...' );
-            
             // Удаляем по correction_id (hex строка)
             if ( $this->corrections_manager->delete_correction_by_hex_id( $correction_id ) ) {
-                error_log( '[Arsenal Corrections Delete] ✓ SUCCESS! Correction deleted: ' . $correction_id );
                 wp_send_json_success();
             } else {
-                error_log( '[Arsenal Corrections Delete] ❌ ERROR: delete_correction_by_hex_id returned false' );
                 wp_send_json_error( 'Ошибка при удалении корректировки' );
             }
         } catch ( Exception $e ) {
-            error_log( '[Arsenal Corrections Delete] ❌ EXCEPTION: ' . $e->getMessage() );
-            error_log( '[Arsenal Corrections Delete] Stack trace: ' . $e->getTraceAsString() );
             wp_send_json_error( 'Исключение: ' . $e->getMessage() );
         }
     }
@@ -235,42 +194,28 @@ class Arsenal_Player_Stats_Corrections_Admin {
      * Обработка AJAX запроса применения корректировки
      */
     public function handle_apply_correction() {
-        error_log( '[Arsenal Corrections Apply] === AJAX handler called ===' );
-        
         // Проверка nonce с обработкой ошибки
         if ( ! isset( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'arsenal_correction_nonce' ) ) {
-            error_log( '[Arsenal Corrections Apply] ❌ Nonce verification failed' );
             wp_send_json_error( 'Ошибка безопасности (nonce)' );
         }
-        error_log( '[Arsenal Corrections Apply] ✓ Nonce проверен успешно' );
         
         if ( ! current_user_can( 'manage_options' ) ) {
-            error_log( '[Arsenal Corrections Apply] ❌ Permission denied' );
             wp_send_json_error( 'Доступ запрещён' );
         }
-        error_log( '[Arsenal Corrections Apply] ✓ Права проверены' );
         
         $correction_id = sanitize_text_field( $_POST['correction_id'] ?? '' );
-        error_log( '[Arsenal Corrections Apply] correction_id: ' . $correction_id );
         
         if ( empty( $correction_id ) ) {
-            error_log( '[Arsenal Corrections Apply] ❌ ERROR: correction_id is empty' );
             wp_send_json_error( 'correction_id не предоставлен' );
         }
         
         try {
-            error_log( '[Arsenal Corrections Apply] Attempting to apply...' );
-            
             if ( $this->corrections_manager->apply_correction( $correction_id ) ) {
-                error_log( '[Arsenal Corrections Apply] ✓ SUCCESS! Correction applied: ' . $correction_id );
                 wp_send_json_success();
             } else {
-                error_log( '[Arsenal Corrections Apply] ❌ ERROR: apply_correction returned false' );
                 wp_send_json_error( 'Ошибка при применении корректировки' );
             }
         } catch ( Exception $e ) {
-            error_log( '[Arsenal Corrections Apply] ❌ EXCEPTION: ' . $e->getMessage() );
-            error_log( '[Arsenal Corrections Apply] Stack trace: ' . $e->getTraceAsString() );
             wp_send_json_error( 'Исключение: ' . $e->getMessage() );
         }
     }
