@@ -152,6 +152,12 @@
 	object-fit: contain;
 }
 
+.sponsors-logo-wrapper lottie-player {
+	width: 100% !important;
+	height: 100% !important;
+	min-height: 200px !important;
+}
+
 .sponsors-general-content {
 	flex: 1;
 	display: flex;
