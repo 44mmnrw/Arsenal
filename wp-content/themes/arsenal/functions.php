@@ -344,13 +344,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			'https://unpkg.com/@lottiefiles/lottie-player@latest',
 			array(),
 			'1.0',
-			true
-		);
-
-		// Контроль интервала проигрывания Lottie анимаций
-		wp_enqueue_script(
-			'lottie-player-interval',
-			ARSENAL_THEME_URI . '/assets/js/lottie-player-interval.js',
+		false  // В head, чтобы загрузилось раньше
 			array( 'lottie-player' ),
 			ARSENAL_VERSION,
 			true
