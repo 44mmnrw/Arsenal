@@ -218,8 +218,6 @@ if ( empty( $staff_nationality ) ) {
 						echo '<div class="staff-section__text">' . wp_kses_post( $staff_bio ) . '</div>';
 					} elseif ( has_excerpt( $post_id ) ) {
 						echo '<p class="staff-section__text">' . wp_kses_post( get_the_excerpt( $post_id ) ) . '</p>';
-					} else {
-						echo '<p class="staff-section__text">Опытный тренер с богатой карьерой. Работает с командой с 2021 года. Известен своим тактическим мастерством и умением мотивировать игроков. Под его руководством команда показывает стабильные результаты и динамичный футбол.</p>';
 					}
 					?>
 				</div>
@@ -316,9 +314,7 @@ if ( empty( $staff_nationality ) ) {
 				<?php if ( ! empty( $staff_interesting_fact ) ) : ?>
 				<div class="staff-fact-card">
 					<div class="staff-fact-icon">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11C11 9.75 13 8.5 13 7C13 5.9 12.1 5 11 5C9.9 5 9 5.9 9 7H7C7 4.79 8.79 3 11 3C13.21 3 15 4.79 15 7C15 8.5 17 9.75 17 13H13Z" fill="currentColor"/>
-						</svg>
+						<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-fact"></use></svg>
 					</div>
 					<h3 class="staff-fact-title">Интересный факт</h3>
 					<p class="staff-fact-text">
