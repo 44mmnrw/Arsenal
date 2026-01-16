@@ -1,3 +1,6 @@
+SET FOREIGN_KEY_CHECKS=0;
+SET UNIQUE_CHECKS=0;
+
 DROP TABLE IF EXISTS `wp_arsenal_coaches`;
 CREATE TABLE `wp_arsenal_coaches` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
@@ -8,7 +11,7 @@ CREATE TABLE `wp_arsenal_coaches` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `coach_id` (`coach_id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Тренеры/коачи - справочник всех тренеров в системе';
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Тренеры/коачи - справочник всех тренеров в системе';
 
 INSERT INTO `wp_arsenal_coaches` (`id`, `coach_id`, `name`, `created_at`, `updated_at`) VALUES
 ('1', '06CCC233', 'Горовцов Андрей Валерьевич', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
@@ -118,7 +121,8 @@ INSERT INTO `wp_arsenal_coaches` (`id`, `coach_id`, `name`, `created_at`, `updat
 ('105', 'ED67EBCB', 'Букаткин Никита Александрович', '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
 ('106', '96971699', 'Лясюк Андрей Геннадьевич', '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
 ('107', 'FE5231EF', 'Киренкин Роман Васильевич', '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
-('108', '9189765E', 'Бушма Владимир Фомич', '2025-12-26 09:23:31', '2025-12-26 09:23:31');
+('108', '9189765E', 'Бушма Владимир Фомич', '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
+('110', 'EE5F6662', 'Гагарин Юрий Алексеевич', '2026-01-13 22:45:13', '2026-01-13 22:45:13');
 
 DROP TABLE IF EXISTS `wp_arsenal_event_types`;
 CREATE TABLE `wp_arsenal_event_types` (
@@ -175,7 +179,7 @@ CREATE TABLE `wp_arsenal_match_events` (
   CONSTRAINT `fk_match_events_matches` FOREIGN KEY (`match_id`) REFERENCES `wp_arsenal_matches` (`match_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_match_events_player_id` FOREIGN KEY (`player_id`) REFERENCES `wp_arsenal_players` (`player_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_match_events_types` FOREIGN KEY (`event_type`) REFERENCES `wp_arsenal_event_types` (`event_type_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=35705 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='События матча - голы, карточки, замены с минутами и игроками';
+) ENGINE=InnoDB AUTO_INCREMENT=35708 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='События матча - голы, карточки, замены с минутами и игроками';
 
 INSERT INTO `wp_arsenal_match_events` (`id`, `match_id`, `player_id`, `event_type`, `minute`, `created_at`, `updated_at`) VALUES
 ('1', '268C5854', '2E28C78B', '8A3000CC', '22', '2025-12-25 20:04:58', '2025-12-26 01:24:29'),
@@ -35881,7 +35885,10 @@ INSERT INTO `wp_arsenal_match_events` (`id`, `match_id`, `player_id`, `event_typ
 ('35701', '3E7B9DCD', '5A9885E0', '2C0F6D91', '111', '2025-12-26 09:23:43', '2025-12-26 09:23:43'),
 ('35702', '3E7B9DCD', '66AB0930', '8A3000CC', '120', '2025-12-26 09:23:43', '2025-12-26 09:23:43'),
 ('35703', '3E7B9DCD', '2B71FDD4', 'F6804FE9', '120', '2025-12-26 09:23:43', '2025-12-26 09:23:43'),
-('35704', '3E7B9DCD', '00FCA3AB', '7B83D3F0', '122', '2025-12-26 09:23:43', '2025-12-26 09:23:43');
+('35704', '3E7B9DCD', '00FCA3AB', '7B83D3F0', '122', '2025-12-26 09:23:43', '2025-12-26 09:23:43'),
+('35705', '7E93AA17', '2C3F29F0', 'A3898573', '11', '2026-01-10 22:31:41', '2026-01-10 22:31:41'),
+('35706', '7E93AA17', '2C3F29F0', '8A3000CC', '43', '2026-01-10 22:37:52', '2026-01-10 22:37:52'),
+('35707', '7E93AA17', '9DA7A702', 'F6804FE9', '43', '2026-01-10 22:37:53', '2026-01-10 22:37:53');
 
 DROP TABLE IF EXISTS `wp_arsenal_match_lineups`;
 CREATE TABLE `wp_arsenal_match_lineups` (
@@ -35902,7 +35909,7 @@ CREATE TABLE `wp_arsenal_match_lineups` (
   CONSTRAINT `fk_match_lineups_matches` FOREIGN KEY (`match_id`) REFERENCES `wp_arsenal_matches` (`match_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_match_lineups_players` FOREIGN KEY (`player_id`) REFERENCES `wp_arsenal_players` (`player_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_match_lineups_teams` FOREIGN KEY (`team_id`) REFERENCES `wp_arsenal_teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=57945 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Составы матча - стартовый и запасные игроки по позициям';
+) ENGINE=InnoDB AUTO_INCREMENT=57950 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Составы матча - стартовый и запасные игроки по позициям';
 
 INSERT INTO `wp_arsenal_match_lineups` (`id`, `match_id`, `team_id`, `player_id`, `shirt_number`, `is_captain`, `is_starting`, `created_at`, `updated_at`) VALUES
 ('1', '268C5854', 'BB787E24', 'BB4B0575', '44', '0', '1', '2025-12-25 20:06:09', '2025-12-25 20:06:09'),
@@ -93848,7 +93855,9 @@ INSERT INTO `wp_arsenal_match_lineups` (`id`, `match_id`, `team_id`, `player_id`
 ('57941', '3E7B9DCD', '2322C968', '35289C85', '18', '0', '0', '2025-12-26 09:24:03', '2025-12-26 09:24:03'),
 ('57942', '3E7B9DCD', '2322C968', '470F3618', '22', '0', '0', '2025-12-26 09:24:03', '2025-12-26 09:24:03'),
 ('57943', '3E7B9DCD', '2322C968', 'D29126F1', '28', '0', '0', '2025-12-26 09:24:03', '2025-12-26 09:24:03'),
-('57944', '3E7B9DCD', '2322C968', '8B644393', '59', '0', '0', '2025-12-26 09:24:03', '2025-12-26 09:24:03');
+('57944', '3E7B9DCD', '2322C968', '8B644393', '59', '0', '0', '2025-12-26 09:24:03', '2025-12-26 09:24:03'),
+('57945', '7E93AA17', 'EB8AA245', '2C3F29F0', '10', '0', '1', '2026-01-10 22:30:13', '2026-01-10 22:31:17'),
+('57948', '7E93AA17', '4EA59493', '00678652', '0', '0', '1', '2026-01-10 23:33:45', '2026-01-10 23:33:45');
 
 DROP TABLE IF EXISTS `wp_arsenal_match_statuses`;
 CREATE TABLE `wp_arsenal_match_statuses` (
@@ -93915,7 +93924,7 @@ CREATE TABLE `wp_arsenal_matches` (
   CONSTRAINT `fk_matches_stadiums` FOREIGN KEY (`stadium_id`) REFERENCES `wp_arsenal_stadiums` (`stadium_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_matches_statuses` FOREIGN KEY (`status`) REFERENCES `wp_arsenal_match_statuses` (`status_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_matches_tournament_id` FOREIGN KEY (`tournament_id`) REFERENCES `wp_arsenal_tournaments` (`tournament_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=1506 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Матчи - основная таблица с результатами, датами, стадионами';
+) ENGINE=InnoDB AUTO_INCREMENT=1514 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Матчи - основная таблица с результатами, датами, стадионами';
 
 INSERT INTO `wp_arsenal_matches` (`id`, `match_id`, `abbf_url`, `tour`, `season_id`, `league_id`, `tournament_id`, `match_date`, `match_time`, `home_team_id`, `away_team_id`, `home_score`, `away_score`, `status`, `stadium_id`, `attendance`, `main_referee`, `match_report`, `assistant_referees_1`, `assistant_referees_2`, `fourth_referee`, `referee_inspector`, `delegate`, `created_at`, `updated_at`) VALUES
 ('1', '268C5854', '/match/2025-vyssaa-liga-gomel-vs-torpedo-belaz-61197', '1', '5B2ABC0C', '450D6F35', '71CFDAA6', '2025-03-15', '13:00:00', 'BB787E24', '465749D4', '1', '1', '0083CE05', '17E4B84C', '895', 'Стецурин Сергей', NULL, 'Косовец Сергей', 'Маслянко Олег', 'Лобацевич Сергей С.', 'Величко Валерий', 'Копылов Евгений', '2025-12-25 20:04:55', '2025-12-26 00:14:43'),
@@ -95470,7 +95479,10 @@ INSERT INTO `wp_arsenal_matches` (`id`, `match_id`, `abbf_url`, `tour`, `season_
 ('1502', '08492E10', '/match/2026-betera-kubok-belarusi-arsenal-vs-molodecno-84924', '2', '75453CE4', '', 'E4DE8DC0', '2025-07-27', '16:00:00', 'EB8AA245', '862A72BA', '1', '0', '0083CE05', '98367B21', '150', 'Ляшук Илья', NULL, 'Головач Дмитрий', 'Загорельский Дмитрий', 'Пугачев Иван', 'Колб Олег', 'Гавришук Владимир', '2025-12-26 09:23:32', '2026-01-04 22:08:54'),
 ('1503', 'E9E2F393', '/match/2026-betera-kubok-belarusi-slavia-mozyr-vs-gomel-77916', '2', '75453CE4', '', 'E4DE8DC0', '2025-07-27', '19:00:00', 'EE9C95E7', 'BB787E24', '1', '0', '0083CE05', 'D016D5B0', '4900', 'Шумилов Игорь', NULL, 'Гусев Антон', 'Арабей Максим', 'Попок Максим', 'Дупанов Юрий', 'Калачев Дмитрий', '2025-12-26 09:23:32', '2026-01-04 22:09:12'),
 ('1504', 'C2B13EC5', '/match/2025-kubok-belarusi-uni-iks-labs-vs-neman-26202', '0', 'C42ABBE0', '', 'E4DE8DC0', '2024-06-19', '20:00:00', 'EEDB138F', '2322C968', '0', '2', '0083CE05', 'BBBB2D86', '500', 'Тарасюк Денис', NULL, 'Флора Данила', 'Апет Александр', 'Ясель Артем', 'Евневич Александр', 'Витушко Сергей', '2025-12-26 09:23:32', '2025-12-26 09:23:32'),
-('1505', '3E7B9DCD', '/match/2026-betera-kubok-belarusi-slonim-vs-neman-24363', '1', '75453CE4', '', 'E4DE8DC0', '2025-11-12', '14:00:00', '8A9598BF', '2322C968', '0', '0', 'E229BE8C', '544AEFDA', '290', 'Блоцкая Ольга', NULL, 'Данченко Анастасия', 'Гутник Алеся', 'Точеный Кирилл', 'Вербицкий Георгий', 'Нерушкин Алексей', '2025-12-26 09:23:32', '2026-01-04 22:06:39');
+('1505', '3E7B9DCD', '/match/2026-betera-kubok-belarusi-slonim-vs-neman-24363', '1', '75453CE4', '', 'E4DE8DC0', '2025-11-12', '14:00:00', '8A9598BF', '2322C968', '0', '0', 'E229BE8C', '544AEFDA', '290', 'Блоцкая Ольга', NULL, 'Данченко Анастасия', 'Гутник Алеся', 'Точеный Кирилл', 'Вербицкий Георгий', 'Нерушкин Алексей', '2025-12-26 09:23:32', '2026-01-04 22:06:39'),
+('1511', '7E93AA17', NULL, '1', 'E7905EDD', '450D6F35', '71CFDAA6', '2026-01-21', '15:45:00', '4EA59493', 'EB8AA245', '1', '0', '0083CE05', 'DAD822E3', '500', 'Вася', 'Матч прошел в дружеской атмосфере', 'Петя', 'Дима', 'Коля', 'Жора', 'Сёма', '2026-01-10 17:14:04', '2026-01-14 13:04:52'),
+('1512', '7E2BDCC6', NULL, '1', 'E7905EDD', '450D6F35', 'B7DCA738', '2026-01-29', '20:30:00', '826BD32B', 'EB8AA245', '0', '0', 'C76DBDE0', 'DAD822E3', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-01-15 14:26:35', '2026-01-15 15:33:52'),
+('1513', '876CDD3D', NULL, '1', 'E7905EDD', '450D6F35', 'B7DCA738', '2026-01-15', '15:18:00', 'EB8AA245', 'BB787E24', '0', '0', 'C76DBDE0', '92CCA62F', '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-01-15 15:18:26', '2026-01-15 15:18:26');
 
 DROP TABLE IF EXISTS `wp_arsenal_players`;
 CREATE TABLE `wp_arsenal_players` (
@@ -95497,7 +95509,7 @@ CREATE TABLE `wp_arsenal_players` (
   KEY `idx_position_id` (`position_id`),
   KEY `idx_birth_date` (`birth_date`),
   CONSTRAINT `fk_players_positions` FOREIGN KEY (`position_id`) REFERENCES `wp_arsenal_positions` (`position_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2097 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Игроки - справочник всех игроков с позициями и характеристиками';
+) ENGINE=InnoDB AUTO_INCREMENT=2099 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Игроки - справочник всех игроков с позициями и характеристиками';
 
 INSERT INTO `wp_arsenal_players` (`id`, `player_id`, `full_name`, `last_name`, `first_name`, `position_id`, `birth_date`, `citizenship`, `height_cm`, `weight_kg`, `dominant_foot`, `biography`, `photo_url`, `shirt_number`, `player_url`, `created_at`, `updated_at`) VALUES
 ('1', 'BB4B0575', 'Клещук Станислав', 'Клещук', 'Станислав', 'A98B3A74', '2000-04-11', 'Беларусь', '187', '77', '', NULL, NULL, '0', '/players/751', '2025-12-25 20:08:09', '2025-12-25 20:08:09'),
@@ -95831,7 +95843,7 @@ INSERT INTO `wp_arsenal_players` (`id`, `player_id`, `full_name`, `last_name`, `
 ('329', '9C6FE810', 'Куткович Герман', 'Куткович', 'Герман', '6B9B6564', '2002-07-31', 'Беларусь', '0', '0', '', NULL, NULL, '2', '/players/4448', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
 ('330', '4A433A1E', 'Донго Кресус Дональд', 'Донго', 'Кресус Дональд', '62C23862', '2003-04-10', 'Кот д\'Ивуар', '0', '0', '', NULL, NULL, '17', '/players/11483', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
 ('331', 'CA534B9B', 'Сталбеков Нурдоолот', 'Сталбеков', 'Нурдоолот', '04AADD4E', '2001-09-13', 'Кыргызстан', '0', '0', '', NULL, NULL, '27', '/players/13775', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
-('332', '1A6AC182', 'Залеский Андрей', 'Залеский', 'Андрей', '6B9B6564', '1991-01-20', 'Беларусь', '0', '0', 'правая', NULL, NULL, '31', '/players/195', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
+('332', '1A6AC182', 'Залеский Андрей', 'Залеский', 'Андрей', '6B9B6564', '1991-01-20', 'Беларусь', '180', '70', 'правая', '', '/wp-content/uploads/2026/01/zales.webp', '31', '/players/195', '2025-12-25 20:08:10', '2026-01-14 12:52:20'),
 ('333', 'C5E6751B', 'Журавлев Владислав', 'Журавлев', 'Владислав', '6B9B6564', '2004-07-02', 'Беларусь', '179', '67', 'правая', NULL, NULL, '21', '/players/5557', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
 ('334', 'C18B8CEE', 'Коврук Матвей', 'Коврук', 'Матвей', 'A98B3A74', '2005-04-10', 'Беларусь', '0', '0', '', NULL, NULL, '0', '/players/3416', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
 ('335', 'F2968B54', 'Яроцкий Ярослав', 'Яроцкий', 'Ярослав', '62C23862', '1996-03-28', 'Беларусь', '173', '68', 'левая', NULL, NULL, '23', '/players/303', '2025-12-25 20:08:10', '2025-12-25 20:08:10'),
@@ -97595,7 +97607,8 @@ INSERT INTO `wp_arsenal_players` (`id`, `player_id`, `full_name`, `last_name`, `
 ('2093', 'E1CD00A3', 'Тихонович Тимофей', 'Тихонович', 'Тимофей', '', '0000-00-00', '', '0', '0', '', NULL, NULL, '0', '/players/6023', '2025-12-26 09:24:05', '2025-12-26 09:24:05'),
 ('2094', '194D088B', 'Лещинский Егор', 'Лещинский', 'Егор', '', '0000-00-00', '', '0', '0', '', NULL, NULL, '0', '/players/2727', '2025-12-26 09:24:05', '2025-12-26 09:24:05'),
 ('2095', '2DDF57C0', 'Суша Иван', 'Суша', 'Иван', '', '0000-00-00', '', '0', '0', '', NULL, NULL, '0', '/players/4130', '2025-12-26 09:24:05', '2025-12-26 09:24:05'),
-('2096', '6CEA4C9B', 'Кузин Александр', 'Кузин', 'Александр', '04AADD4E', '2008-08-01', 'Беларусь', '0', '0', '', NULL, NULL, '0', '/players/7291', '2025-12-26 09:24:05', '2025-12-26 09:24:05');
+('2096', '6CEA4C9B', 'Кузин Александр', 'Кузин', 'Александр', '04AADD4E', '2008-08-01', 'Беларусь', '0', '0', '', NULL, NULL, '0', '/players/7291', '2025-12-26 09:24:05', '2025-12-26 09:24:05'),
+('2098', '4034410A', 'Гагарин Юрий', 'Гагарин', 'Юрий', '6B9B6564', '1961-04-12', '', '0', '0', '', '', '', '99', NULL, '2026-01-16 11:42:55', '2026-01-16 11:42:55');
 
 DROP TABLE IF EXISTS `wp_arsenal_positions`;
 CREATE TABLE `wp_arsenal_positions` (
@@ -97649,6 +97662,35 @@ INSERT INTO `wp_arsenal_seasons` (`id`, `season_id`, `season_name`, `start_date`
 ('13', '75453CE4', 'Сезон 2025-2026', '2025-08-01', '2026-07-31', '1', '2025-12-26 09:23:31'),
 ('14', 'E7905EDD', 'Сезон 2026', '2026-01-01', '2026-12-31', '1', '2026-01-02 16:46:44');
 
+DROP TABLE IF EXISTS `wp_arsenal_sponsors`;
+CREATE TABLE `wp_arsenal_sponsors` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Название спонсора/партнера',
+  `description` longtext COLLATE utf8mb4_unicode_ci COMMENT 'Описание спонсора',
+  `type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Тип: general_sponsor (генеральный спонсор) или partner',
+  `industry` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Отрасль/сектор (Промышленность, Спортивная экипировка, Энергетика, Автомобили, Банковские услуги, Медиа и т.д.)',
+  `logo_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'URL логотипа спонсора',
+  `website_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'URL сайта спонсора',
+  `is_active` tinyint(1) DEFAULT '1' COMMENT 'Активен ли спонсор (1 - да, 0 - нет)',
+  `order_index` int DEFAULT '0' COMMENT 'Порядок отображения',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Дата создания',
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Дата обновления',
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`),
+  KEY `is_active` (`is_active`),
+  KEY `order_index` (`order_index`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Таблица спонсоров и партнеров ФК Арсенал';
+
+INSERT INTO `wp_arsenal_sponsors` (`id`, `name`, `description`, `type`, `industry`, `logo_url`, `website_url`, `is_active`, `order_index`, `created_at`, `updated_at`) VALUES
+('1', 'Lamborgini', 'Крупнейший промышленный холдинг Минской области. Генеральный спонсор клуба с 2018 года. Компания активно поддерживает развитие спорта в регионе и инвестирует в модернизацию инфраструктуры стадиона.', 'partner', 'Промышленность', 'http://arsenal.test/wp-content/uploads/2026/01/lamba.png', '', '1', '1', '2026-01-13 10:52:29', '2026-01-13 14:10:40'),
+('2', 'Porsche', 'Официальный поставщик спортивной экипировки и формы команды. Сотрудничество с 2019 года.', 'partner', 'Спортивная экипировка', 'http://arsenal.test/wp-content/uploads/2026/01/porshe.png', '', '1', '1', '2026-01-13 10:52:29', '2026-01-13 11:36:53'),
+('3', 'Энергетик', 'Региональная энергетическая компания. Обеспечивает стадион электроэнергией и поддерживает молодежные программы клуба.', 'partner', 'Энергетика', '/wp-content/themes/arsenal/assets/images/sponsors/energetik-logo.png', NULL, '1', '2', '2026-01-13 10:52:29', '2026-01-13 10:52:29'),
+('4', 'АвтоБел', 'Крупнейший автодилер региона. Предоставляет транспортные услуги для команды на выездные матчи.', 'partner', 'Автомобили', '/wp-content/themes/arsenal/assets/images/sponsors/autobel-logo.png', NULL, '1', '3', '2026-01-13 10:52:29', '2026-01-13 10:52:29'),
+('5', 'БелБанк', 'Официальный банковский партнер клуба. Обеспечивает финансовые услуги и поддержку болельщицких программ.', 'partner', 'Банковские услуги', '/wp-content/themes/arsenal/assets/images/sponsors/belbank-logo.png', NULL, '1', '4', '2026-01-13 10:52:29', '2026-01-13 10:52:29'),
+('6', 'МедиаГруп', 'Медиахолдинг, освещающий все матчи клуба. Производит видеоконтент и ведет трансляции домашних игр.', 'partner', 'Медиа', '/wp-content/themes/arsenal/assets/images/sponsors/mediagroup-logo.png', NULL, '1', '5', '2026-01-13 10:52:29', '2026-01-13 10:52:29'),
+('7', 'Alfa Romeo', '', 'partner', 'Авто', 'http://arsenal.test/wp-content/uploads/2026/01/alfa.png', '', '1', '0', '2026-01-13 12:07:14', '2026-01-13 14:14:26'),
+('8', 'Audi', 'Самые крутые тачки в мире', 'general_sponsor', 'Авто', 'http://arsenal.test/wp-content/uploads/2026/01/Audi.png', '', '1', '0', '2026-01-13 12:09:33', '2026-01-13 14:14:26');
+
 DROP TABLE IF EXISTS `wp_arsenal_squad`;
 CREATE TABLE `wp_arsenal_squad` (
   `id` tinyint unsigned NOT NULL AUTO_INCREMENT,
@@ -97696,7 +97738,7 @@ INSERT INTO `wp_arsenal_stadiums` (`id`, `stadium_id`, `name`, `city`, `capacity
 ('8', 'D016D5B0', '«Юность», Мозырь', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('9', '98367B21', '«Городской»', 'Борисов', NULL, NULL, '2025-12-25 20:04:54', '2026-01-06 18:26:39'),
 ('10', 'A827DEFA', '«Торпедо», Жодино', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
-('11', '1FC2B52B', 'Атлант', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
+('11', '1FC2B52B', 'Атлант', 'Новополоцк', NULL, NULL, '2025-12-25 20:04:54', '2026-01-10 16:24:47'),
 ('12', '802CE051', 'ОСК «Брестский»', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('13', '2F0BA339', '«Городской», Молодечно', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('14', '3BFA6754', '«Центральный», Гомель', NULL, NULL, NULL, '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
@@ -97737,6 +97779,76 @@ INSERT INTO `wp_arsenal_stadiums` (`id`, `stadium_id`, `name`, `city`, `capacity
 ('49', 'B1EBED32', 'СДЮШОР-1, Рогачев', NULL, NULL, NULL, '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
 ('50', '76DF490F', '«Юность», Осиповичи', NULL, NULL, NULL, '2025-12-26 09:23:31', '2025-12-26 09:23:31'),
 ('51', '45623741', '«Городской», Долбизно', NULL, NULL, NULL, '2025-12-26 09:23:31', '2025-12-26 09:23:31');
+
+DROP TABLE IF EXISTS `wp_arsenal_staff`;
+CREATE TABLE `wp_arsenal_staff` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `second_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department_id` int DEFAULT NULL,
+  `job_title_id` int DEFAULT NULL,
+  `birth_date` date DEFAULT NULL,
+  `contract_start` date DEFAULT NULL,
+  `contract_end` date DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `photo_url` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bio` text COLLATE utf8mb4_unicode_ci,
+  `achievements` json DEFAULT NULL,
+  `career_positions` json DEFAULT NULL COMMENT 'История должностей и опыта: {title, organization, experience}',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `experience` int DEFAULT '0',
+  `citizenship` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `interesting_fact` text COLLATE utf8mb4_unicode_ci COMMENT 'Интересный факт о сотруднике',
+  PRIMARY KEY (`id`),
+  KEY `idx_first_name` (`first_name`),
+  KEY `idx_second_name` (`second_name`),
+  KEY `idx_job_title_id` (`job_title_id`),
+  KEY `fk_staff_department_id` (`department_id`),
+  CONSTRAINT `fk_staff_department_id` FOREIGN KEY (`department_id`) REFERENCES `wp_arsenal_staff_department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_staff_job_title` FOREIGN KEY (`job_title_id`) REFERENCES `wp_arsenal_staff_job_titles` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `wp_arsenal_staff` (`id`, `first_name`, `second_name`, `department_id`, `job_title_id`, `birth_date`, `contract_start`, `contract_end`, `phone`, `email`, `photo_url`, `bio`, `achievements`, `career_positions`, `created_at`, `updated_at`, `experience`, `citizenship`, `interesting_fact`) VALUES
+('1', 'Вячеслав', 'Вашкевич', '1', '1', '1986-02-15', '2026-01-15', '2026-01-31', '', '', '/wp-content/uploads/2026/01/coach.png', 'Биография', '[\"Чемпион Беларуси\", \"Чемпион Мира\", \"Чемпион Галактики\", \"Чемпион Вселенной\"]', '[{\"title\": \"Главный тренер\", \"experience\": \"По настоящее время\", \"organization\": \"Арсенал\"}, {\"title\": \"Главный тренер\", \"experience\": \"По настоящее время\", \"organization\": \"Арсенал\"}, {\"title\": \"Главный тренер\", \"experience\": \"По настоящее время\", \"organization\": \"Арсенал\"}]', '2026-01-11 11:45:07', '2026-01-15 23:23:01', '10', 'Беларусь', 'А вы знали, что Вячеслав родился с серебряной ложкой во рту?'),
+('3', 'Юрий', 'Гагарин', '1', '2', '1988-04-12', '2026-01-13', '2026-02-25', '', '', '/wp-content/uploads/2026/01/YuriGagarin.jpg', 'Космонавт', '[\"Чемпион 1\", \"Чемпион 2\", \"Чемпион 2\"]', '[{\"title\": \"Не главный тренер\", \"experience\": \"Дилетант\", \"organization\": \"Нет никакой Организации\"}, {\"title\": \"Не главный тренер\", \"experience\": \"Дилетант\", \"organization\": \"Нет никакой Организации\"}, {\"title\": \"Не главный тренер\", \"experience\": \"Дилетант\", \"organization\": \"Нет никакой Организации\"}]', '2026-01-13 16:14:17', '2026-01-16 11:10:08', '94', '', 'Факт!');
+
+DROP TABLE IF EXISTS `wp_arsenal_staff_department`;
+CREATE TABLE `wp_arsenal_staff_department` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `department_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `department_name` (`department_name`),
+  KEY `idx_sort` (`sort_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `wp_arsenal_staff_department` (`id`, `department_name`, `description`, `sort_order`, `created_at`, `updated_at`) VALUES
+('1', 'Тренерский штаб', 'Отдел тренерского персонала', '1', '2026-01-15 16:27:44', '2026-01-15 16:27:44'),
+('2', 'Основной персонал', 'Административный и вспомогательный персонал', '2', '2026-01-15 16:27:44', '2026-01-15 16:27:44');
+
+DROP TABLE IF EXISTS `wp_arsenal_staff_job_titles`;
+CREATE TABLE `wp_arsenal_staff_job_titles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `job_title_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `department_id` int DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `sort_order` int DEFAULT '0',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_job_title` (`job_title_name`),
+  KEY `fk_job_title_department_id` (`department_id`),
+  CONSTRAINT `fk_job_title_department_id` FOREIGN KEY (`department_id`) REFERENCES `wp_arsenal_staff_department` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `wp_arsenal_staff_job_titles` (`id`, `job_title_name`, `department_id`, `description`, `sort_order`, `created_at`, `updated_at`) VALUES
+('1', 'Главный тренер', '1', '', '0', '2026-01-11 11:36:27', '2026-01-15 16:39:16'),
+('2', 'Тренер вратарей', '1', '', '0', '2026-01-13 16:12:22', '2026-01-15 16:39:16');
 
 DROP TABLE IF EXISTS `wp_arsenal_standings_adjustments`;
 CREATE TABLE `wp_arsenal_standings_adjustments` (
@@ -97780,7 +97892,7 @@ CREATE TABLE `wp_arsenal_team_coaches` (
   KEY `idx_dates` (`start_date`,`end_date`),
   CONSTRAINT `fk_team_coaches_coaches` FOREIGN KEY (`coach_id`) REFERENCES `wp_arsenal_coaches` (`coach_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `fk_team_coaches_teams` FOREIGN KEY (`team_id`) REFERENCES `wp_arsenal_teams` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=231 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='История тренеров по командам - связь команд и тренеров с датами работы';
+) ENGINE=InnoDB AUTO_INCREMENT=250 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='История тренеров по командам - связь команд и тренеров с датами работы';
 
 INSERT INTO `wp_arsenal_team_coaches` (`id`, `team_id`, `coach_id`, `start_date`, `end_date`, `created_at`, `updated_at`) VALUES
 ('1', 'BB787E24', '06CCC233', '2023-08-12', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
@@ -97803,7 +97915,6 @@ INSERT INTO `wp_arsenal_team_coaches` (`id`, `team_id`, `coach_id`, `start_date`
 ('18', '862A72BA', '6B1A68AA', '2025-06-13', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('19', 'EB8AA245', 'AFFEA25F', '2025-06-13', '2025-07-06', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('20', '4EA59493', '29F4B6EB', '2025-08-01', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
-('21', 'EB8AA245', 'D2BC33DB', '2025-08-02', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('22', 'D3949C90', '2D9855FF', '2025-08-24', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('23', '0720C44E', 'B2B137DC', '2025-10-03', '2025-10-03', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
 ('24', '8A058A2D', '6AA28809', '2025-10-04', '0000-00-00', '2025-12-25 20:04:54', '2025-12-25 20:04:54'),
@@ -98012,7 +98123,7 @@ INSERT INTO `wp_arsenal_team_coaches` (`id`, `team_id`, `coach_id`, `start_date`
 ('227', 'D1159293', 'C90E3305', '2025-07-12', '2025-07-25', '2025-12-26 09:23:32', '2025-12-26 09:23:32'),
 ('228', '0720C44E', '4B902CDC', '2025-12-04', '0000-00-00', '2025-12-26 09:23:32', '2025-12-26 09:23:32'),
 ('229', '8A058A2D', '6AA28809', '2025-12-03', '0000-00-00', '2025-12-26 09:23:32', '2025-12-26 09:23:32'),
-('230', 'EB8AA245', 'D2BC33DB', '2025-07-27', '2025-07-27', '2025-12-26 09:23:32', '2025-12-26 09:23:32');
+('249', 'EB8AA245', 'D2BC33DB', '2025-07-27', '0000-00-00', '2026-01-13 23:31:24', '2026-01-13 23:31:24');
 
 DROP TABLE IF EXISTS `wp_arsenal_team_contracts`;
 CREATE TABLE `wp_arsenal_team_contracts` (
@@ -98033,14 +98144,17 @@ CREATE TABLE `wp_arsenal_team_contracts` (
   KEY `idx_active_status` (`squad_id`),
   CONSTRAINT `fk_team_contracts_player` FOREIGN KEY (`player_id`) REFERENCES `wp_arsenal_players` (`player_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_team_contracts_squad` FOREIGN KEY (`squad_id`) REFERENCES `wp_arsenal_squad` (`squad_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Таблица хранит сведения и периоде работы игрока в команде, тип состава';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Таблица хранит сведения и периоде работы игрока в команде, тип состава';
 
 INSERT INTO `wp_arsenal_team_contracts` (`id`, `contract_id`, `player_id`, `squad_id`, `contract_number`, `contract_start`, `contract_end`, `created_at`, `updated_at`) VALUES
 ('7', 'CE478F7B', '2C3F29F0', '21F3D7B3', '3333', '2025-11-06', '2026-04-06', '2025-12-27 11:20:51', '2026-01-09 10:33:36'),
 ('8', '632B2255', '9DA7A702', '21F3D7B3', '5555', '2025-11-01', '2026-04-30', '2025-12-29 19:40:45', '2025-12-30 12:08:12'),
 ('12', '0809E965', '8702A112', '21F3D7B3', '4555', '2025-12-01', '2026-07-16', '2025-12-30 12:14:24', '2025-12-30 12:14:24'),
 ('13', '29D22FEE', '8637B541', '21F3D7B3', '54353453', '2025-12-04', '2026-09-26', '2026-01-06 14:13:09', '2026-01-06 14:13:09'),
-('14', 'D0F6DC64', '199693B4', '21F3D7B3', '76544', '2025-10-31', '2026-08-27', '2026-01-06 14:14:08', '2026-01-06 14:14:08');
+('15', '4F050339', '1A6AC182', '21F3D7B3', '4444444444', '2026-01-01', '2026-12-31', '2026-01-14 11:33:08', '2026-01-14 11:33:08'),
+('16', 'D0F6DC64', '199693B4', '21F3D7B3', '76544', '2025-08-06', '2026-08-01', '2026-01-14 11:35:21', '2026-01-14 11:35:21'),
+('17', '65D96250', '4034410A', '21F3D7B3', '4545424', '2025-12-01', '2026-06-26', '2026-01-16 11:47:05', '2026-01-16 11:47:05'),
+('18', '9E239625', 'E923DF44', '21F3D7B3', '111111111111', '2025-10-16', '2026-07-03', '2026-01-16 11:51:53', '2026-01-16 11:51:53');
 
 DROP TABLE IF EXISTS `wp_arsenal_team_seasons`;
 CREATE TABLE `wp_arsenal_team_seasons` (
@@ -98164,26 +98278,26 @@ CREATE TABLE `wp_arsenal_teams` (
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Команды - справочник всех футбольных команд';
 
 INSERT INTO `wp_arsenal_teams` (`id`, `team_id`, `name`, `logo_url`, `created_at`, `updated_at`) VALUES
-('1', 'BB787E24', 'Гомель', '/wp-content/uploads/2025/12/FK_Gomel.png', '2025-12-25 20:04:53', '2026-01-08 16:24:24'),
-('2', '465749D4', 'Торпедо-БЕЛАЗ', '/wp-content/uploads/teams/68165f2277139772316064.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
+('1', 'BB787E24', 'Гомель', '/test-logo-2.png', '2025-12-25 20:04:53', '2026-01-11 02:37:36'),
+('2', '465749D4', 'Торпедо-БЕЛАЗ', 'http://arsenal.test/wp-content/uploads/2025/12/FC_Torpedo-BelAZ_Logo.png', '2025-12-25 20:04:53', '2026-01-11 02:26:26'),
 ('3', '7AED7809', 'Минск', '/wp-content/uploads/2025/12/Fc_Minsk_logo.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
 ('4', 'D1159293', 'Нафтан-Новополоцк', '/wp-content/uploads/2025/12/FCNafatan2024.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
-('5', '2322C968', 'Неман', '/wp-content/uploads/teams/689c50059574f844405910.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
-('6', '862A72BA', 'Молодечно', '/wp-content/uploads/teams/6814b08dde6d7319420494.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
+('5', '2322C968', 'Неман', '/wp-content/uploads/2025/12/Neman_Grodno.png', '2025-12-25 20:04:53', '2026-01-11 02:55:50'),
+('6', '862A72BA', 'Молодечно', 'http://arsenal.test/wp-content/uploads/2025/12/FK_Molodechno.png', '2025-12-25 20:04:53', '2026-01-11 20:04:23'),
 ('7', '13986C71', 'Ислочь', '/wp-content/uploads/2025/12/FC_Isloch_Logo.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
-('8', 'EE9C95E7', 'Славия-Мозырь', '/wp-content/uploads/teams/61542deccb9e3213725673.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
+('8', 'EE9C95E7', 'Славия-Мозырь', '/wp-content/uploads/2025/12/FC_Slavia_crest.png', '2025-12-25 20:04:53', '2026-01-11 02:41:04'),
 ('9', '8A058A2D', 'Витебск', '/wp-content/uploads/2025/12/Vitebsklogo.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
 ('10', '4EA59493', 'БАТЭ', '/wp-content/uploads/2025/12/BATE_Borisov.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
 ('11', 'EB8AA245', 'Арсенал', '/wp-content/uploads/2025/12/AresenalDz2025.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
-('12', 'D2CB4DB2', 'Динамо-Брест', '/wp-content/uploads/teams/60926042d74f8330717879.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
+('12', 'D2CB4DB2', 'Динамо-Брест', '/wp-content/uploads/2025/12/Dynamo_Brest_logo.png', '2025-12-25 20:04:53', '2026-01-11 02:44:30'),
 ('13', 'D3949C90', 'Динамо-Минск', '/wp-content/uploads/2025/12/Dinmin.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
 ('14', '073A7D1D', 'Сморгонь', '/wp-content/uploads/teams/62349a019fa11620465777.png', '2025-12-25 20:04:53', '2026-01-08 16:24:25'),
-('15', 'FEDE1840', 'Слуцк', '/wp-content/uploads/teams/625428f6be1ef633547339.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
+('15', 'FEDE1840', 'Слуцк', 'http://arsenal.test/wp-content/uploads/2025/12/FK_Slutsk.png', '2025-12-25 20:04:54', '2026-01-11 03:11:30'),
 ('16', '0720C44E', 'МЛ Витебск', '/wp-content/uploads/2025/12/FC_Maxline_Logo.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
 ('17', 'F91C05F9', 'Днепр-Могилев', '/wp-content/uploads/teams/689c726514a8f284238237.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
 ('18', 'EDB741D1', 'Шахтер', '/wp-content/uploads/teams/6155c128b60a6202202322.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
 ('19', '6334917C', 'РЦОР БГУ', '/wp-content/uploads/teams/6215e501eca33831142105.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
-('20', '25AFDDA8', 'Белшина', '/wp-content/uploads/teams/67d2a1cd009ab982814722.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
+('20', '25AFDDA8', 'Белшина', '', '2025-12-25 20:04:54', '2026-01-11 03:10:48'),
 ('21', '3818D7FB', 'Барановичи', '/wp-content/uploads/teams/5a8d887349a71.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
 ('22', '8A9598BF', 'Слоним', '/wp-content/uploads/teams/5a8e6ea612172.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
 ('23', 'A9DFC061', 'Орша', '/wp-content/uploads/teams/5a8eadd42df9f.png', '2025-12-25 20:04:54', '2026-01-08 16:24:25'),
@@ -98212,7 +98326,7 @@ INSERT INTO `wp_arsenal_teams` (`id`, `team_id`, `name`, `logo_url`, `created_at
 ('46', 'B54F1367', 'Осиповичи', '/wp-content/uploads/teams/5d37f8baa8da5133895064.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
 ('47', '40F84903', 'Миоры', '/wp-content/uploads/teams/609d2be4529be420147375.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
 ('48', '3114E6B2', 'Жодино-Южное', '/wp-content/uploads/teams/626bd08f438b1751707938.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
-('49', 'EB0C33FD', 'Нива Долбизно', '/wp-content/uploads/teams/686e3d6320c7e391881388.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
+('49', 'EB0C33FD', 'Нива Долбизно', '', '2025-12-26 09:23:31', '2026-01-11 03:04:38'),
 ('50', '608AD552', 'Ивацевичи-ДЮСШ', '/wp-content/uploads/teams/6901ce4aae51b490622072.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
 ('51', '19CBC991', 'Бумпром', '/wp-content/uploads/teams/689c71ea5ee2b640391668.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
 ('52', '25E1301D', 'DMedia', '/wp-content/uploads/teams/686e0f2c55f95851408245.png', '2025-12-26 09:23:31', '2026-01-08 16:24:25'),
@@ -98226,13 +98340,17 @@ CREATE TABLE `wp_arsenal_tournaments` (
   `country` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `description` longtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `tournament_id` (`tournament_id`),
   UNIQUE KEY `name` (`name`),
   KEY `idx_tournament_id` (`tournament_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `wp_arsenal_tournaments` (`id`, `tournament_id`, `name`, `country`, `created_at`, `updated_at`) VALUES
-('1', '71CFDAA6', 'Высшая лига', NULL, '2025-12-25 20:04:54', '2025-12-27 14:55:23'),
-('2', 'E4DE8DC0', 'Кубок Беларуси', NULL, '2025-12-26 09:23:31', '2025-12-27 14:55:34');
+INSERT INTO `wp_arsenal_tournaments` (`id`, `tournament_id`, `name`, `country`, `created_at`, `updated_at`, `description`) VALUES
+('1', '71CFDAA6', 'Чемпионат Беларуси', NULL, '2025-12-25 20:04:54', '2026-01-16 12:28:27', NULL),
+('2', 'E4DE8DC0', 'Кубок Беларуси', NULL, '2025-12-26 09:23:31', '2025-12-27 14:55:34', NULL),
+('4', 'B7DCA738', 'Товарищеские матчи', NULL, '2026-01-15 15:16:20', '2026-01-15 15:16:20', '');
 
+SET FOREIGN_KEY_CHECKS=1;
+SET UNIQUE_CHECKS=1;

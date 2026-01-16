@@ -27,34 +27,60 @@ wp_enqueue_style( 'arsenal-standings', get_template_directory_uri() . '/assets/c
 
 global $wpdb;
 
-// Получаем список доступных сезонов для турнира (tournament_id = 71CFDAA6)
+// Получаем список доступных сезонов из таблицы wp_arsenal_seasons для нужного турнира
 $available_seasons = $wpdb->get_results(
     $wpdb->prepare(
-        "SELECT DISTINCT m.season_id, YEAR(m.match_date) as year
-         FROM {$wpdb->prefix}arsenal_matches m
+        "SELECT DISTINCT s.season_id, s.season_name
+         FROM {$wpdb->prefix}arsenal_seasons s
+         INNER JOIN {$wpdb->prefix}arsenal_matches m ON m.season_id = s.season_id
          WHERE m.tournament_id = %s
-         GROUP BY m.season_id, YEAR(m.match_date)
-         ORDER BY YEAR(m.match_date) DESC",
+         GROUP BY s.season_id, s.season_name
+         ORDER BY s.start_date DESC",
         '71CFDAA6'
     )
 );
 
-// Получаем выбранный год из URL параметра или из опций
-$selected_year = isset( $_GET['year'] ) ? intval( $_GET['year'] ) : intval( get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) ) );
+// Получаем выбранный season_id из URL параметра или используем активный сезон
+$selected_season_id = isset( $_GET['season'] ) ? sanitize_text_field( $_GET['season'] ) : get_option( 'arsenal_active_season_id', '5B2ABC0C' );
 
-// Автоматически находим season_id по году из БД
+// Проверяем, что выбранный сезон существует
 $current_season_id = $wpdb->get_var( $wpdb->prepare(
-    "SELECT season_id FROM {$wpdb->prefix}arsenal_matches WHERE YEAR(match_date) = %d AND tournament_id = %s LIMIT 1",
-    $selected_year,
-    '71CFDAA6'
+    "SELECT season_id FROM {$wpdb->prefix}arsenal_seasons WHERE season_id = %s LIMIT 1",
+    $selected_season_id
 ) );
 
-// Fallback на сезон 2025 если ничего не найдено
+// Fallback если сезон не найден
 if ( ! $current_season_id ) {
     $current_season_id = get_option( 'arsenal_active_season_id', '5B2ABC0C' );
 }
 
-$current_year = $selected_year;
+// Получаем год из найденного сезона для отображения
+$season_info = $wpdb->get_row( $wpdb->prepare(
+    "SELECT season_name, YEAR(start_date) as year FROM {$wpdb->prefix}arsenal_seasons WHERE season_id = %s",
+    $current_season_id
+) );
+
+$current_year = $season_info ? intval( $season_info->year ) : intval( date( 'Y' ) );
+
+// Получаем league_id из матчей текущего сезона
+$league_id_from_matches = $wpdb->get_var( $wpdb->prepare(
+    "SELECT DISTINCT m.league_id 
+     FROM {$wpdb->prefix}arsenal_matches m
+     WHERE m.season_id = %s
+     LIMIT 1",
+    $current_season_id
+) );
+
+// Получаем информацию о лиге по league_id
+$league_info = $wpdb->get_row( $wpdb->prepare(
+    "SELECT l.league_id, l.league_name 
+     FROM {$wpdb->prefix}arsenal_leagues l
+     WHERE l.league_id = %s
+     LIMIT 1",
+    $league_id_from_matches
+) );
+
+$current_league_name = $league_info ? $league_info->league_name : 'Чемпионат Беларуси';
 
 // ===== СОБИРАЕМ ТАБЛИЦУ ИЗ МАТЧЕЙ СЕЗОНА =====
 
@@ -316,19 +342,19 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
         <section class="tournament-standings-section">
             <header class="standings-header">
                 <h1 class="standings-title">Турнирная таблица</h1>
+                <p class="standings-league"><?php echo esc_html( $current_league_name ); ?> — Сезон <?php echo esc_html( $current_year ); ?></p>
                 <div class="standings-controls">
                     <form method="get" class="season-selector-form">
-                        <label for="season-year" class="season-label">Выберите сезон:</label>
-                        <select id="season-year" name="year" class="season-select" onchange="this.form.submit()">
+                        <label for="season-selector" class="season-label">Выберите сезон:</label>
+                        <select id="season-selector" name="season" class="season-select" onchange="this.form.submit()">
                             <?php foreach ( $available_seasons as $season ) : ?>
-                                <option value="<?php echo intval( $season->year ); ?>" <?php selected( $current_year, $season->year ); ?>>
-                                    Сезон <?php echo intval( $season->year ); ?>
+                                <option value="<?php echo esc_attr( $season->season_id ); ?>" <?php selected( $current_season_id, $season->season_id ); ?>>
+                                    <?php echo esc_html( $season->season_name ); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </form>
                 </div>
-                <p class="standings-season">Сезон <?php echo esc_html( $current_year ); ?></p>
             </header>
 
             <div class="standings-table-wrapper" role="region" aria-label="Турнирная таблица сезона">
