@@ -37,10 +37,11 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
         'weight_kg' => ! empty( $_POST['weight'] ) ? intval( $_POST['weight'] ) : 0,
         'dominant_foot' => sanitize_text_field( $_POST['dominant_foot'] ?? '' ),
         'photo_url' => ! empty( $_POST['photo_url'] ) ? get_relative_path( $_POST['photo_url'] ) : '',
-        'biography' => isset( $_POST['biography'] ) ? wp_kses_post( $_POST['biography'] ) : null
+        'biography' => isset( $_POST['biography'] ) ? wp_kses_post( $_POST['biography'] ) : null,
+        'full_name' => trim( sanitize_text_field( $_POST['last_name'] ) . ' ' . sanitize_text_field( $_POST['first_name'] ) )
     );
     
-    $format = array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s' );
+    $format = array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s' );
     
     if ( $is_new ) {
         // Для новых игроков генерируем player_id на основе фамилии, имени и даты рождения
@@ -53,12 +54,15 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
                            strtoupper( str_replace( ' ', '', substr( $first_name, 0, 2 ) ) ) . 
                            str_replace( '-', '', $birth_date ); // Дата в формате YYYY-MM-DD
         $data['player_id'] = strtoupper( substr( md5( $player_id_source ), 0, 8 ) );
-        $data = array_merge( array( 'team_id' => 915703 ), $data );
-        array_unshift( $format, '%d' );
         
         $wpdb->insert( 'wp_arsenal_players', $data, $format );
         $player_id = $wpdb->insert_id;
-        echo '<div class="notice notice-success"><p>✅ Игрок добавлен! ID: ' . esc_html( $data['player_id'] ) . '</p></div>';
+        
+        if ( $wpdb->last_error ) {
+            echo '<div class="notice notice-error"><p>❌ Ошибка при добавлении: ' . esc_html( $wpdb->last_error ) . '</p></div>';
+        } else {
+            echo '<div class="notice notice-success"><p>✅ Игрок добавлен! ID: ' . esc_html( $data['player_id'] ) . '</p></div>';
+        }
     } else {
         // При редактировании НЕ меняем player_id
         $result = $wpdb->update( 'wp_arsenal_players', $data, array( 'player_id' => $player_id ), $format, array( '%s' ) );
