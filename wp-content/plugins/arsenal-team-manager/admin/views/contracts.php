@@ -24,9 +24,14 @@ if ( isset( $_POST['action'] ) && check_admin_referer( 'arsenal_contract_action'
         $contract_end = sanitize_text_field( $_POST['contract_end'] );
         $squad_id = sanitize_text_field( $_POST['squad_id'] );
         
+        // Генерируем contract_id как хеш из player_id + contract_start
+        $contract_id_source = $player_id . $contract_start;
+        $contract_id = strtoupper( substr( md5( $contract_id_source ), 0, 8 ) );
+        
         $result = $wpdb->insert(
             $wpdb->prefix . 'arsenal_team_contracts',
             array(
+                'contract_id' => $contract_id,
                 'player_id' => $player_id,
                 'contract_number' => $contract_number,
                 'contract_start' => $contract_start,
@@ -34,7 +39,7 @@ if ( isset( $_POST['action'] ) && check_admin_referer( 'arsenal_contract_action'
                 'squad_id' => $squad_id,
                 'created_at' => current_time( 'mysql' )
             ),
-            array( '%s', '%s', '%s', '%s', '%s', '%s' )
+            array( '%s', '%s', '%s', '%s', '%s', '%s', '%s' )
         );
         
         if ( $result ) {
