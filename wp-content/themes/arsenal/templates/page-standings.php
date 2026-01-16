@@ -27,13 +27,26 @@ wp_enqueue_style( 'arsenal-standings', get_template_directory_uri() . '/assets/c
 
 global $wpdb;
 
-// Получаем активный сезон из настроек плагина Arsenal
-$current_year = intval( get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) ) );
+// Получаем список доступных сезонов для турнира (tournament_id = 71CFDAA6)
+$available_seasons = $wpdb->get_results(
+    $wpdb->prepare(
+        "SELECT DISTINCT m.season_id, YEAR(m.match_date) as year
+         FROM {$wpdb->prefix}arsenal_matches m
+         WHERE m.tournament_id = %s
+         GROUP BY m.season_id, YEAR(m.match_date)
+         ORDER BY YEAR(m.match_date) DESC",
+        '71CFDAA6'
+    )
+);
+
+// Получаем выбранный год из URL параметра или из опций
+$selected_year = isset( $_GET['year'] ) ? intval( $_GET['year'] ) : intval( get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) ) );
 
 // Автоматически находим season_id по году из БД
 $current_season_id = $wpdb->get_var( $wpdb->prepare(
-    "SELECT season_id FROM {$wpdb->prefix}arsenal_matches WHERE YEAR(match_date) = %d LIMIT 1",
-    $current_year
+    "SELECT season_id FROM {$wpdb->prefix}arsenal_matches WHERE YEAR(match_date) = %d AND tournament_id = %s LIMIT 1",
+    $selected_year,
+    '71CFDAA6'
 ) );
 
 // Fallback на сезон 2025 если ничего не найдено
@@ -41,21 +54,30 @@ if ( ! $current_season_id ) {
     $current_season_id = get_option( 'arsenal_active_season_id', '5B2ABC0C' );
 }
 
+$current_year = $selected_year;
+
 // ===== СОБИРАЕМ ТАБЛИЦУ ИЗ МАТЧЕЙ СЕЗОНА =====
 
-// Получаем все команды которые участвовали в матчах сезона 2025
+// Получаем все команды которые участвовали в матчах текущего сезона
 $query = "SELECT DISTINCT t.id, t.name, t.logo_url, t.team_id
          FROM {$wpdb->prefix}arsenal_teams t
-         INNER JOIN {$wpdb->prefix}arsenal_match_lineups ml ON ml.team_id = t.team_id
-         INNER JOIN {$wpdb->prefix}arsenal_matches m ON ml.match_id = m.match_id
-         WHERE m.season_id = %s
+         INNER JOIN {$wpdb->prefix}arsenal_matches m ON (m.home_team_id = t.team_id OR m.away_team_id = t.team_id)
+         WHERE m.season_id = %s AND m.tournament_id = %s
          ORDER BY t.name";
 
-$query = $wpdb->prepare( $query, $current_season_id );
+$query = $wpdb->prepare( $query, $current_season_id, '71CFDAA6' );
 $teams = $wpdb->get_results( $query );
 
+// ОТЛАДКА
+if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+    error_log( 'Standings Debug: year=' . $selected_year . ', season_id=' . $current_season_id . ', teams=' . count( $teams ) . ', query=' . $query );
+}
+
 if ( empty( $teams ) ) {
-    echo '<p class="standings-error">Команды не найдены для сезона 2025</p>';
+    echo '<p class="standings-error">Команды не найдены для сезона ' . intval( $current_year ) . '</p>';
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        error_log( 'Standings: No teams found for season ' . $current_season_id );
+    }
     get_footer();
     return;
 }
@@ -81,7 +103,7 @@ foreach ( $teams as $team ) {
     ];
 }
 
-// ===== ПОЛУЧАЕМ ЖЁЛТЫЕ КАРТОЧКИ ДЛЯ КАЖДОЙ КОМАНДЫ (сезон 2025) =====
+// ===== ПОЛУЧАЕМ ЖЁЛТЫЕ КАРТОЧКИ ДЛЯ КАЖДОЙ КОМАНДЫ (текущий сезон) =====
 $yellow_cards_data = $wpdb->get_results(
     $wpdb->prepare(
         "SELECT ml.team_id, COUNT(*) as count
@@ -89,9 +111,11 @@ $yellow_cards_data = $wpdb->get_results(
          INNER JOIN {$wpdb->prefix}arsenal_matches m ON me.match_id = m.match_id
          INNER JOIN {$wpdb->prefix}arsenal_match_lineups ml ON me.player_id = ml.player_id AND me.match_id = ml.match_id
          WHERE m.season_id = %s 
+         AND m.tournament_id = %s
          AND me.event_type = 'yellow_card' 
          GROUP BY ml.team_id",
-        $current_season_id
+        $current_season_id,
+        '71CFDAA6'
     )
 );
 
@@ -101,17 +125,19 @@ foreach ( $yellow_cards_data as $yc ) {
     }
 }
 
-// Получаем все ЗАВЕРШЁННЫЕ матчи сезона 2025 (status = '0083CE05' = Завершено)
+// Получаем все ЗАВЕРШЁННЫЕ матчи текущего сезона (status = '0083CE05' = Завершено)
 $matches = $wpdb->get_results(
     $wpdb->prepare(
         "SELECT m.home_team_id, m.away_team_id, m.home_score, m.away_score
          FROM {$wpdb->prefix}arsenal_matches m
          WHERE m.season_id = %s 
+         AND m.tournament_id = %s
          AND m.status = '0083CE05' 
          AND m.home_score IS NOT NULL 
          AND m.away_score IS NOT NULL
          ORDER BY m.match_date ASC",
-        $current_season_id
+        $current_season_id,
+        '71CFDAA6'
     )
 );
 
@@ -158,8 +184,10 @@ $adjustments_data = $wpdb->get_results(
     $wpdb->prepare(
         "SELECT team_id, adjustment_points, comment
          FROM {$wpdb->prefix}arsenal_standings_adjustments
-         WHERE season_id = %s",
-        $current_season_id
+         WHERE season_id = %s
+         AND tournament_id = %s",
+        $current_season_id,
+        '71CFDAA6'
     )
 );
 
@@ -185,6 +213,7 @@ $get_h2h_stats = function( $team1_id, $team2_id ) use ( $wpdb, $current_season_i
             "SELECT m.home_team_id, m.away_team_id, m.home_score, m.away_score
              FROM {$wpdb->prefix}arsenal_matches m
              WHERE m.season_id = %s
+             AND m.tournament_id = %s
              AND m.status = '0083CE05'
              AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
              AND (
@@ -192,6 +221,7 @@ $get_h2h_stats = function( $team1_id, $team2_id ) use ( $wpdb, $current_season_i
                 (m.home_team_id = %s AND m.away_team_id = %s)
              )",
             $current_season_id,
+            '71CFDAA6',
             $team1_id, $team2_id, $team2_id, $team1_id
         )
     );
@@ -286,6 +316,18 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
         <section class="tournament-standings-section">
             <header class="standings-header">
                 <h1 class="standings-title">Турнирная таблица</h1>
+                <div class="standings-controls">
+                    <form method="get" class="season-selector-form">
+                        <label for="season-year" class="season-label">Выберите сезон:</label>
+                        <select id="season-year" name="year" class="season-select" onchange="this.form.submit()">
+                            <?php foreach ( $available_seasons as $season ) : ?>
+                                <option value="<?php echo intval( $season->year ); ?>" <?php selected( $current_year, $season->year ); ?>>
+                                    Сезон <?php echo intval( $season->year ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
+                </div>
                 <p class="standings-season">Сезон <?php echo esc_html( $current_year ); ?></p>
             </header>
 
