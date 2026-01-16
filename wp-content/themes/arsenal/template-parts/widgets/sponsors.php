@@ -54,7 +54,7 @@ if ( empty( $sponsors ) ) {
 									loading="lazy"
 								>
 							<?php else : ?>
-							<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%;"></lottie-player>
+								<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" loop autoplay style="width: 100%; height: 100%;"></lottie-player>
 							<?php endif; ?>
 						</a>
 						<?php endif; ?>
@@ -68,7 +68,7 @@ if ( empty( $sponsors ) ) {
 									loading="lazy"
 								>
 							<?php else : ?>
-								<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%;"></lottie-player>
+								<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" loop autoplay style="width: 100%; height: 100%;"></lottie-player>
 							<?php endif; ?>
 						</div>
 						<?php endif; ?>

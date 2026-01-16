@@ -49,7 +49,7 @@ get_header();
 								<?php if ( $general_sponsor->logo_url ) : ?>
 									<img src="<?php echo esc_url( $general_sponsor->logo_url ); ?>" alt="<?php echo esc_attr( $general_sponsor->name ); ?>" class="sponsors-logo-image">
 								<?php else : ?>
-									<div class="sponsors-logo-placeholder">Логотип</div>
+								<?php arsenal_render_camera_placeholder(); ?>
 								<?php endif; ?>
 							</div>
 						</div>
@@ -91,7 +91,7 @@ get_header();
 									<?php if ( $partner->logo_url ) : ?>
 										<img src="<?php echo esc_url( $partner->logo_url ); ?>" alt="<?php echo esc_attr( $partner->name ); ?>" class="sponsors-partner-logo-image">
 									<?php else : ?>
-										<div class="sponsors-logo-placeholder">Логотип</div>
+										<?php arsenal_render_camera_placeholder(); ?>
 									<?php endif; ?>
 								</div>
 

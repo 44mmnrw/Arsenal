@@ -114,13 +114,17 @@ foreach ( $players as $player ) {
 								?>
 									<a href="<?php echo esc_url( $player_url ); ?>" class="player-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото + Номер -->
-										<div class="player-card__photo">
-											<img 
-												src="<?php echo esc_url( $photo_url ); ?>" 
-												alt="<?php echo esc_attr( $name_display ); ?>"
-												class="player-card__image"
-												loading="lazy"
-											>
+										<div class="player-card__photo<?php echo empty( $photo_url ) ? ' player-card__photo--placeholder' : ''; ?>">
+											<?php if ( ! empty( $photo_url ) ) : ?>
+												<img 
+													src="<?php echo esc_url( $photo_url ); ?>" 
+													alt="<?php echo esc_attr( $name_display ); ?>"
+													class="player-card__image"
+													loading="lazy"
+												>
+											<?php else : ?>
+												<?php arsenal_render_camera_placeholder(); ?>
+											<?php endif; ?>
 											<?php if ( $shirt_number ) : ?>
 												<div class="player-card__number">
 													<?php echo esc_html( $shirt_number ); ?>
