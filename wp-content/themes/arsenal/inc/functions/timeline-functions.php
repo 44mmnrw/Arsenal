@@ -66,59 +66,77 @@ function arsenal_display_timeline() {
 		$range = 1; // Избегаем деления на ноль в viewBox
 	}
 
-	// Определить цвета по чередованию
-	$colors = array( '#DC3545', '#FFA500', '#DC3545', '#FFA500' );
+	// Определить цвета для точек по годам
+	$color_map = array(
+		2018 => '#900',
+		2019 => '#f0b100',
+		2020 => '#ff1a1a',
+		2021 => '#f0b100',
+		2022 => '#f33',
+		2023 => '#f0b100',
+		2024 => '#ff1a1a',
+		2025 => '#900',
+	);
 
 	?>
 	<section class="timeline-section">
 		<div class="timeline-container">
-			<div class="timeline-line">
-				<svg class="timeline-svg" viewBox="0 0 <?php echo esc_attr( $range + 1 ); ?> 100" preserveAspectRatio="none">
-					<!-- Основная линия -->
-					<line x1="0" y1="50" x2="<?php echo esc_attr( $range ); ?>" y2="50" class="timeline-base-line" />
-					
-					<?php foreach ( $timeline as $index => $entry ) : ?>
-						<?php
-						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-						$text = isset( $entry['text'] ) ? $entry['text'] : '';
-						$x_pos = $year - $min_year;
-						$color = $colors[ $index % count( $colors ) ];
-						?>
-						<!-- Точка года -->
-						<circle 
-							cx="<?php echo esc_attr( $x_pos ); ?>" 
-							cy="50" 
-							r="4" 
-							class="timeline-dot"
-							style="fill: <?php echo esc_attr( $color ); ?>"
-						/>
-					<?php endforeach; ?>
-				</svg>
-			</div>
-
-			<!-- Годы и подсказки -->
-			<div class="timeline-events">
+			<!-- Года в бейджах сверху -->
+			<div class="timeline-years-badges">
 				<?php foreach ( $timeline as $index => $entry ) : ?>
 					<?php
 					$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-					$text = isset( $entry['text'] ) ? $entry['text'] : '';
-					$x_percent = ( ( $year - $min_year ) / $range ) * 100;
-					$color = $colors[ $index % count( $colors ) ];
-					$is_even = $index % 2 === 0;
+					$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
 					?>
 					<div 
-						class="timeline-event <?php echo $is_even ? 'timeline-event--top' : 'timeline-event--bottom'; ?>"
+						class="timeline-year-badge"
 						style="left: <?php echo esc_attr( $x_percent ); ?>%"
 					>
-						<div class="timeline-event__year" style="border-color: <?php echo esc_attr( $color ); ?>">
-							<?php echo esc_html( $year ); ?>
-						</div>
-						<div class="timeline-event__tooltip">
-							<?php echo esc_html( $text ); ?>
-						</div>
+						<?php echo esc_html( $year ); ?>
 					</div>
 				<?php endforeach; ?>
 			</div>
+
+			<!-- Линия временной шкалы -->
+			<div class="timeline-line">
+				<div class="timeline-background-line"></div>
+				<div class="timeline-dots">
+					<?php foreach ( $timeline as $index => $entry ) : ?>
+						<?php
+						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
+						$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
+						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
+						?>
+						<div 
+							class="timeline-dot"
+							style="left: <?php echo esc_attr( $x_percent ); ?>%; background-color: <?php echo esc_attr( $color ); ?>"
+						></div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+
+			<!-- Подробные подсказки при наведении -->
+			<?php if ( ! empty( $timeline ) ) : ?>
+				<div class="timeline-events">
+					<?php foreach ( $timeline as $index => $entry ) : ?>
+						<?php
+						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
+						$event = isset( $entry['event'] ) ? $entry['event'] : '';
+						$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
+						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
+						$is_even = $index % 2 === 0;
+						?>
+						<div 
+							class="timeline-event <?php echo $is_even ? 'timeline-event--top' : 'timeline-event--bottom'; ?>"
+							style="left: <?php echo esc_attr( $x_percent ); ?>%"
+						>
+							<div class="timeline-event__tooltip" style="border-top-color: <?php echo esc_attr( $color ); ?>">
+								<?php echo esc_html( $event ); ?>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php

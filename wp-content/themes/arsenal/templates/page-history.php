@@ -31,7 +31,16 @@ $history = Arsenal_History_Manager::get_history();
 			<div class="history-intro__text">
 				<?php echo wp_kses_post( $history['description'] ); ?>
 			</div>
-		</section><!-- Рекорды и достижения -->
+		</section>
+
+		<!-- Временная шкала -->
+		<?php
+		if ( ! empty( $history['scale'] ) ) {
+			arsenal_display_timeline();
+		}
+		?>
+
+		<!-- Рекорды и достижения -->
 
 		<section class="achievements-section">
 			<h3 class="achievements-section__heading"><?php echo esc_html( $history['title_second'] ); ?></h3>
@@ -106,13 +115,6 @@ $history = Arsenal_History_Manager::get_history();
 			?>
 		</div>
 	</section><!-- Дополнительная секция -->
-
-	<!-- Временная шкала -->
-	<?php
-	if ( ! empty( $history['scale'] ) ) {
-		arsenal_display_timeline();
-	}
-	?>
 
 		<section class="stadiums-section">
 			<h3 class="stadiums-section__heading"><?php echo esc_html( isset( $history['title_third'] ) && ! empty( $history['title_third'] ) ? $history['title_third'] : 'Домашние стадионы' ); ?></h3>

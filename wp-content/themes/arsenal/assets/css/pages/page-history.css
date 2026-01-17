@@ -73,7 +73,7 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
-    margin-bottom: 48px;
+    margin-bottom: 48px
 }
 
 .timeline-section__heading {
@@ -84,158 +84,7 @@
     margin: 0;
 }
 
-/* ========================================
-   Временная шкала (основной компонент)
-   ======================================== */
 
-.timeline-years {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 32px;
-    overflow-x: auto;
-    padding-bottom: 20px;
-    -webkit-overflow-scrolling: touch;
-}
-
-.timeline-year {
-    min-width: 80px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    align-items: center;
-}
-
-.timeline__line-container {
-    position: relative;
-    height: 216px;
-    width: 100%;
-}
-
-.timeline__background-line {
-    position: absolute;
-    height: 4px;
-    background-color: #d1d5dc;
-    width: 100%;
-    top: 106px;
-    left: 0;
-}
-
-.timeline__progress-line {
-    position: absolute;
-    height: 4px;
-    background-color: #990000;
-    width: 0%;
-    top: 106px;
-    left: 0;
-    transition: width 0.3s ease;
-    z-index: 1;
-}
-
-.timeline__items {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    height: 100%;
-    padding: 0;
-}
-
-.timeline__item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-    flex: 1;
-    position: relative;
-    min-width: 0;
-}
-
-.timeline__year-badge {
-    background-color: #e5e7eb;
-    border-radius: 33px;
-    padding: 6px 12px;
-    font-size: 16px;
-    font-weight: 400;
-    color: #0a0a0a;
-    text-align: center;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    order: 1;
-}
-
-.timeline__dot {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 4px solid white;
-    box-shadow: var(--shadow-md);
-    order: 2;
-}
-
-/* Варианты цветов точек */
-.timeline__dot--champion {
-    background-color: #990000;
-}
-
-.timeline__dot--gold {
-    background-color: #f0b100;
-}
-
-.timeline__dot--red {
-    background-color: #ff1a1a;
-}
-
-.timeline__dot--accent {
-    background-color: #f33;
-}
-
-/* Легенда временной шкалы */
-.timeline__legend {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 0 20px;
-}
-
-.timeline__legend-item {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.timeline__legend-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.timeline__legend-dot--gold {
-    background-color: #f0b100;
-}
-
-.timeline__legend-dot--red {
-    background-color: #ff1a1a;
-}
-
-.timeline__legend-dot--accent {
-    background-color: #f33;
-}
-
-.timeline__legend-dot--champion {
-    background-color: #990000;
-}
-
-.timeline__legend-label {
-    font-size: 14px;
-    font-weight: 400;
-    color: #0a0a0a;
-    margin: 0;
-}
 
 /* ========================================
    Секция "Рекорды и достижения"
@@ -503,7 +352,194 @@
 }
 
 /* ========================================
-   Адаптивный дизайн (Desktops to Tablets)
+   Утилиты и вспомогательные классы
+   ======================================== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Анимации при загрузке */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.club-history-container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ========================================
+   Временная шкала (новая версия с бейджами)
+   Структура для interactive timeline
+   ======================================== */
+
+.timeline-container {
+    max-width: 1440px;
+    padding: 0 20px;
+    position: relative;
+    width: 100%;
+}
+
+/* Года в сером бейджах сверху */
+.timeline-years-badges {
+    position: relative;
+    width: 100%;
+    height: 72px;
+    margin-bottom: 20px;
+}
+
+.timeline-year-badge {
+    position: absolute;
+    top: 0;
+    background-color: #e5e7eb;
+    border-radius: 33px;
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #0a0a0a;
+    text-align: center;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    transform: translateX(-50%);
+    line-height: 24px;
+}
+
+/* Линия временной шкалы */
+.timeline-line {
+    position: relative;
+    width: 100%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+/* Фоновая линия */
+.timeline-background-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #d1d5dc;
+    transform: translateY(-50%);
+}
+
+/* Контейнер для точек */
+.timeline-dots {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    transform: translateY(-50%);
+}
+
+/* Точки на линии */
+.timeline-dot {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 4px solid white;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-dot:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0px 15px 20px -3px rgba(0, 0, 0, 0.15), 0px 6px 8px -4px rgba(0, 0, 0, 0.12);
+}
+
+.timeline-events {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+}
+
+.timeline-event {
+    position: absolute;
+    pointer-events: auto;
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+}
+
+.timeline-event--top {
+    /* контейнер в верхней половине */
+}
+
+.timeline-event--bottom {
+    /* контейнер в нижней половине */
+}
+
+.timeline-event__tooltip {
+    font-size: 13px;
+    color: #555;
+    background: #ffffff;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border-top: 3px solid;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    white-space: normal;
+    width: 150px;
+    line-height: 1.4;
+    z-index: 100;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.timeline-event--top .timeline-event__tooltip {
+    bottom: calc(100% + 4px);
+}
+
+.timeline-event--bottom .timeline-event__tooltip {
+    top: calc(100% + 4px);
+}
+
+.timeline-event:hover .timeline-event__tooltip {
+    display: block;
+}
+
+/* ========================================
+   АДАПТИВНЫЙ ДИЗАЙН (Все media queries)
+   ======================================== */
+
+/* ========================================
+   Адаптивный дизайн (Desktop to Tablet: max-width 1024px)
    ======================================== */
 
 @media (max-width: 1024px) {
@@ -511,13 +547,13 @@
 		text-align: left;
 	}
 	.entry-header h1 {
-    font-size: 1.75rem !important;
-    text-align: left !important;
-   }
+        font-size: 1.75rem !important;
+        text-align: left !important;
+    }
 }
 
 /* ========================================
-   Адаптивный дизайн (Tablet)
+   Адаптивный дизайн (Tablet: max-width 768px)
    ======================================== */
 
 @media (max-width: 768px) {
@@ -526,9 +562,9 @@
     }
 
     .entry-header h1 {
-    font-size: 1.75rem !important;
-    padding: 0 24px !important;  
-   }
+        font-size: 1.75rem !important;
+        padding: 0 24px !important;  
+    }
 
     .club-history-container {
         padding: 24px;
@@ -559,6 +595,24 @@
         grid-template-columns: 1fr;
     }
 
+    /* Timeline styles for tablet */
+    .timeline-line {
+        height: 50px;
+        margin: 0px 0;
+    }
+
+    .timeline-event__year {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .timeline-event__tooltip {
+        font-size: 12px;
+        padding: 8px 10px;
+        max-width: 120px;
+    }
+
+    /* Old timeline (если используется) */
     .timeline__items {
         justify-content: flex-start;
         overflow-x: auto;
@@ -582,7 +636,7 @@
 }
 
 /* ========================================
-   Адаптивный дизайн (Mobile)
+   Адаптивный дизайн (Mobile: max-width 480px)
    ======================================== */
 
 @media (max-width: 480px) {
@@ -665,177 +719,7 @@
         line-height: 20px;
     }
 
-    .timeline__legend {
-        gap: 8px;
-    }
-
-    .timeline__legend-label {
-        font-size: 11px;
-    }
-}
-
-/* ========================================
-   Утилиты и вспомогательные классы
-   ======================================== */
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* Анимации при загрузке */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.club-history-container {
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* ========================================
-   Временная шкала (SVG версия)
-   Новая структура для interactive timeline
-   ======================================== */
-
-.timeline-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    position: relative;
-}
-
-.timeline-line {
-    width: 100%;
-    height: 300px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 40px 0;
-}
-
-.timeline-svg {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.timeline-base-line {
-    stroke: #ddd;
-    stroke-width: 3;
-}
-
-.timeline-dot {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.timeline-dot:hover {
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-    r: 7.5;
-}
-
-.timeline-events {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.timeline-event {
-    position: absolute;
-    pointer-events: auto;
-    transform: translateX(-50%);
-}
-
-.timeline-event--top {
-    top: 0;
-    bottom: auto;
-}
-
-.timeline-event--bottom {
-    bottom: 0;
-    top: auto;
-}
-
-.timeline-event__year {
-    font-size: 14px;
-    font-weight: bold;
-    color: #1a1a1a;
-    background: #ffffff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 4px solid;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.timeline-event__tooltip {
-    font-size: 13px;
-    color: #555;
-    background: #ffffff;
-    padding: 10px 12px;
-    border-radius: 4px;
-    margin-top: 8px;
-    display: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    white-space: normal;
-    max-width: 150px;
-    line-height: 1.4;
-    z-index: 10;
-}
-
-.timeline-event--top .timeline-event__tooltip {
-    margin-top: -8px;
-    transform: translateY(-100%);
-}
-
-.timeline-event--bottom .timeline-event__tooltip {
-    margin-top: 8px;
-}
-
-.timeline-event:hover .timeline-event__tooltip {
-    display: block;
-}
-
-@media (max-width: 768px) {
-    .timeline-line {
-        height: 250px;
-        margin: 30px 0;
-    }
-
-    .timeline-event__year {
-        font-size: 12px;
-        padding: 6px 10px;
-    }
-
-    .timeline-event__tooltip {
-        font-size: 12px;
-        padding: 8px 10px;
-        max-width: 120px;
-    }
-}
-
-@media (max-width: 480px) {
+    /* Timeline styles for mobile */
     .timeline-line {
         height: 200px;
         margin: 20px 0;
@@ -850,5 +734,16 @@
         font-size: 11px;
         max-width: 100px;
     }
+
+    /* Old timeline (если используется) */
+    .timeline__legend {
+        gap: 8px;
+    }
+
+    .timeline__legend-label {
+        font-size: 11px;
+    }
 }
+
+
 
