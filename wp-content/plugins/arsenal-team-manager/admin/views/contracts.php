@@ -127,19 +127,20 @@ $squads = $wpdb->get_results( "
 " );
 
 ?>
-<div class="contracts-wrapper">
-    <div class="contracts-header">
-        <h1>📋 Контракты</h1>
-        <button onclick="openAddModal()" class="button button-primary">
-            ➕ Добавить контракт
-        </button>
-    </div>
-
-    <?php if ( ! empty( $message ) ): ?>
-        <div class="notice notice-success is-dismissible" style="margin: 20px 0;">
-            <p><?php echo esc_html( $message ); ?></p>
+<div class="wrap">
+    <div class="contracts-wrapper">
+        <div class="contracts-header">
+            <h1>📋 Контракты</h1>
+            <button onclick="openAddModal()" class="button button-primary">
+                ➕ Добавить контракт
+            </button>
         </div>
-    <?php endif; ?>
+
+        <?php if ( ! empty( $message ) ): ?>
+            <div class="notice notice-success is-dismissible" style="margin: 20px 0;">
+                <p><?php echo esc_html( $message ); ?></p>
+            </div>
+        <?php endif; ?>
     
     <?php if ( ! empty( $error ) ): ?>
         <div class="notice notice-error is-dismissible" style="margin: 20px 0;">
@@ -217,6 +218,7 @@ $squads = $wpdb->get_results( "
                 </div>
             <?php endif; ?>
         </div>
+    </div>
     </div>
 </div>
 

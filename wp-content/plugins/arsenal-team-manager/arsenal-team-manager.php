@@ -109,6 +109,10 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
         
+        // Классы управления историей клуба
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-manager.php';
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-admin.php';
+        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -143,6 +147,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс корректировок статистики
         $stats_corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
         $stats_corrections_admin->init();
+        
+        // Инициализируем админ-интерфейс истории
+        $history_admin = new Arsenal_History_Admin();
+        $history_admin->__init__();
     }
     
     /**
@@ -278,6 +286,16 @@ class Arsenal_Team_Manager {
             array( $this, 'render_sponsors_list' )
         );
         
+        // Подменю: История клуба
+        add_submenu_page(
+            $parent_slug,
+            'История клуба',
+            'История клуба',
+            'manage_options',
+            'arsenal-history',
+            array( $this, 'render_history_form' )
+        );
+        
         // Скрытая страница добавления спонсора (без пункта меню)
         add_submenu_page(
             '',
@@ -396,6 +414,26 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-adjustment-edit',
             array( $this, 'render_adjustment_edit' )
+        );
+        
+        // Скрытая страница добавления записи истории (без пункта меню)
+        add_submenu_page(
+            '',
+            'Добавить запись истории',
+            'Добавить запись истории',
+            'manage_options',
+            'arsenal-history-add',
+            array( $this, 'render_history_form' )
+        );
+        
+        // Скрытая страница редактирования записи истории (без пункта меню)
+        add_submenu_page(
+            '',
+            'Редактировать запись истории',
+            'Редактировать запись истории',
+            'manage_options',
+            'arsenal-history-edit',
+            array( $this, 'render_history_form' )
         );
         
         // Скрытые страницы персонала (без пункта меню)
@@ -790,6 +828,15 @@ class Arsenal_Team_Manager {
     public function render_player_stats_corrections() {
         $corrections_admin = Arsenal_Player_Stats_Corrections_Admin::get_instance();
         $corrections_admin->render_page();
+    }
+    
+    /**
+     * Форма управления историей клуба
+     */
+    public function render_history_form() {
+        $history_admin = new Arsenal_History_Admin();
+        $history_admin->__init__(); // Инициализируем хуки
+        $history_admin->render_history_form();
     }
 
     /**

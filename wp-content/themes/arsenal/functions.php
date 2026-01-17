@@ -19,6 +19,44 @@ define( 'ARSENAL_THEME_DIR', get_template_directory() );
 define( 'ARSENAL_THEME_URI', get_template_directory_uri() );
 
 /**
+ * Разбить текст по двоеточию: часть до : жирная, после обычная
+ * 
+ * @param string $text Текст
+ * @return string HTML с bold/normal текстом
+ */
+function arsenal_format_item_text( $text ) {
+	if ( strpos( $text, ':' ) !== false ) {
+		$parts = explode( ':', $text, 2 );
+		return '<strong>' . esc_html( $parts[0] . ':' ) . '</strong> ' . esc_html( trim( $parts[1] ) );
+	}
+	return esc_html( $text );
+}
+
+/**
+ * Вывести иконку из sprite.svg
+ * 
+ * @param string $icon Имя иконки (например 'cup' для 'icon-cup')
+ * @param string $class Дополнительные классы
+ * @return string HTML иконки
+ */
+function arsenal_get_icon( $icon = 'cup', $class = '' ) {
+	if ( empty( $icon ) ) {
+		$icon = 'cup';
+	}
+	
+	// Формируем ID символа
+	$icon_id = 'icon-' . sanitize_html_class( $icon );
+	
+	$classes = 'icon ' . esc_attr( $class );
+	
+	return sprintf(
+		'<svg class="%s" aria-hidden="true"><use xlink:href="#%s"></use></svg>',
+		$classes,
+		esc_attr( $icon_id )
+	);
+}
+
+/**
  * Отключение встроенных стилей WordPress
  * Все стили управляются через наши CSS файлы
  */
@@ -218,6 +256,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		wp_enqueue_style(
 			'arsenal-staff-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
+			array( 'arsenal-footer' ),
+			ARSENAL_VERSION
+		);
+	}
+
+	// Стили страницы управления клубом (для страницы Руководство)
+	if ( is_page_template( 'templates/page-management.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'management' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'administration' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'руководство' ) ) ) {
+		wp_enqueue_style(
+			'arsenal-management',
+			ARSENAL_THEME_URI . '/assets/css/pages/page-management.css',
 			array( 'arsenal-footer' ),
 			ARSENAL_VERSION
 		);

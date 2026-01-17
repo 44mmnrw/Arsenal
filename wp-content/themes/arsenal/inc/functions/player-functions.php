@@ -553,6 +553,13 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 		$year = intval( $year );
 	}
 	
+	// DEBUG
+	$debug = isset( $_GET['debug_corrections'] ) && $_GET['debug_corrections'] === '1';
+	if ( $debug ) {
+		error_log( "=== arsenal_apply_player_corrections DEBUG ===" );
+		error_log( "Player ID: $player_id, Tournament: $tournament_id, Year: $year" );
+	}
+	
 	// Получаем примененные коррекции с годом из таблицы seasons
 	$corrections_with_years = $wpdb->get_results( $wpdb->prepare(
 		"SELECT 
@@ -567,6 +574,10 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 		$player_id,
 		$tournament_id
 	) );
+	
+	if ( $debug ) {
+		error_log( "Found corrections: " . count( $corrections_with_years ?? array() ) );
+	}
 	
 	if ( empty( $corrections_with_years ) ) {
 		return $stats;
@@ -602,6 +613,10 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 			$should_apply = true;
 		}
 		
+		if ( $debug ) {
+			error_log( "Correction {$correction->correction_id}: year=$correction_year, target_year=$year, should_apply=" . ( $should_apply ? 'YES' : 'NO' ) );
+		}
+		
 		if ( $should_apply ) {
 			if ( isset( $correction->minutes_played_delta ) ) {
 				$corrections_for_year['minutes_played_delta'] += intval( $correction->minutes_played_delta );
@@ -627,6 +642,10 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 		}
 	}
 	
+	if ( $debug ) {
+		error_log( "Accumulated corrections: " . json_encode( $corrections_for_year ) );
+	}
+	
 	// Применяем коррекции к статистике
 	$corrected_stats->minutes_played = intval( $corrected_stats->minutes_played ) + $corrections_for_year['minutes_played_delta'];
 	$corrected_stats->matches_played = intval( $corrected_stats->matches_played ) + $corrections_for_year['matches_played_delta'];
@@ -635,6 +654,10 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 	$corrected_stats->assists = intval( $corrected_stats->assists ) + $corrections_for_year['assists_delta'];
 	$corrected_stats->yellow_cards = intval( $corrected_stats->yellow_cards ) + $corrections_for_year['yellow_cards_delta'];
 	$corrected_stats->red_cards = intval( $corrected_stats->red_cards ) + $corrections_for_year['red_cards_delta'];
+	
+	if ( $debug ) {
+		error_log( "Final stats: minutes=" . $corrected_stats->minutes_played . ", goals=" . $corrected_stats->goals . ", assists=" . $corrected_stats->assists );
+	}
 	
 	return $corrected_stats;
 }
