@@ -107,6 +107,15 @@ $history = Arsenal_History_Manager::get_history();
 		</div>
 	</section><!-- Дополнительная секция -->
 
+	<!-- Временная шкала -->
+	<?php
+	if ( ! empty( $history['scale'] ) ) {
+		echo '<section class="timeline-section">';
+		arsenal_display_timeline();
+		echo '</section>';
+	}
+	?>
+
 		<section class="stadiums-section">
 			<h3 class="stadiums-section__heading"><?php echo esc_html( isset( $history['title_third'] ) && ! empty( $history['title_third'] ) ? $history['title_third'] : 'Домашние стадионы' ); ?></h3>
 			<div class="stadiums-grid">

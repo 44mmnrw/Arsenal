@@ -63,10 +63,32 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <label for="scale"><?php _e( 'Данные временной шкалы', 'arsenal-team-manager' ); ?></label>
                     </th>
                     <td>
-                        <textarea id="scale" name="scale" rows="6" class="large-text code"><?php echo esc_textarea( is_array( $history['scale'] ) ? json_encode( $history['scale'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) : $history['scale'] ); ?></textarea>
+                        <textarea id="scale" name="scale" rows="10" class="large-text code"><?php echo esc_textarea( is_array( $history['scale'] ) ? json_encode( $history['scale'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) : $history['scale'] ); ?></textarea>
                         <p class="description">
-                            <?php _e( 'JSON формат:', 'arsenal-team-manager' ); ?><br/>
-                            <code>[{"year": 2018, "event": "Основание"}]</code>
+                            <?php _e( 'JSON формат (год и описание события):', 'arsenal-team-manager' ); ?><br/>
+                            <code>[<br/>
+  {<br/>
+    "year": 2018,<br/>
+    "text": "Основание футбольного клуба Арсенал"<br/>
+  },<br/>
+  {<br/>
+    "year": 2019,<br/>
+    "text": "Победа в Чемпионате Беларуси второй лиги"<br/>
+  },<br/>
+  {<br/>
+    "year": 2021,<br/>
+    "text": "Первый титул - Чемпион Первой лиги"<br/>
+  },<br/>
+  {<br/>
+    "year": 2023,<br/>
+    "text": "Повторное чемпионство в Первой лиге"<br/>
+  }<br/>
+]</code><br/>
+                            <strong><?php _e( 'Поля:', 'arsenal-team-manager' ); ?></strong>
+                            <ul style="margin: 10px 0; padding-left: 20px;">
+                                <li><code>year</code> (число) - год события</li>
+                                <li><code>text</code> (строка) - описание события (появится в подсказке при наведении)</li>
+                            </ul>
                         </p>
                     </td>
                 </tr>

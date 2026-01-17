@@ -332,6 +332,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы История
+		if ( is_page_template( 'templates/page-history.php' ) || is_page( 'history' ) || is_page( 'история' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-history',
+				ARSENAL_THEME_URI . '/assets/css/page-history.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы 404
 		if ( is_404() ) {
 			wp_enqueue_style(
@@ -1449,6 +1459,7 @@ if ( ! function_exists( 'arsenal_pluralize' ) ) {
 require_once ARSENAL_THEME_DIR . '/inc/functions/template-functions.php';
 require_once ARSENAL_THEME_DIR . '/inc/functions/player-functions.php';
 require_once ARSENAL_THEME_DIR . '/inc/functions/match-functions.php';
+require_once ARSENAL_THEME_DIR . '/inc/functions/timeline-functions.php';
 require_once ARSENAL_THEME_DIR . '/inc/customizer.php';
 /**
  * Функция расчёта турнирной таблицы по сезону
