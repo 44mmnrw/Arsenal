@@ -55,15 +55,14 @@ function arsenal_display_timeline() {
 		return $year_a - $year_b;
 	} );
 
-	// Найти минимальный и максимальный годы
+	// Количество точек для равномерного распределения
+	$total_points = count( $timeline );
+
+	// Найти минимальный и максимальный годы (для справки)
 	$min_year = isset( $timeline[0]['year'] ) ? (int) $timeline[0]['year'] : (int) date( 'Y' );
 	$max_year = (int) end( $timeline )['year'];
 	if ( ! $max_year ) {
 		$max_year = (int) date( 'Y' );
-	}
-	$range = $max_year - $min_year;
-	if ( $range === 0 ) {
-		$range = 1; // Избегаем деления на ноль в viewBox
 	}
 
 	// Определить цвета для точек по годам
@@ -80,13 +79,14 @@ function arsenal_display_timeline() {
 
 	?>
 	<section class="timeline-section">
-		<div class="timeline-container">
+		<div class="timeline-container" data-timeline-items="<?php echo esc_attr( $total_points ); ?>">
 			<!-- Года в бейджах сверху -->
 			<div class="timeline-years-badges">
 				<?php foreach ( $timeline as $index => $entry ) : ?>
 					<?php
 					$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-					$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
+					// Равномерное распределение по количеству точек
+					$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
 					?>
 					<div 
 						class="timeline-year-badge"
@@ -100,16 +100,19 @@ function arsenal_display_timeline() {
 			<!-- Линия временной шкалы -->
 			<div class="timeline-line">
 				<div class="timeline-background-line"></div>
-				<div class="timeline-dots">
+				<div class="timeline-fill-line"></div>
+				<div class="timeline-dots" style="--timeline-items: <?php echo esc_attr( $total_points ); ?>;">
 					<?php foreach ( $timeline as $index => $entry ) : ?>
 						<?php
 						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-						$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
+						// Равномерное распределение по количеству точек
+						$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
 						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
 						?>
 						<div 
 							class="timeline-dot"
-							style="left: <?php echo esc_attr( $x_percent ); ?>%; background-color: <?php echo esc_attr( $color ); ?>"
+							data-index="<?php echo esc_attr( $index ); ?>"
+							style="--dot-position: <?php echo esc_attr( $index + 1 ); ?>; left: <?php echo esc_attr( $x_percent ); ?>%; background-color: <?php echo esc_attr( $color ); ?>"
 						></div>
 					<?php endforeach; ?>
 				</div>
@@ -117,18 +120,19 @@ function arsenal_display_timeline() {
 
 			<!-- Подробные подсказки при наведении -->
 			<?php if ( ! empty( $timeline ) ) : ?>
-				<div class="timeline-events">
+				<div class="timeline-events" style="--timeline-items: <?php echo esc_attr( $total_points ); ?>;">
 					<?php foreach ( $timeline as $index => $entry ) : ?>
 						<?php
 						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
 						$event = isset( $entry['event'] ) ? $entry['event'] : '';
-						$x_percent = 5 + ( ( $year - $min_year ) / max( 1, $range ) ) * 90;
+						// Равномерное распределение по количеству точек
+						$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
 						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
 						$is_even = $index % 2 === 0;
 						?>
 						<div 
 							class="timeline-event <?php echo $is_even ? 'timeline-event--top' : 'timeline-event--bottom'; ?>"
-							style="left: <?php echo esc_attr( $x_percent ); ?>%"
+							style="--dot-position: <?php echo esc_attr( $index + 1 ); ?>; left: <?php echo esc_attr( $x_percent ); ?>%"
 						>
 							<div class="timeline-event__tooltip" style="border-top-color: <?php echo esc_attr( $color ); ?>">
 								<?php echo esc_html( $event ); ?>

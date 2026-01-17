@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
         <input type="hidden" name="action" value="arsenal_save_history" />
         <?php wp_nonce_field( 'arsenal_save_history', '_wpnonce' ); ?>
         
+        <!-- Контейнер двух колонок для всех секций -->
+        <div class="form-columns-container">
+        
         <!-- Основная информация -->
         <div class="form-section">
             <h3><?php _e( 'Основная информация', 'arsenal-team-manager' ); ?></h3>
@@ -67,15 +70,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <textarea id="scale" name="scale" rows="10" class="large-text code"><?php echo esc_textarea( is_array( $history['scale'] ) ? json_encode( $history['scale'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) : $history['scale'] ); ?></textarea>
                         <p class="description">
                             <?php _e( 'JSON формат (год и описание события):', 'arsenal-team-manager' ); ?><br/>
-                            <code>[<br/>
-  {<br/>
-    "year": 2018,<br/>
-    "event": "Основание футбольного клуба Арсенал"<br/>
-  },<br/>
-  {<br/>
-    "year": 2019,<br/>
-    "event": "Победа в Чемпионате Беларуси второй лиги"<br/>
-  },<br/>
+                            <code>[<br/>    
   {<br/>
     "year": 2021,<br/>
     "event": "Первый титул - Чемпион Первой лиги"<br/>
@@ -205,6 +200,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             </table>
         </div>
         
+        </div><!-- закрытие form-columns-container -->
+        
         <!-- Кнопки -->
         <div class="form-actions">
             <?php submit_button( __( 'Сохранить историю', 'arsenal-team-manager' ), 'primary', 'submit', true ); ?>
@@ -213,10 +210,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <style>
+    .arsenal-history-form {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .form-columns-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 20px 0;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    
+    @media (max-width: 1200px) {
+        .form-columns-container {
+            grid-template-columns: 1fr;
+        }
+    }
+    
     .arsenal-history-form .form-section {
         background: #fff;
         padding: 20px;
-        margin: 20px 0;
         border: 1px solid #ccd0d4;
         border-radius: 4px;
         box-shadow: 0 1px 1px rgba(0,0,0,.04);

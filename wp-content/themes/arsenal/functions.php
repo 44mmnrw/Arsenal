@@ -414,6 +414,24 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			true
 		);
 
+		// Динамический расчет расстояния между точками timeline
+		wp_enqueue_script(
+			'timeline-dynamic',
+			ARSENAL_THEME_URI . '/assets/js/timeline-dynamic.js',
+			array(),
+			ARSENAL_VERSION,
+			true
+		);
+
+		// Обработчик hover на timeline точках
+		wp_enqueue_script(
+			'arsenal-timeline',
+			ARSENAL_THEME_URI . '/assets/js/timeline.js',
+			array(),
+			ARSENAL_VERSION,
+			true
+		);
+
 		// Передача данных в JavaScript
 		wp_localize_script( 'arsenal-script', 'arsenalData', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),

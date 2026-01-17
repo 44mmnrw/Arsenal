@@ -12,6 +12,27 @@
 	let intervalId = null;
 	const ANIMATION_SPEED = 1;     // Скорость воспроизведения
 	const ANIMATION_INTERVAL = 7000; // Интервал повторения в мс
+	let players = [];
+
+	// Функция для запуска интервала
+	function startInterval() {
+		if (players.length === 0 || intervalId) return;
+		
+		intervalId = setInterval(() => {
+			players.forEach(player => {
+				player.seek('0%'); // вернуть в начало
+				player.play();     // запустить
+			});
+		}, ANIMATION_INTERVAL);
+	}
+
+	// Функция для остановки интервала
+	function stopInterval() {
+		if (intervalId) {
+			clearInterval(intervalId);
+			intervalId = null;
+		}
+	}
 
 	// Слушаем видимость вкладки
 	document.addEventListener('visibilitychange', () => {
@@ -20,14 +41,13 @@
 		if (isPageVisible && !intervalId) {
 			startInterval(); // запустить если вернулись на вкладку
 		} else if (!isPageVisible && intervalId) {
-			clearInterval(intervalId); // остановить если ушли со вкладки
-			intervalId = null;
+			stopInterval(); // остановить если ушли со вкладки
 		}
 	});
 
 	// Загрузка страницы
 	document.addEventListener('DOMContentLoaded', () => {
-		const players = document.querySelectorAll('lottie-player');
+		players = Array.from(document.querySelectorAll('lottie-player'));
 
 		if (players.length === 0) return;
 
@@ -36,16 +56,6 @@
 			player.speed = ANIMATION_SPEED;
 			player.play();
 		});
-
-		// Один setInterval для всех плееров
-		function startInterval() {
-			intervalId = setInterval(() => {
-				players.forEach(player => {
-					player.seek('0%'); // вернуть в начало
-					player.play();     // запустить
-				});
-			}, ANIMATION_INTERVAL);
-		}
 
 		if (isPageVisible) {
 			startInterval();
