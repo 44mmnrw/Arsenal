@@ -184,7 +184,7 @@ class Arsenal_Players {
 		}
 
 		if ( ! empty( $data['biography'] ) ) {
-			$insert['biography'] = sanitize_textarea_field( $data['biography'] );
+			$insert['biography'] = wp_kses_post( $data['biography'] );
 			$format[] = '%s';
 		}
 
@@ -268,7 +268,7 @@ class Arsenal_Players {
 		}
 
 		if ( isset( $data['biography'] ) ) {
-			$update['biography'] = sanitize_textarea_field( $data['biography'] ?? '' );
+			$update['biography'] = wp_kses_post( $data['biography'] ?? '' );
 			$format[] = '%s';
 		}
 

@@ -194,7 +194,7 @@ class Arsenal_Match_Admin {
             'fourth_referee' => sanitize_text_field( $_POST['fourth_referee'] ?? '' ),
             'referee_inspector' => sanitize_text_field( $_POST['referee_inspector'] ?? '' ),
             'delegate' => sanitize_text_field( $_POST['delegate'] ?? '' ),
-            'match_report' => wp_kses_post( $_POST['match_report'] ?? '' ),
+            'match_report' => wpautop( wp_kses_post( wp_unslash( $_POST['match_report'] ?? '' ) ) ),
         );
         
         // Создание матча
@@ -278,7 +278,7 @@ class Arsenal_Match_Admin {
             'fourth_referee' => ! empty( $_POST['fourth_referee'] ) ? sanitize_text_field( $_POST['fourth_referee'] ) : null,
             'referee_inspector' => ! empty( $_POST['referee_inspector'] ) ? sanitize_text_field( $_POST['referee_inspector'] ) : null,
             'delegate' => ! empty( $_POST['delegate'] ) ? sanitize_text_field( $_POST['delegate'] ) : null,
-            'match_report' => ! empty( $_POST['match_report'] ) ? wp_kses_post( $_POST['match_report'] ) : null,
+            'match_report' => ! empty( $_POST['match_report'] ) ? wpautop( wp_kses_post( wp_unslash( $_POST['match_report'] ) ) ) : null,
         );
         
         // Обновление матча

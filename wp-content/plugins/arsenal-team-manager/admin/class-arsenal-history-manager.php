@@ -67,7 +67,7 @@ class Arsenal_History_Manager {
         // Сохраняем как JSON в wp_options
         return update_option( 
             self::HISTORY_OPTION_KEY, 
-            json_encode( $data, JSON_UNESCAPED_UNICODE )
+            json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES )
         );
     }
     
@@ -98,7 +98,7 @@ class Arsenal_History_Manager {
     private static function validate_history_data( $data ) {
         return array(
             'title'            => isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : 'История клуба',
-            'description'      => isset( $data['description'] ) ? wp_kses_post( $data['description'] ) : '',
+            'description'      => isset( $data['description'] ) ? self::sanitize_rich_text( $data['description'] ) : '',
             'scale'            => isset( $data['scale'] ) ? self::validate_json_field( $data['scale'] ) : array(),
             'title_second'     => isset( $data['title_second'] ) ? sanitize_text_field( $data['title_second'] ) : 'Рекорды и достижения',
             'records'          => isset( $data['records'] ) ? self::validate_json_field( $data['records'] ) : array(),
@@ -106,6 +106,44 @@ class Arsenal_History_Manager {
             'title_third'      => isset( $data['title_third'] ) ? sanitize_text_field( $data['title_third'] ) : 'Домашние стадионы',
             'additional_cards' => isset( $data['additional_cards'] ) ? self::validate_json_field( $data['additional_cards'] ) : array(),
         );
+    }
+    
+    /**
+     * Санитизировать текст с HTML форматированием
+     * Разрешаем основные теги форматирования
+     * 
+     * @param string $text Текст с HTML
+     * @return string
+     */
+    private static function sanitize_rich_text( $text ) {
+        // Сначала применяем wpautop для преобразования переносов строк в <p> теги
+        $text = wpautop( $text );
+        
+        $allowed_html = array(
+            'p'      => array( 'class' => array(), 'style' => array() ),
+            'br'     => array(),
+            'strong' => array( 'class' => array(), 'style' => array() ),
+            'b'      => array( 'class' => array(), 'style' => array() ),
+            'em'     => array( 'class' => array(), 'style' => array() ),
+            'i'      => array( 'class' => array(), 'style' => array() ),
+            'u'      => array( 'class' => array(), 'style' => array() ),
+            'a'      => array( 'href' => array(), 'title' => array(), 'class' => array(), 'style' => array() ),
+            'ul'     => array( 'class' => array(), 'style' => array() ),
+            'ol'     => array( 'class' => array(), 'style' => array() ),
+            'li'     => array( 'class' => array(), 'style' => array() ),
+            'h1'     => array( 'class' => array(), 'style' => array() ),
+            'h2'     => array( 'class' => array(), 'style' => array() ),
+            'h3'     => array( 'class' => array(), 'style' => array() ),
+            'h4'     => array( 'class' => array(), 'style' => array() ),
+            'h5'     => array( 'class' => array(), 'style' => array() ),
+            'h6'     => array( 'class' => array(), 'style' => array() ),
+            'blockquote' => array( 'class' => array(), 'style' => array() ),
+            'code'   => array( 'class' => array(), 'style' => array() ),
+            'pre'    => array( 'class' => array(), 'style' => array() ),
+            'span'   => array( 'class' => array(), 'style' => array() ),
+            'div'    => array( 'class' => array(), 'style' => array() ),
+        );
+        return wp_kses( $text, $allowed_html );
     }
     
     /**

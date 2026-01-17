@@ -39,11 +39,12 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <td>
                         <?php
                         wp_editor(
-                            $history['description'],
+                            wp_unslash( $history['description'] ),
                             'description',
                             array(
-                                'textarea_rows' => 8,
-                                'media_buttons' => false,
+                                'textarea_rows' => 10,
+                                'media_buttons' => true,
+                                'wpautop'       => true,
                             )
                         );
                         ?>
@@ -69,25 +70,25 @@ if ( ! defined( 'ABSPATH' ) ) {
                             <code>[<br/>
   {<br/>
     "year": 2018,<br/>
-    "text": "Основание футбольного клуба Арсенал"<br/>
+    "event": "Основание футбольного клуба Арсенал"<br/>
   },<br/>
   {<br/>
     "year": 2019,<br/>
-    "text": "Победа в Чемпионате Беларуси второй лиги"<br/>
+    "event": "Победа в Чемпионате Беларуси второй лиги"<br/>
   },<br/>
   {<br/>
     "year": 2021,<br/>
-    "text": "Первый титул - Чемпион Первой лиги"<br/>
+    "event": "Первый титул - Чемпион Первой лиги"<br/>
   },<br/>
   {<br/>
     "year": 2023,<br/>
-    "text": "Повторное чемпионство в Первой лиге"<br/>
+    "event": "Повторное чемпионство в Первой лиге"<br/>
   }<br/>
 ]</code><br/>
                             <strong><?php _e( 'Поля:', 'arsenal-team-manager' ); ?></strong>
                             <ul style="margin: 10px 0; padding-left: 20px;">
                                 <li><code>year</code> (число) - год события</li>
-                                <li><code>text</code> (строка) - описание события (появится в подсказке при наведении)</li>
+                                <li><code>event</code> (строка) - описание события (появится в подсказке при наведении)</li>
                             </ul>
                         </p>
                     </td>

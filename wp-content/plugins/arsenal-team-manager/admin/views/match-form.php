@@ -267,14 +267,13 @@ $form_action = $is_edit ? 'arsenal_update_match' : 'arsenal_create_match';
                     $match_report_content = ! empty( $match ) && ! empty( $match->match_report ) ? $match->match_report : '';
                     
                     wp_editor( 
-                        $match_report_content, 
+                        wp_unslash( $match_report_content ), 
                         'match_report', 
                         array(
                             'textarea_name' => 'match_report',
-                            'media_buttons' => false,
+                            'media_buttons' => true,
                             'textarea_rows' => 10,
-                            'teeny' => true,
-                            'quicktags' => false,
+                            'wpautop'       => true,
                         )
                     );
                     ?>

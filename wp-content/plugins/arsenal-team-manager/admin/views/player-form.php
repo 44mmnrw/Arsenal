@@ -37,7 +37,7 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
         'weight_kg' => ! empty( $_POST['weight'] ) ? intval( $_POST['weight'] ) : 0,
         'dominant_foot' => sanitize_text_field( $_POST['dominant_foot'] ?? '' ),
         'photo_url' => ! empty( $_POST['photo_url'] ) ? get_relative_path( $_POST['photo_url'] ) : '',
-        'biography' => isset( $_POST['biography'] ) ? wp_kses_post( $_POST['biography'] ) : null,
+        'biography' => isset( $_POST['biography'] ) ? wpautop( wp_kses_post( wp_unslash( $_POST['biography'] ) ) ) : null,
         'full_name' => trim( sanitize_text_field( $_POST['last_name'] ) . ' ' . sanitize_text_field( $_POST['first_name'] ) )
     );
     
@@ -225,12 +225,11 @@ if ( ! $is_new ) {
                         <label for="biography">Биография игрока</label>
                         <?php
                         $biography_content = $player ? ( $player->biography ?? '' ) : '';
-                        wp_editor( $biography_content, 'biography', array(
+                        wp_editor( wp_unslash( $biography_content ), 'biography', array(
                             'textarea_name' => 'biography',
-                            'textarea_rows' => 8,
-                            'media_buttons' => false,
-                            'teeny' => true,
-                            'quicktags' => false
+                            'textarea_rows' => 10,
+                            'media_buttons' => true,
+                            'wpautop'       => true,
                         ) );
                         ?>
                         <p class="description">Краткая биография игрока</p>

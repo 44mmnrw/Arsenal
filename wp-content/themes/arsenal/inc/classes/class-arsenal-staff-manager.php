@@ -81,7 +81,7 @@ class Arsenal_Staff_Manager {
 
 		$insert = array(
 			'job_title_name' => sanitize_text_field( $job_title_name ),
-			'description' => sanitize_textarea_field( $description ),
+			'description' => wp_kses_post( $description ),
 			'sort_order' => (int) $sort_order,
 		);
 
@@ -120,7 +120,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( isset( $data['description'] ) ) {
-			$update['description'] = sanitize_textarea_field( $data['description'] );
+			$update['description'] = wp_kses_post( $data['description'] );
 			$format[] = '%s';
 		}
 
@@ -294,7 +294,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( ! empty( $data['bio'] ) ) {
-			$insert['bio'] = sanitize_textarea_field( $data['bio'] );
+			$insert['bio'] = wp_kses_post( $data['bio'] );
 			$format[] = '%s';
 		}
 
@@ -309,7 +309,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( ! empty( $data['interesting_fact'] ) ) {
-			$insert['interesting_fact'] = sanitize_textarea_field( $data['interesting_fact'] );
+			$insert['interesting_fact'] = wp_kses_post( $data['interesting_fact'] );
 			$format[] = '%s';
 		}
 
@@ -396,7 +396,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( isset( $data['bio'] ) ) {
-			$update['bio'] = sanitize_textarea_field( $data['bio'] );
+			$update['bio'] = wp_kses_post( $data['bio'] );
 			$format[] = '%s';
 		}
 
@@ -411,7 +411,7 @@ class Arsenal_Staff_Manager {
 		}
 
 		if ( isset( $data['interesting_fact'] ) ) {
-			$update['interesting_fact'] = sanitize_textarea_field( $data['interesting_fact'] ?? '' );
+			$update['interesting_fact'] = wp_kses_post( $data['interesting_fact'] ?? '' );
 			$format[] = '%s';
 		}
 

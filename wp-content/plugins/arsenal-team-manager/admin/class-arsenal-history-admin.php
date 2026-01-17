@@ -59,7 +59,7 @@ class Arsenal_History_Admin {
         // Подготовка данных
         $data = array(
             'title'            => isset( $_POST['title'] ) ? sanitize_text_field( $_POST['title'] ) : 'История клуба',
-            'description'      => isset( $_POST['description'] ) ? wp_kses_post( $_POST['description'] ) : '',
+            'description'      => isset( $_POST['description'] ) ? wpautop( wp_kses_post( wp_unslash( $_POST['description'] ) ) ) : '',
             'scale'            => isset( $_POST['scale'] ) ? wp_unslash( $_POST['scale'] ) : '[]',
             'title_second'     => isset( $_POST['title_second'] ) ? sanitize_text_field( $_POST['title_second'] ) : 'Рекорды и достижения',
             'records'          => isset( $_POST['records'] ) ? wp_unslash( $_POST['records'] ) : '[]',

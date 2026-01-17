@@ -313,7 +313,7 @@ if ( empty( $staff_nationality ) ) {
 					</div>
 					<h3 class="staff-fact-title">Интересный факт</h3>
 					<p class="staff-fact-text">
-						<?php echo esc_html( $staff_interesting_fact ); ?>
+						<?php echo wp_kses_post( $staff_interesting_fact ); ?>
 					</p>
 				</div>
 				<?php endif; ?>
