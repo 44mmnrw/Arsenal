@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Массив с годами и описаниями.
  */
 function arsenal_get_timeline() {
-	if ( ! function_exists( 'Arsenal_History_Manager' ) ) {
+	if ( ! class_exists( 'Arsenal_History_Manager' ) ) {
 		return array();
 	}
 
@@ -56,9 +56,15 @@ function arsenal_display_timeline() {
 	} );
 
 	// Найти минимальный и максимальный годы
-	$min_year = (int) $timeline[0]['year'] ?? date( 'Y' );
-	$max_year = (int) end( $timeline )['year'] ?? date( 'Y' );
+	$min_year = isset( $timeline[0]['year'] ) ? (int) $timeline[0]['year'] : (int) date( 'Y' );
+	$max_year = (int) end( $timeline )['year'];
+	if ( ! $max_year ) {
+		$max_year = (int) date( 'Y' );
+	}
 	$range = $max_year - $min_year;
+	if ( $range === 0 ) {
+		$range = 1; // Избегаем деления на ноль в viewBox
+	}
 
 	// Определить цвета по чередованию
 	$colors = array( '#DC3545', '#FFA500', '#DC3545', '#FFA500' );

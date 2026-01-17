@@ -110,9 +110,7 @@ $history = Arsenal_History_Manager::get_history();
 	<!-- Временная шкала -->
 	<?php
 	if ( ! empty( $history['scale'] ) ) {
-		echo '<section class="timeline-section">';
 		arsenal_display_timeline();
-		echo '</section>';
 	}
 	?>
 
