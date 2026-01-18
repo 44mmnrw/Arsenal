@@ -69,89 +69,96 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
 
         <!-- Таблица сотрудников -->
         <div class="staff-list-container">
-            <div class="staff-table">
-                <div class="staff-row staff-header">
-                    <div class="staff-col-photo">Фото</div>
-                    <div class="staff-col-name">ФИО</div>
-                    <div class="staff-col-job">Должность</div>
-                    <div class="staff-col-dept">Отдел</div>
-                    <div class="staff-col-contract">Контракт</div>
-                    <div class="staff-col-action">Действие</div>
-                </div>
-
-                <?php if ( $staff ): ?>
-                    <?php foreach ( $staff as $person ): ?>
-                    <div class="staff-row">
-                        <div class="staff-col-photo">
-                            <?php if ( $person->photo_url ): ?>
-                                <img src="<?php echo esc_url( $person->photo_url ); ?>" 
-                                     alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
-                                     class="staff-thumbnail">
-                            <?php else: ?>
-                                <div class="staff-thumbnail-empty">
-                                    <span class="dashicons dashicons-admin-users"></span>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="staff-col-name">
-                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
-                               class="staff-name-link">
-                                <?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?>
-                            </a>
-                            <?php if ( $person->email ): ?>
-                                <br><small style="color: #666;">📧 <?php echo esc_html( $person->email ); ?></small>
-                            <?php endif; ?>
-                        </div>
-                        <div class="staff-col-job">
-                            <span class="job-title-badge">
-                                <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
-                            </span>
-                        </div>
-                        <div class="staff-col-dept">
-                            <span class="department-badge">
-                                <?php 
-                                if ( $person->department_id ) {
-                                    $dept = Arsenal_Staff_Manager::get_department( $person->department_id );
-                                    echo esc_html( $dept ? $dept->department_name : '—' );
-                                } else {
-                                    echo '—';
-                                }
-                                ?>
-                            </span>
-                        </div>
-                        <div class="staff-col-contract">
-                            <?php if ( $person->contract_start && $person->contract_end ): ?>
-                                <small>
-                                    📅 <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_start ) ); ?> — 
-                                    <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_end ) ); ?>
-                                </small>
-                            <?php else: ?>
-                                <small style="color: #999;">—</small>
-                            <?php endif; ?>
-                        </div>
-                        <div class="staff-col-action">
-                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
-                               class="button button-small">
-                                ✏️ Редактировать
-                            </a>
-                            <button class="button button-small button-delete" 
-                                    data-staff-id="<?php echo $person->id; ?>"
-                                    data-action="delete-staff">
-                                🗑️ Удалить
-                            </button>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="staff-row staff-empty">
-                        <div class="staff-col-full">
-                            <p style="text-align: center; color: #999; padding: 20px;">
+            <table class="wp-list-table widefat striped">
+                <thead>
+                    <tr>
+                        <th class="staff-col-photo">Фото</th>
+                        <th class="staff-col-name">ФИО</th>
+                        <th class="staff-col-job">Должность</th>
+                        <th class="staff-col-dept">Отдел</th>
+                        <th class="staff-col-club-type">Тип клуба</th>
+                        <th class="staff-col-contract">Контракт</th>
+                        <th class="staff-col-action">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ( $staff ): ?>
+                        <?php foreach ( $staff as $person ): ?>
+                        <tr>
+                            <td class="staff-col-photo">
+                                <?php if ( $person->photo_url ): ?>
+                                    <img src="<?php echo esc_url( $person->photo_url ); ?>" 
+                                         alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
+                                         class="staff-thumbnail">
+                                <?php else: ?>
+                                    <div class="staff-thumbnail-empty">
+                                        <span class="dashicons dashicons-admin-users"></span>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <td class="staff-col-name">
+                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
+                                   class="staff-name-link">
+                                    <?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?>
+                                </a>
+                                <?php if ( $person->email ): ?>
+                                    <br><small style="color: #666;">📧 <?php echo esc_html( $person->email ); ?></small>
+                                <?php endif; ?>
+                            </td>
+                            <td class="staff-col-job">
+                                <span class="job-title-badge">
+                                    <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
+                                </span>
+                            </td>
+                            <td class="staff-col-dept">
+                                <span class="department-badge">
+                                    <?php 
+                                    if ( $person->department_id ) {
+                                        $dept = Arsenal_Staff_Manager::get_department( $person->department_id );
+                                        echo esc_html( $dept ? $dept->department_name : '—' );
+                                    } else {
+                                        echo '—';
+                                    }
+                                    ?>
+                                </span>
+                            </td>
+                            <td class="staff-col-club-type">
+                                <span class="club-type-badge">
+                                    <?php echo esc_html( $person->club_type ?? 'Основной клуб' ); ?>
+                                </span>
+                            </td>
+                            <td class="staff-col-contract">
+                                <?php if ( $person->contract_start && $person->contract_end ): ?>
+                                    <small>
+                                        📅 <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_start ) ); ?> — 
+                                        <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_end ) ); ?>
+                                    </small>
+                                <?php else: ?>
+                                    <small style="color: #999;">—</small>
+                                <?php endif; ?>
+                            </td>
+                            <td class="staff-col-action">
+                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
+                                   class="button button-small">
+                                    ✏️ Редактировать
+                                </a>
+                                <button class="button button-small button-delete" 
+                                        data-staff-id="<?php echo $person->id; ?>"
+                                        data-action="delete-staff">
+                                    🗑️ Удалить
+                                </button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" style="padding: 20px; text-align: center; color: #999;">
                                 Сотрудников не найдено
-                            </p>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
 
         <!-- Раздел должностей -->

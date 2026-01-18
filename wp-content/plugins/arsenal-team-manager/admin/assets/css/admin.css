@@ -3726,6 +3726,16 @@
     display: inline-block;
 }
 
+.club-type-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
 .staff-row.staff-empty {
     grid-column: 1 / -1;
     justify-content: center;

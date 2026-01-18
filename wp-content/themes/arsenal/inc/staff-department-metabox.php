@@ -99,3 +99,185 @@ if ( ! function_exists( 'arsenal_save_staff_department_filter' ) ) {
 
 	add_action( 'save_post_page', 'arsenal_save_staff_department_filter' );
 }
+
+if ( ! function_exists( 'arsenal_register_staff_club_type_metabox' ) ) {
+	function arsenal_register_staff_club_type_metabox() {
+		// Показываем метаокс на странице редактирования поста
+		if ( ! isset( $_GET['post'] ) ) {
+			return;
+		}
+		
+		$post_id = intval( $_GET['post'] );
+		$template = get_page_template_slug( $post_id );
+		
+		// Показываем метаокс только для page-staff-grid.php
+		if ( $template !== 'templates/page-staff-grid.php' ) {
+			return;
+		}
+
+		add_meta_box(
+			'arsenal_staff_club_type_filter',
+			'Фильтр типа клуба',
+			'arsenal_staff_club_type_metabox_callback',
+			'page',
+			'side',
+			'high',
+			array( 'show_in_rest' => true )
+		);
+	}
+
+	add_action( 'add_meta_boxes', 'arsenal_register_staff_club_type_metabox' );
+}
+
+if ( ! function_exists( 'arsenal_staff_club_type_metabox_callback' ) ) {
+	function arsenal_staff_club_type_metabox_callback( $post ) {
+		$club_type = get_post_meta( $post->ID, '_arsenal_staff_club_type_filter', true );
+		
+		wp_nonce_field( 'arsenal_staff_club_type_filter', 'arsenal_staff_club_type_filter_nonce' );
+		?>
+		<div style="margin-bottom: 15px;">
+			<label for="arsenal_staff_club_type_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
+				Выбрать тип клуба:
+			</label>
+			<select 
+				id="arsenal_staff_club_type_filter_select"
+				name="arsenal_staff_club_type_filter" 
+				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+				<option value="">— Все типы —</option>
+				<option value="Основной клуб" 
+					<?php selected( $club_type, 'Основной клуб' ); ?>>
+					Основной клуб
+				</option>
+				<option value="СДЮШ" 
+					<?php selected( $club_type, 'СДЮШ' ); ?>>
+					СДЮШ
+				</option>
+			</select>
+		</div>
+		<p style="font-size: 12px; color: #666; margin: 0;">
+			Оставьте пустым для отображения всех сотрудников
+		</p>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'arsenal_save_staff_club_type_filter' ) ) {
+	function arsenal_save_staff_club_type_filter( $post_id ) {
+		// Проверяем nonce
+		if ( ! isset( $_POST['arsenal_staff_club_type_filter_nonce'] ) || 
+			 ! wp_verify_nonce( $_POST['arsenal_staff_club_type_filter_nonce'], 'arsenal_staff_club_type_filter' ) ) {
+			return;
+		}
+
+		// Проверяем, что это не автосохранение
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Проверяем права
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		// Сохраняем значение
+		if ( isset( $_POST['arsenal_staff_club_type_filter'] ) ) {
+			$club_type = sanitize_text_field( $_POST['arsenal_staff_club_type_filter'] );
+			update_post_meta( $post_id, '_arsenal_staff_club_type_filter', $club_type );
+		} else {
+			delete_post_meta( $post_id, '_arsenal_staff_club_type_filter' );
+		}
+	}
+
+	add_action( 'save_post_page', 'arsenal_save_staff_club_type_filter' );
+}
+
+if ( ! function_exists( 'arsenal_register_management_club_type_metabox' ) ) {
+	function arsenal_register_management_club_type_metabox() {
+		// Показываем метаокс на странице редактирования поста
+		if ( ! isset( $_GET['post'] ) ) {
+			return;
+		}
+		
+		$post_id = intval( $_GET['post'] );
+		$template = get_page_template_slug( $post_id );
+		
+		// Показываем метаокс только для page-management.php
+		if ( $template !== 'templates/page-management.php' ) {
+			return;
+		}
+
+		add_meta_box(
+			'arsenal_management_club_type_filter',
+			'Фильтр типа клуба',
+			'arsenal_management_club_type_metabox_callback',
+			'page',
+			'side',
+			'high',
+			array( 'show_in_rest' => true )
+		);
+	}
+
+	add_action( 'add_meta_boxes', 'arsenal_register_management_club_type_metabox' );
+}
+
+if ( ! function_exists( 'arsenal_management_club_type_metabox_callback' ) ) {
+	function arsenal_management_club_type_metabox_callback( $post ) {
+		$club_type = get_post_meta( $post->ID, '_arsenal_management_club_type_filter', true );
+		
+		wp_nonce_field( 'arsenal_management_club_type_filter', 'arsenal_management_club_type_filter_nonce' );
+		?>
+		<div style="margin-bottom: 15px;">
+			<label for="arsenal_management_club_type_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
+				Выбрать тип клуба:
+			</label>
+			<select 
+				id="arsenal_management_club_type_filter_select"
+				name="arsenal_management_club_type_filter" 
+				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+				<option value="">— Все типы —</option>
+				<option value="Основной клуб" 
+					<?php selected( $club_type, 'Основной клуб' ); ?>>
+					Основной клуб
+				</option>
+				<option value="СДЮШ" 
+					<?php selected( $club_type, 'СДЮШ' ); ?>>
+					СДЮШ
+				</option>
+			</select>
+		</div>
+		<p style="font-size: 12px; color: #666; margin: 0;">
+			Оставьте пустым для отображения всех
+		</p>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'arsenal_save_management_club_type_filter' ) ) {
+	function arsenal_save_management_club_type_filter( $post_id ) {
+		// Проверяем nonce
+		if ( ! isset( $_POST['arsenal_management_club_type_filter_nonce'] ) || 
+			 ! wp_verify_nonce( $_POST['arsenal_management_club_type_filter_nonce'], 'arsenal_management_club_type_filter' ) ) {
+			return;
+		}
+
+		// Проверяем, что это не автосохранение
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Проверяем права
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		// Сохраняем значение
+		if ( isset( $_POST['arsenal_management_club_type_filter'] ) ) {
+			$club_type = sanitize_text_field( $_POST['arsenal_management_club_type_filter'] );
+			update_post_meta( $post_id, '_arsenal_management_club_type_filter', $club_type );
+		} else {
+			delete_post_meta( $post_id, '_arsenal_management_club_type_filter' );
+		}
+	}
+
+	add_action( 'save_post_page', 'arsenal_save_management_club_type_filter' );
+}

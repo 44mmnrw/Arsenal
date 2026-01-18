@@ -5,10 +5,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// Обработка формы должна быть в отдельном хуке ПЕРЕД выводом
+// Здесь только вывод формы
+
 global $wpdb;
 
 $id = isset( $_GET['id'] ) ? intval( $_GET['id'] ) : 0;
-$show_success = false;
+$error_msg = '';
 $management = null;
 $is_edit = false;
 
@@ -23,66 +26,12 @@ if ( $id ) {
     }
 }
 
-// Обработка формы
-if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_management'] ) ) {
-    check_admin_referer( 'arsenal_management_nonce' );
-
-    $data = array(
-        'name' => sanitize_text_field( $_POST['name'] ?? '' ),
-        'position' => sanitize_text_field( $_POST['position'] ?? '' ),
-        'description' => sanitize_textarea_field( $_POST['description'] ?? '' ),
-        'photo_url' => ! empty( $_POST['photo_url'] ) ? esc_url_raw( $_POST['photo_url'] ) : '',
-    );
-
-    // Валидация
-    if ( empty( $data['name'] ) ) {
-        echo '<div class="notice notice-error"><p>Пожалуйста, заполните ФИО</p></div>';
-    } elseif ( empty( $data['position'] ) ) {
-        echo '<div class="notice notice-error"><p>Пожалуйста, заполните должность</p></div>';
-    } else {
-        if ( $is_edit ) {
-            $result = $wpdb->update(
-                $wpdb->prefix . 'arsenal_management',
-                $data,
-                array( 'id' => $id ),
-                array( '%s', '%s', '%s', '%s' ),
-                array( '%d' )
-            );
-            $message = 'Запись обновлена';
-        } else {
-            $result = $wpdb->insert(
-                $wpdb->prefix . 'arsenal_management',
-                $data,
-                array( '%s', '%s', '%s', '%s' )
-            );
-            $message = 'Запись добавлена';
-            if ( $result ) {
-                $id = $wpdb->insert_id;
-                $is_edit = true;
-                $management = $wpdb->get_row( $wpdb->prepare( 
-                    "SELECT * FROM {$wpdb->prefix}arsenal_management WHERE id = %d", 
-                    $id 
-                ) );
-            }
-        }
-
-        if ( $result !== false ) {
-            $show_success = true;
-        } else {
-            $error_msg = $wpdb->last_error ?: 'Неизвестная ошибка';
-            echo '<div class="notice notice-error"><p>Ошибка при сохранении: ' . esc_html( $error_msg ) . '</p></div>';
-        }
-    }
-}
-
 ?>
 <div class="wrap">
     <h1><?php echo $is_edit ? '✏️ Редактирование' : '➕ Добавление члена руководства'; ?></h1>
 
-    <?php if ( $show_success ): ?>
-        <div class="notice notice-success"><p>
-            ✓ <?php echo esc_html( $message ); ?>
-        </p></div>
+    <?php if ( ! empty( $error_msg ) ): ?>
+        <div class="notice notice-error"><p><?php echo esc_html( $error_msg ); ?></p></div>
     <?php endif; ?>
 
     <form method="post" class="management-form-container">
@@ -122,12 +71,45 @@ if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_management'] )
                     </div>
 
                     <div class="form-group">
+                        <label for="club_type">
+                            <strong>Тип клуба</strong>
+                        </label>
+                        <?php
+                        $club_type = 'Основной клуб';
+                        if ( $management ) {
+                            $club_info = json_decode( $management->club_type, true );
+                            if ( is_array( $club_info ) && isset( $club_info['type'] ) ) {
+                                $club_type = $club_info['type'];
+                            } elseif ( is_string( $management->club_type ) ) {
+                                $club_type = $management->club_type;
+                            }
+                        }
+                        ?>
+                        <select id="club_type" name="club_type" class="regular-text">
+                            <option value="Основной клуб" <?php selected( $club_type, 'Основной клуб' ); ?>>Основной клуб</option>
+                            <option value="СДЮШ" <?php selected( $club_type, 'СДЮШ' ); ?>>СДЮШ</option>
+                        </select>
+                        <span class="description">Выберите тип клуба для члена руководства</span>
+                    </div>
+
+                    <div class="form-group">
                         <label for="description">
                             <strong>Описание</strong>
                         </label>
                         <textarea id="description" name="description" rows="5" 
                                   class="large-text" placeholder="Краткая биография, опыт, достижения..."><?php echo $management ? esc_textarea( $management->description ) : ''; ?></textarea>
                         <span class="description">Расширенная информация о члене руководства (опыт, достижения и т.д.)</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="display_order">
+                            <strong>Порядок отображения</strong>
+                        </label>
+                        <input type="number" id="display_order" name="display_order" 
+                               value="<?php echo $management ? intval( $management->display_order ) : '0'; ?>"
+                               min="0" max="999"
+                               class="small-text" style="width: 100px;">
+                        <span class="description">Порядок вывода членов руководства (по возрастанию)</span>
                     </div>
                 </div>
             </div>

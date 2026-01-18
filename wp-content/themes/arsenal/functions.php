@@ -311,6 +311,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы Руководство
+		if ( is_page_template( 'templates/page-management.php' ) || is_page( 'management' ) || is_page( 'руководство' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-management',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-management.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы Стадион
 		if ( is_page_template( 'templates/page-stadium.php' ) || is_page( 'stadium' ) || is_page( 'стадион' ) ) {
 			wp_enqueue_style(

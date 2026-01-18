@@ -8,12 +8,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
 $staff_id = isset( $_GET['staff_id'] ) ? intval( $_GET['staff_id'] ) : 0;
-$show_success = false;
-
-// Если форма была отправлена (POST), но нет GET параметра - получить из скрытого поля
-if ( ! $staff_id && isset( $_POST['staff_id'] ) ) {
-    $staff_id = intval( $_POST['staff_id'] );
-}
 
 $staff = null;
 $is_edit = false;
@@ -26,124 +20,12 @@ if ( $staff_id ) {
     }
 }
 
-// Обработка формы
-if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['save_staff'] ) ) {
-    check_admin_referer( 'arsenal_staff_nonce' );
-
-    // Обработка achievements: разбить многострочный текст и сохранить как JSON
-    $achievements_input = sanitize_textarea_field( $_POST['achievements'] ?? '' );
-    $achievements_array = array_filter( array_map( 'trim', explode( "\n", $achievements_input ) ) );
-    $achievements_json = ! empty( $achievements_array ) ? wp_json_encode( $achievements_array ) : null;
-
-    // Обработка career_positions: парсить многострочный текст в структурированный JSON
-    $career_input = sanitize_textarea_field( $_POST['career_positions_text'] ?? '' );
-    $career_positions = array();
-    if ( ! empty( $career_input ) ) {
-        $lines = array_filter( array_map( 'trim', explode( "\n", $career_input ) ) );
-        foreach ( $lines as $line ) {
-            $parts = array_map( 'trim', explode( '|', $line ) );
-            if ( count( $parts ) >= 1 && ! empty( $parts[0] ) ) {
-                $career_positions[] = array(
-                    'title' => $parts[0] ?? '',
-                    'organization' => $parts[1] ?? '',
-                    'experience' => $parts[2] ?? '',
-                );
-            }
-        }
-    }
-    $career_positions_json = ! empty( $career_positions ) ? wp_json_encode( $career_positions ) : null;
-
-    $data = array(
-        'first_name' => sanitize_text_field( $_POST['first_name'] ?? '' ),
-        'second_name' => sanitize_text_field( $_POST['second_name'] ?? '' ),
-        'job_title_id' => ! empty( $_POST['job_title_id'] ) ? intval( $_POST['job_title_id'] ) : null,
-        'department_id' => ! empty( $_POST['department_id'] ) ? intval( $_POST['department_id'] ) : null,
-        'birth_date' => ! empty( $_POST['birth_date'] ) ? sanitize_text_field( $_POST['birth_date'] ) : null,
-        'contract_start' => ! empty( $_POST['contract_start'] ) ? sanitize_text_field( $_POST['contract_start'] ) : null,
-        'contract_end' => ! empty( $_POST['contract_end'] ) ? sanitize_text_field( $_POST['contract_end'] ) : null,
-        'phone' => sanitize_text_field( $_POST['phone'] ?? '' ),
-        'email' => sanitize_email( $_POST['email'] ?? '' ),
-        'photo_url' => ! empty( $_POST['photo_url'] ) ? esc_url_raw( $_POST['photo_url'] ) : '',
-        'bio' => sanitize_textarea_field( $_POST['bio'] ?? '' ),
-        'experience' => ! empty( $_POST['experience'] ) ? intval( $_POST['experience'] ) : null,
-        'citizenship' => sanitize_text_field( $_POST['citizenship'] ?? '' ),
-        'interesting_fact' => sanitize_textarea_field( $_POST['interesting_fact'] ?? '' ),
-        'achievements' => $achievements_json,
-        'career_positions' => $career_positions_json,
-    );
-
-    // Валидация: проверить соответствие должности и отдела
-    $validation_error = null;
-    if ( ! empty( $data['job_title_id'] ) ) {
-        $job_title = Arsenal_Staff_Manager::get_job_title( $data['job_title_id'] );
-        
-        if ( $job_title ) {
-            // Если у должности указан отдел
-            if ( ! empty( $job_title->department_id ) ) {
-                // Отдел должен быть выбран и совпадать
-                if ( empty( $data['department_id'] ) ) {
-                    // Если не выбран - автоматически подставить
-                    $data['department_id'] = (int) $job_title->department_id;
-                } elseif ( (int) $job_title->department_id !== (int) $data['department_id'] ) {
-                    // Если выбран другой - ошибка
-                    $validation_error = sprintf(
-                        'Ошибка: должность "%s" относится к отделу "%s", но вы выбрали другой отдел.',
-                        esc_html( $job_title->job_title_name ),
-                        esc_html( Arsenal_Staff_Manager::get_department( $job_title->department_id )->department_name )
-                    );
-                }
-            }
-            // Если у должности НЕ указан отдел - отдел может быть любой или пустой
-        }
-    }
-
-    if ( $validation_error ) {
-        echo '<div class="notice notice-error"><p>' . wp_kses_post( $validation_error ) . '</p></div>';
-    } else {
-        error_log( '=== Before save ===' );
-        error_log( 'job_title_id: ' . var_export( $data['job_title_id'], true ) );
-        error_log( 'department_id: ' . var_export( $data['department_id'], true ) );
-        
-        if ( $is_edit ) {
-            $result = Arsenal_Staff_Manager::update_staff( $staff_id, $data );
-            $message = 'Сотрудник обновлен';
-        } else {
-            $result = Arsenal_Staff_Manager::add_staff( $data );
-            $message = 'Сотрудник добавлен';
-            $staff_id = $result;
-            $is_edit = true;
-        }
-
-        if ( $result !== false ) {
-            // Переполучить свежие данные из БД после сохранения
-            $staff = Arsenal_Staff_Manager::get_staff_member( $staff_id );
-            $is_edit = true;
-            $show_success = true;
-            
-            error_log( '=== Success - Reloaded staff ===' );
-            error_log( 'Staff ID: ' . $staff_id );
-            error_log( 'Job Title ID: ' . $staff->job_title_id );
-            error_log( 'Department ID: ' . $staff->department_id );
-        } else {
-            global $wpdb;
-            $error_msg = $wpdb->last_error ?: 'Неизвестная ошибка';
-            echo '<div class="notice notice-error"><p>Ошибка при сохранении: ' . esc_html( $error_msg ) . '</p></div>';
-        }
-    }
-}
-
 $job_titles = Arsenal_Staff_Manager::get_job_titles( true );
 $departments = Arsenal_Staff_Manager::get_departments( true );
 
 ?>
 <div class="wrap">
     <h1><?php echo $is_edit ? '✏️ Редактирование сотрудника' : '➕ Добавление нового сотрудника'; ?></h1>
-
-    <?php if ( $show_success ): ?>
-        <div class="notice notice-success"><p>
-            Сотрудник успешно обновлен!
-        </p></div>
-    <?php endif; ?>
 
     <form method="post" class="staff-form-wrapper">
         <?php wp_nonce_field( 'arsenal_staff_nonce' ); ?>
@@ -191,6 +73,14 @@ $departments = Arsenal_Staff_Manager::get_departments( true );
                                 <?php echo esc_html( $dept->department_name ); ?>
                             </option>
                         <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="club_type">Тип клуба</label>
+                    <select id="club_type" name="club_type">
+                        <option value="Основной клуб" <?php selected( $staff->club_type ?? 'Основной клуб', 'Основной клуб' ); ?>>Основной клуб</option>
+                        <option value="СДЮШ" <?php selected( $staff->club_type ?? 'Основной клуб', 'СДЮШ' ); ?>>СДЮШ</option>
                     </select>
                 </div>
             </div>

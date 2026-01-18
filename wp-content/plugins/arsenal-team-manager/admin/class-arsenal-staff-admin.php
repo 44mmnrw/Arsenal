@@ -26,6 +26,79 @@ class Arsenal_Staff_Admin {
     public function init() {
         add_action( 'wp_ajax_arsenal_delete_staff', array( $this, 'delete_staff_ajax' ) );
         add_action( 'wp_ajax_arsenal_delete_job_title', array( $this, 'delete_job_title_ajax' ) );
+        add_action( 'admin_init', array( $this, 'handle_form_submission' ) );
+    }
+
+    /**
+     * Обработка отправки формы сотрудника
+     */
+    public function handle_form_submission() {
+        if ( $_SERVER['REQUEST_METHOD'] !== 'POST' ) {
+            return;
+        }
+
+        if ( ! isset( $_POST['save_staff'] ) ) {
+            return;
+        }
+
+        check_admin_referer( 'arsenal_staff_nonce' );
+
+        require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
+
+        $staff_id = isset( $_POST['staff_id'] ) ? intval( $_POST['staff_id'] ) : 0;
+        $is_edit = $staff_id > 0;
+
+        // Обработка achievements
+        $achievements_input = sanitize_textarea_field( $_POST['achievements'] ?? '' );
+        $achievements_array = array_filter( array_map( 'trim', explode( "\n", $achievements_input ) ) );
+        $achievements_json = ! empty( $achievements_array ) ? wp_json_encode( $achievements_array ) : null;
+
+        // Обработка career_positions
+        $career_input = sanitize_textarea_field( $_POST['career_positions_text'] ?? '' );
+        $career_positions = array();
+        if ( ! empty( $career_input ) ) {
+            $lines = array_filter( array_map( 'trim', explode( "\n", $career_input ) ) );
+            foreach ( $lines as $line ) {
+                $parts = array_map( 'trim', explode( '|', $line ) );
+                if ( count( $parts ) >= 1 && ! empty( $parts[0] ) ) {
+                    $career_positions[] = array(
+                        'title' => $parts[0] ?? '',
+                        'organization' => $parts[1] ?? '',
+                        'experience' => $parts[2] ?? '',
+                    );
+                }
+            }
+        }
+        $career_positions_json = ! empty( $career_positions ) ? wp_json_encode( $career_positions ) : null;
+
+        $data = array(
+            'first_name' => sanitize_text_field( $_POST['first_name'] ?? '' ),
+            'second_name' => sanitize_text_field( $_POST['second_name'] ?? '' ),
+            'job_title_id' => ! empty( $_POST['job_title_id'] ) ? intval( $_POST['job_title_id'] ) : null,
+            'department_id' => ! empty( $_POST['department_id'] ) ? intval( $_POST['department_id'] ) : null,
+            'club_type' => sanitize_text_field( $_POST['club_type'] ?? 'Основной клуб' ),
+            'birth_date' => ! empty( $_POST['birth_date'] ) ? sanitize_text_field( $_POST['birth_date'] ) : null,
+            'contract_start' => ! empty( $_POST['contract_start'] ) ? sanitize_text_field( $_POST['contract_start'] ) : null,
+            'contract_end' => ! empty( $_POST['contract_end'] ) ? sanitize_text_field( $_POST['contract_end'] ) : null,
+            'phone' => sanitize_text_field( $_POST['phone'] ?? '' ),
+            'email' => sanitize_email( $_POST['email'] ?? '' ),
+            'photo_url' => ! empty( $_POST['photo_url'] ) ? esc_url_raw( $_POST['photo_url'] ) : '',
+            'bio' => sanitize_textarea_field( $_POST['bio'] ?? '' ),
+            'experience' => ! empty( $_POST['experience'] ) ? intval( $_POST['experience'] ) : null,
+            'citizenship' => sanitize_text_field( $_POST['citizenship'] ?? '' ),
+            'interesting_fact' => sanitize_textarea_field( $_POST['interesting_fact'] ?? '' ),
+            'achievements' => $achievements_json,
+            'career_positions' => $career_positions_json,
+        );
+
+        if ( $is_edit ) {
+            Arsenal_Staff_Manager::update_staff( $staff_id, $data );
+        } else {
+            Arsenal_Staff_Manager::add_staff( $data );
+        }
+
+        wp_redirect( admin_url( 'admin.php?page=arsenal-staff' ) );
+        exit;
     }
 
     /**

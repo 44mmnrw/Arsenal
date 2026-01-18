@@ -24,7 +24,7 @@ if ( ! empty( $position_filter ) ) {
     $params[] = $position_filter;
 }
 
-$query .= " ORDER BY position, name ASC";
+$query .= " ORDER BY display_order ASC, position, name ASC";
 
 $management = $params ? $wpdb->get_results( $wpdb->prepare( $query, $params ) ) : $wpdb->get_results( $query );
 
@@ -78,60 +78,76 @@ $positions = $wpdb->get_col( "SELECT DISTINCT position FROM {$wpdb->prefix}arsen
 
         <!-- Таблица руководства -->
         <div class="management-list-container">
-            <div class="management-table">
-                <div class="management-row management-header">
-                    <div class="mgmt-col-photo">Фото</div>
-                    <div class="mgmt-col-name">ФИО</div>
-                    <div class="mgmt-col-position">Должность</div>
-                    <div class="mgmt-col-description">Описание</div>
-                    <div class="mgmt-col-action">Действие</div>
-                </div>
-
-                <?php if ( $management ): ?>
-                    <?php foreach ( $management as $member ): ?>
-                    <div class="management-row">
-                        <div class="mgmt-col-photo">
-                            <?php if ( $member->photo_url ): ?>
-                                <img src="<?php echo esc_url( $member->photo_url ); ?>" 
-                                     alt="<?php echo esc_attr( $member->name ); ?>"
-                                     class="management-thumbnail">
-                            <?php else: ?>
-                                <div class="management-thumbnail-empty">
-                                    <span class="dashicons dashicons-admin-users"></span>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="mgmt-col-name">
-                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-edit&id=' . $member->id ); ?>" 
-                               class="management-name-link">
-                                <?php echo esc_html( $member->name ); ?>
-                            </a>
-                        </div>
-                        <div class="mgmt-col-position">
-                            <span class="position-badge"><?php echo esc_html( $member->position ); ?></span>
-                        </div>
-                        <div class="mgmt-col-description">
-                            <span class="description-text">
-                                <?php echo esc_html( wp_trim_words( $member->description, 15 ) ); ?>
-                            </span>
-                        </div>
-                        <div class="mgmt-col-action">
-                            <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-edit&id=' . $member->id ); ?>" 
-                               class="button button-small">Редактировать</a>
-                            <button class="button button-small button-link-delete delete-management" 
-                                    data-id="<?php echo esc_attr( $member->id ); ?>"
-                                    data-name="<?php echo esc_attr( $member->name ); ?>">Удалить</button>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="management-row management-empty">
-                        <div style="grid-column: 1/-1; padding: 20px; text-align: center; color: #999;">
-                            <p>Нет записей. <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-add' ); ?>">Добавить первую</a></p>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
+            <table class="wp-list-table widefat striped">
+                <thead>
+                    <tr>
+                        <th class="mgmt-col-photo">Фото</th>
+                        <th class="mgmt-col-name">ФИО</th>
+                        <th class="mgmt-col-position">Должность</th>
+                        <th class="mgmt-col-club-type">Тип клуба</th>
+                        <th class="mgmt-col-order">Порядок</th>
+                        <th class="mgmt-col-description">Описание</th>
+                        <th class="mgmt-col-action">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ( $management ): ?>
+                        <?php foreach ( $management as $member ): ?>
+                        <tr>
+                            <td class="mgmt-col-photo">
+                                <?php if ( $member->photo_url ): ?>
+                                    <img src="<?php echo esc_url( $member->photo_url ); ?>" 
+                                         alt="<?php echo esc_attr( $member->name ); ?>"
+                                         class="management-thumbnail">
+                                <?php else: ?>
+                                    <div class="management-thumbnail-empty">
+                                        <span class="dashicons dashicons-admin-users"></span>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <td class="mgmt-col-name">
+                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-edit&id=' . $member->id ); ?>" 
+                                   class="management-name-link">
+                                    <?php echo esc_html( $member->name ); ?>
+                                </a>
+                            </td>
+                            <td class="mgmt-col-position">
+                                <span class="position-badge"><?php echo esc_html( $member->position ); ?></span>
+                            </td>
+                            <td class="mgmt-col-club-type">
+                                <span class="club-type-badge">
+                                    <?php 
+                                    $club_type = ! empty( $member->club_type ) ? $member->club_type : 'Основной клуб';
+                                    echo esc_html( $club_type );
+                                    ?>
+                                </span>
+                            </td>
+                            <td class="mgmt-col-order">
+                                <span class="order-number"><?php echo intval( $member->display_order ); ?></span>
+                            </td>
+                            <td class="mgmt-col-description">
+                                <span class="description-text">
+                                    <?php echo esc_html( wp_trim_words( $member->description, 15 ) ); ?>
+                                </span>
+                            </td>
+                            <td class="mgmt-col-action">
+                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-edit&id=' . $member->id ); ?>" 
+                                   class="button button-small">Редактировать</a>
+                                <button class="button button-small button-link-delete delete-management" 
+                                        data-id="<?php echo esc_attr( $member->id ); ?>"
+                                        data-name="<?php echo esc_attr( $member->name ); ?>">Удалить</button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" style="padding: 20px; text-align: center; color: #999;">
+                                <p>Нет записей. <a href="<?php echo admin_url( 'admin.php?page=arsenal-management-add' ); ?>">Добавить первую</a></p>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

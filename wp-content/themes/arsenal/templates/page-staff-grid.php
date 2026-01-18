@@ -27,26 +27,32 @@ require_once get_template_directory() . '/inc/classes/class-arsenal-staff-depart
 
 global $wpdb;
 
-// Получить фильтр отдела из post_meta текущей страницы
+// Получить фильтры из post_meta текущей страницы
 $post_id = get_the_ID();
 $department_id = get_post_meta( $post_id, '_arsenal_staff_department_filter', true );
+$club_type_filter = get_post_meta( $post_id, '_arsenal_staff_club_type_filter', true );
 
-// Запрос: все сотрудники (или отфильтрованные по отделу) с их должностями
+// Построить SQL запрос с фильтрами
+$where_conditions = array();
+
 if ( ! empty( $department_id ) ) {
-	$sql = $wpdb->prepare(
-		"SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
-		FROM {$wpdb->prefix}arsenal_staff s
-		LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
-		WHERE s.department_id = %d
-		ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC",
-		$department_id
-	);
-} else {
-	$sql = "SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
-		FROM {$wpdb->prefix}arsenal_staff s
-		LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
-		ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
+	$where_conditions[] = $wpdb->prepare( "s.department_id = %d", intval( $department_id ) );
 }
+
+if ( ! empty( $club_type_filter ) ) {
+	$where_conditions[] = $wpdb->prepare( "s.club_type = %s", sanitize_text_field( $club_type_filter ) );
+}
+
+$where_clause = '';
+if ( ! empty( $where_conditions ) ) {
+	$where_clause = ' WHERE ' . implode( ' AND ', $where_conditions );
+}
+
+$sql = "SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
+	FROM {$wpdb->prefix}arsenal_staff s
+	LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
+	{$where_clause}
+	ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
 
 $staff = $wpdb->get_results( $sql );
 

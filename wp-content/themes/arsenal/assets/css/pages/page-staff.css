@@ -425,7 +425,7 @@
 
 /* Desktop Large (1024px) */
 @media (max-width: 1024px) {
-	.player-container {
+	.staff-container {
 		padding: 0 30px;
 		height: auto;
 	}
@@ -507,7 +507,7 @@
 		padding: 0 20px;
 	}
 
-	.player-container {
+	.staff-container {
 		padding: 0 20px;
 	}
 
@@ -657,7 +657,7 @@
 		text-align: left;
 	}
 
-	.player-container {
+	.staff-container {
 		padding: 0 12px;
 		height: auto;
 	}

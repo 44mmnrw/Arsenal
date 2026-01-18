@@ -140,7 +140,7 @@ if ( empty( $staff_nationality ) ) {
 	<!-- HERO SECTION -->
 	<div class="player-hero">
 		<div class="player-hero__overlay"></div>
-		<div class="player-hero__content player-container">
+		<div class="player-hero__content staff-container">
 			<div class="player-hero__inner">
 				<!-- Main Info Container -->
 				<div class="staff-hero__main">

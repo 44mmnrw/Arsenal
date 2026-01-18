@@ -2,15 +2,31 @@
 
 .page-management-wrapper {
 	background-color: #ffffff;
-	padding: 2rem 0;
+	
 }
 
 .page-management-container {
-	max-width: 94rem;
+	padding: var(--container-padding-y) var(--container-padding-x);
+	max-width: var(--container-max-width);
 	margin: 0 auto;
-	padding: 2rem 1.25rem;
 }
 
+/* Entry Header (как в других шаблонах) */
+.entry-header {
+	margin: 0 0 2rem 0;
+}
+
+.entry-title {
+	font-family: 'Inter', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
+	color: #0a0a0a;
+	margin: 0;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+}
+
+/* Совместимость с .management-title */
 .management-title {
 	font-family: 'Inter', sans-serif;
 	font-size: 1.5rem;
@@ -134,6 +150,10 @@
 		padding: 1.5rem 1rem;
 	}
 
+	.entry-title {
+		font-size: 2rem;
+	}
+
 	.management-title {
 		font-size: 1.25rem;
 		margin-bottom: 1.5rem;
@@ -163,6 +183,12 @@
 	}
 
 	.page-management-container {
+		padding: 1rem 0.75rem;
+	}
+
+	.entry-title {
+		font-size: 1.5rem;
+	}	.page-management-container {
 		padding: 1rem 0.75rem;
 	}
 
