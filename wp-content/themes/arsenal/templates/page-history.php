@@ -117,7 +117,9 @@ $history = Arsenal_History_Manager::get_history();
 	</section><!-- Дополнительная секция -->
 
 		<section class="stadiums-section">
-			<h3 class="stadiums-section__heading"><?php echo esc_html( isset( $history['title_third'] ) && ! empty( $history['title_third'] ) ? $history['title_third'] : 'Домашние стадионы' ); ?></h3>
+			<?php if ( ! empty( $history['title_third'] ) ) : ?>
+				<h3 class="stadiums-section__heading"><?php echo esc_html( $history['title_third'] ); ?></h3>
+			<?php endif; ?>
 			<div class="stadiums-grid">
 				<?php 
 				if ( ! empty( $history['additional_cards'] ) ) {
@@ -129,9 +131,10 @@ $history = Arsenal_History_Manager::get_history();
 					if ( is_array( $additional ) ) {
 						foreach ( $additional as $card ) {
 							if ( is_array( $card ) && isset( $card['label'], $card['value'] ) ) {
+								$icon = isset( $card['icon'] ) && ! empty( $card['icon'] ) ? $card['icon'] : 'stadium';
 								?>
 								<div class="stadium-item">
-									<div class="stadium-item__icon"><?php echo arsenal_get_icon( 'stadium' ); ?></div>
+									<div class="stadium-item__icon"><?php echo arsenal_get_icon( $icon ); ?></div>
 									<div class="stadium-item__info">
 										<h4 class="stadium-item__name"><?php echo esc_html( $card['label'] ); ?></h4>
 										<p class="stadium-item__location"><?php echo wp_kses_post( $card['value'] ); ?></p>

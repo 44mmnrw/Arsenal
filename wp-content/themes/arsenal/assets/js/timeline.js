@@ -36,15 +36,14 @@
 
 			// Функция для расчета позиции (используем ту же формулу, что и для точек)
 			function calculateFillPercent(pointIndex) {
-				return ((pointIndex + 1) / (totalPoints + 1)) * 100;
-			}
+			return 5 + (pointIndex / Math.max(1, totalPoints - 1)) * 90;
+		}
 
-			// Hover на точку
-			dot.addEventListener('mouseover', function() {
+		// Hover на точку
+		dot.addEventListener('mouseover', function() {
 				// Показываем подсказку
 				if (tooltip) {
-					tooltip.style.display = 'block';
-					tooltip.style.opacity = '1';
+					tooltip.classList.add('visible');
 				}
 
 				// Заполняем линию до этой точки по правильной формуле
@@ -55,16 +54,14 @@
 			// Уход мыши с точки
 			dot.addEventListener('mouseout', function() {
 				if (tooltip) {
-					tooltip.style.display = 'none';
-					tooltip.style.opacity = '0';
+					tooltip.classList.remove('visible');
 				}
 			});
 
 			// Также оставляем hover на саму подсказку (если наводить прямо на неё)
 			event.addEventListener('mouseover', function() {
 				if (tooltip) {
-					tooltip.style.display = 'block';
-					tooltip.style.opacity = '1';
+					tooltip.classList.add('visible');
 				}
 
 				// Заполняем линию до этой точки по правильной формуле
@@ -74,8 +71,7 @@
 
 			event.addEventListener('mouseout', function() {
 				if (tooltip) {
-					tooltip.style.display = 'none';
-					tooltip.style.opacity = '0';
+					tooltip.classList.remove('visible');
 				}
 			});
 		});

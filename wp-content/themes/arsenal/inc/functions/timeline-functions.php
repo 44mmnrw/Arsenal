@@ -66,16 +66,7 @@ function arsenal_display_timeline() {
 	}
 
 	// Определить цвета для точек по годам
-	$color_map = array(
-		2018 => '#900',
-		2019 => '#f0b100',
-		2020 => '#ff1a1a',
-		2021 => '#f0b100',
-		2022 => '#f33',
-		2023 => '#f0b100',
-		2024 => '#ff1a1a',
-		2025 => '#900',
-	);
+	// Четные года - #f0b100, нечетные - #ff1a1a
 
 	?>
 	<section class="timeline-section">
@@ -85,8 +76,8 @@ function arsenal_display_timeline() {
 				<?php foreach ( $timeline as $index => $entry ) : ?>
 					<?php
 					$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-					// Равномерное распределение по количеству точек
-					$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
+					// Первая и последняя точки в 5% от края, остальные между ними
+					$x_percent = 5 + ( $index / max( 1, $total_points - 1 ) ) * 90;
 					?>
 					<div 
 						class="timeline-year-badge"
@@ -105,9 +96,9 @@ function arsenal_display_timeline() {
 					<?php foreach ( $timeline as $index => $entry ) : ?>
 						<?php
 						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
-						// Равномерное распределение по количеству точек
-						$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
-						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
+						// Первая и последняя точки в 5% от края, остальные между ними
+						$x_percent = 5 + ( $index / max( 1, $total_points - 1 ) ) * 90;
+						$color = ( $year % 2 === 0 ) ? '#f0b100' : '#ff1a1a';
 						?>
 						<div 
 							class="timeline-dot"
@@ -125,9 +116,9 @@ function arsenal_display_timeline() {
 						<?php
 						$year = isset( $entry['year'] ) ? (int) $entry['year'] : 0;
 						$event = isset( $entry['event'] ) ? $entry['event'] : '';
-						// Равномерное распределение по количеству точек
-						$x_percent = ( ( $index + 1 ) / ( $total_points + 1 ) ) * 100;
-						$color = isset( $color_map[ $year ] ) ? $color_map[ $year ] : '#900';
+						// Первая и последняя точки в 5% от края, остальные между ними
+						$x_percent = 5 + ( $index / max( 1, $total_points - 1 ) ) * 90;
+						$color = ( $year % 2 === 0 ) ? '#f0b100' : '#ff1a1a';
 						$is_even = $index % 2 === 0;
 						?>
 						<div 

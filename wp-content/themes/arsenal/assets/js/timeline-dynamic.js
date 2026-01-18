@@ -57,8 +57,8 @@
 
             // Пересчитать позицию каждой точки
             dots.forEach((dot, index) => {
-                // Равномерное распределение: (index + 1) / (totalItems + 1) * 100%
-                const percentage = ((index + 1) / (totalItems + 1)) * 100;
+                // Первая и последняя в 5% от края, остальные равномерно между ними
+                const percentage = 5 + (index / Math.max(1, totalItems - 1)) * 90;
                 dot.style.left = percentage + '%';
                 dot.style.setProperty('--dot-position', index + 1);
             });
@@ -68,7 +68,8 @@
                 this.timelineEvents.style.setProperty('--timeline-items', totalItems);
                 const events = this.timelineEvents.querySelectorAll('.timeline-event');
                 events.forEach((event, index) => {
-                    const percentage = ((index + 1) / (totalItems + 1)) * 100;
+                    // Первая и последняя в 5% от края, остальные равномерно между ними
+                    const percentage = 5 + (index / Math.max(1, totalItems - 1)) * 90;
                     event.style.left = percentage + '%';
                     event.style.setProperty('--dot-position', index + 1);
                 });
@@ -79,7 +80,8 @@
             if (yearBadges) {
                 const badges = yearBadges.querySelectorAll('.timeline-year-badge');
                 badges.forEach((badge, index) => {
-                    const percentage = ((index + 1) / (totalItems + 1)) * 100;
+                    // Первая и последняя в 5% от края, остальные равномерно между ними
+                    const percentage = 5 + (index / Math.max(1, totalItems - 1)) * 90;
                     badge.style.left = percentage + '%';
                 });
             }

@@ -389,7 +389,7 @@
    ======================================== */
 
 .timeline-container {
-    max-width: 1440px;
+    max-width: 1200px;
     padding: 0 20px;
     position: relative;
     width: 100%;
@@ -399,7 +399,8 @@
 .timeline-years-badges {
     position: relative;
     width: 100%;
-    height: 72px;
+    height: 16px;
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 
@@ -451,7 +452,7 @@
     left: 0;
     width: 0%;
     height: 4px;
-    background-color: #1f2937;
+    background-color: #FF1A1A;
     transform: translateY(-50%);
     transition: width 0.3s ease;
     pointer-events: none;
@@ -473,7 +474,6 @@
 .timeline-dot {
     position: absolute;
     top: 50%;
-    left: 0;
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -482,8 +482,6 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
-    /* Переменная для позиции точки (1-based индекс) */
-    --dot-position: 1;
     z-index: 10;
 }
 
@@ -509,9 +507,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    left: 0;
     top: 0;
     overflow: visible;
+    /* left будет установлен инлайн стилем */
 }
 
 .timeline-event--top {
@@ -523,22 +521,25 @@
 }
 
 .timeline-event__tooltip {
-    font-size: 13px;
+    font-size: 1rem;
     color: #555;
     background: #ffffff;
     padding: 10px 12px;
-    border-radius: 4px;
+    border-radius: 8px;
     border-top: 3px solid;
-    display: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     white-space: normal;
-    width: 150px;
+    width: auto;
+    min-width: 150px;
     line-height: 1.4;
     z-index: 100;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     pointer-events: auto;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .timeline-event--top .timeline-event__tooltip {
@@ -547,6 +548,12 @@
 
 .timeline-event--bottom .timeline-event__tooltip {
     top: calc(100% + 4px);
+}
+
+.timeline-event__tooltip.visible {
+    display: block;
+    opacity: 1;
+    visibility: visible;
 }
 
 .timeline-event:hover .timeline-event__tooltip {

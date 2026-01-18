@@ -105,6 +105,9 @@ class Arsenal_Team_Manager {
         // Классы управления персоналом
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-staff-admin.php';
         
+        // Классы управления руководством
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-management-admin.php';
+        
         // Классы управления корректировками статистики игроков
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
@@ -143,6 +146,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс персонала
         $staff_admin = new Arsenal_Staff_Admin();
         $staff_admin->init();
+        
+        // Инициализируем админ-интерфейс руководства
+        $management_admin = new Arsenal_Management_Admin();
+        $management_admin->init();
         
         // Инициализируем админ-интерфейс корректировок статистики
         $stats_corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
@@ -214,6 +221,26 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-staff',
             array( $this, 'render_staff_list' )
+        );
+        
+        // Подменю: Руководство
+        add_submenu_page(
+            $parent_slug,
+            'Руководство',
+            'Руководство',
+            'manage_options',
+            'arsenal-management',
+            array( $this, 'render_management_list' )
+        );
+        
+        // Подменю: Библиотека иконок
+        add_submenu_page(
+            $parent_slug,
+            'Библиотека иконок',
+            '🎨 Иконки',
+            'manage_options',
+            'arsenal-icon-library',
+            array( $this, 'render_icon_library' )
         );
         
         // Подменю: Стадионы
@@ -471,6 +498,25 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-job-title-edit',
             array( $this, 'render_job_title_edit' )
+        );
+        
+        // Скрытые страницы руководства (без пункта меню)
+        add_submenu_page(
+            '',
+            'Добавить члена руководства',
+            'Добавить члена руководства',
+            'manage_options',
+            'arsenal-management-add',
+            array( $this, 'render_management_form' )
+        );
+        
+        add_submenu_page(
+            '',
+            'Редактировать члена руководства',
+            'Редактировать члена руководства',
+            'manage_options',
+            'arsenal-management-edit',
+            array( $this, 'render_management_form' )
         );
         
         // Скрытая страница добавления матча (без пункта меню)
@@ -793,6 +839,29 @@ class Arsenal_Team_Manager {
     public function render_job_title_edit() {
         $staff_admin = new Arsenal_Staff_Admin();
         $staff_admin->render_job_title_edit();
+    }
+    
+    /**
+     * Список руководства
+     */
+    public function render_management_list() {
+        $management_admin = new Arsenal_Management_Admin();
+        $management_admin->render_management_list();
+    }
+    
+    /**
+     * Добавление/редактирование члена руководства
+     */
+    public function render_management_form() {
+        $management_admin = new Arsenal_Management_Admin();
+        $management_admin->render_management_form();
+    }
+    
+    /**
+     * Библиотека иконок
+     */
+    public function render_icon_library() {
+        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/icon-library.php';
     }
     
     /**

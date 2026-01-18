@@ -79,12 +79,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     "year": 2023,<br/>
     "event": "Повторное чемпионство в Первой лиге"<br/>
   }<br/>
-]</code><br/>
-                            <strong><?php _e( 'Поля:', 'arsenal-team-manager' ); ?></strong>
-                            <ul style="margin: 10px 0; padding-left: 20px;">
-                                <li><code>year</code> (число) - год события</li>
-                                <li><code>event</code> (строка) - описание события (появится в подсказке при наведении)</li>
-                            </ul>
+]</code><br/>                                                        
                         </p>
                     </td>
                 </tr>
@@ -183,15 +178,17 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <td>
                         <textarea id="additional_cards" name="additional_cards" rows="6" class="large-text code"><?php echo esc_textarea( is_array( $history['additional_cards'] ) ? json_encode( $history['additional_cards'], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) : $history['additional_cards'] ); ?></textarea>
                         <p class="description">
-                            <?php _e( 'JSON формат:', 'arsenal-team-manager' ); ?><br/>
+                            <?php _e( 'JSON формат (icon: названием из спрайта):', 'arsenal-team-manager' ); ?><br/>
                             <code>[<br/>
   {<br/>
     "label": "РЦОП-Стайки",<br/>
-    "value": "Минск • Вместимость: 1,500"<br/>
+    "value": "Минск • Вместимость: 1,500",<br/>
+    "icon": "stadium"<br/>
   },<br/>
   {<br/>
     "label": "Городской стадион",<br/>
-    "value": "Борисов • Вместимость: 5,402"<br/>
+    "value": "Борисов • Вместимость: 5,402",<br/>
+    "icon": "stadium"<br/>
   }<br/>
 ]</code>
                         </p>
@@ -208,75 +205,3 @@ if ( ! defined( 'ABSPATH' ) ) {
         </div>
     </form>
 </div>
-
-<style>
-    .arsenal-history-form {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .form-columns-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 20px 0;
-        box-sizing: border-box;
-        width: 100%;
-    }
-    
-    @media (max-width: 1200px) {
-        .form-columns-container {
-            grid-template-columns: 1fr;
-        }
-    }
-    
-    .arsenal-history-form .form-section {
-        background: #fff;
-        padding: 20px;
-        border: 1px solid #ccd0d4;
-        border-radius: 4px;
-        box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    }
-    
-    .arsenal-history-form .form-section h3 {
-        margin: 0 0 15px 0;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #0073aa;
-        color: #0073aa;
-        font-size: 14px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .arsenal-history-form .form-table {
-        margin: 0;
-        width: 100%;
-    }
-    
-    .arsenal-history-form .form-table tr {
-        border: none;
-    }
-    
-    .arsenal-history-form .code {
-        font-family: 'Courier New', monospace;
-        font-size: 13px;
-        line-height: 1.6;
-        background: #f5f5f5;
-        border: 1px solid #ddd;
-        padding: 10px;
-    }
-    
-    .form-actions {
-        margin: 30px 0;
-        padding: 20px;
-        background: #fff;
-        border: 1px solid #ccd0d4;
-        border-radius: 4px;
-    }
-    
-    .form-actions .button {
-        margin-right: 10px;
-    }
-</style>
