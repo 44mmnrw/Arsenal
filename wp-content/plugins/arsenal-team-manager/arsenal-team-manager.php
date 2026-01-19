@@ -1438,3 +1438,112 @@ function arsenal_get_job_title_department() {
 add_action( 'wp_ajax_arsenal_get_job_title_department', 'arsenal_get_job_title_department' );
 
 add_action( 'wp_ajax_arsenal_delete_coach_from_db', 'arsenal_delete_coach_from_db' );
+
+/**
+ * AJAX: Добавить новый отдел
+ */
+function arsenal_add_department() {
+    check_ajax_referer( 'arsenal_add_department', 'nonce' );
+    
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'message' => 'Нет прав доступа' ) );
+    }
+    
+    $department_name = sanitize_text_field( $_POST['department_name'] ?? '' );
+    $description = wp_kses_post( $_POST['description'] ?? '' );
+    
+    if ( empty( $department_name ) ) {
+        wp_send_json_error( array( 'message' => 'Название отдела обязательно' ) );
+    }
+    
+    require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
+    
+    $department_id = Arsenal_Staff_Manager::add_department( $department_name, $description );
+    
+    if ( ! $department_id ) {
+        wp_send_json_error( array( 'message' => 'Ошибка при добавлении отдела в БД' ) );
+    }
+    
+    wp_send_json_success( array( 
+        'message' => 'Отдел добавлен успешно',
+        'department_id' => $department_id,
+        'department_name' => $department_name
+    ) );
+}
+
+add_action( 'wp_ajax_arsenal_add_department', 'arsenal_add_department' );
+
+/**
+ * AJAX: Получить данные отдела
+ */
+function arsenal_get_department() {
+    check_ajax_referer( 'arsenal_get_department', 'nonce' );
+    
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'message' => 'Нет прав доступа' ) );
+    }
+    
+    $department_id = intval( $_POST['department_id'] ?? 0 );
+    
+    if ( ! $department_id ) {
+        wp_send_json_error( array( 'message' => 'ID отдела не указан' ) );
+    }
+    
+    require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
+    
+    $department = Arsenal_Staff_Manager::get_department( $department_id );
+    
+    if ( ! $department ) {
+        wp_send_json_error( array( 'message' => 'Отдел не найден' ) );
+    }
+    
+    wp_send_json_success( array(
+        'id' => $department->id,
+        'department_name' => $department->department_name,
+        'description' => $department->description
+    ) );
+}
+
+add_action( 'wp_ajax_arsenal_get_department', 'arsenal_get_department' );
+
+/**
+ * AJAX: Обновить отдел
+ */
+function arsenal_update_department() {
+    check_ajax_referer( 'arsenal_update_department', 'nonce' );
+    
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'message' => 'Нет прав доступа' ) );
+    }
+    
+    $department_id = intval( $_POST['department_id'] ?? 0 );
+    $department_name = sanitize_text_field( $_POST['department_name'] ?? '' );
+    $description = wp_kses_post( $_POST['description'] ?? '' );
+    
+    if ( ! $department_id ) {
+        wp_send_json_error( array( 'message' => 'ID отдела не указан' ) );
+    }
+    
+    if ( empty( $department_name ) ) {
+        wp_send_json_error( array( 'message' => 'Название отдела обязательно' ) );
+    }
+    
+    require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
+    
+    $result = Arsenal_Staff_Manager::update_department( $department_id, array(
+        'department_name' => $department_name,
+        'description' => $description
+    ) );
+    
+    if ( ! $result ) {
+        wp_send_json_error( array( 'message' => 'Ошибка при обновлении отдела в БД' ) );
+    }
+    
+    wp_send_json_success( array(
+        'message' => 'Отдел обновлен успешно',
+        'department_id' => $department_id,
+        'department_name' => $department_name
+    ) );
+}
+
+add_action( 'wp_ajax_arsenal_update_department', 'arsenal_update_department' );

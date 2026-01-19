@@ -536,4 +536,95 @@ class Arsenal_Staff_Manager {
 			)
 		);
 	}
+
+	/**
+	 * Добавить новый отдел
+	 *
+	 * @param string $department_name Название отдела
+	 * @param string $description Описание (опционально)
+	 * @param int $sort_order Порядок сортировки
+	 * @return int|false ID созданного отдела или false
+	 */
+	public static function add_department( $department_name, $description = '', $sort_order = 0 ) {
+		global $wpdb;
+
+		$insert = array(
+			'department_name' => sanitize_text_field( $department_name ),
+			'description' => wp_kses_post( $description ),
+			'sort_order' => (int) $sort_order,
+		);
+
+		$format = array( '%s', '%s', '%d' );
+
+		$result = $wpdb->insert(
+			$wpdb->prefix . 'arsenal_staff_department',
+			$insert,
+			$format
+		);
+
+		if ( $result ) {
+			return $wpdb->insert_id;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Обновить отдел
+	 *
+	 * @param int $department_id ID отдела
+	 * @param array $data Данные для обновления
+	 * @return bool Результат обновления
+	 */
+	public static function update_department( $department_id, $data ) {
+		global $wpdb;
+
+		$update = array();
+		$format = array();
+
+		if ( isset( $data['department_name'] ) ) {
+			$update['department_name'] = sanitize_text_field( $data['department_name'] );
+			$format[] = '%s';
+		}
+
+		if ( isset( $data['description'] ) ) {
+			$update['description'] = wp_kses_post( $data['description'] );
+			$format[] = '%s';
+		}
+
+		if ( isset( $data['sort_order'] ) ) {
+			$update['sort_order'] = (int) $data['sort_order'];
+			$format[] = '%d';
+		}
+
+		if ( empty( $update ) ) {
+			return false;
+		}
+
+		$format[] = '%d';
+
+		return $wpdb->update(
+			$wpdb->prefix . 'arsenal_staff_department',
+			$update,
+			array( 'id' => (int) $department_id ),
+			$format,
+			array( '%d' )
+		);
+	}
+
+	/**
+	 * Удалить отдел
+	 *
+	 * @param int $department_id ID отдела
+	 * @return bool Результат удаления
+	 */
+	public static function delete_department( $department_id ) {
+		global $wpdb;
+
+		return $wpdb->delete(
+			$wpdb->prefix . 'arsenal_staff_department',
+			array( 'id' => (int) $department_id ),
+			array( '%d' )
+		);
+	}
 }
