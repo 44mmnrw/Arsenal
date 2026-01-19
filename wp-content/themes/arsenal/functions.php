@@ -352,6 +352,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы Набор в академию
+		if ( is_page_template( 'templates/page-academy-recruitment.php' ) || is_page( 'academy-recruitment' ) || is_page( 'набор-в-академию' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-academy-recruitment',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-academy-recruitment.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы 404
 		if ( is_404() ) {
 			wp_enqueue_style(

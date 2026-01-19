@@ -32,6 +32,18 @@ $post_id = get_the_ID();
 $department_id = get_post_meta( $post_id, '_arsenal_staff_department_filter', true );
 $club_type_filter = get_post_meta( $post_id, '_arsenal_staff_club_type_filter', true );
 
+// Получить название отдела
+$department_name = '';
+if ( ! empty( $department_id ) ) {
+	$department = $wpdb->get_row( $wpdb->prepare(
+		"SELECT department_name FROM {$wpdb->prefix}arsenal_staff_department WHERE id = %d",
+		intval( $department_id )
+	) );
+	if ( $department ) {
+		$department_name = $department->department_name;
+	}
+}
+
 // Построить SQL запрос с фильтрами
 $where_conditions = array();
 
@@ -72,7 +84,7 @@ foreach ( $staff as $person ) {
 	<section class="teams-section">
 		<div class="container">
 			<div class="teams-header">
-				<h1 class="teams-title">Тренерский штаб</h1>
+				<h1 class="teams-title"><?php echo ! empty( $department_name ) ? esc_html( $department_name ) : get_the_title(); ?></h1>
 			</div>
 
 			<?php if ( ! empty( $staff ) ) : ?>
