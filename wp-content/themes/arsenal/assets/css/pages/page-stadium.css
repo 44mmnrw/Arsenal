@@ -349,6 +349,16 @@ svg use {
 	border-radius: 50%;
 }
 
+.timeline-item__icon {
+	width: 24px;
+	height: 24px;
+	fill: none;
+	stroke: white;
+	stroke-width: 2;
+	position: absolute;
+	z-index: 2;
+}
+
 .timeline-item__content {
 	flex: 1;
 	padding-top: 0.25rem;

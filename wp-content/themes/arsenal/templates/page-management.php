@@ -36,7 +36,7 @@ $management_team = $wpdb->get_results(
 	<div class="page-management-wrapper">
 		<div class="page-management-container">
 			<div class="entry-header">
-				<h1 class="entry-title">Руководство клуба</h1>
+				<h1 class="entry-title">Руководство</h1>
 			</div>
 			
 			<div class="management-grid">

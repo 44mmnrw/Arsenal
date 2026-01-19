@@ -92,7 +92,17 @@ class Arsenal_Stadium_Admin {
             'name' => sanitize_text_field( $_POST['name'] ?? '' ),
             'city' => sanitize_text_field( $_POST['city'] ?? '' ),
             'capacity' => sanitize_text_field( $_POST['capacity'] ?? '' ),
+            'open_date' => sanitize_text_field( $_POST['open_date'] ?? '' ),
             'photo_url' => sanitize_text_field( $_POST['photo_url'] ?? '' ),
+            'description' => wp_kses_post( $_POST['description'] ?? '' ),
+            'history' => sanitize_text_field( $_POST['history'] ?? '' ),
+            'contacts' => sanitize_text_field( $_POST['contacts'] ?? '' ),
+            'infrastructure' => sanitize_text_field( $_POST['infrastructure'] ?? '' ),
+            'tech_features' => sanitize_text_field( $_POST['tech_features'] ?? '' ),
+            'sectors' => sanitize_text_field( $_POST['sectors'] ?? '' ),
+            'stat_cards' => sanitize_text_field( $_POST['stat_cards'] ?? '' ),
+            'to_get' => sanitize_text_field( $_POST['to_get'] ?? '' ),
+            'on_date' => sanitize_text_field( $_POST['on_date'] ?? '' ),
         );
         
         // Обработка загрузки изображения
@@ -140,6 +150,16 @@ class Arsenal_Stadium_Admin {
             'name' => sanitize_text_field( $_POST['name'] ?? '' ),
             'city' => sanitize_text_field( $_POST['city'] ?? '' ),
             'capacity' => sanitize_text_field( $_POST['capacity'] ?? '' ),
+            'open_date' => sanitize_text_field( $_POST['open_date'] ?? '' ),
+            'description' => wp_kses_post( $_POST['description'] ?? '' ),
+            'history' => sanitize_text_field( $_POST['history'] ?? '' ),
+            'contacts' => sanitize_text_field( $_POST['contacts'] ?? '' ),
+            'infrastructure' => sanitize_text_field( $_POST['infrastructure'] ?? '' ),
+            'tech_features' => sanitize_text_field( $_POST['tech_features'] ?? '' ),
+            'sectors' => sanitize_text_field( $_POST['sectors'] ?? '' ),
+            'stat_cards' => sanitize_text_field( $_POST['stat_cards'] ?? '' ),
+            'to_get' => sanitize_text_field( $_POST['to_get'] ?? '' ),
+            'on_date' => sanitize_text_field( $_POST['on_date'] ?? '' ),
         );
         
         // Обработка загрузки изображения

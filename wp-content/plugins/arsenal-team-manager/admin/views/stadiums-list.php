@@ -53,13 +53,12 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <div class="stadiums-col-name">Название</div>
                 <div class="stadiums-col-city">Город</div>
                 <div class="stadiums-col-capacity">Вместимость</div>
-                <div class="stadiums-col-club-type">Тип клуба</div>
                 <div class="stadiums-col-action">Действия</div>
             </div>
 
             <?php if ( ! empty( $stadiums ) ) : ?>
                 <?php foreach ( $stadiums as $stadium ) : ?>
-                    <div class="stadiums-row">
+                    <div class="stadiums-row stadiums-row-compact">
                         <div class="stadiums-col-photo">
                             <?php if ( ! empty( $stadium->photo_url ) ) : ?>
                                 <?php
@@ -88,11 +87,6 @@ if ( ! defined( 'ABSPATH' ) ) {
                         </div>
                         <div class="stadiums-col-capacity">
                             <?php echo ! empty( $stadium->capacity ) ? number_format( intval( $stadium->capacity ), 0, ',', ' ' ) : '—'; ?>
-                        </div>
-                        <div class="stadiums-col-club-type">
-                            <span class="club-type-badge">
-                                <?php echo ! empty( $stadium->club_type ) ? esc_html( $stadium->club_type ) : 'Основной клуб'; ?>
-                            </span>
                         </div>
                         <div class="stadiums-col-action">
                             <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-stadium-edit&stadium_id=' . $stadium->id ) ); ?>" 

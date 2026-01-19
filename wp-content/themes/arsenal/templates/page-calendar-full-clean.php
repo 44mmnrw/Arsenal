@@ -24,17 +24,8 @@ if ( ! $arsenal_team_id ) {
 
 // Получить выбранные параметры из URL
 $selected_tournament = isset( $_GET['tournament'] ) ? sanitize_text_field( $_GET['tournament'] ) : '';
-$selected_season = isset( $_GET['season'] ) ? sanitize_text_field( $_GET['season'] ) : '';
-$selected_month = isset( $_GET['month'] ) ? absint( $_GET['month'] ) : intval( date( 'n' ) ); // 'n' = месяц без ведущего нуля (1-12)
-
-// Значения по умолчанию
-// Если сезон не выбран И турнир тоже не выбран - использовать последний доступный сезон
-// Если турнир выбран, то пользователь может выбрать "Все сезоны" (empty value)
-if ( empty( $selected_season ) && empty( $selected_tournament ) ) {
-	// Получить последний доступный сезон
-	$last_season = $wpdb->get_row( "SELECT season_id FROM wp_arsenal_seasons ORDER BY start_date DESC LIMIT 1" );
-	$selected_season = $last_season ? $last_season->season_id : '';
-}
+$selected_season = isset( $_GET['season'] ) ? sanitize_text_field( $_GET['season'] ) : $active_season_year;
+$selected_month = isset( $_GET['month'] ) ? absint( $_GET['month'] ) : 0; // 0 = все месяцы
 
 // Получить все турниры из таблицы
 $tournaments = $wpdb->get_results(
@@ -47,27 +38,20 @@ $tournaments = $wpdb->get_results(
 // Если выбран турнир - берём сезоны только для этого турнира
 // Если турнир не выбран - берём все сезоны
 if ( ! empty( $selected_tournament ) ) {
-	$seasons = $wpdb->get_results(
+	$seasons = $wpdb->get_col(
 		$wpdb->prepare(
-			"SELECT DISTINCT s.season_id, s.season_name
-			 FROM wp_arsenal_seasons s
-			 INNER JOIN wp_arsenal_matches m ON s.season_id = m.season_id
-			 WHERE m.tournament_id = %s
-			 ORDER BY s.start_date DESC",
+			"SELECT DISTINCT YEAR(match_date) FROM wp_arsenal_matches WHERE tournament_id = %s ORDER BY YEAR(match_date) DESC",
 			$selected_tournament
 		)
 	);
 } else {
-	$seasons = $wpdb->get_results(
-		"SELECT DISTINCT s.season_id, s.season_name
-		 FROM wp_arsenal_seasons s
-		 INNER JOIN wp_arsenal_matches m ON s.season_id = m.season_id
-		 ORDER BY s.start_date DESC"
+	$seasons = $wpdb->get_col(
+		"SELECT DISTINCT YEAR(match_date) FROM wp_arsenal_matches ORDER BY YEAR(match_date) DESC"
 	);
 }
 
 // Построить запрос
-$prepare_values = array( $arsenal_team_id, $arsenal_team_id );
+$prepare_values = array( $arsenal_team_id, $arsenal_team_id, $selected_season );
 $query = "
 	SELECT 
 		m.*,
@@ -85,13 +69,8 @@ $query = "
 	LEFT JOIN wp_arsenal_stadiums st ON m.stadium_id = st.stadium_id
 	LEFT JOIN wp_arsenal_tournaments t ON m.tournament_id = t.tournament_id
 	LEFT JOIN wp_arsenal_match_statuses ms ON m.status = ms.status_id
-	WHERE (m.home_team_id = %s OR m.away_team_id = %s)";
-
-// Добавить фильтр по сезону если выбран
-if ( ! empty( $selected_season ) ) {
-	$query .= " AND m.season_id = %s";
-	$prepare_values[] = $selected_season;
-}
+	WHERE (m.home_team_id = %s OR m.away_team_id = %s)
+		AND YEAR(m.match_date) = %d";
 
 // Добавить фильтр по турниру если выбран
 if ( ! empty( $selected_tournament ) ) {
@@ -134,22 +113,7 @@ $has_matches = ! empty( $matches );
 	<section class="calendar-section">
 		<div class="container">
 			<div class="calendar-header">
-				<h1 class="calendar-title">
-					<?php 
-					if ( ! empty( $selected_season ) ) {
-						// Получить название сезона
-						$season_name = $wpdb->get_var(
-							$wpdb->prepare(
-								"SELECT season_name FROM wp_arsenal_seasons WHERE season_id = %s",
-								$selected_season
-							)
-						);
-						echo esc_html( 'Календарь матчей ' . ( $season_name ? $season_name : 'сезона' ) );
-					} else {
-						echo 'Календарь матчей';
-					}
-					?>
-				</h1>
+				<h1 class="calendar-title">Календарь матчей сезона <?php echo esc_html( $selected_season ); ?></h1>
 
 				<?php if ( ! empty( $tournaments ) || ! empty( $seasons ) ) : ?>
 					<form method="get" class="calendar-filters">
@@ -172,10 +136,10 @@ $has_matches = ! empty( $matches );
 							<?php if ( ! empty( $seasons ) ) : ?>
 								<div class="filter-group">
 									<select name="season" class="filter-select" onchange="this.form.submit()">
-										<option value="">Все сезоны</option>
+										<option value="">Все годы</option>
 										<?php foreach ( $seasons as $season ) : ?>
-											<option value="<?php echo esc_attr( $season->season_id ); ?>" <?php selected( $selected_season, $season->season_id ); ?>>
-												<?php echo esc_html( $season->season_name ); ?>
+											<option value="<?php echo esc_attr( $season ); ?>" <?php selected( $selected_season, $season ); ?>>
+												<?php echo esc_html( $season ); ?>
 											</option>
 										<?php endforeach; ?>
 									</select>
@@ -193,13 +157,13 @@ $has_matches = ! empty( $matches );
 								);
 
 								$prev_month = $selected_month - 1;
-								if ( $prev_month < 1 ) {
+								if ( $prev_month < 0 ) {
 									$prev_month = 0;
 								}
 
 								$next_month = $selected_month + 1;
 								if ( $next_month > 12 ) {
-									$next_month = 0;
+									$next_month = 12;
 								}
 
 								$prev_url = add_query_arg( array(
@@ -215,12 +179,18 @@ $has_matches = ! empty( $matches );
 								) );
 								?>
 
-								<a href="<?php echo esc_url( $prev_url ); ?>" class="month-nav-btn prev" <?php echo $selected_month <= 1 ? 'disabled' : ''; ?>>←</a>
+								<a href="<?php echo esc_url( $prev_url ); ?>" class="month-nav-btn prev" <?php echo $selected_month <= 0 ? 'disabled' : ''; ?>>←</a>
 								
 								<span class="month-name">
-									<?php echo $selected_month > 0 ? esc_html( $months[ $selected_month ] ) : 'Все месяцы'; ?>
+									<?php 
+									if ( $selected_month > 0 && $selected_month <= 12 ) {
+										echo esc_html( $months[ $selected_month ] );
+									} else {
+										echo 'Все месяцы';
+									}
+									?>
 								</span>
-
+								
 								<a href="<?php echo esc_url( $next_url ); ?>" class="month-nav-btn next" <?php echo $selected_month >= 12 ? 'disabled' : ''; ?>>→</a>
 							</div>
 						</div>

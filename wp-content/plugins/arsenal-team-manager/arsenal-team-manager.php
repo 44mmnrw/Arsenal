@@ -597,6 +597,14 @@ class Arsenal_Team_Manager {
             ARSENAL_TM_VERSION . '.' . time() // Добавляем timestamp для сброса кэша
         );
         
+        // Стили страницы редактирования стадиона
+        wp_enqueue_style(
+            'arsenal-stadium-form',
+            ARSENAL_TM_PLUGIN_URL . 'admin/assets/css/stadium-form.css',
+            array( 'arsenal-admin' ),
+            ARSENAL_TM_VERSION . '.' . time()
+        );
+        
         wp_enqueue_script(
             'arsenal-admin',
             ARSENAL_TM_PLUGIN_URL . 'admin/assets/js/admin.js',

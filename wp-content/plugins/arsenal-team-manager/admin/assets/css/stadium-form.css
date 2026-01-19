@@ -1,0 +1,359 @@
+/* ========================================
+   STADIUMS FORM PAGE STYLES
+   ======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+.stadium-form-wrapper {
+    background: #fff;
+    padding: 30px;
+    margin-top: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.stadium-form-wrapper h1 {
+    margin-top: 0;
+    color: #333;
+    font-size: 28px;
+}
+
+.stadium-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+/* Все прямые дочерние элементы в 2 колонки по умолчанию */
+.stadium-form > .stadium-form-section {
+    grid-column: span 1;
+}
+
+/* Блоки на полную ширину (Описание и История) */
+.stadium-form > .stadium-form-full {
+    grid-column: 1 / -1;
+}
+
+/* Row контейнер для остальных блоков в 2 колонки */
+.stadium-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    grid-column: 1 / -1;
+    align-items: start;
+}
+
+/* Все кнопки удаления */
+.stadium-form-remove-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.stadium-form-remove-btn:hover {
+    background-color: #c82333;
+}
+
+.stadium-form-remove-btn:active {
+    background-color: #bd2130;
+}
+
+/* 2-колончная сетка для всех редакторов */
+.stadium-form-editors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    grid-column: 1 / -1;
+    margin-top: 40px;
+}
+
+.stadium-form-editors > .stadium-form-section {
+    width: 100%;
+    min-width: 0;
+}
+
+.stadium-form-section {
+    background: #f9f9f9;
+    padding: 25px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #0073aa;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-group label .required {
+    color: #dc3545;
+    margin-left: 2px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="file"]:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+.form-description {
+    font-size: 12px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.stadium-preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.stadium-form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.stadium-form-actions .button {
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.stadium-form-actions .button-primary {
+    background-color: #0073aa;
+    color: #fff;
+    border: 1px solid #0073aa;
+}
+
+.stadium-form-actions .button-primary:hover {
+    background-color: #005a87;
+    border-color: #005a87;
+}
+
+.stadium-form-actions .button {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.stadium-form-actions .button:hover {
+    background-color: #e8e8e8;
+    border-color: #999;
+}
+
+/* Контакты редактор */
+.contact-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.contact-item-row {
+    display: grid;
+    grid-template-columns: 1fr 150px 50px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-item-row input,
+.contact-item-row select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.contact-item-row input:focus,
+.contact-item-row select:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+/* В день матча редактор */
+.match-day-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.match-day-item-row {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.match-day-item-row input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.match-day-item-row input:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+/* Форма стадиона адаптивный дизайн */
+@media (max-width: 782px) {
+    .stadium-form {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .stadium-form-wrapper {
+        padding: 15px;
+    }
+
+    .stadium-form-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .stadium-form-editors {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .stadium-form-section {
+        flex-direction: column;
+    }
+
+    .stadium-form-actions {
+        flex-direction: column;
+    }
+
+    .stadium-form-actions .button {
+        width: 100%;
+    }
+}
+
+/* Стили для маршрутов "Как добраться" */
+.direction-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.direction-item-row {
+    display: grid;
+    grid-template-columns: 1fr 140px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.direction-item-row:first-child {
+    grid-template-columns: 1fr 140px;
+}
+
+.direction-item-row:nth-child(2) {
+    grid-template-columns: 1fr;
+}
+
+.direction-item-row:nth-child(3) {
+    grid-template-columns: 1fr 1fr;
+}
+
+.direction-item-row:last-child {
+    margin-bottom: 0;
+    grid-template-columns: 1fr 50px;
+}
+
+.direction-item-row input,
+.direction-item-row select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+.direction-item-row input:focus,
+.direction-item-row select:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.1);
+}
+
+

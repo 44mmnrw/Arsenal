@@ -44,14 +44,21 @@ function arsenal_get_icon( $icon = 'cup', $class = '' ) {
 		$icon = 'cup';
 	}
 	
+	// Удаляем префикс "icon-" если он есть в переданном значении
+	$icon = str_replace( 'icon-', '', $icon );
+	
 	// Формируем ID символа
 	$icon_id = 'icon-' . sanitize_html_class( $icon );
+	
+	// Полный путь до спрайта
+	$sprite_url = get_template_directory_uri() . '/assets/images/sprite.svg';
 	
 	$classes = 'icon ' . esc_attr( $class );
 	
 	return sprintf(
-		'<svg class="%s" aria-hidden="true"><use xlink:href="#%s"></use></svg>',
+		'<svg class="%s" aria-hidden="true"><use xlink:href="%s#%s"></use></svg>',
 		$classes,
+		esc_url( $sprite_url ),
 		esc_attr( $icon_id )
 	);
 }
@@ -1665,3 +1672,8 @@ require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-department-ma
  * Подключение метаокса для фильтра отдела на странице сотрудников
  */
 require_once ARSENAL_THEME_DIR . '/inc/staff-department-metabox.php';
+
+/**
+ * Подключение метаокса для выбора стадиона на странице "page-stadium"
+ */
+require_once ARSENAL_THEME_DIR . '/inc/stadium-selector-metabox.php';

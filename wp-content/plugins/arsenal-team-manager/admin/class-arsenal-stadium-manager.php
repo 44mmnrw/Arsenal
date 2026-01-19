@@ -79,15 +79,45 @@ class Arsenal_Stadium_Manager {
         
         $name = sanitize_text_field( $data['name'] );
         
+        // Функция для обработки JSON полей
+        $sanitize_json = function( $value ) {
+            if ( '' === $value || empty( $value ) ) {
+                return null;
+            }
+            
+            // Разэкранируем кавычки, которые добавил браузер при POST
+            $value = stripslashes( $value );
+            
+            // Проверяем валидность JSON
+            $decoded = json_decode( $value, true );
+            if ( json_last_error() !== JSON_ERROR_NONE ) {
+                error_log( 'Arsenal: Ошибка JSON декодирования - ' . json_last_error_msg() . ' | Значение: ' . substr( $value, 0, 100 ) );
+                return null;
+            }
+            
+            // Возвращаем чистый JSON без экранирования
+            return json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+        };
+        
         $insert_data = array(
             'stadium_id' => sanitize_text_field( $data['stadium_id'] ?? '' ),
             'name' => $name,
             'city' => sanitize_text_field( $data['city'] ?? '' ),
             'capacity' => isset( $data['capacity'] ) ? intval( $data['capacity'] ) : null,
+            'open_date' => sanitize_text_field( $data['open_date'] ?? '' ),
             'photo_url' => sanitize_text_field( $data['photo_url'] ?? '' ),
+            'description' => isset( $data['description'] ) ? wp_kses_post( $data['description'] ) : '',
+            'history' => $sanitize_json( $data['history'] ?? '' ),
+            'contacts' => $sanitize_json( $data['contacts'] ?? '' ),
+            'infrastructure' => $sanitize_json( $data['infrastructure'] ?? '' ),
+            'tech_features' => $sanitize_json( $data['tech_features'] ?? '' ),
+            'sectors' => $sanitize_json( $data['sectors'] ?? '' ),
+            'stat_cards' => $sanitize_json( $data['stat_cards'] ?? '' ),
+            'to_get' => $sanitize_json( $data['to_get'] ?? '' ),
+            'on_date' => $sanitize_json( $data['on_date'] ?? '' ),
         );
         
-        $format = array( '%s', '%s', '%s', '%d', '%s' );
+        $format = array( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
         
         $result = $wpdb->insert( "{$wpdb->prefix}arsenal_stadiums", $insert_data, $format );
         
@@ -109,6 +139,26 @@ class Arsenal_Stadium_Manager {
     public static function update_stadium( $stadium_id, $data ) {
         global $wpdb;
         
+        // Функция для обработки JSON полей
+        $sanitize_json = function( $value ) {
+            if ( '' === $value || empty( $value ) ) {
+                return null;
+            }
+            
+            // Разэкранируем кавычки, которые добавил браузер при POST
+            $value = stripslashes( $value );
+            
+            // Проверяем валидность JSON
+            $decoded = json_decode( $value, true );
+            if ( json_last_error() !== JSON_ERROR_NONE ) {
+                error_log( 'Arsenal: Ошибка JSON декодирования - ' . json_last_error_msg() . ' | Значение: ' . substr( $value, 0, 100 ) );
+                return null;
+            }
+            
+            // Возвращаем чистый JSON без экранирования
+            return json_encode( $decoded, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+        };
+        
         $update_data = array();
         $format = array();
         
@@ -127,8 +177,58 @@ class Arsenal_Stadium_Manager {
             $format[] = '%d';
         }
         
+        if ( isset( $data['open_date'] ) ) {
+            $update_data['open_date'] = sanitize_text_field( $data['open_date'] );
+            $format[] = '%s';
+        }
+        
         if ( isset( $data['photo_url'] ) ) {
             $update_data['photo_url'] = sanitize_text_field( $data['photo_url'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['description'] ) ) {
+            $update_data['description'] = wp_kses_post( $data['description'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['history'] ) ) {
+            $update_data['history'] = $sanitize_json( $data['history'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['contacts'] ) ) {
+            $update_data['contacts'] = $sanitize_json( $data['contacts'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['infrastructure'] ) ) {
+            $update_data['infrastructure'] = $sanitize_json( $data['infrastructure'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['tech_features'] ) ) {
+            $update_data['tech_features'] = $sanitize_json( $data['tech_features'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['sectors'] ) ) {
+            $update_data['sectors'] = $sanitize_json( $data['sectors'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['stat_cards'] ) ) {
+            $update_data['stat_cards'] = $sanitize_json( $data['stat_cards'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['to_get'] ) ) {
+            $update_data['to_get'] = $sanitize_json( $data['to_get'] );
+            $format[] = '%s';
+        }
+        
+        if ( isset( $data['on_date'] ) ) {
+            $update_data['on_date'] = $sanitize_json( $data['on_date'] );
             $format[] = '%s';
         }
         
