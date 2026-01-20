@@ -15,7 +15,7 @@
 	border-radius: 10px;
 	padding: 48px;
 	margin-bottom: 48px;
-	color: #fff;
+	color: #ffffff;
 }
 
 .page-academy-recruitment .hero-content {
@@ -27,7 +27,7 @@
 	font-weight: 700;
 	line-height: 1.2;
 	margin-bottom: 24px;
-	color: #fff;
+	color: #ffffff;
 }
 
 .page-academy-recruitment .hero-description {
@@ -56,7 +56,7 @@
 }
 
 .page-academy-recruitment .hero-actions .btn-primary {
-	background-color: #fff;
+	background-color: #ffffff;
 	color: #900;
 }
 
@@ -68,8 +68,8 @@
 
 .page-academy-recruitment .hero-actions .btn-secondary {
 	background-color: transparent;
-	color: #fff;
-	border: 2px solid #fff;
+	color: #ffffff;
+	border: 2px solid #ffffff;
 }
 
 .page-academy-recruitment .hero-actions .btn-secondary:hover {

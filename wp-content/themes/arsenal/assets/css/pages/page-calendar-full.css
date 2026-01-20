@@ -6,13 +6,13 @@
 /* Main Container */
 .calendar-page {
 	width: 100%;
-	background-color: #fff;
+	background-color: #ffffff;
 }
 
 /* Раздел календаря */
 .calendar-section {
 	padding: 48px 0;
-	background-color: #fff;
+	background-color: #ffffff;
 }
 
 .calendar-section .container {
@@ -63,7 +63,7 @@
 	padding: 10px 12px;
 	border: 1px solid #e0e0e0;
 	border-radius: 4px;
-	background-color: #fff;
+	background-color: #ffffff;
 	font-size: 14px;
 	color: #333;
 	cursor: pointer;
@@ -81,12 +81,12 @@
 }
 
 .filter-select:hover {
-	border-color: #c41e3a;
+	border-color: var(--red-700);
 }
 
 .filter-select:focus {
 	outline: none;
-	border-color: #c41e3a;
+	border-color: var(--red-700);
 	box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.1);
 }
 
@@ -102,38 +102,36 @@
 	padding: 10px 0;
 }
 
-.month-nav-btn {
-	display: inline-flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	width: 32px !important;
-	height: 32px !important;
-	border: 1px solid #e0e0e0 !important;
-	border-radius: 4px !important;
-	background-color: #fff !important;
-	color: #c41e3a !important;
-	text-decoration: none !important;
-	font-size: 16px !important;
-	font-weight: 700 !important;
-	cursor: pointer !important;
-	transition: all 0.2s !important;
-	padding: 0 !important;
-	margin: 0 !important;
-	min-height: auto !important;
-	line-height: 1 !important;
+.month-navigation a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	text-decoration: none;
 }
 
-.month-nav-btn:hover:not([disabled]) {
-	border-color: #c41e3a !important;
-	background-color: #f5f5f5 !important;
+.month-navigation a[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
 
-.month-nav-btn[disabled] {
-	opacity: 0.5 !important;
-	cursor: not-allowed !important;
-	color: #ccc !important;
-	border-color: #e0e0e0 !important;
-	pointer-events: none !important;
+.month-nav-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	stroke: #666 !important;
+	color: #666 !important;
+	transition: all 0.2s ease;
+}
+
+.month-navigation a:hover .month-nav-icon {
+	stroke: var(--red-700) !important;
+	color: var(--red-700) !important;
 }
 
 .month-name {
@@ -423,12 +421,15 @@
 	letter-spacing: 0.5px;
 }
 
-.calendar-link-text {
-	font-family: 'Inter', sans-serif;
+.calendar-link-icon {
+	width: 16px !important;
+	height: 16px !important;
+	stroke: #ff1a1a !important;
+	color: #ff1a1a !important;
+	display: inline;
+	vertical-align: middle;
+	margin-left: 4px;
 	font-size: 12px;
-	font-weight: 500;
-	color: #ff1a1a;
-	line-height: 16px;
 }
 
 /* ====== АДАПТИВНЫЙ ДИЗАЙН ====== */

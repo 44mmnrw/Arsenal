@@ -4,7 +4,7 @@
 
 .site-footer {
 	background-color: #212121;
-	color: #fff;
+	color: #ffffff;
 }
 
 /* Основная часть футера */
@@ -98,7 +98,7 @@
 .footer-brand-name {
 	font-size: 1.250rem;
 	font-weight: 400;
-	color: #fff;
+	color: #ffffff;
 }
 
 .footer-brand-city {
@@ -128,7 +128,7 @@
 .footer-nav-title {
 	font-size: 1.125rem;
 	font-weight: 600;
-	color: #fff;
+	color: #ffffff;
 }
 
 .footer-nav-links {
@@ -150,7 +150,7 @@
 }
 
 .footer-nav-links li a:hover {
-	color: #fff;
+	color: #ffffff;
 }
 
 /* Кнопка аккордеона (скрыта на десктопе) */
@@ -159,7 +159,7 @@
 	background: none;
 	border: none;
 	padding: 0;
-	color: #fff;
+	color: #ffffff;
 	font-size: 1.125rem;
 	font-weight: 600;
 	cursor: pointer;
@@ -193,7 +193,7 @@
 .footer-contacts-heading {
 	font-size: 1.125rem;
 	font-weight: 600;
-	color: #fff;
+	color: #ffffff;
 	pointer-events: none;
 	cursor: default;
 }
@@ -246,7 +246,7 @@
 }
 
 .footer-contacts-list li a:hover {
-	color: #fff;
+	color: #ffffff;
 }
 
 /* Социальные сети */
@@ -345,7 +345,7 @@
 }
 
 .footer-link:hover {
-	color: #fff;
+	color: #ffffff;
 }
 
 .footer-link--accent {
