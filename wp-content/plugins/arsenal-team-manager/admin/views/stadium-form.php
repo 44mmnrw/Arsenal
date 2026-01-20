@@ -264,18 +264,20 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
 
                     $('#add-match-day-item-btn').on('click', function(e) {
                         e.preventDefault();
-                        const textarea = $('#on_date');
-                        let items = [];
-                        if (textarea.val().trim()) {
-                            try {
-                                items = JSON.parse(textarea.val());
-                                if (!Array.isArray(items)) items = [];
-                            } catch(e) {}
-                        }
-                        
-                        items.push({ text: '' });
-                        textarea.val(JSON.stringify(items, null, 2));
-                        renderMatchDayItems();
+                        const list = $('#match-day-list');
+                        const html = $('<div class="match-day-item"></div>')
+                            .html(`
+                                <div class="match-day-item-row">
+                                    <input type="text" class="match-day-text" placeholder="Например: Ворота открываются за 1 час" value="">
+                                    <button type="button" class="stadium-form-remove-btn">✕</button>
+                                </div>
+                            `)
+                            .on('change', 'input', updateJSON)
+                            .on('click', '.stadium-form-remove-btn', function() {
+                                $(this).closest('.match-day-item').remove();
+                                updateJSON();
+                            });
+                        list.append(html);
                         return false;
                     });
 
