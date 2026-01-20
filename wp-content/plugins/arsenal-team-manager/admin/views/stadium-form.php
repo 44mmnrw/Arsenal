@@ -1038,17 +1038,43 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                         // Добавить маршрут
                         $('#add-direction-btn').on('click', function(e) {
                             e.preventDefault();
-                            const textarea = $('#to_get');
-                            let items = [];
-                            try {
-                                const val = textarea.val().trim();
-                                if (val) {
-                                    items = JSON.parse(val);
-                                }
-                            } catch (e) {}
-                            items.push({ transport: '', route: '', station_label: '', station: '', time: '', icon: 'icon-car' });
-                            textarea.val(JSON.stringify(items, null, 2));
-                            renderDirections();
+                            const container = $('#directions-container');
+                            const iconOptions = STADIUM_FORM_ICONS.map(ic => 
+                                `<option value="${ic.id}">${ic.name}</option>`
+                            ).join('');
+
+                            const html = `
+                                <div class="direction-item">
+                                    <div class="direction-item-row">
+                                        <input type="text" class="direction-transport" placeholder="Вид транспорта (Автобус, Метро)" value="" />
+                                        <select class="direction-icon">
+                                            <option value="icon-car" selected>🚗 Машина/Транспорт</option>
+                                            ${iconOptions}
+                                        </select>
+                                    </div>
+                                    <div class="direction-item-row">
+                                        <input type="text" class="direction-route" placeholder="Маршрут (№5, №12)" value="" />
+                                    </div>
+                                    <div class="direction-item-row">
+                                        <input type="text" class="direction-station-label" placeholder="Заголовок (например: Станция/Остановка)" value="" />
+                                        <input type="text" class="direction-station" placeholder="Название (например: ст. Центральная)" value="" />
+                                    </div>
+                                    <div class="direction-item-row">
+                                        <input type="text" class="direction-time" placeholder="Время (15 минут)" value="" />
+                                        <button type="button" class="stadium-form-remove-btn">✕</button>
+                                    </div>
+                                </div>
+                            `;
+                            container.append(html);
+                            
+                            // Вешаем события на новый элемент
+                            const $newItem = container.find('.direction-item').last();
+                            $newItem.on('change', 'input, select', updateJSON);
+                            $newItem.on('click', '.stadium-form-remove-btn', function(e) {
+                                e.preventDefault();
+                                $(this).closest('.direction-item').remove();
+                                updateJSON();
+                            });
                         });
 
                         // Удалить маршрут
