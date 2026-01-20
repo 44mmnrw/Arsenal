@@ -59,22 +59,23 @@ if ( $stadium_id ) {
 			<div class="container">
 				<h1 class="stadium-hero__title"><?php echo esc_html( get_the_title() ); ?></h1>
 				<div class="stadium-hero__meta">
+					<?php if ( $stadium && ! empty( $stadium->city ) ) : ?>
 					<div class="stadium-hero__meta-item">
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-place"></use>
 						</svg>
-						<span><?php echo $stadium && ! empty( $stadium->city ) ? esc_html( $stadium->city . ', Беларусь' ) : esc_html_e( 'Борисов, Беларусь', 'arsenal' ); ?></span>
+						<span><?php echo esc_html( $stadium->city . ', Беларусь' ); ?></span>
 					</div>
+					<?php endif; ?>
 					<div class="stadium-hero__meta-item">
 					<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-people"></use>
+						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-people"></use>
 						</svg>
 						<span>
 							<?php 
 							if ( $stadium && ! is_null( $stadium->capacity ) ) {
 								echo esc_html_e( 'Вместимость:', 'arsenal' ) . ' ' . number_format( $stadium->capacity );
-							} else {
-								esc_html_e( 'Вместимость: 5 402', 'arsenal' );
+
 							}
 							?>
 						</span>
@@ -82,16 +83,9 @@ if ( $stadium_id ) {
 					<?php if ( $stadium ) : ?>
 						<div class="stadium-hero__meta-item">
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-date"></use>
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-date"></use>
 							</svg>
-						<span><?php printf( esc_html__( 'Открыт: %s г.', 'arsenal' ), ! empty( $stadium->open_date ) ? esc_html( $stadium->open_date ) : '1959' ); ?></span>
-						</div>
-					<?php else : ?>
-						<div class="stadium-hero__meta-item">
-						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-date"></use>
-							</svg>
-							<span><?php esc_html_e( 'Открыт: 1959 г.', 'arsenal' ); ?></span>
+						<span><?php printf( esc_html__( 'Открыт: %s г.', 'arsenal' ), ! empty( $stadium->open_date ) ? esc_html( $stadium->open_date ) : '' ); ?></span>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -110,8 +104,8 @@ if ( $stadium_id ) {
 						$stat_cards = json_decode( $stadium->stat_cards, true );
 						if ( is_array( $stat_cards ) ) {
 							foreach ( $stat_cards as $card ) {
-								if ( isset( $card['title'] ) && isset( $card['value'] ) ) {
-									$icon_id = isset( $card['icon'] ) ? sanitize_text_field( $card['icon'] ) : 'icon-calendar';
+								if ( isset( $card['title'] ) && isset( $card['value'] ) && isset( $card['icon'] ) ) {
+									$icon_id = sanitize_text_field( $card['icon'] );
 									?>
 									<div class="stat-card">
 										<div class="stat-card__icon">
@@ -126,48 +120,6 @@ if ( $stadium_id ) {
 								}
 							}
 						}
-					} else {
-						?>
-						<div class="stat-card">
-							<div class="stat-card__icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-calendar"></use>
-								</svg>
-							</div>
-							<div class="stat-card__number">5 402</div>
-							<div class="stat-card__label"><?php esc_html_e( 'Вместимость', 'arsenal' ); ?></div>
-						</div>
-
-						<div class="stat-card">
-							<div class="stat-card__icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-calendar"></use>
-								</svg>
-							</div>
-							<div class="stat-card__number">1959</div>
-							<div class="stat-card__label"><?php esc_html_e( 'Год постройки', 'arsenal' ); ?></div>
-						</div>
-
-						<div class="stat-card">
-							<div class="stat-card__icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-event"></use>
-								</svg>
-							</div>
-							<div class="stat-card__number">2013</div>
-							<div class="stat-card__label"><?php esc_html_e( 'Реконструкция', 'arsenal' ); ?></div>
-						</div>
-
-						<div class="stat-card">
-							<div class="stat-card__icon">
-								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
-								</svg>
-							</div>
-							<div class="stat-card__number">105x68</div>
-							<div class="stat-card__label"><?php esc_html_e( 'Размеры поля', 'arsenal' ); ?></div>
-						</div>
-						<?php
 					}
 					?>
 				</div>
@@ -179,14 +131,6 @@ if ( $stadium_id ) {
 						<?php
 						if ( $stadium && ! empty( $stadium->description ) ) {
 							echo wp_kses_post( nl2br( $stadium->description ) );
-						} else {
-							?>
-							<p><?php esc_html_e( 'Стадион был построен в 1959 году и первоначально имел всего одну трибуну вместимостью 2600 мест. На нём играли городские команды, в их числе «Фомальгаут», в 1995 году выступавший во Второй лиге (втором по силе дивизионе первенства Беларуси).', 'arsenal' ); ?></p>
-							<p><?php esc_html_e( 'Масштабная реконструкция стадиона была проведена в 1998—2001 годах, после того, как ФК БАТЭ получил право участвовать в Высшей лиге чемпионата страны. Вместимость единственной трибуны была увеличена до 3 100 зрителей, полностью перестелили газон. Тогда же было заложено тренировочное поле, установлена компьютерная система полива «Rain-Bird», реконструироованы подъездные пути, инженерные сети, оборудованы пресс-центр, ложа почетных гостей и комментаторские кабины.', 'arsenal' ); ?></p>
-							<p><?php esc_html_e( 'В 2002 году была построена восточная трибуна, вместимость стадиона увеличилась до 5402 мест. На обеих трибунах были установлены индивидуальные пластиковые кресла. Был уложен новый, качественный газон, поле оборудовали системой полива. Через два года установили большое электронное информационное табло, ещё через год — 4 мачты искусственного освещения. В 2008 году над восточной трибуной появился козырёк из стали, алюминия и поликарбоната. ', 'arsenal' ); ?></p>
-							<p><?php esc_html_e( 'В июне 1998 года борисовский городской стадион был принят европейской комиссией УЕФА и получил право на проведение международных матчей. ФК БАТЭ проводил на стадионе матчи квалификационных раундов еврокубков. Также на стадионе проводит свои домашние матчи молодёжная сборная Беларуси по футболу. ', 'arsenal' ); ?></p>
-							<p><?php esc_html_e( 'В начале мая 2013 года на стадионе была смонтирована система подогрева газона.', 'arsenal' ); ?></p>
-							<?php
 						}
 						?>
 					</div>
@@ -209,25 +153,6 @@ if ( $stadium_id ) {
 									<?php
 								}
 							}
-						} else {
-							?>
-							<div class="spec-item">
-								<div class="spec-item__label"><?php esc_html_e( 'Покрытие', 'arsenal' ); ?></div>
-								<div class="spec-item__value"><?php esc_html_e( 'Натуральный газон', 'arsenal' ); ?></div>
-							</div>
-							<div class="spec-item">
-								<div class="spec-item__label"><?php esc_html_e( 'Освещение', 'arsenal' ); ?></div>
-								<div class="spec-item__value"><?php esc_html_e( 'Есть (1200 люкс)', 'arsenal' ); ?></div>
-							</div>
-							<div class="spec-item">
-								<div class="spec-item__label"><?php esc_html_e( 'Размеры поля', 'arsenal' ); ?></div>
-								<div class="spec-item__value">105 x 68 м</div>
-							</div>
-							<div class="spec-item">
-								<div class="spec-item__label"><?php esc_html_e( 'VIP-места', 'arsenal' ); ?></div>
-								<div class="spec-item__value">50 <?php esc_html_e( 'мест', 'arsenal' ); ?></div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -263,37 +188,6 @@ if ( $stadium_id ) {
 									}
 								}
 							}
-						} else {
-							// Fallback: хардкод для примера
-							?>
-							<div class="sector-item">
-								<div class="sector-item__info">
-									<div class="sector-item__name"><?php esc_html_e( 'Главная трибуна', 'arsenal' ); ?></div>
-								</div>
-								<div class="sector-item__count">1 800 <?php esc_html_e( 'мест', 'arsenal' ); ?></div>
-							</div>
-
-							<div class="sector-item">
-								<div class="sector-item__info">
-									<div class="sector-item__name"><?php esc_html_e( 'Восточная трибуна', 'arsenal' ); ?></div>
-								</div>
-								<div class="sector-item__count">1 200 <?php esc_html_e( 'мест', 'arsenal' ); ?></div>
-							</div>
-
-							<div class="sector-item">
-								<div class="sector-item__info">
-									<div class="sector-item__name"><?php esc_html_e( 'Западная трибуна', 'arsenal' ); ?></div>
-								</div>
-								<div class="sector-item__count">800 <?php esc_html_e( 'мест', 'arsenal' ); ?></div>
-							</div>
-
-							<div class="sector-item">
-								<div class="sector-item__info">
-									<div class="sector-item__name"><?php esc_html_e( 'Южная трибуна (гостевая)', 'arsenal' ); ?></div>
-								</div>
-								<div class="sector-item__count">400 <?php esc_html_e( 'мест', 'arsenal' ); ?></div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -317,8 +211,8 @@ if ( $stadium_id ) {
 								if ( $year || $title ) {
 									?>
 									<div class="timeline-item<?php echo esc_attr( $last_class ); ?>">
-										<div class="timeline-item__dot">
-											<svg class="timeline-item__icon" viewBox="0 0 24 24" aria-hidden="true">
+									<div class="timeline-item__icon">
+										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
 												<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $icon_id ); ?>"></use>
 											</svg>
 										</div>
@@ -334,57 +228,6 @@ if ( $stadium_id ) {
 									<?php
 								}
 							}
-						} else {
-							// Fallback на дефолтные события
-							?>
-							<div class="timeline-item">
-								<div class="timeline-item__dot">
-									<svg class="timeline-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-calendar"></use>
-									</svg>
-								</div>
-								<div class="timeline-item__content">
-									<div class="timeline-item__year">1958</div>
-									<div class="timeline-item__title"><?php esc_html_e( 'Открытие стадиона', 'arsenal' ); ?></div>
-								</div>
-							</div>
-
-							<div class="timeline-item">
-								<div class="timeline-item__dot">
-									<svg class="timeline-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-event"></use>
-									</svg>
-								</div>
-								<div class="timeline-item__content">
-									<div class="timeline-item__year">1995</div>
-									<div class="timeline-item__title"><?php esc_html_e( 'Первая реконструкция', 'arsenal' ); ?></div>
-								</div>
-							</div>
-
-							<div class="timeline-item">
-								<div class="timeline-item__dot">
-									<svg class="timeline-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-stadium"></use>
-									</svg>
-								</div>
-								<div class="timeline-item__content">
-									<div class="timeline-item__year">2015</div>
-									<div class="timeline-item__title"><?php esc_html_e( 'Масштабная реконструкция', 'arsenal' ); ?></div>
-								</div>
-							</div>
-
-							<div class="timeline-item timeline-item--last">
-								<div class="timeline-item__dot">
-									<svg class="timeline-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-report"></use>
-									</svg>
-								</div>
-								<div class="timeline-item__content">
-									<div class="timeline-item__year">2020</div>
-									<div class="timeline-item__title"><?php esc_html_e( 'Модернизация освещения', 'arsenal' ); ?></div>
-								</div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -393,8 +236,8 @@ if ( $stadium_id ) {
 				<!-- How to Get There -->
 				<section class="stadium-section">
 					<h2 class="stadium-section__heading-with-icon">
-						<svg class="stadium-section__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-							<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+						<svg class="stadium-section__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-map"></use>
 						</svg>
 						<?php esc_html_e( 'Как добраться', 'arsenal' ); ?>
 					</h2>
@@ -408,9 +251,11 @@ if ( $stadium_id ) {
 									?>
 									<div class="direction-card">
 										<div class="direction-card__header">
-											<svg class="direction-card__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-												<use xlink:href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/sprite.svg#' . $icon_id ); ?>"></use>
-											</svg>
+											<div class="direction-card__icon">
+												<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+													<use xlink:href="<?php echo get_template_directory_uri() . '/assets/images/sprite.svg?v=1.1#' . esc_attr( $icon_id ); ?>"></use>
+												</svg>
+											</div>
 											<h3><?php echo ! empty( $direction['transport'] ) ? esc_html( $direction['transport'] ) : '—'; ?></h3>
 										</div>
 										<div class="direction-card__info">
@@ -439,58 +284,6 @@ if ( $stadium_id ) {
 									<?php
 								}
 							}
-						} else {
-							?>
-							<div class="direction-card">
-								<div class="direction-card__header">
-									<svg class="direction-card__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-										<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-									</svg>
-									<h3><?php esc_html_e( 'Автобус', 'arsenal' ); ?></h3>
-								</div>
-								<div class="direction-card__info">
-									<div class="direction-card__item">
-										<span class="direction-card__label"><?php esc_html_e( 'Маршрут:', 'arsenal' ); ?></span>
-										<span class="direction-card__value">№5, №12, №18</span>
-									</div>
-									<div class="direction-card__item">
-										<span class="direction-card__label"><?php esc_html_e( 'Остановка:', 'arsenal' ); ?></span>
-										<span class="direction-card__value"><?php esc_html_e( 'Остановка "Стадион Строитель"', 'arsenal' ); ?></span>
-									</div>
-									<div class="direction-card__highlight">
-										<svg class="direction-card__highlight-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-											<path d="M8 1a7 7 0 100 14A7 7 0 008 1z"/>
-										</svg>
-										<span><?php esc_html_e( '15 минут от центра города', 'arsenal' ); ?></span>
-									</div>
-								</div>
-							</div>
-
-							<div class="direction-card">
-								<div class="direction-card__header">
-									<svg class="direction-card__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-										<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-									</svg>
-									<h3><?php esc_html_e( 'Автомобиль', 'arsenal' ); ?></h3>
-								</div>
-								<div class="direction-card__info">
-									<div class="direction-card__item">
-										<span class="direction-card__label"><?php esc_html_e( 'Маршрут:', 'arsenal' ); ?></span>
-										<span class="direction-card__value">М1 (E30) → Дзержинск → ул. Спортивная</span>
-									</div>
-									<div class="direction-card__item">
-										<span class="direction-card__label"><?php esc_html_e( 'Парковка:', 'arsenal' ); ?></span>
-										<span class="direction-card__value"><?php esc_html_e( 'Бесплатная парковка на территории', 'arsenal' ); ?></span>
-									</div>
-									<div class="direction-card__highlight">
-										<svg class="direction-card__highlight-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-											<path d="M8 1a7 7 0 100 14A7 7 0 008 1z"/>
-										</svg>
-										<span><?php esc_html_e( '30 минут от Минска', 'arsenal' ); ?></span>
-									</div>
-								</div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -514,7 +307,7 @@ if ( $stadium_id ) {
 										?>
 										<div class="contact-item">
 											<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-												<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $icon ); ?>"></use>
+												<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#<?php echo esc_attr( $icon ); ?>"></use>
 											</svg>
 											<div class="contact-item__text"><?php echo esc_html( $value ); ?></div>
 										</div>
@@ -525,21 +318,12 @@ if ( $stadium_id ) {
 								?>
 								<div class="contact-item">
 									<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-phone"></use>
+										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-phone"></use>
 									</svg>
 									<div class="contact-item__text"><?php esc_html_e( 'Контакты не указаны', 'arsenal' ); ?></div>
 								</div>
 								<?php
 							}
-						} else {
-							?>
-							<div class="contact-item">
-								<svg class="contact-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
-								</svg>
-								<div class="contact-item__text"><?php esc_html_e( 'ул. Спортивная, 1, Дзержинск, Минская область, 222720', 'arsenal' ); ?></div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -577,44 +361,6 @@ if ( $stadium_id ) {
 									<?php
 								}
 							}
-						} else {
-							?>
-							<div class="infrastructure-item">
-								<div class="infrastructure-item__icon">
-									<svg viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
-									</svg>
-								</div>
-								<div class="infrastructure-item__text">
-									<div class="infrastructure-item__name"><?php esc_html_e( 'Парковка', 'arsenal' ); ?></div>
-									<div class="infrastructure-item__desc">150 <?php esc_html_e( 'мест для автомобилей', 'arsenal' ); ?></div>
-								</div>
-							</div>
-
-							<div class="infrastructure-item">
-								<div class="infrastructure-item__icon">
-									<svg viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-event"></use>
-									</svg>
-								</div>
-								<div class="infrastructure-item__text">
-									<div class="infrastructure-item__name"><?php esc_html_e( 'VIP-ложа', 'arsenal' ); ?></div>
-									<div class="infrastructure-item__desc"><?php esc_html_e( 'На 50 персон с отдельным входом', 'arsenal' ); ?></div>
-								</div>
-							</div>
-
-							<div class="infrastructure-item">
-								<div class="infrastructure-item__icon">
-									<svg viewBox="0 0 24 24" aria-hidden="true">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-phone"></use>
-									</svg>
-								</div>
-								<div class="infrastructure-item__text">
-									<div class="infrastructure-item__name"><?php esc_html_e( 'Медцентр', 'arsenal' ); ?></div>
-									<div class="infrastructure-item__desc"><?php esc_html_e( 'Медицинское обслуживание и первая помощь', 'arsenal' ); ?></div>
-								</div>
-							</div>
-							<?php
 						}
 						?>
 					</div>
@@ -623,8 +369,8 @@ if ( $stadium_id ) {
 				<!-- Match Day -->
 				<section class="stadium-card stadium-card--match-day">
 					<h3 class="stadium-card__title-with-icon">
-						<svg class="stadium-card__title-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path d="M5 3a2 2 0 00-2 2v6h4V5a2 2 0 00-2-2zm0 0h.01M9 3a2 2 0 00-2 2v6h4V5a2 2 0 00-2-2z"/>
+						<svg class="stadium-card__title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-clock"></use>
 						</svg>
 						<?php esc_html_e( 'В день матча', 'arsenal' ); ?>
 					</h3>
@@ -641,21 +387,7 @@ if ( $stadium_id ) {
 									<?php
 								}
 							}
-						} else {
-							?>
-							<li><?php esc_html_e( 'Ворота открываются за 1 час до начала', 'arsenal' ); ?></li>
-							<li><?php esc_html_e( 'Запрещены пиротехнические средства', 'arsenal' ); ?></li>
-							<li><?php esc_html_e( 'Буфеты работают с момента открытия', 'arsenal' ); ?></li>
-							<li><?php esc_html_e( 'Парковка бесплатная для всех зрителей', 'arsenal' ); ?></li>
-							<?php
 						}
-					} else {
-						?>
-						<li><?php esc_html_e( 'Ворота открываются за 1 час до начала', 'arsenal' ); ?></li>
-						<li><?php esc_html_e( 'Запрещены пиротехнические средства', 'arsenal' ); ?></li>
-						<li><?php esc_html_e( 'Буфеты работают с момента открытия', 'arsenal' ); ?></li>
-						<li><?php esc_html_e( 'Парковка бесплатная для всех зрителей', 'arsenal' ); ?></li>
-						<?php
 					}
 					?>
 					</ul>

@@ -38,36 +38,11 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
             <!-- Единый список иконок для всех секций -->
             <script>
             const STADIUM_FORM_ICONS = [
-                // Основные иконки
-                { id: 'icon-calendar', name: '📅 Календарь' },
-                { id: 'icon-date', name: '📆 Дата' },
-                { id: 'icon-clock', name: '🕐 Часы/Время' },
-                { id: 'icon-people', name: '👥 Люди/Фанаты' },
-                { id: 'icon-place', name: '📍 Место/Локация' },
-                { id: 'icon-phone', name: '☎️ Телефон' },
-                { id: 'icon-email', name: '📧 Email' },
-                
-                // Документы и события
-                { id: 'icon-report', name: '📄 Отчет/Документ' },
-                { id: 'icon-event', name: '⚡ События/Молния' },
-                { id: 'icon-checkbox', name: '✓ Чекбокс/Галочка' },
-                { id: 'icon-chart', name: '📊 График/Статистика' },
-                
-                // Спорт и активность
-                { id: 'icon-dumbbell', name: '🏋️ Гантель/Тренажер' },
-                { id: 'icon-stadium', name: '🏟️ Стадион' },
-                { id: 'icon-cup', name: '🏆 Кубок/Трофей' },
-                { id: 'icon-medal', name: '🎖️ Медаль' },
-                
-                // Транспорт и передвижение
-                { id: 'icon-car', name: '🚗 Машина/Транспорт' },
-                { id: 'icon-map', name: '🗺️ Карта' },
-                
                 // Стрелки
                 { id: 'icon-arrow-right', name: '➡️ Стрелка вправо' },
-                { id: 'icon-arrow-left', name: '⬅️ Стрелка влево' },
-                { id: 'icon-arrow-up', name: '⬆️ Стрелка вверх' },
                 { id: 'icon-arrow-down', name: '⬇️ Стрелка вниз' },
+                { id: 'icon-arrow-up', name: '⬆️ Стрелка вверх' },
+                { id: 'icon-arrow-left', name: '⬅️ Стрелка влево' },
                 { id: 'icon-arrow-banner', name: '🔀 Стрелка баннера' },
                 { id: 'icon-chevron-left', name: '◀ Шеврон влево' },
                 { id: 'icon-chevron-right', name: '▶ Шеврон вправо' },
@@ -77,9 +52,35 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                 { id: 'icon-instagram', name: '📱 Instagram' },
                 { id: 'icon-youtube', name: '📹 YouTube' },
                 { id: 'icon-telegram', name: '✈️ Telegram' },
-                { id: 'icon-vk', name: '🔗 VK' },
+                { id: 'icon-vk', name: '🔗 VKontakte' },
                 
-                // Персонал
+                // Контакты
+                { id: 'icon-phone', name: '☎️ Телефон' },
+                { id: 'icon-email', name: '📧 Email' },
+                { id: 'icon-clock', name: '🕐 Часы/Время' },
+                { id: 'icon-place', name: '📍 Место/Локация' },
+                { id: 'icon-people', name: '👥 Люди/Фанаты' },
+                { id: 'icon-team-placeholder', name: '⬜ Заполнитель команды' },
+                
+                // Документы
+                { id: 'icon-report', name: '📄 Отчет/Документ' },
+                { id: 'icon-event', name: '⚡ События/Молния' },
+                { id: 'icon-calendar', name: '📅 Календарь' },
+                { id: 'icon-date', name: '📆 Дата' },
+                { id: 'icon-map', name: '🗺️ Карта' },
+                { id: 'icon-checkbox', name: '✓ Чекбокс/Галочка' },
+                
+                // Спорт
+                { id: 'icon-dumbbell', name: '🏋️ Гантель/Тренажер' },
+                { id: 'icon-stadium', name: '🏟️ Стадион' },
+                { id: 'icon-cup', name: '🏆 Кубок/Трофей' },
+                { id: 'icon-medal', name: '🎖️ Медаль' },
+                
+                // Транспорт
+                { id: 'icon-car', name: '🚗 Машина/Транспорт' },
+                { id: 'icon-bus', name: '🚌 Автобус' },
+                
+                // Люди и персонал
                 { id: 'icon-staff-stat', name: '📋 Статистика персонала' },
                 { id: 'icon-bio', name: '👤 Биография' },
                 { id: 'icon-career', name: '💼 Карьера' },
@@ -89,7 +90,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                 { id: 'icon-ruler', name: '📏 Линейка/Размер' },
                 { id: 'icon-medicine', name: '⛑️ Медицина/Крест' },
                 { id: 'icon-fact', name: '👁️ Интересный факт' },
-                { id: 'icon-team-placeholder', name: '⬜ Заполнитель команды' },
+                { id: 'icon-chart', name: '📊 График/Статистика' },
             ];
             </script>
 

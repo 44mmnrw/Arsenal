@@ -166,8 +166,8 @@ svg use {
 }
 
 .stat-card__icon svg {
-	width: 1.5rem;
-	height: 1.5rem;
+	width: 50%;
+	height: 50%;
 }
 
 .stat-card__number {
@@ -212,7 +212,8 @@ svg use {
 .stadium-section__icon {
 	width: 1.625rem;
 	height: 1.625rem;
-	flex-shrink: 0;
+	flex-shrink: 0; 
+	color: var(--red-700);
 }
 
 /* Text Content */
@@ -327,7 +328,7 @@ svg use {
 	display: none;
 }
 
-.timeline-item__dot {
+.timeline-item__icon {
 	width: 3rem;
 	height: 3rem;
 	background: #ff1a1a;
@@ -336,27 +337,15 @@ svg use {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	color: white;
 	box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
 	position: relative;
 	z-index: 1;
 }
 
-.timeline-item__dot::before {
-	content: '';
-	width: 20px;
-	height: 20px;
-	background: white;
-	border-radius: 50%;
-}
-
-.timeline-item__icon {
-	width: 24px;
-	height: 24px;
-	fill: none;
-	stroke: white;
-	stroke-width: 2;
-	position: absolute;
-	z-index: 2;
+.timeline-item__icon svg {
+	width: 1.5rem;
+	height: 1.5rem;
 }
 
 .timeline-item__content {
@@ -418,8 +407,8 @@ svg use {
 }
 
 .direction-card__icon svg {
-	width: 1.5rem;
-	height: 1.5rem;
+	width: 50%;
+	height: 50%;
 }
 
 .direction-card__header h3 {
@@ -585,8 +574,8 @@ svg use {
 }
 
 .infrastructure-item__icon {
-	width: 1em;
-	height: 1em;
+	width: 3em;
+	height: 3em;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -596,8 +585,8 @@ svg use {
 }
 
 .infrastructure-item__icon svg {
-	width: 100%;
-	height: 100%;
+	width: 50%;
+	height: 50%;
 	color: currentColor;
 }
 
