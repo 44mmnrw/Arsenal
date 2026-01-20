@@ -203,12 +203,10 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                     <div id="match-day-list"></div>
                 </div>
 
-                <div class="form-group" style="margin-top: 20px;">
-                    <label for="on_date">Данные (скрытое поле JSON)</label>
+                <div class="form-group" style="margin-top: 20px;">                    
                     <textarea name="on_date" id="on_date" rows="5" class="json-field" style="display: none;"><?php 
                         echo ! empty( $stadium ) && ! empty( $stadium->on_date ) ? esc_textarea( $stadium->on_date ) : ''; 
-                    ?></textarea>
-                    <p class="form-description">Редактируйте информацию используя форму выше</p>
+                    ?></textarea>                    
                 </div>
 
                 <script>
@@ -338,7 +336,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                 const html = $('<div class="contact-item"></div>')
                                     .html(`
                                         <div class="contact-item-row">
-                                            <input type="text" class="contact-value" placeholder="Значение (например: +375 29 XXX-XX-XX)" value="${escapeHtml(String(value))}">
+                                            <input type="text" class="contact-value" placeholder="Значение (например: +375 29 XXX-XX-XX)" value="${escapeHtml(typeof value === 'object' ? '' : String(value))}">
                                             <select class="contact-icon">
                                                 ${iconOptions}
                                             </select>
@@ -559,7 +557,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                 const html = $('<div class="history-item"></div>')
                                     .html(`
                                         <div class="history-item-row">
-                                            <input type="text" class="history-year" placeholder="Год (например: 2000)" value="${escapeHtml(String(year))}">
+                                            <input type="text" class="history-year" placeholder="Год (например: 2000)" value="${escapeHtml(typeof year === 'object' ? '' : String(year))}">
                                             <input type="text" class="history-event" placeholder="Событие (например: Открытие стадиона)" value="${escapeHtml(event)}">
                                             <select class="history-icon">
                                                 ${iconOptions}
@@ -616,7 +614,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                             }
                             
                             history.push({
-                                year: new Date().getFullYear(),
+                                year: '',
                                 event: '',
                                 icon: 'icon-calendar'
                             });
@@ -673,12 +671,12 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                     .html(`
                                         <div class="tech-feature-item-row">
                                             <input type="text" class="tech-name" placeholder="Название (например: Освещение)" value="${escapeHtml(key)}">
-                                            <input type="text" class="tech-value" placeholder="Значение (например: 1200 люкс)" value="${escapeHtml(String(value))}">
+                                            <input type="text" class="tech-value" placeholder="Значение (например: 1200 люкс)" value="${escapeHtml(typeof value === 'object' ? '' : String(value))}">
                                             <button type="button" class="stadium-form-remove-btn" data-idx="${idx}">✕</button>
                                         </div>
                                     `)
                                     .on('change', 'input', updateJSON)
-                                    .on('click', '.tech-feature-remove', function() {
+                                    .on('click', '.stadium-form-remove-btn', function() {
                                         $(this).closest('.tech-feature-item').remove();
                                         updateJSON();
                                     });
@@ -691,6 +689,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                             $('#tech-features-list .tech-feature-item').each(function() {
                                 const name = $(this).find('.tech-name').val();
                                 const value = $(this).find('.tech-value').val();
+                                // Сохраняем только если имя заполнено
                                 if (name) {
                                     features[name] = value;
                                 }
@@ -714,9 +713,22 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                     if (typeof features !== 'object' || Array.isArray(features)) features = {};
                                 } catch(e) {}
                             }
-                            features['Новая'] = '';
-                            textarea.val(JSON.stringify(features, null, 2));
-                            renderTechFeatures();
+                            // Добавляем новую пустую характеристику
+                            const list = $('#tech-features-list');
+                            const html = $('<div class="tech-feature-item"></div>')
+                                .html(`
+                                    <div class="tech-feature-item-row">
+                                        <input type="text" class="tech-name" placeholder="Название (например: Освещение)" value="">
+                                        <input type="text" class="tech-value" placeholder="Значение (например: 1200 люкс)" value="">
+                                        <button type="button" class="stadium-form-remove-btn">✕</button>
+                                    </div>
+                                `)
+                                .on('change', 'input', updateJSON)
+                                .on('click', '.stadium-form-remove-btn', function() {
+                                    $(this).closest('.tech-feature-item').remove();
+                                    updateJSON();
+                                });
+                            list.append(html);
                             return false;
                         });
 
@@ -738,12 +750,10 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                         <div id="sectors-list"></div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 20px;">
-                        <label for="sectors">Данные секторов (скрытое поле JSON)</label>
+                    <div class="form-group" style="margin-top: 20px;">                        
                         <textarea name="sectors" id="sectors" rows="5" class="json-field" style="display: none;"><?php 
                             echo ! empty( $stadium ) && ! empty( $stadium->sectors ) ? esc_textarea( $stadium->sectors ) : ''; 
-                        ?></textarea>
-                        <p class="form-description">Редактируйте секторы используя форму выше</p>
+                        ?></textarea>                        
                     </div>
 
                     <script>
@@ -769,12 +779,12 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                     .html(`
                                         <div class="sector-item-row">
                                             <input type="text" class="sector-name" placeholder="Название (например: Северная трибуна)" value="${escapeHtml(key)}">
-                                            <input type="number" class="sector-capacity" placeholder="Вместимость" value="${escapeHtml(String(value))}">
+                                            <input type="number" class="sector-capacity" placeholder="Вместимость" value="${escapeHtml(typeof value === 'object' ? '' : String(value))}">
                                             <button type="button" class="stadium-form-remove-btn" data-idx="${idx}">✕</button>
                                         </div>
                                     `)
                                     .on('change', 'input', updateJSON)
-                                    .on('click', '.sector-remove', function() {
+                                    .on('click', '.stadium-form-remove-btn', function() {
                                         $(this).closest('.sector-item-form').remove();
                                         updateJSON();
                                     });
@@ -802,26 +812,21 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
 
                         $('#add-sector-btn').on('click', function(e) {
                             e.preventDefault();
-                            const textarea = $('#sectors');
-                            let sectors = {};
-                            if (textarea.val().trim()) {
-                                try {
-                                    sectors = JSON.parse(textarea.val());
-                                    if (typeof sectors !== 'object' || Array.isArray(sectors)) sectors = {};
-                                } catch(e) {}
-                            }
-                            
-                            // Генерируем уникальный ключ
-                            let newKey = 'Новый';
-                            let counter = 1;
-                            while (sectors[newKey] !== undefined) {
-                                newKey = 'Новый ' + counter;
-                                counter++;
-                            }
-                            
-                            sectors[newKey] = '';
-                            textarea.val(JSON.stringify(sectors, null, 2));
-                            renderSectors();
+                            const list = $('#sectors-list');
+                            const html = $('<div class="sector-item-form"></div>')
+                                .html(`
+                                    <div class="sector-item-row">
+                                        <input type="text" class="sector-name" placeholder="Название (например: Северная трибуна)" value="">
+                                        <input type="number" class="sector-capacity" placeholder="Вместимость" value="">
+                                        <button type="button" class="stadium-form-remove-btn">✕</button>
+                                    </div>
+                                `)
+                                .on('change', 'input', updateJSON)
+                                .on('click', '.stadium-form-remove-btn', function() {
+                                    $(this).closest('.sector-item-form').remove();
+                                    updateJSON();
+                                });
+                            list.append(html);
                             return false;
                         });
 
@@ -847,7 +852,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                   placeholder='[{"title": "Год основания", "value": "2000", "icon": "icon-calendar"}, {"title": "Вместимость", "value": "15000", "icon": "icon-people"}]'><?php 
                             echo ! empty( $stadium ) && ! empty( $stadium->stat_cards ) ? esc_textarea( $stadium->stat_cards ) : ''; 
                         ?></textarea>
-                        <p class="form-description">Статистические карточки с иконками из спрайта (title, value, icon)</p>
+                        <p class="form-description">Статистические карточки с иконками (title, value, icon)</p>
                     </div>
 
                     <script>
@@ -882,7 +887,7 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
                                         </div>
                                     `)
                                     .on('change', 'input, select', updateJSON)
-                                    .on('click', '.stat-card-remove', function() {
+                                    .on('click', '.stadium-form-remove-btn', function() {
                                         $(this).closest('.stat-card-item').remove();
                                         updateJSON();
                                     });
