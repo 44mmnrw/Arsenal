@@ -57,7 +57,7 @@ if ( $stadium_id ) {
 
 		<div class="stadium-hero__content">
 			<div class="container">
-				<h1 class="stadium-hero__title"><?php echo esc_html( get_the_title() ); ?></h1>
+				<h1 class="stadium-hero__title"><?php echo $stadium ? esc_html( $stadium->name ) : esc_html( get_the_title() ); ?></h1>
 				<div class="stadium-hero__meta">
 					<?php if ( $stadium && ! empty( $stadium->city ) ) : ?>
 					<div class="stadium-hero__meta-item">
