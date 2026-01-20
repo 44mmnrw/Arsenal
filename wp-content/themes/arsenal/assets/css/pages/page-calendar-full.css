@@ -6,13 +6,13 @@
 /* Main Container */
 .calendar-page {
 	width: 100%;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 }
 
 /* Раздел календаря */
 .calendar-section {
 	padding: 48px 0;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 }
 
 .calendar-section .container {
@@ -29,7 +29,7 @@
 .calendar-section .calendar-title {
 	font-size: 2rem;
 	font-weight: 700;
-	color: #1a1a1a;
+	color: var(--color-dark-gray);
 	margin: 0 0 20px 0;
 	text-transform: none;
 	padding-bottom: 15px;
@@ -63,7 +63,7 @@
 	padding: 10px 12px;
 	border: 1px solid #e0e0e0;
 	border-radius: 4px;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	font-size: 14px;
 	color: #333;
 	cursor: pointer;
@@ -163,8 +163,8 @@
 .calendar-match-card {
 	display: flex;
 	flex-direction: column;
-	background-color: #ffffff;
-	border: 1px solid #e5e7eb;
+	background-color: var(--color-white);
+	border: 1px solid var(--gray-200);
 	border-radius: 10px;
 	overflow: hidden;
 	transition: box-shadow 0.2s ease;
@@ -176,7 +176,7 @@
 }
 
 .calendar-match-card:hover {
-	box-shadow: 0px 8px 12px #1f1f1f1f;
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 /* Заголовок матча - турнир + тур */
@@ -185,8 +185,8 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 12px 24px;
-	background-color: #f9fafb;
-	border-bottom: 1px solid #e5e7eb;
+	background-color: var(--gray-50);
+	border-bottom: 1px solid var(--gray-200);
 	height: 49px;
 }
 
@@ -194,7 +194,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 16px;
 	font-weight: 600;
-	color: #364153;
+	color: var(--gray-700);
 	line-height: 24px;
 }
 
@@ -202,7 +202,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 14px;
 	font-weight: 500;
-	color: #4a5565;
+	color: var(--gray-600);
 	line-height: 20px;
 }
 
@@ -236,28 +236,28 @@
 	width: 16px;
 	height: 16px;
 	flex-shrink: 0;
-	stroke: #4a5565;
+	stroke: var(--gray-600);
 	fill: none;
-	color: #4a5565;
+	color: var(--gray-600);
 	background: none !important;
 	background-color: transparent !important;
 }
 
 .calendar-info-row:nth-child(1) .calendar-icon {
-	stroke: #4a5565;
-	color: #4a5565;
+	stroke: var(--gray-600);
+	color: var(--gray-600);
 }
 
 .calendar-info-row:nth-child(2) .calendar-icon {
-	stroke: #ff1a1a;
-	color: #ff1a1a;
+	stroke: var(--red-700);
+	color: var(--red-700);
 }
 
 .calendar-date {
 	font-family: 'Inter', sans-serif;
 	font-size: 14px;
 	font-weight: 400;
-	color: #4a5565;
+	color: var(--gray-600);
 	line-height: 20px;
 }
 
@@ -265,7 +265,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 14px;
 	font-weight: 600;
-	color: #ff1a1a;
+	color: var(--red-700);
 	line-height: 20px;
 }
 
@@ -273,7 +273,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 12px;
 	font-weight: 400;
-	color: #6a7282;
+	color: var(--gray-500);
 	line-height: 16px;
 	word-break: break-word;
 	max-width: 150px;
@@ -304,7 +304,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	box-shadow: 0px 4px 6px -1px #1a1a1a1a, 0px 2px 4px -2px #1a1a1a1a;
+	box-shadow: 0px 4px 6px -1px var(--color-dark-gray)1a, 0px 2px 4px -2px var(--color-dark-gray)1a;
 	overflow: hidden;
 }
 
@@ -327,7 +327,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 14px;
 	font-weight: 700;
-	color: #ffffff;
+	color: var(--color-white);
 	line-height: 20px;
 }
 
@@ -345,7 +345,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 18px;
 	font-weight: 600;
-	color: #0a0a0a;
+	color: var(--gray-900);
 	line-height: 28px;
 	flex: 1;
 	min-width: 0;
@@ -356,7 +356,7 @@
 
 /* Название домашней команды - красный цвет */
 .calendar-team-block:first-of-type .calendar-team-name {
-	color: #ff1a1a;
+	color: var(--red-700);
 }
 
 /* Правая панель - счёт + статус */
@@ -383,7 +383,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 48px;
 	font-weight: 700;
-	color: #ff1a1a;
+	color: var(--red-700);
 	line-height: 48px;
 }
 
@@ -415,7 +415,7 @@
 	font-family: 'Inter', sans-serif;
 	font-size: 12px;
 	font-weight: 500;
-	color: #6a7282;
+	color: var(--gray-500);
 	line-height: 16px;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
@@ -424,8 +424,8 @@
 .calendar-link-icon {
 	width: 16px !important;
 	height: 16px !important;
-	stroke: #ff1a1a !important;
-	color: #ff1a1a !important;
+	stroke: var(--red-700) !important;
+	color: var(--red-700) !important;
 	display: inline;
 	vertical-align: middle;
 	margin-left: 4px;

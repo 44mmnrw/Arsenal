@@ -215,13 +215,17 @@ $has_matches = ! empty( $matches );
 								) );
 								?>
 
-								<a href="<?php echo esc_url( $prev_url ); ?>" class="month-nav-btn prev" <?php echo $selected_month <= 1 ? 'disabled' : ''; ?>>←</a>
-								
-								<span class="month-name">
-									<?php echo $selected_month > 0 ? esc_html( $months[ $selected_month ] ) : 'Все месяцы'; ?>
-								</span>
+							<a href="<?php echo esc_url( $prev_url ); ?>" <?php echo $selected_month <= 1 ? 'disabled' : ''; ?>>
+								<?php arsenal_icon( 'icon-arrow-left', 20, 20, 'month-nav-icon' ); ?>
+							</a>
+							
+							<span class="month-name">
+								<?php echo $selected_month > 0 ? esc_html( $months[ $selected_month ] ) : 'Все месяцы'; ?>
+							</span>
 
-								<a href="<?php echo esc_url( $next_url ); ?>" class="month-nav-btn next" <?php echo $selected_month >= 12 ? 'disabled' : ''; ?>>→</a>
+							<a href="<?php echo esc_url( $next_url ); ?>" <?php echo $selected_month >= 12 ? 'disabled' : ''; ?>>
+								<?php arsenal_icon( 'icon-arrow-right', 20, 20, 'month-nav-icon' ); ?>
+							</a>
 							</div>
 						</div>
 					</form>
@@ -332,7 +336,7 @@ $has_matches = ! empty( $matches );
 												?>
 												<span class="calendar-status"><?php echo esc_html( $status_display ); ?></span>
 												<?php if ( $has_result ) : ?>
-													<span class="calendar-link-text">Матч-центр →</span>
+													<span class="calendar-link-text">Матч-центр <?php arsenal_icon( 'icon-arrow-right', 16, 16, 'calendar-link-icon' ); ?></span>
 												<?php endif; ?>
 											</div>
 										</div>

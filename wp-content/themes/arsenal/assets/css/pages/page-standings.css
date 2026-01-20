@@ -35,7 +35,7 @@ h1 {
 
 .tournament-standings-section {
     padding: 0px 0;
-    background: #ffffff;
+    background: var(--color-white);
 }
 
 header.standings-header {
@@ -79,7 +79,7 @@ header.standings-header {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background: #ffffff;
+    background: var(--color-white);
     color: #333;
     font-size: 14px;
     font-weight: 500;
@@ -88,19 +88,19 @@ header.standings-header {
 }
 
 .season-select:hover {
-    border-color: #999;
+    border-color: var(--red-700);
 }
 
 .season-select:focus {
     outline: none;
-    border-color: #c41e3a;
+    border-color: var(--red-700);
     box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.1);
 }
 
 .standings-title {
     font-size: 2rem;
     font-weight: 700;
-    color: #1a1a1a;
+    color: var(--color-dark-gray);
     margin: 0 0 10px 0;
     display: block;
     line-height: 1.2;
@@ -157,16 +157,16 @@ header.standings-header {
 }
 
 .standings-table tbody tr {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--gray-200);
     transition: background-color 0.2s;
 }
 
 .standings-table tbody tr:hover {
-    background-color: #fafafa;
+    background-color: var(--gray-50);
 }
 
 .standings-table tbody tr.arsenal-row {
-    background-color: #ffe5e5;
+    background-color: var(--red-100);
     font-weight: 500;
 }
 
@@ -218,7 +218,7 @@ header.standings-header {
 
 .standings-table .col-points {
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--color-dark-gray);
     width: 70px;
 }
 
@@ -249,7 +249,7 @@ aside.standings-notes {
 aside.standings-notes h2 {
     font-size: 18px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--color-dark-gray);
     margin: 0 0 15px 0;
 }
 
@@ -441,11 +441,11 @@ aside.standings-notes h2 {
     
     .standings-table tbody tr:hover {
         background-color: white;
-        box-shadow: 0 4px 8px #1a1a1a1a;
+        box-shadow: 0 4px 8px var(--color-dark-gray)1a;
     }
     
     .standings-table tbody tr.arsenal-row {
-        background-color: #ffe5e5;
+        background-color: var(--red-100);
         border-color: #c8102e;
     }
     
@@ -488,7 +488,7 @@ aside.standings-notes h2 {
     .standings-table .team-name {
         font-size: 16px;
         font-weight: 600;
-        color: #1a1a1a;
+        color: var(--color-dark-gray);
     }
     
     /* Статистика - строки одна под другой */
@@ -516,12 +516,12 @@ aside.standings-notes h2 {
     .standings-table td:not(.col-position):not(.col-team) {
         font-size: 15px;
         font-weight: 600;
-        color: #1a1a1a;
+        color: var(--color-dark-gray);
     }
     
     /* Очки - выделяем */
     .standings-table .col-points {
-        background: #1a1a1a;
+        background: var(--color-dark-gray);
         color: white;
         font-size: 16px;
         padding: 12px;
@@ -563,6 +563,11 @@ aside.standings-notes h2 {
     .standings-header {
         flex-direction: column;
         align-items: flex-start;
+        padding-bottom: 20px;       
+    }
+
+    .standings-controls {       
+        width: 100%;
     }
 
     .season-selector-form {

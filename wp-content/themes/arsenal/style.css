@@ -83,36 +83,111 @@ table {
 	--container-padding-x: 20px;
 	--container-padding-y: 20px;
 	
+	/* ============================================
+	   ЦВЕТОВАЯ ПАЛИТРА ARSENAL
+	   ============================================ */
+	
 	/* Красная палитра Arsenal */
 	--red-900: #990000; /* Темный бордовый для текста и акцентов */
-	--red-800: #CC0000; /* Для активных состояний */
-	--red-700: #FF1A1A; /* Основной яркий красный */
-	--red-600: #FF3333; /* Для hover-эффектов */
-	--red-500: #FF4D4D; /* Более светлый акцент */
-	--red-100: #FFE5E5; /* Светлый фон для выделения */
-	--red-50: #FFF0F0;  /* Очень светлый фон */
+	--red-800: #cc0000; /* Для активных состояний */
+	--red-700: #ff1a1a; /* Основной яркий красный */
+	--red-600: #ff3333; /* Для hover-эффектов */
+	--red-500: #ff4d4d; /* Более светлый акцент */
+	--red-400: #dc2626; /* Альтернативный красный */
+	--red-100: #ffe5e5; /* Светлый фон для выделения */
+	--red-50: #fff0f0;  /* Очень светлый фон */
+	--red-tint: #fee2e2; /* Очень светлый красный оттенок */
 	
-	/* Базовые цвета */
-	--color-white: #ffffff;
+	/* Алиасы для красного */
+	--color-primary: var(--red-900); /* Темный красный первичный */
+	--color-primary-light: var(--red-700); /* Светлый красный первичный */
+	--color-primary-accent: var(--red-600); /* Красный акцент */
+	--accent-color: var(--red-700); /* Основной акцент */
+	--primary-color: var(--red-700); /* Первичный цвет */
+	
+	/* Черные и темные оттенки */
 	--color-black: #000000;
-	--color-dark-gray: #1a1a1a;
-	--color-beige: #EAD6BE;
-	--color-dark-green: #093733;
-	--color-charcoal: #212121;
+	--color-black-soft: #0a0a0a; /* Мягкий черный для текста */
+	--color-charcoal: #212121; /* Темный серо-черный (уголь) */
+	--color-dark-slate: #101828; /* Очень темный серо-синий */
+	--color-dark-gray: #1a1a1a; /* Темно-серый */
+	
+	/* Белые оттенки */
+	--color-white: #ffffff;
+	
+	/* Серая палитра */
+	--gray-900: #0a0a0a; /* Почти черный текст */
+	--gray-800: #101828; /* Темный текст заголовков */
+	--gray-700: #364153; /* Темный вторичный серый */
+	--gray-600: #4a5565; /* Серый вторичный текст */
+	--gray-500: #6a7282; /* Средний серый */
+	--gray-400: #98a2b3; /* Серый для границ */
+	--gray-300: #d1d5dc; /* Светло-серая граница */
+	--gray-200: #e5e7eb; /* Светло-серый фон/границы */
+	--gray-100: #f0f1f3; /* Очень светлый серый */
+	--gray-50: #f9fafb;  /* Фон страниц */
+	
+	/* Зеленая палитра (футбольное поле) */
+	--green-800: #008236; /* Темный зеленый поле */
+	--green-700: #00a63e; /* Основной зеленый поле */
+	--green-600: #16a34a; /* Средний зеленый */
+	--green-500: #22c55e; /* Светлый зеленый */
+	--green-100: #093733; /* Темный зеленовато-бежевый */
+	
+	/* Синяя палитра */
+	--blue-700: #155dfc; /* Синий для гостевой команды */
+	
+	/* Золотой */
+	--color-gold: #f0b100; /* Золотой для достижений */
+	
+	/* Бежевый */
+	--color-beige: #ead6be; /* Бежевый акцент */
+	
+	/* Социальные сети */
+	--social-facebook: #1877f2;
+	--social-instagram-1: #f58529;
+	--social-instagram-2: #dd2a7b;
+	--social-instagram-3: #8134af;
+	--social-whatsapp: #25d366;
+	--social-twitter: #1da1f2;
+	
+	/* Тени */
+	--shadow-hover: #1f1f1f1f; /* Тень для hover состояний карточек */
+	
+	/* ============================================
+	   СЕМАНТИЧЕСКИЕ ЦВЕТА
+	   ============================================ */
 	
 	/* Фоны */
-	--color-bg: #ffffff;
-	--color-bg-dark: #1a1a1a;
-	--color-bg-red-light: var(--red-100, #FFE5E5);
-	--color-bg-red-lighter: var(--red-50, #FFF0F0);
+	--color-bg: var(--color-white);
+	--color-bg-page: var(--gray-50); /* #f9fafb */
+	--color-bg-light: var(--gray-50);
+	--color-bg-dark: var(--color-dark-gray);
+	--color-bg-gray: var(--gray-200); /* #e5e7eb */
+	--color-bg-card: var(--color-white);
+	--color-bg-red-light: var(--red-100);
+	--color-bg-red-lighter: var(--red-50);
 	
 	/* Текст */
 	--color-text: #333333;
-	--color-text-light: #ffffff;
-	--color-text-muted: #666666;
+	--color-text-dark: var(--gray-900); /* #0a0a0a */
+	--color-text-darker: var(--gray-800); /* #101828 */
+	--color-text-light: var(--color-white);
+	--color-text-secondary: var(--gray-600); /* #4a5565 */
+	--color-text-muted: var(--gray-700); /* #364153 */
+	--secondary-color: var(--color-white); /* Вторичный текст (белый на красном) */
 	
 	/* Границы */
-	--color-border: #e5e5e5;
+	--color-border: var(--gray-200); /* #e5e7eb */
+	--color-border-light: var(--gray-300); /* #d1d5dc */
+	
+	/* Футбольное поле */
+	--color-field: var(--green-700); /* #00a63e */
+	--color-field-dark: var(--green-800); /* #008236 */
+	
+	/* Матч: домашняя/гостевая команда */
+	--color-home: var(--red-700); /* #ff1a1a */
+	--color-away: var(--blue-700); /* #155dfc */
 }
 
 * {

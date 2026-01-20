@@ -25,7 +25,7 @@
 }
 
 .match-detail-page {
-	background-color: #f9fafb;
+	background-color: var(--gray-50);
 	min-height: 100vh;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
@@ -43,7 +43,7 @@
 	position: relative;
 	height: 25rem;
 	overflow: hidden;
-	background: linear-gradient(135deg, #101828 0%, #1e2939 100%);
+	background: linear-gradient(135deg, var(--gray-800) 0%, var(--color-charcoal) 100%);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -95,7 +95,7 @@
 
 .league-badge {
 	display: inline-block;
-	background-color: #ff1a1a;
+	background-color: var(--red-700);
 	color: white;
 	padding: 0.25rem 0.75rem;
 	border-radius: 1.5rem;
@@ -106,12 +106,12 @@
 
 .tour-info,
 .match-date {
-	color: #d1d5dc;
+	color: var(--gray-300);
 	font-size: 0.875rem;
 }
 
 .meta-sep {
-	color: #d1d5dc;
+	color: var(--gray-300);
 	opacity: 0.6;
 }
 
@@ -145,7 +145,7 @@
 
 .away-team-panel .team-icon-circle,
 .away-header {
-	background-color: #155dfc;
+	background-color: var(--blue-700);
 }
 
 .team-title {
@@ -189,7 +189,7 @@
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: #d1d5dc;
+	color: var(--gray-300);
 	font-size: 0.875rem;
 	white-space: nowrap;
 }
@@ -204,14 +204,14 @@
 }
 
 lottie-player {
-	--lottie-player-color: #ffffff;
-	color: #ffffff;
+	--lottie-player-color: var(--color-white);
+	color: var(--color-white);
 	filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.3)) brightness(1.2);
 	opacity: 1;
 }
 
 .detail-item lottie-player {
-	color: #ffffff;
+	color: var(--color-white);
 	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.3)) brightness(1.2);
 }
 
@@ -236,10 +236,10 @@ lottie-player {
 
 /* Карточки разделов */
 .section-card {
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	border-radius: 0.625rem;
 	padding: 1.5rem;
-	box-shadow: 0 4px 6px #1a1a1a1a, 0 2px 4px #0d0d0d0d;
+	box-shadow: 0 4px 6px var(--color-dark-gray)1a, 0 2px 4px #0d0d0d0d;
 }
 
 .section-header {
@@ -260,7 +260,7 @@ lottie-player {
 	margin: 0;
 	font-size: 1.25rem;
 	font-weight: 600;
-	color: #101828;
+	color: var(--gray-800);
 }
 
 /* ============================================
@@ -296,7 +296,7 @@ lottie-player {
 }
 
 .event-item.event-goal {
-	background-color: #22c55e0d;
+	background-color: var(--green-500)0d;
 }
 
 .event-item.event-yellow {
@@ -304,16 +304,16 @@ lottie-player {
 }
 
 .event-item.event-red {
-	background-color: #ff1a1a1a;
+	background-color: var(--red-700)1a;
 }
 
 .event-item.event-sub {
-	background-color: #155dfc0d;
+	background-color: var(--blue-700)0d;
 }
 
 .event-minute {
 	font-weight: 600;
-	color: #364153;
+	color: var(--gray-700);
 	text-align: right;
 	font-size: 0.8125rem;
 }
@@ -331,7 +331,7 @@ lottie-player {
 
 .event-player {
 	font-weight: 600;
-	color: #101828;
+	color: var(--gray-800);
 }
 
 .event-team-badge {
@@ -349,19 +349,19 @@ lottie-player {
 }
 
 .event-team-badge.team-home {
-	background-color: #ff1a1a;
+	background-color: var(--red-700);
 }
 
 .event-team-badge.team-away {
-	background-color: #155dfc;
+	background-color: var(--blue-700);
 }
 
 /* Кнопка переключения событий */
 .toggle-events-btn {
 	margin-top: 1rem;
 	padding: 0.5rem 1rem;
-	background-color: #fafafa;
-	border: 1px solid #e5e7eb;
+	background-color: var(--gray-50);
+	border: 1px solid var(--gray-200);
 	border-radius: 0.5rem;
 	font-size: 0.875rem;
 	font-weight: 500;
@@ -376,8 +376,8 @@ lottie-player {
 }
 
 .toggle-events-btn:hover {
-	background-color: #e5e7eb;
-	border-color: #d1d5db;
+	background-color: var(--gray-200);
+	border-color: var(--gray-300);
 }
 
 .toggle-events-btn .toggle-text {
@@ -428,12 +428,12 @@ lottie-player {
 	flex-direction: column;
 	overflow: hidden;
 	border-radius: 0.625rem;
-	box-shadow: 0 4px 6px #1a1a1a1a, 0 2px 4px #0d0d0d0d;
+	box-shadow: 0 4px 6px var(--color-dark-gray)1a, 0 2px 4px #0d0d0d0d;
 }
 
 .lineup-panel.home-panel,
 .lineup-panel.away-panel {
-	background-color: #ffffff;
+	background-color: var(--color-white);
 }
 
 .lineup-header {
@@ -445,11 +445,11 @@ lottie-player {
 	align-items: center;
 	justify-content: space-between;
 	height: 2.875rem;
-	background: linear-gradient(to right, #990000, #ff1a1a);
+	background: linear-gradient(to right, var(--red-900), var(--red-700));
 }
 
 .lineup-header.away-header {
-	background: linear-gradient(to right, #1447e6, #155dfc);
+	background: linear-gradient(to right, #1447e6, var(--blue-700));
 }
 
 .team-name {
@@ -467,7 +467,7 @@ lottie-player {
 	flex-direction: column;
 	gap: 0.5rem;
 	padding: 0.75rem;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 }
 
 .players-group {
@@ -485,7 +485,7 @@ lottie-player {
 .group-label {
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: #6a7282;
+	color: var(--gray-500);
 	text-transform: uppercase;
 	letter-spacing: 0.6px;
 	margin: 0;
@@ -530,7 +530,7 @@ lottie-player {
 
 .coach-name {
 	font-size: 0.75rem;
-	color: #0a0a0a;
+	color: var(--gray-900);
 	font-weight: 600;
 }
 
@@ -559,7 +559,7 @@ lottie-player {
 	border-radius: 0.25rem;
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: #0a0a0a;
+	color: var(--gray-900);
 	flex-shrink: 0;
 }
 
@@ -570,7 +570,7 @@ lottie-player {
 
 .player-full-name {
 	font-size: 0.75rem;
-	color: #0a0a0a;
+	color: var(--gray-900);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -581,7 +581,7 @@ lottie-player {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	border-radius: 0.625rem;
 	overflow: hidden;
 	width: 100%;
@@ -589,7 +589,7 @@ lottie-player {
 
 .pitch-title {
 	padding: 0.75rem 1rem;
-	background: linear-gradient(to right, #008236, #00a63e);
+	background: linear-gradient(to right, var(--green-800), var(--green-700));
 	color: white;
 	font-size: 1rem;
 	font-weight: 600;
@@ -601,7 +601,7 @@ lottie-player {
 	flex-direction: column;
 	position: relative;
 	padding: 1rem;
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -611,9 +611,9 @@ lottie-player {
 	height: auto;
 	max-width: 100%;
 	display: block;
-	border: 0.25rem solid #ffffff;
+	border: 0.25rem solid var(--color-white);
 	border-radius: 0.625rem;
-	box-shadow: 0 10px 15px #1a1a1a1a;
+	box-shadow: 0 10px 15px var(--color-dark-gray)1a;
 	overflow: hidden;
 }
 
@@ -631,7 +631,7 @@ lottie-player {
 }
 
 .report-body {
-	color: #364153;
+	color: var(--gray-700);
 	font-size: 1rem;
 	line-height: 1.6;
 }
@@ -975,7 +975,7 @@ lottie-player {
 	}
 
 	.detail-item lottie-player {
-		color: #ffffff;
+		color: var(--color-white);
 		filter: brightness(1.3) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
 	}
 
@@ -1055,8 +1055,8 @@ lottie-player {
 		display: flex;
 		margin-top: 0.75rem;
 		padding: 0.625rem 1rem;
-		background-color: #fafafa;
-		border: 1px solid #e5e7eb;
+		background-color: var(--gray-50);
+		border: 1px solid var(--gray-200);
 		border-radius: 0.5rem;
 		font-size: 0.8125rem;
 		font-weight: 500;
@@ -1070,8 +1070,8 @@ lottie-player {
 	}
 
 	.toggle-lineup-btn:hover {
-		background-color: #e5e7eb;
-		border-color: #d1d5db;
+		background-color: var(--gray-200);
+		border-color: var(--gray-300);
 	}
 
 	.toggle-lineup-btn .toggle-icon {

@@ -180,7 +180,7 @@ $departments = Arsenal_Staff_Manager::get_departments( true );
 
             <div class="staff-photo-box">
                 <?php if ( $staff->photo_url ?? null ): ?>
-                    <img id="photo-preview" src="<?php echo esc_url( home_url( $staff->photo_url ) ); ?>" alt="Фото сотрудника">
+                    <img id="photo-preview" src="<?php echo esc_url( home_url( $staff->photo_url ) . '?v=' . time() ); ?>" alt="Фото сотрудника">
                 <?php else: ?>
                     <div id="photo-preview" style="display: none;"></div>
                     <p style="color: #999;">Фото не загружено</p>
@@ -246,11 +246,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             photoInput.value = relativePath;
 
+            // Добавляем timestamp для избежания кэширования
+            const urlWithVersion = fullUrl + '?v=' + Date.now();
+
             if (photoPreview.tagName === 'IMG') {
-                photoPreview.src = fullUrl;
+                photoPreview.src = urlWithVersion;
             } else {
                 const img = document.createElement('img');
-                img.src = fullUrl;
+                img.src = urlWithVersion;
                 img.id = 'photo-preview';
                 photoPreview.parentNode.insertBefore(img, photoPreview);
                 photoPreview.remove();
@@ -273,9 +276,27 @@ document.addEventListener('DOMContentLoaded', function() {
     function removePhoto(e) {
         e.preventDefault();
         photoInput.value = '';
-        photoPreview.src = '';
-        photoPreview.style.display = 'none';
-        if (removeButton) removeButton.remove();
+        
+        if (photoPreview.tagName === 'IMG') {
+            photoPreview.style.display = 'none';
+        } else {
+            photoPreview.style.display = 'none';
+        }
+        
+        // Показать текст "Фото не загружено"
+        const emptyText = document.createElement('p');
+        emptyText.textContent = 'Фото не загружено';
+        emptyText.style.color = '#999';
+        emptyText.id = 'photo-empty-text';
+        
+        if (!document.getElementById('photo-empty-text')) {
+            photoPreview.parentNode.insertBefore(emptyText, photoPreview.nextSibling);
+        }
+        
+        // Скрыть кнопку удаления
+        if (removeButton) {
+            removeButton.style.display = 'none';
+        }
     }
 
     if (removeButton) {

@@ -26,25 +26,7 @@ h1 {
 	font-size: 2rem;
 }
 
-h2 {
-	/* Base styles for h2 */
-}
 
-h3 {
-	/* Base styles for h3 */
-}
-
-h4 {
-	/* Base styles for h4 */
-}
-
-h5 {
-	/* Base styles for h5 */
-}
-
-h6 {
-	/* Base styles for h6 */
-}
 
 /* ==========================================================================
    BANNER CAROUSEL
@@ -55,7 +37,7 @@ h6 {
 	width: 100%;
 	min-height: calc(100vh - 4rem - 5rem); /* 100vh - header(4rem) - stats-bar(5rem) */
 	overflow: hidden;
-	background-color: #0a0a0a;
+	background-color: var(--gray-900);
 }
 
 .banner-slides {
@@ -167,7 +149,7 @@ h6 {
 }
 
 .banner-title {
-	color: var(--color-text-light, #ffffff);
+	color: var(--color-text-light, var(--color-white));
 	font-size: clamp(2.5rem, 5vw, 4rem);
 	font-weight: 700;
 	line-height: 1.1;
@@ -204,7 +186,7 @@ h6 {
 	gap: 0.5rem;
 	padding: 1rem 2rem;
 	background-color: var(--red-700);
-	color: var(--color-text-light, #ffffff);
+	color: var(--color-text-light, var(--color-white));
 	font-size: 1rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -218,7 +200,7 @@ h6 {
 }
 
 .banner-btn-primary:focus {
-	outline: 0.125rem solid var(--color-text-light, #ffffff);
+	outline: 0.125rem solid var(--color-text-light, var(--color-white));
 	outline-offset: 0.125rem;
 }
 
@@ -238,7 +220,7 @@ h6 {
 	gap: 0.5rem;
 	padding: 1rem 2rem;
 	background-color: #ffffff1a;
-	color: var(--color-text-light, #ffffff);
+	color: var(--color-text-light, var(--color-white));
 	font-size: 1rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -254,7 +236,7 @@ h6 {
 }
 
 .banner-btn-secondary:focus {
-	outline: 0.125rem solid var(--color-text-light, #ffffff);
+	outline: 0.125rem solid var(--color-text-light, var(--color-white));
 	outline-offset: 0.125rem;
 }
 
@@ -299,7 +281,7 @@ h6 {
 }
 
 .banner-nav-btn:focus {
-	outline: 0.125rem solid var(--color-text-light, #ffffff);
+	outline: 0.125rem solid var(--color-text-light, var(--color-white));
 	outline-offset: 0.125rem;
 }
 
@@ -307,7 +289,7 @@ h6 {
 	width: 1.5rem;
 	height: 1.5rem;
 	fill: none;
-	stroke: var(--color-text-light, #ffffff);
+	stroke: var(--color-text-light, var(--color-white));
 	stroke-width: 2;
 	stroke-linecap: round;
 	stroke-linejoin: round;
@@ -345,7 +327,7 @@ h6 {
 }
 
 .banner-dot:focus {
-	outline: 0.125rem solid var(--color-text-light, #ffffff);
+	outline: 0.125rem solid var(--color-text-light, var(--color-white));
 	outline-offset: 0.125rem;
 }
 
@@ -375,7 +357,7 @@ h6 {
    ========================================================================== */
 
 .stats-bar {
-	background-color: var(--red-900, #990000);
+	background-color: var(--red-900, var(--red-900));
 	width: 100%;
 }
 
@@ -398,7 +380,7 @@ h6 {
 }
 
 .stats-bar-number {
-	color: var(--color-text-light, #ffffff);
+	color: var(--color-text-light, var(--color-white));
 	font-size: 2rem;
 	font-weight: 700;
 	line-height: 1;
@@ -432,7 +414,7 @@ h6 {
 }
 
 .section-title {
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-size: 1rem;
 	font-weight: 500;
 	text-transform: uppercase;
@@ -448,11 +430,17 @@ h6 {
 }
 
 .match-card {
-	background: #ffffff;
+	background: var(--color-white);
+	border: 1px solid var(--gray-200);
 	border-radius: 0.625rem;
-	box-shadow: 0 0.5rem 0.625rem -0.375rem #1a1a1a1a, 0 1.25rem 1.5625rem -0.3125rem #1a1a1a1a;
 	padding: 0;
 	overflow: hidden;
+	box-shadow: 0 0.0625rem 0.1875rem var(--color-dark-gray)1a, 0 0.0625rem 0.125rem #0d0d0d0d;
+	transition: box-shadow 0.2s ease;
+}
+
+.match-card:hover {
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 .match-card-inner {
@@ -461,8 +449,8 @@ h6 {
 }
 
 .match-tournament-badge {
-	background-color: #f9fafb;
-	color: #364153;
+	background-color: var(--gray-50);
+	color: var(--gray-700);
 	padding: 0.75rem 1.5rem;
 	font-family: 'Inter', sans-serif;
 	font-size: 16px;
@@ -471,7 +459,7 @@ h6 {
 	letter-spacing: 0.5px;
 	text-transform: none;
 	text-align: left;
-	border-bottom: 1px solid #e5e7eb;
+	border-bottom: 1px solid var(--gray-200);
 }
 
 .match-card-content {
@@ -524,7 +512,7 @@ h6 {
 }
 
 .team-logo.home-team svg {
-	fill: #ffffff;
+	fill: var(--color-white);
 }
 
 .team-logo.away-team svg {
@@ -580,7 +568,7 @@ h6 {
 .match-score-large .score-away {
 	font-size: 3.5rem;
 	font-weight: 700;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	min-width: 3.5rem;
 	text-align: center;
 }
@@ -677,7 +665,7 @@ h6 {
 article {
 	margin-bottom: 2.5rem;
 	padding-bottom: 2.5rem;
-	border-bottom: 0.0625rem solid #eee;
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .entry-header {
@@ -791,7 +779,7 @@ article {
    ========================================================================== */
 
 .news-section {
-	background-color: #ffffff;
+	background-color: var(--color-white);
 	padding: 2rem 0 3rem;
 }
 
@@ -813,7 +801,7 @@ article {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -837,18 +825,23 @@ article {
 }
 
 .news-card {
-	background: #ffffff;
+	background: var(--color-white);
+	border: 1px solid var(--gray-200);
 	border-radius: 0.625rem;
-	overflow: hidden;
-	box-shadow: 0 0.5rem 0.625rem -0.375rem #1a1a1a1a, 0 1.25rem 1.5625rem -0.3125rem #1a1a1a1a;
 	display: flex;
 	flex-direction: column;
+	box-shadow: 0 0.0625rem 0.1875rem var(--color-dark-gray)1a, 0 0.0625rem 0.125rem #0d0d0d0d;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.news-card:hover {
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 .news-card__image {
 	width: 100%;
 	height: 14rem;
-	background-color: #fafafa;
+	background-color: var(--gray-50);
 	overflow: hidden;
 	display: flex;
 	align-items: center;
@@ -865,7 +858,7 @@ article {
 .news-card__image lottie-player {
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+	background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
 	min-height: 14rem;
 }
 
@@ -899,7 +892,7 @@ article {
 }
 
 .news-card__category {
-	color: var(--red-900, #990000);
+	color: var(--red-900, var(--red-900));
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -924,7 +917,7 @@ article {
 }
 
 .news-card__title a:hover {
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 }
 
 .news-card__excerpt {
@@ -939,7 +932,7 @@ article {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.375rem;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -963,8 +956,8 @@ article {
 
 .sponsors-section {
 	padding: 2.75rem 0;
-	background-color: #ffffff;	
-	border-bottom: 1px solid #e5e7eb;
+	background-color: var(--color-white);	
+	border-bottom: 1px solid var(--gray-200);
 }
 
 .sponsors-section .container {
@@ -985,7 +978,7 @@ article {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -1034,41 +1027,40 @@ article {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #f9fafb;
-	border: 1px solid #e5e7eb;
+	background: var(--gray-50);
+	border: 1px solid var(--gray-200);
 	border-radius: 8px;
 	padding: 16px;
 	text-decoration: none;
-	transition: all 0.3s ease;
+	transition: box-shadow 0.2s ease;
 	overflow: hidden;
 }
 
 .sponsors-carousel .sponsor-card:hover {
-	background: #f3f4f6;
-	border-color: #d1d5db;
-	transform: translateY(-4px);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 .sponsor-logo {
-	width: 220px;
-	height: 100px;
+	width: 100%;
+	max-width: 220px;
+	max-height: 100px;
+	height: auto;
 	object-fit: contain;
 }
 
 .sponsor-card lottie-player {
-	width: 220px !important;
-	height: 100px !important;
-	background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%) !important;
+	width: auto;
+	max-width: 100px;		
+	background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
 }
 
 .sponsor-placeholder {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+	max-width: 220px;
+	max-height: 100px;	
+	background: linear-gradient(135deg, var(--gray-50), var(--gray-200));
 	border-radius: 4px;
 	padding: 16px;
 	text-align: center;
@@ -1107,7 +1099,7 @@ article {
 .last-games-section .section-link {
 	font-size: 0.875rem;
 	font-weight: 500;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	text-decoration: none;
 	display: flex;
 	align-items: center;
@@ -1130,15 +1122,16 @@ article {
 }
 
 .game-card {
-	background: #ffffff;
+	background: var(--color-white);
+	border: 1px solid var(--gray-200);
 	border-radius: 0.625rem;
 	padding: 1.25rem;
-	box-shadow: 0 0.0625rem 0.1875rem #1a1a1a1a, 0 0.0625rem 0.125rem #0d0d0d0d;
-	transition: box-shadow 0.2s ease;
+	box-shadow: 0 0.0625rem 0.1875rem var(--color-dark-gray)1a, 0 0.0625rem 0.125rem #0d0d0d0d;
+	transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
 
 .game-card:hover {
-	box-shadow: 0 0.25rem 0.375rem #1a1a1a1a, 0 0.125rem 0.25rem #0d0d0d0d;
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 .game-header {
@@ -1147,7 +1140,7 @@ article {
 	align-items: center;
 	margin-bottom: 1.25rem;
 	padding-bottom: 1rem;
-	border-bottom: 0.0625rem solid #E5E5E5;
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .game-date {
@@ -1243,7 +1236,7 @@ article {
 
 .game-footer {
 	padding-top: 1rem;
-	border-top: 0.0625rem solid #E5E5E5;
+	border-top: 0.0625rem solid var(--gray-200);
 }
 
 .game-location {
@@ -1266,7 +1259,7 @@ article {
 
 .tournament-table-section {
 	padding: 2.75rem 0;
-	background-color: #FFFFFF;
+	background-color: var(--color-white);
 }
 
 .tournament-table-section .container {
@@ -1298,7 +1291,7 @@ article {
 .tournament-header__label {
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
 }
@@ -1315,7 +1308,7 @@ article {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -1332,16 +1325,22 @@ article {
 }
 
 .tournament-table-wrapper {
-	background: #ffffff;
-	border-radius: 0.625rem;
-	box-shadow: 0 0.25rem 0.375rem -0.125rem #1a1a1a1a, 0 0.625rem 0.9375rem -0.1875rem #1a1a1a1a;
+	background: var(--color-white);
+	border: 1px solid var(--gray-200);
+	border-radius: 0.625rem;	
 	overflow: hidden;
+	transition: box-shadow 0.2s ease;
+}
+
+.tournament-table-wrapper:hover {
+	box-shadow: 0px 8px 12px var(--shadow-hover);
 }
 
 .tournament-table {
 	width: 100%;
 	border-collapse: collapse;
 }
+
 
 .tournament-table thead {
 	background-color: #F9FAFB;
@@ -1353,14 +1352,14 @@ article {
 	font-weight: 600;
 	color: #0A0A0A;
 	text-align: left;
-	border-bottom: 0.0625rem solid #E5E5E5;
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .tournament-table td {
 	padding: 0.875rem 1rem;
 	font-size: 0.875rem;
 	color: #0A0A0A;
-	border-bottom: 0.0625rem solid #E5E5E5;
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .tournament-table tbody tr:last-child td {
@@ -1411,7 +1410,7 @@ article {
 
 .tournament-table .col-points {
 	font-weight: 700;
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 }
 
 .tournament-table tbody tr.highlight-row {
@@ -1419,7 +1418,7 @@ article {
 }
 
 .tournament-table tbody tr.highlight-row td {
-	color: var(--red-700, #FF1A1A);
+	color: var(--red-700, var(--red-700));
 	font-weight: 600;
 }
 
@@ -1743,8 +1742,10 @@ article {
 	}
 
 	.sponsor-logo {
-		width: 160px;
-		height: 90px;
+		width: 100%;
+		max-width: 160px;
+		max-height: 90px;
+		height: auto;
 	}
 
 	.carousel-nav {
@@ -1983,8 +1984,10 @@ article {
 	}
 
 	.sponsor-logo {
-		width: 140px;
-		height: 80px;
+		width: 100%;
+		max-width: 140px;
+		max-height: 80px;
+		height: auto;
 	}
 
 	.carousel-nav {

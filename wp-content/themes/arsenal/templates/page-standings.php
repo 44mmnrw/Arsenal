@@ -96,7 +96,7 @@ $teams = $wpdb->get_results( $query );
 
 // ОТЛАДКА
 if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-    error_log( 'Standings Debug: year=' . $selected_year . ', season_id=' . $current_season_id . ', teams=' . count( $teams ) . ', query=' . $query );
+    error_log( 'Standings Debug: year=' . $current_year . ', season_id=' . $current_season_id . ', teams=' . count( $teams ) . ', query=' . $query );
 }
 
 if ( empty( $teams ) ) {

@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .site-footer {
-	background-color: #212121;
-	color: #ffffff;
+	background-color: var(--color-charcoal);
+	color: var(--color-white);
 }
 
 /* Основная часть футера */
@@ -46,7 +46,7 @@
 	justify-content: center;
 	width: 3rem;
 	height: 3rem;
-	background-color: var(--color-white, #ffffff);
+	background-color: var(--color-white, var(--color-white));
 	border-radius: 50%;
 	flex-shrink: 0;
 	transition: transform 0.2s ease, background-color 0.3s ease;
@@ -72,12 +72,12 @@
 
 .footer-logo-icon svg .cls-2,
 .footer-logo-icon svg .cls-3 {
-	fill: var(--color-charcoal, #212121);
+	fill: var(--color-charcoal, var(--color-charcoal));
 	transition: fill 0.3s ease;
 }
 
 .footer-logo-icon svg .cls-5 {
-	fill: var(--color-charcoal, #212121);
+	fill: var(--color-charcoal, var(--color-charcoal));
 	transition: fill 0.3s ease;
 }
 
@@ -98,7 +98,7 @@
 .footer-brand-name {
 	font-size: 1.250rem;
 	font-weight: 400;
-	color: #ffffff;
+	color: var(--color-white);
 }
 
 .footer-brand-city {
@@ -128,7 +128,7 @@
 .footer-nav-title {
 	font-size: 1.125rem;
 	font-weight: 600;
-	color: #ffffff;
+	color: var(--color-white);
 }
 
 .footer-nav-links {
@@ -150,7 +150,7 @@
 }
 
 .footer-nav-links li a:hover {
-	color: #ffffff;
+	color: var(--color-white);
 }
 
 /* Кнопка аккордеона (скрыта на десктопе) */
@@ -159,7 +159,7 @@
 	background: none;
 	border: none;
 	padding: 0;
-	color: #ffffff;
+	color: var(--color-white);
 	font-size: 1.125rem;
 	font-weight: 600;
 	cursor: pointer;
@@ -193,7 +193,7 @@
 .footer-contacts-heading {
 	font-size: 1.125rem;
 	font-weight: 600;
-	color: #ffffff;
+	color: var(--color-white);
 	pointer-events: none;
 	cursor: default;
 }
@@ -246,7 +246,7 @@
 }
 
 .footer-contacts-list li a:hover {
-	color: #ffffff;
+	color: var(--color-white);
 }
 
 /* Социальные сети */
@@ -262,7 +262,7 @@
 	justify-content: center;
 	width: 2.5rem;
 	height: 2.5rem;
-	background-color: #3A3A3A;
+	background-color: var(--color-charcoal);
 	border-radius: 50%;
 	transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -281,7 +281,7 @@
 }
 
 .footer-social-youtube:hover {
-	background-color: #ff1a1a;
+	background-color: var(--red-700);
 }
 
 .footer-social-telegram:hover {
@@ -316,7 +316,7 @@
 	grid-template-columns: 1fr 1fr;
 	gap: 1.5rem;
 	align-items: center;
-	border-top: 1px solid #1E2939;
+	border-top: 1px solid var(--color-charcoal);
 	padding-top: 1.5rem;
 	padding-bottom: 1rem;
 }
@@ -345,7 +345,7 @@
 }
 
 .footer-link:hover {
-	color: #ffffff;
+	color: var(--color-white);
 }
 
 .footer-link--accent {

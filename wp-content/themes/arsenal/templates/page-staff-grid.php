@@ -95,7 +95,7 @@ foreach ( $staff as $person ) {
 						<div class="position-group">
 							<h2 class="position-heading"><?php echo esc_html( $job_title ); ?></h2>
 							
-							<div class="players-grid">
+							<div class="staff-grid">
 								<?php foreach ( $job_staff as $person ) : 
 									$photo_url = ! empty( $person->photo_url ) ? $person->photo_url : '';
 									$photo_src = function_exists( 'arsenal_convert_logo_url' ) ? arsenal_convert_logo_url( $photo_url ) : $photo_url;
@@ -105,14 +105,14 @@ foreach ( $staff as $person ) {
 									// Динамический URL сотрудника (по аналогии со страницей игрока)
 									$staff_url = ! empty( $person->id ) ? arsenal_get_staff_url( $person->id ) : '#';
 								?>
-									<a href="<?php echo esc_url( $staff_url ); ?>" class="coach-card" title="<?php echo esc_attr( $name_display ); ?>">
+										<a href="<?php echo esc_url( $staff_url ); ?>" class="staff-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото -->
-										<div class="coach-card__photo">
+												<div class="staff-card__photo">
 											<?php if ( ! empty( $photo_url ) ) : ?>
 												<img 
 													src="<?php echo esc_url( $photo_src ); ?>" 
 													alt="<?php echo esc_attr( $name_display ); ?>"
-													class="coach-card__image"
+													class="staff-card__image"
 													loading="lazy"
 												>
 											<?php else : ?>
@@ -121,9 +121,9 @@ foreach ( $staff as $person ) {
 										</div>
 
 										<!-- Правая колонка 50%: Информация -->
-										<div class="coach-card__info">
-											<h3 class="coach-card__name"><?php echo esc_html( $name_display ); ?></h3>
-											<p class="coach-card__position"><?php echo esc_html( $position ); ?></p>
+												<div class="staff-card__info">
+													<h3 class="staff-card__name"><?php echo esc_html( $name_display ); ?></h3>
+													<p class="staff-card__position"><?php echo esc_html( $position ); ?></p>
 										</div>
 									</a>
 								<?php endforeach; ?>
