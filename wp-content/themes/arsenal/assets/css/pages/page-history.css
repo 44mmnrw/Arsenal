@@ -9,9 +9,7 @@
    ======================================== */
 
 .club-history-container {
-    background: var(--color-white);
-    border-radius: 10px;
-    box-shadow: 0px 1px 3px 0px rgba(26, 26, 26, 0.1), 0px 1px 2px -1px rgba(26, 26, 26, 0.1);
+    background: var(--color-white);      
     padding: var(--container-padding-y) var(--container-padding-x);
     max-width: var(--container-max-width);
     margin: 0 auto;
@@ -22,8 +20,8 @@
    ======================================== */
 
 .entry-header h1 {
-    font-size: 2rem !important;
-    text-align: left !important;
+    font-size: 2rem;
+    text-align: left
 }
 
 /* ========================================
@@ -286,7 +284,7 @@
    ======================================== */
 
 .stadiums-section {
-    background-color: var(--gray-50);
+    background-color: var(--gray-100);
     border-radius: 10px;
     padding: 24px;
     display: flex;
@@ -513,14 +511,6 @@
     top: 0;
     overflow: visible;
     /* left будет установлен инлайн стилем */
-}
-
-.timeline-event--top {
-    /* контейнер в верхней половине */
-}
-
-.timeline-event--bottom {
-    /* контейнер в нижней половине */
 }
 
 .timeline-event__tooltip {
@@ -809,6 +799,18 @@
         padding: 8px 10px;
         min-width: 130px;
     }
+    
+    /* Крайние подсказки не выходят за границы */
+    .timeline-event:first-child .timeline-event__tooltip {
+        left: 0;
+        transform: translateX(0);
+    }
+    
+    .timeline-event:last-child .timeline-event__tooltip {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
+    }
 }
 
 /* ========================================
@@ -830,8 +832,7 @@
     }
 
     .club-history-container {
-        padding: 20px 16px;
-        border-radius: 8px;
+        padding: 20px 16px;        
     }
     
     .history-intro {
@@ -986,6 +987,18 @@
         min-width: 110px;
         max-width: 140px;
         border-radius: 6px;
+    }
+    
+    /* Крайние подсказки не выходят за границы */
+    .timeline-event:first-child .timeline-event__tooltip {
+        left: 0;
+        transform: translateX(0);
+    }
+    
+    .timeline-event:last-child .timeline-event__tooltip {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
     }
 }
 

@@ -116,6 +116,9 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-admin.php';
         
+        // Классы управления набором в академию
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-academy-recruitment-admin.php';
+        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -158,6 +161,10 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс истории
         $history_admin = new Arsenal_History_Admin();
         $history_admin->__init__();
+        
+        // Инициализируем админ-интерфейс набора в академию
+        $academy_admin = new Arsenal_Academy_Recruitment_Admin();
+        $academy_admin->__init__();
     }
     
     /**
@@ -321,6 +328,16 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-history',
             array( $this, 'render_history_form' )
+        );
+        
+        // Подменю: Набор в академию
+        add_submenu_page(
+            $parent_slug,
+            'Набор в академию',
+            'Набор в академию',
+            'manage_options',
+            'arsenal-academy-recruitment',
+            array( $this, 'render_academy_recruitment' )
         );
         
         // Скрытая страница добавления спонсора (без пункта меню)
@@ -914,6 +931,15 @@ class Arsenal_Team_Manager {
         $history_admin = new Arsenal_History_Admin();
         $history_admin->__init__(); // Инициализируем хуки
         $history_admin->render_history_form();
+    }
+    
+    /**
+     * Форма управления набором в академию
+     */
+    public function render_academy_recruitment() {
+        $academy_admin = new Arsenal_Academy_Recruitment_Admin();
+        $academy_admin->__init__();
+        $academy_admin->render_page();
     }
 
     /**

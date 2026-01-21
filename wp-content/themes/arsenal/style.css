@@ -96,14 +96,6 @@ table {
 	--red-400: #dc2626; /* Альтернативный красный */
 	--red-100: #ffe5e5; /* Светлый фон для выделения */
 	--red-50: #fff0f0;  /* Очень светлый фон */
-	--red-tint: #fee2e2; /* Очень светлый красный оттенок */
-	
-	/* Алиасы для красного */
-	--color-primary: var(--red-900); /* Темный красный первичный */
-	--color-primary-light: var(--red-700); /* Светлый красный первичный */
-	--color-primary-accent: var(--red-600); /* Красный акцент */
-	--accent-color: var(--red-700); /* Основной акцент */
-	--primary-color: var(--red-700); /* Первичный цвет */
 	
 	/* Черные и темные оттенки */
 	--color-black: #000000;
@@ -158,42 +150,26 @@ table {
 	   СЕМАНТИЧЕСКИЕ ЦВЕТА
 	   ============================================ */
 	
-	/* Фоны */
-	--color-bg: var(--color-white);
-	--color-bg-page: var(--gray-50); /* #f9fafb */
-	--color-bg-light: var(--gray-50);
-	--color-bg-dark: var(--color-dark-gray);
-	--color-bg-gray: var(--gray-200); /* #e5e7eb */
-	--color-bg-card: var(--color-white);
-	--color-bg-red-light: var(--red-100);
-	--color-bg-red-lighter: var(--red-50);
-	
 	/* Текст */
 	--color-text: #333333;
-	--color-text-dark: var(--gray-900); /* #0a0a0a */
-	--color-text-darker: var(--gray-800); /* #101828 */
-	--color-text-light: var(--color-white);
-	--color-text-secondary: var(--gray-600); /* #4a5565 */
-	--color-text-muted: var(--gray-700); /* #364153 */
-	--secondary-color: var(--color-white); /* Вторичный текст (белый на красном) */
+	--color-text-dark: #0a0a0a;
+	--color-text-darker: #101828;
+	--color-text-light: #ffffff;
+	--color-text-secondary: #4a5565;
+	--color-text-muted: #364153;
+	--secondary-color: #ffffff;
 	
 	/* Границы */
-	--color-border: var(--gray-200); /* #e5e7eb */
-	--color-border-light: var(--gray-300); /* #d1d5dc */
+	--color-border: #e5e7eb;
+	--color-border-light: #d1d5dc;
 	
 	/* Футбольное поле */
-	--color-field: var(--green-700); /* #00a63e */
-	--color-field-dark: var(--green-800); /* #008236 */
+	--color-field: #00a63e;
+	--color-field-dark: #008236;
 	
 	/* Матч: домашняя/гостевая команда */
-	--color-home: var(--red-700); /* #ff1a1a */
-	--color-away: var(--blue-700); /* #155dfc */
-}
-
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+	--color-home: #ff1a1a;
+	--color-away: #155dfc;
 }
 
 body {
@@ -201,7 +177,7 @@ body {
 	font-size: 16px;
 	line-height: 1.6;
 	color: var(--color-text, #333333);
-	background-color: var(--color-bg, #ffffff);
+	background-color: var(--color-white, #ffffff);
 }
 
 /* Контейнер */

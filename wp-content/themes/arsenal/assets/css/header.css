@@ -240,7 +240,7 @@
 }
 
 .skip-link:focus {
-	background-color: var(--color-bg);
+	background-color: var(--color-white);
 	clip: auto !important;
 	display: block;
 	height: auto;

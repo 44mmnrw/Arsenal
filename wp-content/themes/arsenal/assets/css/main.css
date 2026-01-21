@@ -678,7 +678,7 @@ article {
 }
 
 .entry-title a {
-	color: var(--primary-color);
+	color: var(--red-700);
 }
 
 .post-thumbnail {
@@ -704,14 +704,14 @@ article {
 .read-more {
 	display: inline-block;
 	padding: 0.625rem 1.25rem;
-	background: var(--accent-color);
+	background: var(--red-700);
 	color: var(--secondary-color);
 	border-radius: 0.25rem;
 	transition: background 0.3s ease;
 }
 
 .read-more:hover {
-	background: var(--primary-color);
+	background: var(--red-700);
 	color: var(--secondary-color);
 }
 
@@ -727,7 +727,7 @@ article {
 	font-size: 1.25rem;
 	margin-bottom: 1.25rem;
 	padding-bottom: 0.625rem;
-	border-bottom: 0.125rem solid var(--accent-color);
+	border-bottom: 0.125rem solid var(--red-700);
 }
 
 /* ==========================================================================
@@ -749,7 +749,7 @@ article {
 
 .footer-widget-area .widget-title {
 	color: var(--color-text-light);
-	border-color: var(--accent-color);
+	border-color: var(--red-700);
 }
 
 .site-info {

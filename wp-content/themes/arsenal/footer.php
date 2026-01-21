@@ -319,6 +319,19 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 });
+
+// Асинхронная загрузка логотипа в header
+document.addEventListener('DOMContentLoaded', function() {
+	var logoIconEl = document.getElementById('logo-icon');
+	if (logoIconEl && !logoIconEl.innerHTML.trim()) {
+		fetch('<?php echo esc_url(get_template_directory_uri() . '/assets/images/arsenal-logo.svg'); ?>')
+			.then(response => response.text())
+			.then(data => {
+				logoIconEl.innerHTML = data;
+			})
+			.catch(err => console.error('Logo load error:', err));
+	}
+});
 </script>
 
 <?php wp_footer(); ?>

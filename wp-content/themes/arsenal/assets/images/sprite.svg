@@ -41,7 +41,7 @@
 
 	<!-- Facebook -->
 	<symbol id="icon-facebook" viewBox="0 0 24 24" data-name="Facebook" data-category="Социальные сети">
-		<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+		<path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
 	</symbol>
 
 	<!-- Instagram -->
@@ -176,7 +176,7 @@
 	</symbol>
 
 	<!-- Календарь (для даты) -->
-	<symbol id="icon-date" viewBox="0 0 24 26.4">
+	<symbol id="icon-date" viewBox="0 0 24 26.4" data-name="Дата" data-category="Документы">
 		<g id="Слой_x0020_1">
 			<metadata id="CorelCorpID_0Corel-Layer"/>
 			<line fill="none" fill-opacity="0.901961" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="22.9256" stroke-opacity="0.901961" x1="7.2" y1="1.2" x2="7.2" y2="6"/>

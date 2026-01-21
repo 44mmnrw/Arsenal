@@ -14,15 +14,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Регистрация метабокса для выбора стадиона
  */
 function arsenal_register_stadium_selector_metabox() {
-	// Добавляем метабокс на все страницы
-	add_meta_box(
-		'arsenal_stadium_selector',
-		__( '🏟️ Выбор стадиона', 'arsenal' ),
-		'arsenal_render_stadium_selector_metabox',
-		'page',
-		'normal',
-		'high'
-	);
+	global $post;
+	
+	// Проверяем, что это страница и используется шаблон page-stadium
+	if ( ! $post ) {
+		return;
+	}
+	
+	$page_template = get_post_meta( $post->ID, '_wp_page_template', true );
+	
+	// Добавляем метабокс только если выбран шаблон Стадион
+	if ( 'templates/page-stadium.php' === $page_template ) {
+		add_meta_box(
+			'arsenal_stadium_selector',
+			__( '🏟️ Выбор стадиона', 'arsenal' ),
+			'arsenal_render_stadium_selector_metabox',
+			'page',
+			'normal',
+			'high'
+		);
+	}
 }
 add_action( 'add_meta_boxes', 'arsenal_register_stadium_selector_metabox' );
 

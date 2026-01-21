@@ -26,8 +26,7 @@
 		<div class="header-container">
 			<!-- Логотип -->
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo">
-				<div class="logo-icon">
-				<?php echo file_get_contents( get_template_directory() . '/assets/images/arsenal-logo.svg' ); ?>
+				<div class="logo-icon" id="logo-icon">
 				</div>
 				<div class="logo-text">
 					<span class="logo-title">ФК Арсенал</span>

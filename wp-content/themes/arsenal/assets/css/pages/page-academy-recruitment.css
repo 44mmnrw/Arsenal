@@ -7,11 +7,21 @@
  */
 
 /* ============================================
+   0. MAP SECTION
+   ============================================ */
+
+.page-academy-recruitment #academy-map {
+	border-radius: 8px;
+	margin-bottom: 20px;
+	border: 2px solid var(--red-100);
+}
+
+/* ============================================
    1. HERO SECTION
    ============================================ */
 
 .page-academy-recruitment .academy-hero {
-	background: linear-gradient(135deg, #900 0%, var(--red-700) 100%);
+	background: linear-gradient(135deg, var(--red-700) 0%, var(--red-800) 100%);
 	border-radius: 10px;
 	padding: 48px;
 	margin-bottom: 48px;
@@ -84,7 +94,7 @@
 .page-academy-recruitment .section-title {
 	font-size: 30px;
 	font-weight: 600;
-	color: #900;
+	color: var(--red-700);
 	margin-bottom: 32px;
 	line-height: 1.3;
 }
@@ -107,7 +117,7 @@
 	background: #fff;
 	border-radius: 10px;
 	padding: 32px;
-	border-top: 4px solid #900;
+	border-top: 4px solid var(--red-700);
 	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s ease;
 }
@@ -147,10 +157,10 @@
 .page-academy-recruitment .benefit-icon .icon-24 {
 	width: 24px;
 	height: 24px;
-	stroke: #900;
+	stroke: var(--red-700);
 	stroke-width: 2;
 	fill: none;
-	color: #900;
+	color: var(--red-700);
 }
 
 .page-academy-recruitment .benefit-title {
@@ -190,7 +200,7 @@
 }
 
 .page-academy-recruitment .age-group-card:hover {
-	border-color: #900;
+	border-color: var(--red-700);
 	box-shadow: 0 4px 12px rgba(144, 0, 0, 0.15);
 }
 
@@ -204,7 +214,7 @@
 .page-academy-recruitment .age-group-name {
 	font-size: 24px;
 	font-weight: 700;
-	color: #900;
+	color: var(--red-700);
 	margin: 0;
 }
 
@@ -317,7 +327,7 @@
 
 .page-academy-recruitment .academy-schedule {
 	background: #fff;
-	border-left: 4px solid #900;
+	border-left: 4px solid var(--red-700);
 	border-radius: 10px;
 	padding: 32px 32px 32px 36px;
 	margin-bottom: 48px;
@@ -349,7 +359,7 @@
 .page-academy-recruitment .schedule-icon svg {
 	width: 28px;
 	height: 28px;
-	fill: #900;
+	fill: var(--red-700);
 	stroke: none;
 }
 
@@ -385,8 +395,12 @@
    7. CONTACTS SECTION
    ============================================ */
 
+/* ============================================
+   7. CONTACTS SECTION (2-COLUMN LAYOUT)
+   ============================================ */
+
 .page-academy-recruitment .academy-contacts {
-	background-color: var(--color-charcoal);
+	background-color: #212121;
 	border-radius: 10px;
 	padding: 32px;
 	margin-bottom: 48px;
@@ -396,30 +410,61 @@
 .page-academy-recruitment .academy-contacts .section-title {
 	color: #fff;
 	border-bottom: none;
+	margin-bottom: 32px;
+	font-size: 30px;
+	font-weight: 600;
+	line-height: 39px;
 }
 
-.page-academy-recruitment .contacts-grid {
+/* 2-Column Grid for Admin + Director | Map + Directions */
+.page-academy-recruitment .contacts-2col {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	grid-template-columns: repeat(2, 1fr);
 	gap: 32px;
+	margin-bottom: 32px;
 }
 
-.page-academy-recruitment .contacts-column {
+/* Left Column: Administration & Director */
+.page-academy-recruitment .contacts-left-column {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
 }
 
-.page-academy-recruitment .contacts-subtitle {
+/* Right Column: Map & Directions */
+.page-academy-recruitment .contacts-right-column {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+/* Section within contacts (Administration, Director, etc.) */
+.page-academy-recruitment .contacts-section {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+/* Section Title (Администрация СДЮШ, Директор СДЮШ, etc.) */
+.page-academy-recruitment .contacts-section-title {
 	font-size: 20px;
 	font-weight: 600;
 	color: #ffb3b3;
-	margin-bottom: 0;
+	margin: 0;
+	line-height: 28px;
 }
 
+/* Container for contact items */
+.page-academy-recruitment .contacts-items {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+/* Individual Contact Item (Address, Phone, Email) */
 .page-academy-recruitment .contact-item {
 	display: flex;
-	gap: 32px;
+	gap: 12px;
 	align-items: flex-start;
 }
 
@@ -432,77 +477,225 @@
 	stroke: none;
 }
 
-.page-academy-recruitment .contact-info {
+/* Contact Content Container */
+.page-academy-recruitment .contact-content {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
 }
 
+/* Label (Адрес, Телефон, Email) */
 .page-academy-recruitment .contact-label {
 	font-size: 14px;
 	color: #99a1af;
-	margin: 0 0 4px 0;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
+	margin: 0;
+	font-weight: 400;
+	line-height: 20px;
 }
 
+/* Value (actual address, phone, etc.) */
 .page-academy-recruitment .contact-value {
 	font-size: 16px;
 	color: #fff;
 	margin: 0;
+	font-weight: 400;
+	line-height: 24px;
 }
 
-.page-academy-recruitment .contact-hours {
+.page-academy-recruitment .contact-value a {
+	color: #fff;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.page-academy-recruitment .contact-value a:hover {
+	color: #ffb3b3;
+}
+
+/* Schedule line under phone */
+.page-academy-recruitment .contact-schedule {
 	font-size: 14px;
 	color: #99a1af;
-	margin: 4px 0 0 0;
+	margin: 0;
+	font-weight: 400;
+	line-height: 20px;
+	margin-top: 2px;
 }
 
+/* Director Card Styles */
 .page-academy-recruitment .director-card {
 	background-color: rgba(255, 255, 255, 0.1);
 	border-radius: 10px;
 	padding: 16px;
-	margin-top: 8px;
-}
-
-.page-academy-recruitment .director-title {
-	font-size: 20px;
-	font-weight: 600;
-	color: #ffb3b3;
-	margin: 0 0 16px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 }
 
 .page-academy-recruitment .director-name {
 	font-size: 18px;
 	color: #fff;
-	margin: 0 0 4px 0;
-	font-weight: 500;
+	margin: 0;
+	font-weight: 400;
+	line-height: 28px;
 }
 
 .page-academy-recruitment .director-role {
 	font-size: 14px;
 	color: #99a1af;
-	margin: 0 0 12px 0;
+	margin: 0;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+.page-academy-recruitment .director-contacts {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	margin-top: 4px;
 }
 
 .page-academy-recruitment .director-contact {
 	font-size: 14px;
 	color: #fff;
 	margin: 0;
-	line-height: 1.8;
+	font-weight: 400;
+	line-height: 20px;
 }
 
-/* Location/Map Section */
-.page-academy-recruitment .location-map {
+.page-academy-recruitment .director-contact a {
+	color: #fff;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.page-academy-recruitment .director-contact a:hover {
+	color: #ffb3b3;
+}
+
+/* Map Container & Placeholder */
+.page-academy-recruitment .academy-map-wrapper {
+	position: relative;
+	width: 100%;
+	height: 325px;
 	background-color: rgba(255, 255, 255, 0.1);
 	border-radius: 10px;
-	padding: 32px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 256px;
+	overflow: hidden;
+	margin-bottom: 16px;
+}
+
+.page-academy-recruitment #academy-map {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
 }
 
 .page-academy-recruitment .map-placeholder {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	text-align: center;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.page-academy-recruitment .map-icon {
+	width: 48px;
+	height: 48px;
+	fill: #99a1af;
+	margin-bottom: 12px;
+}
+
+.page-academy-recruitment .map-text {
+	font-size: 16px;
+	color: #99a1af;
+	margin: 0 0 4px 0;
+	font-weight: 400;
+	line-height: 24px;
+}
+
+.page-academy-recruitment .map-subtext {
+	font-size: 14px;
+	color: #6a7282;
+	margin: 0;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: center;
+}
+
+/* Transport Directions */
+.page-academy-recruitment .transport-directions {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.page-academy-recruitment .transport-directions p {
+	font-size: 14px;
+	color: #99a1af;
+	margin: 0;
+	font-weight: 400;
+	line-height: 22.4px;
+}
+
+.page-academy-recruitment .transport-directions strong {
+	color: #99a1af;
+	font-weight: 700;
+}
+
+/* Social Media Section (Full Width) */
+.page-academy-recruitment .contacts-social-section {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	padding-top: 33px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.page-academy-recruitment .contacts-social-section .contacts-section-title {
+	margin: 0;
+}
+
+/* Social Links Grid */
+.page-academy-recruitment .social-links-grid {
+	display: flex;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.page-academy-recruitment .social-button {
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #fff;
+	padding: 12px 16px;
+	border-radius: 10px;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 24px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.page-academy-recruitment .social-button svg {
+	width: 24px;
+	height: 24px;
+	fill: currentColor;
+}
+
+.page-academy-recruitment .social-button:hover {
+	background-color: rgba(255, 179, 179, 0.2);
+	color: #ffb3b3;
 }
 
 .page-academy-recruitment .map-placeholder svg {
@@ -628,7 +821,7 @@
 .page-academy-recruitment .faq-question::after {
 	content: "▼";
 	font-size: 12px;
-	color: #900;
+	color: var(--red-700);
 	transition: transform 0.3s ease;
 	transform: translateY(2px);
 }
@@ -649,7 +842,67 @@
    9. RESPONSIVE DESIGN
    ============================================ */
 
+/* ============================================
+   LARGE TABLET (max-width: 1024px)
+   ============================================ */
+
+@media (max-width: 1024px) {
+	/* Hero Section */
+	.page-academy-recruitment .academy-hero {
+		padding: 40px;
+	}
+
+	.page-academy-recruitment .hero-title {
+		font-size: 40px;
+	}
+
+	/* Benefits */
+	.page-academy-recruitment .benefits-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+	}
+
+	/* Age Groups */
+	.page-academy-recruitment .age-groups-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 16px;
+	}
+
+	/* Contacts */
+	.page-academy-recruitment .contacts-2col {
+		grid-template-columns: 1fr;
+		gap: 24px;
+	}
+
+	/* Schedule */
+	.page-academy-recruitment .schedule-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+	}
+
+	/* Map */
+	.page-academy-recruitment .academy-map-wrapper {
+		height: 280px;
+	}
+
+	/* Documents Grid */
+	.page-academy-recruitment .documents-grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 24px;
+	}
+}
+
+/* ============================================
+   TABLET (max-width: 768px)
+   ============================================ */
+
 @media (max-width: 768px) {
+	/* Map */
+	.page-academy-recruitment #academy-map {
+		height: 350px;
+	}
+
+	/* Hero Section */
 	.page-academy-recruitment .academy-hero {
 		padding: 32px;
 	}
@@ -672,11 +925,13 @@
 		min-width: auto;
 	}
 
+	/* Titles */
 	.page-academy-recruitment .section-title {
 		font-size: 24px;
 		margin-bottom: 24px;
 	}
 
+	/* Benefits */
 	.page-academy-recruitment .benefits-grid {
 		grid-template-columns: 1fr;
 		gap: 16px;
@@ -686,11 +941,13 @@
 		padding: 24px;
 	}
 
+	/* Age Groups */
 	.page-academy-recruitment .age-groups-grid {
 		grid-template-columns: 1fr;
 		gap: 12px;
 	}
 
+	/* Documents */
 	.page-academy-recruitment .documents-grid {
 		grid-template-columns: 1fr;
 		gap: 12px;
@@ -704,6 +961,7 @@
 		padding: 24px;
 	}
 
+	/* Schedule */
 	.page-academy-recruitment .schedule-grid {
 		grid-template-columns: 1fr;
 		gap: 16px;
@@ -713,7 +971,8 @@
 		padding: 24px 24px 24px 28px;
 	}
 
-	.page-academy-recruitment .contacts-grid {
+	/* Contacts */
+	.page-academy-recruitment .contacts-2col {
 		grid-template-columns: 1fr;
 		gap: 24px;
 	}
@@ -723,19 +982,23 @@
 	}
 
 	.page-academy-recruitment .contact-item {
-		gap: 16px;
+		gap: 12px;
 	}
 
-	.page-academy-recruitment .social-links {
+	.page-academy-recruitment .academy-map-wrapper {
+		height: 200px;
+	}
+
+	.page-academy-recruitment .social-links-grid {
 		gap: 8px;
 	}
 
-	.page-academy-recruitment .social-link {
+	.page-academy-recruitment .social-button {
 		flex: 1;
 		text-align: center;
-		padding: 10px 8px;
 	}
 
+	/* FAQ */
 	.page-academy-recruitment .faq-question {
 		font-size: 16px;
 		padding: 16px;
@@ -747,7 +1010,17 @@
 	}
 }
 
+/* ============================================
+   MOBILE (max-width: 480px)
+   ============================================ */
+
 @media (max-width: 480px) {
+	/* Map */
+	.page-academy-recruitment #academy-map {
+		height: 250px;
+	}
+
+	/* Hero Section */
 	.page-academy-recruitment .hero-title {
 		font-size: 24px;
 	}
@@ -756,21 +1029,53 @@
 		font-size: 14px;
 	}
 
+	.page-academy-recruitment .academy-hero {
+		padding: 24px;
+	}
+
+	/* Cards */
 	.page-academy-recruitment .benefit-card,
 	.page-academy-recruitment .age-group-card {
 		padding: 16px;
 	}
 
+	/* Age Groups Header */
 	.page-academy-recruitment .age-group-header {
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 12px;
 	}
 
+	/* Section Title */
+	.page-academy-recruitment .section-title {
+		font-size: 20px;
+		margin-bottom: 16px;
+	}
+
+	/* Documents */
 	.page-academy-recruitment .document-item {
 		gap: 12px;
 	}
 
+	.page-academy-recruitment .academy-documents {
+		padding: 16px;
+	}
+
+	/* Schedule */
+	.page-academy-recruitment .schedule-icon {
+		width: 48px;
+		height: 48px;
+	}
+
+	.page-academy-recruitment .schedule-heading {
+		font-size: 16px;
+	}
+
+	.page-academy-recruitment .academy-schedule {
+		padding: 16px 16px 16px 20px;
+	}
+
+	/* Contacts */
 	.page-academy-recruitment .location-map {
 		padding: 24px;
 		min-height: auto;
@@ -780,7 +1085,35 @@
 		gap: 16px;
 	}
 
+	.page-academy-recruitment .academy-contacts {
+		padding: 16px;
+	}
+
+	.page-academy-recruitment .contacts-section-title {
+		font-size: 16px;
+	}
+
+	.page-academy-recruitment .contact-value {
+		font-size: 14px;
+	}
+
 	.page-academy-recruitment .social-links {
 		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.page-academy-recruitment .social-button {
+		padding: 8px 12px;
+		font-size: 14px;
+	}
+
+	/* FAQ */
+	.page-academy-recruitment .faq-question {
+		font-size: 14px;
+		padding: 12px;
+	}
+
+	.page-academy-recruitment .faq-answer {
+		font-size: 13px;
+		padding: 0 12px 12px 12px;
 	}
 }

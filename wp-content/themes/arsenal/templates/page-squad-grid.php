@@ -17,7 +17,15 @@ get_header();
 
 global $wpdb;
 
-// Запрос: все игроки Арсенала с активными контрактами
+// Получаем ID выбранного состава из метаполя
+$squad_id = get_post_meta( get_the_ID(), '_arsenal_squad_id', true );
+
+// Если не выбран состав в метаоксе, используем значение по умолчанию (Основной состав)
+if ( empty( $squad_id ) ) {
+	$squad_id = '21F3D7B3'; // По умолчанию: Основной состав
+}
+
+// Запрос: все игроки выбранного состава с активными контрактами
 $sql = "SELECT p.*, pos.name as position_name, pos.id as position_id_numeric
 	FROM {$wpdb->prefix}arsenal_players p
 	LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.position_id
@@ -26,7 +34,21 @@ $sql = "SELECT p.*, pos.name as position_name, pos.id as position_id_numeric
 	AND (tc.contract_end IS NULL OR tc.contract_end >= CURDATE())
 	ORDER BY pos.id ASC, p.shirt_number ASC";
 
-$players = $wpdb->get_results( $wpdb->prepare( $sql, '21F3D7B3' ) );
+$players = $wpdb->get_results( $wpdb->prepare( $sql, $squad_id ) );
+
+// Получаем название состава из БД
+$squad_name = 'Основной состав'; // По умолчанию
+if ( ! empty( $squad_id ) ) {
+	$squad_data = $wpdb->get_row(
+		$wpdb->prepare(
+			"SELECT squad_name FROM {$wpdb->prefix}arsenal_squad WHERE squad_id = %s",
+			$squad_id
+		)
+	);
+	if ( $squad_data && ! empty( $squad_data->squad_name ) ) {
+		$squad_name = $squad_data->squad_name;
+	}
+}
 
 // Группируем игроков по позициям
 $players_by_position = array();
@@ -44,7 +66,7 @@ foreach ( $players as $player ) {
 	<section class="teams-section">
 		<div class="container">
 			<div class="teams-header">
-				<h1 class="teams-title">Основной состав</h1>
+				<h1 class="teams-title"><?php echo esc_html( $squad_name ); ?></h1>
 			</div>
 
 			<?php if ( ! empty( $players ) ) : ?>

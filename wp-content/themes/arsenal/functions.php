@@ -96,8 +96,95 @@ add_filter( 'use_block_editor_for_post', '__return_false' );
 remove_action( 'wp_enqueue_scripts', 'wp_common_block_scripts_and_styles' );
 
 /**
+ * Оптимизация производительности для страницы academy recruitment
+ */
+add_action( 'wp_head', function() {
+	if ( is_page_template( 'templates/page-academy-recruitment.php' ) ) {
+		// Inline критический CSS для hero секции
+		echo '<style>
+			.page-academy-recruitment .academy-hero {
+				background: linear-gradient(135deg, #900 0%, #cc0000 100%);
+				border-radius: 10px;
+				padding: 48px;
+				margin-bottom: 48px;
+				color: #fff;
+			}
+			.page-academy-recruitment .hero-title {
+				font-size: 48px;
+				font-weight: 700;
+				line-height: 1.2;
+				margin-bottom: 24px;
+				color: #fff;
+			}
+			.page-academy-recruitment .hero-description {
+				font-size: 20px;
+				line-height: 1.6;
+				margin-bottom: 32px;
+				color: #fff;
+				max-width: 100%;
+			}
+		</style>';
+		
+		// Preload критических шрифтов
+		echo '<link rel="preload" as="font" href="' . get_template_directory_uri() . '/assets/fonts/Inter-Regular.woff2" type="font/woff2" crossorigin>';
+		echo '<link rel="preload" as="font" href="' . get_template_directory_uri() . '/assets/fonts/Inter-Bold.woff2" type="font/woff2" crossorigin>';
+		
+		// DNS prefetch для CDN
+		echo '<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">';
+	}
+}, 1 );
+
+/**
+ * Отложить загрузку non-critical CSS
+ */
+add_action( 'wp_enqueue_scripts', function() {
+	if ( is_page_template( 'templates/page-academy-recruitment.php' ) ) {
+		// Отложить загрузку page-academy-recruitment.css используя media="print" трюк
+		// После загрузки страницы JavaScript переключит media на "all"
+		wp_enqueue_style(
+			'arsenal-academy-recruitment',
+			get_template_directory_uri() . '/assets/css/pages/page-academy-recruitment.css',
+			array( 'arsenal-footer' ),
+			'1.0.0'
+		);
+		
+		// Добавить скрипт для загрузки стилей асинхронно
+		echo '<script>
+			var link = document.querySelector("link[data-lazy-css]");
+			if ( link && link.media === "print" ) {
+				link.media = "all";
+				link.onload = function() { this.onload = null; };
+			}
+		</script>';
+	}
+}, 999 );
+
+/**
+ * Подключение Leaflet для интерактивных карт
+ */
+add_action( 'wp_enqueue_scripts', function() {
+	// Проверяем, находимся ли на странице academy recruitment
+	if ( is_page_template( 'templates/page-academy-recruitment.php' ) ) {
+		// Leaflet CSS
+		wp_enqueue_style( 'leaflet-css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css', array(), '1.9.4' );
+		
+		// Leaflet JS с defer для неблокирующей загрузки
+		wp_enqueue_script( 'leaflet-js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js', array(), '1.9.4', true );
+		
+		// Добавить defer атрибут к Leaflet скрипту
+		add_filter( 'script_loader_tag', function( $tag, $handle ) {
+			if ( 'leaflet-js' === $handle ) {
+				return str_replace( ' src=', ' defer src=', $tag );
+			}
+			return $tag;
+		}, 10, 2 );
+	}
+} );
+
+/**
  * Подключение файлов темы
  */
+require_once ARSENAL_THEME_DIR . '/inc/academy-recruitment-api.php';
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-manager.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-players.php';
@@ -344,6 +431,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-staff',
 				ARSENAL_THEME_URI . '/assets/css/pages/page-staff.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
+		// Стили страницы Набор в академию
+		if ( is_page_template( 'templates/page-academy-recruitment.php' ) || is_page( 'academy-recruitment' ) ) {
+			wp_enqueue_style(
+				'arsenal-academy-recruitment',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-academy-recruitment.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -1677,3 +1774,8 @@ require_once ARSENAL_THEME_DIR . '/inc/staff-department-metabox.php';
  * Подключение метаокса для выбора стадиона на странице "page-stadium"
  */
 require_once ARSENAL_THEME_DIR . '/inc/stadium-selector-metabox.php';
+
+/**
+ * Подключение метаокса для выбора состава на странице "page-squad-grid"
+ */
+require_once ARSENAL_THEME_DIR . '/inc/squad-selector-metabox.php';
