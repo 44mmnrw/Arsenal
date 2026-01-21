@@ -323,16 +323,6 @@ class Arsenal_Team_Manager {
             array( $this, 'render_history_form' )
         );
         
-        // Подменю: Набор в академию
-        add_submenu_page(
-            $parent_slug,
-            'Набор в академию',
-            'Набор в академию',
-            'manage_options',
-            'arsenal-academy-recruitment',
-            array( $this, 'render_academy_recruitment' )
-        );
-        
         // Скрытая страница добавления спонсора (без пункта меню)
         add_submenu_page(
             '',
@@ -926,15 +916,6 @@ class Arsenal_Team_Manager {
         $history_admin->render_history_form();
     }
     
-    /**
-     * Форма управления набором в академию
-     */
-    public function render_academy_recruitment() {
-        $academy_admin = new Arsenal_Academy_Recruitment_Admin();
-        $academy_admin->init();
-        $academy_admin->render_page();
-    }
-
     /**
      * Обработка отправки формы спонсора (admin_init - ПЕРЕД выводом контента!)
      */
