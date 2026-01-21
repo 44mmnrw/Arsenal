@@ -21,13 +21,13 @@ $form_action = 'arsenal_update_academy_recruitment';
 
 		<!-- Сообщения об ошибке/успехе -->
 		<?php if ( isset( $_GET['saved'] ) && $_GET['saved'] == 1 ) : ?>
-			<div class="notice notice-success is-dismissible" style="margin: 20px 0;">
+			<div class="notice notice-success is-dismissible">
 				<p><?php esc_html_e( 'Данные успешно сохранены!', 'arsenal-team-manager' ); ?></p>
 			</div>
 		<?php endif; ?>
 
 		<?php if ( isset( $_GET['error'] ) && $_GET['error'] == 1 ) : ?>
-			<div class="notice notice-error is-dismissible" style="margin: 20px 0;">
+			<div class="notice notice-error is-dismissible">
 				<p><?php esc_html_e( 'Произошла ошибка при сохранении!', 'arsenal-team-manager' ); ?></p>
 			</div>
 		<?php endif; ?>
@@ -80,23 +80,21 @@ $form_action = 'arsenal_update_academy_recruitment';
 							  placeholder="Опишите программу набора"><?php echo isset( $data['hero_data']['description'] ) ? esc_textarea( $data['hero_data']['description'] ) : ''; ?></textarea>
 				</div>
 
-				<input type="hidden" name="hero_data" id="hero_data" style="display:none;">
-			</div>
-
+			<input type="hidden" name="hero_data" id="hero_data" class="hidden-field">
 			<!-- Преимущества (Why Us) -->
 			<div class="academy-recruitment-section academy-recruitment-full">
 				<div class="section-header">
 					⭐ Преимущества (Почему мы?)
 				</div>
 
-				<div id="benefits-editor" style="margin-bottom: 10px;">
-					<div style="margin-bottom: 10px;">
-						<button type="button" id="add-benefit-btn" class="button">+ Добавить карточку</button>
-					</div>
-					<div id="benefits-list"></div>
+<div id="benefits-editor" class="editor-container">
+				<div class="add-btn-container">
+					<button type="button" id="add-benefit-btn" class="button">+ Добавить карточку</button>
 				</div>
+				<div id="benefits-list"></div>
+			</div>
 
-				<input type="hidden" name="benefits_data" id="benefits_data" style="display:none;">
+			<input type="hidden" name="benefits_data" id="benefits_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -115,7 +113,7 @@ $form_action = 'arsenal_update_academy_recruitment';
 									</select>
 									<button type="button" class="academy-form-remove-btn">Удалить</button>
 								</div>
-								<div class="form-group" style="margin-bottom: 0;">
+							<div class="form-group">
 									<input type="text" class="benefit-title" value="${(item.title || '').replace(/"/g, '&quot;')}" placeholder="Заголовок">
 								</div>
 								<div class="form-group">
@@ -185,14 +183,14 @@ $form_action = 'arsenal_update_academy_recruitment';
 					👥 Возрастные группы
 				</div>
 
-				<div id="age-groups-editor" style="margin-bottom: 10px;">
-					<div style="margin-bottom: 10px;">
-						<button type="button" id="add-age-group-btn" class="button">+ Добавить группу</button>
-					</div>
-					<div id="age-groups-list"></div>
+<div id="age-groups-editor" class="editor-container">
+				<div class="add-btn-container">
+					<button type="button" id="add-age-group-btn" class="button">+ Добавить группу</button>
 				</div>
+				<div id="age-groups-list"></div>
+			</div>
 
-				<input type="hidden" name="age_groups_data" id="age_groups_data" style="display:none;">
+			<input type="hidden" name="age_groups_data" id="age_groups_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -296,19 +294,19 @@ $form_action = 'arsenal_update_academy_recruitment';
 					📄 Необходимые документы
 				</div>
 
-				<div id="documents-editor" style="margin-bottom: 10px;">
-					<div style="margin-bottom: 10px;">
-						<button type="button" id="add-document-btn" class="button">+ Добавить документ</button>
-					</div>
-					<div id="documents-list"></div>
+<div id="documents-editor" class="editor-container">
+				<div class="add-btn-container">
+					<button type="button" id="add-document-btn" class="button">+ Добавить документ</button>
 				</div>
+				<div id="documents-list"></div>
+			</div>
 
-				<div class="form-group">
-					<label for="documents_notice">Примечание</label>
-					<textarea name="documents_notice" id="documents_notice" rows="3"><?php echo isset( $data['documents_data']['notice'] ) ? esc_textarea( $data['documents_data']['notice'] ) : ''; ?></textarea>
-				</div>
+			<div class="form-group">
+				<label for="documents_notice">Примечание</label>
+				<textarea name="documents_notice" id="documents_notice" rows="3"><?php echo isset( $data['documents_data']['notice'] ) ? esc_textarea( $data['documents_data']['notice'] ) : ''; ?></textarea>
+			</div>
 
-				<input type="hidden" name="documents_data" id="documents_data" style="display:none;">
+			<input type="hidden" name="documents_data" id="documents_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -378,19 +376,19 @@ $form_action = 'arsenal_update_academy_recruitment';
 					📅 Расписание просмотров
 				</div>
 
-				<div id="schedule-editor" style="margin-bottom: 10px;">
-					<div style="margin-bottom: 10px;">
-						<button type="button" id="add-schedule-item-btn" class="button">+ Добавить пункт</button>
-					</div>
-					<div id="schedule-list"></div>
+<div id="schedule-editor" class="editor-container">
+				<div class="add-btn-container">
+					<button type="button" id="add-schedule-item-btn" class="button">+ Добавить пункт</button>
 				</div>
+				<div id="schedule-list"></div>
+			</div>
 
-				<div class="form-group">
-					<label for="schedule_notice">Примечание</label>
-					<textarea name="schedule_notice" id="schedule_notice" rows="3"><?php echo isset( $data['schedule_data']['notice'] ) ? esc_textarea( $data['schedule_data']['notice'] ) : ''; ?></textarea>
-				</div>
+			<div class="form-group">
+				<label for="schedule_notice">Примечание</label>
+				<textarea name="schedule_notice" id="schedule_notice" rows="3"><?php echo isset( $data['schedule_data']['notice'] ) ? esc_textarea( $data['schedule_data']['notice'] ) : ''; ?></textarea>
+			</div>
 
-				<input type="hidden" name="schedule_data" id="schedule_data" style="display:none;">
+			<input type="hidden" name="schedule_data" id="schedule_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -500,32 +498,30 @@ $form_action = 'arsenal_update_academy_recruitment';
 				</div>
 
 				<!-- Рабочие дни и время -->
-				<div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 20px;">
-					<h4 style="margin-top: 0;">Рабочие дни и время</h4>
+			<div class="subsection">
+				<h4 class="subsection-title">Рабочие дни и время</h4>
 
-					<div id="working-schedule-editor">
-						<div id="working-schedule-items" style="display: grid; gap: 12px; margin-bottom: 15px;">
+				<div id="working-schedule-editor">
+					<div id="working-schedule-items" class="working-schedule-items">
 							<?php 
 							$schedule = isset( $data['contacts_data']['working_schedule'] ) && is_array( $data['contacts_data']['working_schedule'] ) ? $data['contacts_data']['working_schedule'] : array();
 							foreach ( $schedule as $index => $day ) : 
 							?>
-							<div class="schedule-item" data-index="<?php echo $index; ?>" style="display: grid; grid-template-columns: 1fr 1fr 40px; gap: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; align-items: center;">
-								<input type="text" class="schedule-day" value="<?php echo esc_attr( $day['day'] ?? '' ); ?>" placeholder="Понедельник" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<input type="text" class="schedule-time" value="<?php echo esc_attr( $day['time'] ?? '' ); ?>" placeholder="09:00 - 18:00" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<button type="button" class="remove-schedule-item" style="padding: 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
-							</div>
-							<?php endforeach; ?>
+						<div class="schedule-day-item" data-index="<?php echo $index; ?>">
+							<input type="text" class="schedule-day" value="<?php echo esc_attr( $day['day'] ?? '' ); ?>" placeholder="Понедельник">
+							<input type="text" class="schedule-time" value="<?php echo esc_attr( $day['time'] ?? '' ); ?>" placeholder="09:00 - 18:00">
+							<button type="button" class="remove-schedule-item">✕</button>
 						</div>
-
-						<button type="button" id="add-schedule-item" style="padding: 10px 20px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer;">+ Добавить день</button>
-						<input type="hidden" id="working-schedule-json" name="working_schedule_json" value="<?php echo isset( $data['contacts_data']['working_schedule'] ) ? esc_attr( json_encode( $data['contacts_data']['working_schedule'] ) ) : '[]'; ?>">
+						<?php endforeach; ?>
 					</div>
+
+					<button type="button" id="add-schedule-item" class="add-schedule-day-btn">+ Добавить день</button>
+					<input type="hidden" id="working-schedule-json" name="working_schedule_json" value="<?php echo isset( $data['contacts_data']['working_schedule'] ) ? esc_attr( json_encode( $data['contacts_data']['working_schedule'] ) ) : '[]'; ?>">
 				</div>
 
 				<!-- Карты -->
-				<div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 20px;">
-					<h4 style="margin-top: 0;">Ссылки на карты</h4>
-
+			<div class="subsection">
+				<h4 class="subsection-title">Ссылки на карты</h4>
 					<div class="form-row">
 						<div class="form-group">
 							<label for="google_maps_url">Google Maps URL</label>
@@ -544,9 +540,8 @@ $form_action = 'arsenal_update_academy_recruitment';
 				</div>
 
 				<!-- Директор -->
-				<div style="background: #f0f0f0; padding: 15px; border-radius: 4px; margin-top: 20px;">
-					<h4 style="margin-top: 0;">Директор СДЮШ</h4>
-
+			<div class="subsection-alt">
+				<h4 class="subsection-title">Директор СДЮШ</h4>
 					<div class="form-row">
 						<div class="form-group">
 							<label for="director_name">Имя директора</label>
@@ -581,10 +576,10 @@ $form_action = 'arsenal_update_academy_recruitment';
 				</div>
 
 				<!-- Маршруты/Направления -->
-				<div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 20px;">
-					<h4 style="margin-top: 0;">Маршруты доезда</h4>
-					<div id="directions-editor" style="margin-bottom: 10px;">
-						<div style="margin-bottom: 10px;">
+			<div class="subsection">
+				<h4 class="subsection-title">Маршруты проезда</h4>
+				<div id="directions-editor" class="editor-container">
+					<div class="add-btn-container">
 							<button type="button" id="add-direction-btn" class="button">+ Добавить маршрут</button>
 						</div>
 						<div id="directions-list"></div>
@@ -592,19 +587,19 @@ $form_action = 'arsenal_update_academy_recruitment';
 				</div>
 
 				<!-- Социальные сети -->
-				<div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin-top: 20px;">
-					<h4 style="margin-top: 0;">Социальные сети</h4>
-					<div id="social-editor" style="margin-bottom: 10px;">
-						<div style="margin-bottom: 10px;">
+			<div class="subsection">
+				<h4 class="subsection-title">Социальные сети</h4>
+				<div id="social-editor" class="editor-container">
+					<div class="add-btn-container">
 							<button type="button" id="add-social-btn" class="button">+ Добавить соцсеть</button>
 						</div>
 						<div id="social-list"></div>
 					</div>
 				</div>
 
-				<input type="hidden" name="contacts_data" id="contacts_data" style="display:none;">
-				<input type="hidden" name="directions_data" id="directions_data" style="display:none;">
-				<input type="hidden" name="social_data" id="social_data" style="display:none;">
+			<input type="hidden" name="contacts_data" id="contacts_data" class="hidden-field">
+			<input type="hidden" name="directions_data" id="directions_data" class="hidden-field">
+			<input type="hidden" name="social_data" id="social_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -683,7 +678,7 @@ $form_action = 'arsenal_update_academy_recruitment';
 
 							const html = $('<div class="direction-item"></div>')
 								.html(`
-									<div class="direction-item-row">
+									<div class="academy-direction-item-row">
 										<select class="direction-icon">
 											<option value="">Выбрать иконку</option>
 											` + iconOptions + `
@@ -728,7 +723,7 @@ $form_action = 'arsenal_update_academy_recruitment';
 
 						const html = $('<div class="direction-item"></div>')
 							.html(`
-								<div class="direction-item-row">
+								<div class="academy-direction-item-row">
 									<select class="direction-icon">
 										<option value="">Выбрать иконку</option>
 										` + iconOptions + `
@@ -841,14 +836,14 @@ $form_action = 'arsenal_update_academy_recruitment';
 					❓ Частые вопросы (FAQ)
 				</div>
 
-				<div id="faq-editor" style="margin-bottom: 10px;">
-					<div style="margin-bottom: 10px;">
-						<button type="button" id="add-faq-btn" class="button">+ Добавить вопрос</button>
-					</div>
-					<div id="faq-list"></div>
+<div id="faq-editor" class="editor-container">
+				<div class="add-btn-container">
+					<button type="button" id="add-faq-btn" class="button">+ Добавить вопрос</button>
 				</div>
+				<div id="faq-list"></div>
+			</div>
 
-				<input type="hidden" name="faq_data" id="faq_data" style="display:none;">
+			<input type="hidden" name="faq_data" id="faq_data" class="hidden-field">
 
 				<script>
 				jQuery(function($) {
@@ -918,7 +913,7 @@ $form_action = 'arsenal_update_academy_recruitment';
 					// ===== Управление рабочими днями и временем =====
 					function updateWorkingScheduleJSON() {
 						const schedule = [];
-						$('#working-schedule-items .schedule-item').each(function() {
+						$('#working-schedule-items .schedule-day-item').each(function() {
 							schedule.push({
 								day: $(this).find('.schedule-day').val(),
 								time: $(this).find('.schedule-time').val(),
@@ -931,11 +926,11 @@ $form_action = 'arsenal_update_academy_recruitment';
 						e.preventDefault();
 						const container = $('#working-schedule-items');
 						const index = container.children().length;
-						const html = $('<div class="schedule-item" data-index="' + index + '" style="display: grid; grid-template-columns: 1fr 1fr 40px; gap: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; align-items: center;"></div>')
-							.html(`
-								<input type="text" class="schedule-day" placeholder="Понедельник" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<input type="text" class="schedule-time" placeholder="09:00 - 18:00" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-								<button type="button" class="remove-schedule-item" style="padding: 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+					const html = $('<div class="schedule-day-item" data-index="' + index + '"></div>')
+						.html(`
+							<input type="text" class="schedule-day" placeholder="Понедельник">
+							<input type="text" class="schedule-time" placeholder="09:00 - 18:00">
+							<button type="button" class="remove-schedule-item">✕</button>
 							`)
 							.on('input change', 'input', updateWorkingScheduleJSON)
 							.on('click', '.remove-schedule-item', function(e) {
@@ -949,11 +944,12 @@ $form_action = 'arsenal_update_academy_recruitment';
 					});
 					$(document).on('input change', '#working-schedule-items input', updateWorkingScheduleJSON);
 					
-					// Инициализировать скрытое поле при загрузке страницы
+					// Инициализировать все JSON поля при загрузке страницы
 					updateWorkingScheduleJSON();
-					updateContactsJSON();
 					updateHeroJSON();
+					updateContactsJSON();
 				});
+
 				</script>
 			</div>
 
