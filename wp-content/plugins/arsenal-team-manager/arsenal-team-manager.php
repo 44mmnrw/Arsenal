@@ -158,10 +158,6 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс истории
         $history_admin = new Arsenal_History_Admin();
         $history_admin->__init__();
-        
-        // Инициализируем админ-интерфейс набора в академию
-        $academy_admin = new Arsenal_Academy_Recruitment_Admin();
-        $academy_admin->init();
     }
     
     /**
