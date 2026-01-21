@@ -1,43 +1,966 @@
 /**
- * Academy History Page Styles
- * Page: История академии
+ * CSS стили для страницы "История ДЮСШ"
  * 
  * @package Arsenal
- * @since 1.0.0
  */
 
-/* ============================================
-   1. PAGE CONTAINER
-   ============================================ */
+/* ========================================
+   КОНТЕЙНЕР ОСНОВНОЙ
+   ======================================== */
 
-.page-academy-history {
-	width: 100%;
+.academy-history-container {
+    background: var(--color-white);
+    padding: var(--container-padding-y) var(--container-padding-x);
+    max-width: var(--container-max-width);
+    margin: 0 auto;
 }
 
-/* ============================================
-   2. RESPONSIVE DESIGN
-   ============================================ */
+/* ========================================
+   СЕКЦИЯ ВВЕДЕНИЯ
+   ======================================== */
 
-/* ============================================
-   LARGE TABLET (max-width: 1024px)
-   ============================================ */
+.academy-history-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    margin-bottom: 48px;
+}
+
+.academy-history-intro__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.academy-history-intro__title {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 39px;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.academy-history-intro__description {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    color: var(--gray-600);
+    max-width: 100%;
+    margin: 0;
+}
+
+/* ========================================
+   СТАТИСТИЧЕСКИЕ КАРТОЧКИ
+   ======================================== */
+
+.academy-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.academy-stat-card {
+    background: var(--color-white);
+    border: 1px solid var(--gray-200);
+    border-top: 4px solid var(--red-900);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.academy-stat-card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.academy-stat-card__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--red-900);
+}
+
+.academy-stat-card__icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.academy-stat-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.academy-stat-card__number {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.academy-stat-card__label {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--gray-600);
+    margin: 0;
+}
+
+/* ========================================
+   СЕКЦИЯ КЛЮЧЕВЫХ СОБЫТИЙ
+   ======================================== */
+
+.academy-events-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.academy-events-section__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--red-900);
+    margin: 0;
+}
+
+.academy-events-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ========================================
+   КАРТОЧКА СОБЫТИЯ
+   ======================================== */
+
+.academy-event-card {
+    background: var(--color-white);
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--red-900);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.academy-event-card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.academy-event-card__icon {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red-100);
+    border-radius: 50%;
+    color: var(--red-900);
+}
+
+.academy-event-card__icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.academy-event-card__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+}
+
+.academy-event-card__header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.academy-event-card__title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.academy-event-card__year {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--red-900);
+}
+
+.academy-event-card__description {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    color: var(--gray-700);
+    margin: 0;
+}
+
+/* ========================================
+   СЕКЦИЯ ТРЕНЕРСКОГО ШТАБА
+   ======================================== */
+
+.academy-staff-section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.academy-staff-section__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--red-900);
+    margin: 0;
+}
+
+.academy-coaches-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.academy-coach-card {
+    background: var(--color-white);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.academy-coach-card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.academy-coach-card__name {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 25.2px;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.academy-coach-card__position {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22.4px;
+    color: var(--red-900);
+    margin: 0;
+}
+
+.academy-coach-card__since {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 19.2px;
+    color: var(--gray-600);
+    margin: 0;
+}
+
+/* ========================================
+   СЕКЦИЯ ТРЕНИРОВОЧНОЙ БАЗЫ
+   ======================================== */
+
+.academy-facilities-section {
+    background-color: var(--gray-50);
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+}
+
+.academy-facilities-section__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--red-900);
+    margin: 0;
+}
+
+.academy-facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.academy-facility-item {
+    display: flex;
+    gap: 16px;
+}
+
+.academy-facility-item__icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--red-900);
+    border-radius: 10px;
+    color: var(--color-white);
+}
+
+.academy-facility-item__icon svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+.academy-facility-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+}
+
+.academy-facility-item__heading {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 25.2px;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.academy-facility-item__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.academy-facility-item__list li {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--gray-600);
+}
+
+/* ========================================
+   СЕКЦИЯ ЗАПИСЬ В АКАДЕМИЮ
+   ======================================== */
+
+.academy-enrollment-section {
+    background-color: var(--red-900);
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--color-white);
+}
+
+.academy-enrollment-section__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 33.6px;
+    color: var(--color-white);
+    margin: 0;
+}
+
+.academy-enrollment-section__description {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+.academy-enrollment-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.academy-enrollment-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.academy-enrollment-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.academy-enrollment-item__emoji {
+    font-size: 16px;
+    line-height: 25.6px;
+    display: inline-block;
+}
+
+.academy-enrollment-item__content {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25.6px;
+    color: var(--color-white);
+}
+
+.academy-enrollment-item__content strong {
+    font-weight: 700;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - ПЛАНШЕТЫ (1024px)
+   ======================================== */
 
 @media (max-width: 1024px) {
-	/* Add styles for large tablets */
+    .academy-history-container {
+        padding: var(--container-padding-y) 16px;
+    }
+
+    .academy-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .academy-stat-card {
+        padding: 20px 16px;
+    }
+
+    .academy-coaches-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .academy-coach-card {
+        padding: 16px;
+    }
+
+    .academy-coach-card__name {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-facilities-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .academy-event-card {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .academy-event-card__icon {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+    }
+
+    .academy-event-card__icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .academy-facility-item {
+        gap: 12px;
+    }
+
+    .academy-facility-item__icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+    }
+
+    .academy-facility-item__heading {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-enrollment-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .academy-enrollment-item {
+        gap: 6px;
+        font-size: 14px;
+        line-height: 22px;
+    }
 }
 
-/* ============================================
-   TABLET (max-width: 768px)
-   ============================================ */
+/* ========================================
+   RESPONSIVE DESIGN - ПЛАНШЕТЫ (768px)
+   ======================================== */
 
 @media (max-width: 768px) {
-	/* Add styles for tablets */
+    .academy-history-container {
+        padding: 16px;
+    }
+
+    .academy-history-intro {
+        gap: 32px;
+        margin-bottom: 32px;
+    }
+
+    .academy-history-intro__header {
+        gap: 12px;
+    }
+
+    .academy-history-intro__title {
+        font-size: 26px;
+        line-height: 32.8px;
+    }
+
+    .academy-history-intro__description {
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .academy-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .academy-stat-card {
+        padding: 16px;
+        gap: 12px;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .academy-stat-card__icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .academy-stat-card__content {
+        flex: 1;
+    }
+
+    .academy-stat-card__number {
+        font-size: 18px;
+        line-height: 25.2px;
+    }
+
+    .academy-stat-card__label {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .academy-events-section {
+        margin-bottom: 32px;
+    }
+
+    .academy-events-section__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .academy-events-timeline {
+        gap: 12px;
+    }
+
+    .academy-event-card {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    .academy-event-card__icon {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+    }
+
+    .academy-event-card__title {
+        font-size: 18px;
+        line-height: 25.2px;
+    }
+
+    .academy-event-card__year {
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    .academy-event-card__description {
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .academy-staff-section {
+        margin-bottom: 32px;
+    }
+
+    .academy-staff-section__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .academy-coaches-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .academy-coach-card {
+        padding: 16px;
+    }
+
+    .academy-coach-card__name {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-coach-card__position {
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .academy-coach-card__since {
+        font-size: 11px;
+        line-height: 16px;
+    }
+
+    .academy-facilities-section {
+        padding: 16px;
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .academy-facilities-section__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .academy-facilities-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .academy-facility-item {
+        gap: 12px;
+    }
+
+    .academy-facility-item__icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+    }
+
+    .academy-facility-item__icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .academy-facility-item__heading {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-facility-item__list li {
+        font-size: 13px;
+        line-height: 18px;
+    }
+
+    .academy-enrollment-section {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .academy-enrollment-section__title {
+        font-size: 20px;
+        line-height: 28px;
+    }
+
+    .academy-enrollment-section__description {
+        font-size: 14px;
+        line-height: 21px;
+    }
+
+    .academy-enrollment-info {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .academy-enrollment-column {
+        gap: 6px;
+    }
+
+    .academy-enrollment-item {
+        gap: 6px;
+        align-items: center;
+    }
+
+    .academy-enrollment-item__emoji {
+        font-size: 18px;
+        line-height: 1;
+    }
+
+    .academy-enrollment-item__content {
+        font-size: 14px;
+        line-height: 21px;
+    }
 }
 
-/* ============================================
-   MOBILE (max-width: 480px)
-   ============================================ */
+/* ========================================
+   RESPONSIVE DESIGN - МОБИЛЬНЫЕ (480px)
+   ======================================== */
 
 @media (max-width: 480px) {
-	/* Add styles for mobile devices */
+    .academy-history-container {
+        padding: 12px;
+        margin: 0;
+    }
+
+    .academy-history-intro {
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    .academy-history-intro__header {
+        gap: 12px;
+    }
+
+    .academy-history-intro__title {
+        font-size: 22px;
+        line-height: 29.6px;
+    }
+
+    .academy-history-intro__description {
+        font-size: 14px;
+        line-height: 22.4px;
+    }
+
+    .academy-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .academy-stat-card {
+        padding: 12px;
+        gap: 10px;
+        border-top-width: 3px;
+        border-radius: 8px;
+    }
+
+    .academy-stat-card__icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .academy-stat-card__icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .academy-stat-card__number {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-stat-card__label {
+        font-size: 12px;
+        line-height: 16.8px;
+    }
+
+    .academy-events-section {
+        margin-bottom: 24px;
+    }
+
+    .academy-events-section__title {
+        font-size: 18px;
+        line-height: 25.2px;
+        margin-bottom: 12px;
+    }
+
+    .academy-events-timeline {
+        gap: 10px;
+    }
+
+    .academy-event-card {
+        padding: 12px;
+        gap: 10px;
+        border-radius: 8px;
+        border-left-width: 3px;
+    }
+
+    .academy-event-card__icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+    }
+
+    .academy-event-card__icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .academy-event-card__header {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .academy-event-card__title {
+        font-size: 16px;
+        line-height: 22.4px;
+    }
+
+    .academy-event-card__year {
+        font-size: 11px;
+        line-height: 16px;
+        flex-basis: auto;
+    }
+
+    .academy-event-card__description {
+        font-size: 13px;
+        line-height: 19.5px;
+    }
+
+    .academy-staff-section {
+        margin-bottom: 24px;
+    }
+
+    .academy-staff-section__title {
+        font-size: 18px;
+        line-height: 25.2px;
+        margin-bottom: 12px;
+    }
+
+    .academy-coaches-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .academy-coach-card {
+        padding: 12px;
+        border-radius: 8px;
+        gap: 3px;
+    }
+
+    .academy-coach-card__name {
+        font-size: 14px;
+        line-height: 19.6px;
+    }
+
+    .academy-coach-card__position {
+        font-size: 12px;
+        line-height: 16.8px;
+    }
+
+    .academy-coach-card__since {
+        font-size: 10px;
+        line-height: 14px;
+    }
+
+    .academy-facilities-section {
+        padding: 12px;
+        gap: 12px;
+        margin-bottom: 24px;
+        border-radius: 8px;
+    }
+
+    .academy-facilities-section__title {
+        font-size: 18px;
+        line-height: 25.2px;
+        margin-bottom: 8px;
+    }
+
+    .academy-facilities-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .academy-facility-item {
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .academy-facility-item__icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+
+    .academy-facility-item__icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .academy-facility-item__heading {
+        font-size: 14px;
+        line-height: 19.6px;
+    }
+
+    .academy-facility-item__list li {
+        font-size: 12px;
+        line-height: 16.8px;
+    }
+
+    .academy-enrollment-section {
+        padding: 12px;
+        gap: 12px;
+        border-radius: 8px;
+    }
+
+    .academy-enrollment-section__title {
+        font-size: 18px;
+        line-height: 25.2px;
+    }
+
+    .academy-enrollment-section__description {
+        font-size: 13px;
+        line-height: 19.5px;
+    }
+
+    .academy-enrollment-info {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .academy-enrollment-column {
+        gap: 8px;
+    }
+
+    .academy-enrollment-item {
+        gap: 6px;
+        align-items: flex-start;
+        font-size: 13px;
+        line-height: 19.5px;
+    }
+
+    .academy-enrollment-item__emoji {
+        font-size: 16px;
+        line-height: 1;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .academy-enrollment-item__content {
+        font-size: 13px;
+        line-height: 19.5px;
+    }
+
+    .academy-enrollment-item__content strong {
+        font-weight: 600;
+    }
 }

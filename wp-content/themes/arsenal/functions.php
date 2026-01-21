@@ -420,6 +420,16 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
+		// Стили страницы истории академии
+		if ( is_page_template( 'templates/page-academy-history.php' ) || is_page( 'academy-history' ) ) {
+			wp_enqueue_style(
+				'arsenal-page-academy-history',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-academy-history.css',
+				array( 'arsenal-footer' ),
+				ARSENAL_VERSION
+			);
+		}
+
 		// Стили страницы Стадион
 		if ( is_page_template( 'templates/page-stadium.php' ) || is_page( 'stadium' ) || is_page( 'стадион' ) ) {
 			wp_enqueue_style(
@@ -1794,4 +1804,5 @@ require_once ARSENAL_THEME_DIR . '/inc/carbon-fields-init.php';
  * Подключение Carbon Fields адаптера для академии
  */
 require_once ARSENAL_THEME_DIR . '/inc/class-academy-carbon-adapter.php';
+require_once ARSENAL_THEME_DIR . '/inc/class-academy-history-carbon-adapter.php';
 require_once ARSENAL_THEME_DIR . '/inc/class-history-carbon-adapter.php';

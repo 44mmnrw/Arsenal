@@ -46,8 +46,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'text', '_academy_hero_title', 'Заголовок' )
 				->set_default_value( 'Набор в академию' ),
 			
-			Field::make( 'textarea', '_academy_hero_description', 'Описание' )
-				->set_rows( 3 ),
+		Field::make( 'textarea', '_academy_hero_description', 'Описание' ),
 		] )
 		
 		->add_tab( 'Преимущества', [
@@ -56,8 +55,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					Field::make( 'select', 'icon', 'Иконка' )
 						->add_options( 'arsenal_get_sprite_icons' ),
 					Field::make( 'text', 'title', 'Заголовок' ),
-					Field::make( 'textarea', 'description', 'Описание' )
-						->set_rows( 3 ),
+					Field::make( 'textarea', 'description', 'Описание' ),
 				] )
 				->set_header_template( '
 					<% if (title) { %>
@@ -79,10 +77,9 @@ add_action( 'carbon_fields_register_fields', function() {
 						->set_help_text( 'Например: 2016-2017' ),
 					Field::make( 'text', 'schedule', 'Расписание' )
 						->set_help_text( 'Например: Пн, Ср, Пт: 16:00-17:30' ),
-				Field::make( 'text', 'spots_available', 'Доступно мест' )
-					->set_attribute( 'type', 'number' )
-					->set_attribute( 'min', '0' )
-					->set_default_value( '0' ),
+					Field::make( 'text', 'spots_available', 'Доступно мест' )
+
+						->set_default_value( '0' ),
 					Field::make( 'select', 'spots_status', 'Статус мест' )
 						->add_options( [
 							'normal'  => 'Обычный',
@@ -113,8 +110,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					<% } %>
 				' ),
 			
-			Field::make( 'textarea', '_academy_documents_notice', 'Примечание' )
-				->set_rows( 3 ),
+			Field::make( 'textarea', '_academy_documents_notice', 'Примечание' ),
 		] )
 		
 		->add_tab( 'Расписание просмотров', [
@@ -135,8 +131,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					<% } %>
 				' ),
 			
-			Field::make( 'textarea', '_academy_schedule_notice', 'Примечание' )
-				->set_rows( 3 ),
+			Field::make( 'textarea', '_academy_schedule_notice', 'Примечание' ),
 		] )
 		
 		->add_tab( 'Контакты', [
@@ -156,38 +151,37 @@ add_action( 'carbon_fields_register_fields', function() {
 						Новый день
 					<% } %>
 				' ),
+			
+			Field::make( 'text', '_academy_map_url', 'Ссылка на карту' )
+				->set_help_text( 'Google Maps или Яндекс Карты. ВАЖНО: используйте полную ссылку с координатами, не короткую (goo.gl). Пример: https://www.google.com/maps?q=53.6603,27.5334' ),
+		] )
 		
-		Field::make( 'text', '_academy_map_url', 'Ссылка на карту' )
-			->set_attribute( 'type', 'url' )
-		->set_help_text( 'Google Maps или Яндекс Карты. ВАЖНО: используйте полную ссылку с координатами, не короткую (goo.gl). Пример: https://www.google.com/maps?q=53.6603,27.5334' ),
-	] )
-	
-	->add_tab( 'Директор', [
-		Field::make( 'text', '_academy_director_name', 'Имя директора' ),
-		Field::make( 'text', '_academy_director_role', 'Должность/Стаж' ),
-		Field::make( 'text', '_academy_director_phone', 'Телефон' ),
-		Field::make( 'text', '_academy_director_email', 'Email' ),
-	] )
-	
-	->add_tab( 'Маршруты проезда', [
-		Field::make( 'complex', '_academy_directions', 'Маршруты' )
-			->add_fields( [
-				Field::make( 'select', 'icon', 'Иконка' )
-					->add_options( 'arsenal_get_sprite_icons' ),
-				Field::make( 'text', 'transport', 'Транспорт' )
-					->set_help_text( 'Например: Автобус' ),
-				Field::make( 'text', 'route', 'Маршрут' )
+		->add_tab( 'Директор', [
+			Field::make( 'text', '_academy_director_name', 'Имя директора' ),
+			Field::make( 'text', '_academy_director_role', 'Должность/Стаж' ),
+			Field::make( 'text', '_academy_director_phone', 'Телефон' ),
+			Field::make( 'text', '_academy_director_email', 'Email' ),
+		] )
+		
+		->add_tab( 'Маршруты проезда', [
+			Field::make( 'complex', '_academy_directions', 'Маршруты' )
+				->add_fields( [
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
+					Field::make( 'text', 'transport', 'Транспорт' )
+						->set_help_text( 'Например: Автобус' ),
+					Field::make( 'text', 'route', 'Маршрут' )
 						->set_help_text( 'Например: №24, 45' ),
 					Field::make( 'text', 'time', 'Время в пути' )
 						->set_help_text( 'Например: 15 минут' ),
 				] )
-				->set_header_template( '
-					<% if (transport) { %>
-						<%- transport %> <% if (route) { %>— <%- route %><% } %>
-					<% } else { %>
-						Новый маршрут
-					<% } %>
-				' ),
+					->set_header_template( '
+						<% if (transport) { %>
+							<%- transport %> <% if (route) { %>— <%- route %><% } %>
+						<% } else { %>
+							Новый маршрут
+						<% } %>
+					' ),
 		] )
 		
 		->add_tab( 'Социальные сети', [
@@ -195,8 +189,7 @@ add_action( 'carbon_fields_register_fields', function() {
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
 						->add_options( 'arsenal_get_sprite_icons' ),
-					Field::make( 'text', 'url', 'URL профиля' )
-						->set_attribute( 'type', 'url' ),
+					Field::make( 'text', 'url', 'URL профиля' ),
 				] )
 				->set_header_template( '
 					<% if (url) { %>
@@ -211,8 +204,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'complex', '_academy_faq', 'Частые вопросы' )
 				->add_fields( [
 					Field::make( 'text', 'question', 'Вопрос' ),
-					Field::make( 'textarea', 'answer', 'Ответ' )
-						->set_rows( 3 ),
+					Field::make( 'textarea', 'answer', 'Ответ' ),
 				] )
 				->set_header_template( '
 					<% if (question) { %>
@@ -229,14 +221,10 @@ add_action( 'carbon_fields_register_fields', function() {
 		->add_tab( 'Основная информация', [
 			Field::make( 'text', '_history_title', 'Название секции' )
 				->set_default_value( 'История клуба' ),
-			Field::make( 'rich_text', '_history_description', 'Описание' ),
-		] )
-		
-		->add_tab( 'Временная шкала', [
+			Field::make( 'textarea', '_history_description', 'Описание' ),
 			Field::make( 'complex', '_history_scale', 'События' )
 				->add_fields( [
-					Field::make( 'text', 'year', 'Год' )
-						->set_attribute( 'type', 'number' ),
+					Field::make( 'text', 'year', 'Год' ),
 					Field::make( 'text', 'event', 'Событие' ),
 				] )
 				->set_header_template( '
@@ -305,6 +293,65 @@ add_action( 'carbon_fields_register_fields', function() {
 						<%- label %>
 					<% } else { %>
 						Новая карточка
+					<% } %>
+				' ),
+		] );
+
+	// Страница истории академии
+	Container::make( 'post_meta', 'academy_history_data', 'Данные страницы истории академии' )
+		->where( 'post_template', '=', 'templates/page-academy-history.php' )
+		
+		->add_tab( 'Hero секция', [
+			Field::make( 'textarea', '_academy_history_hero_description', 'Описание' )
+
+				->set_default_value( 'Спортивная детско-юношеская школа "Арсенал" — футбольная академия клуба, основанная в 2010 году. За 15 лет работы школа подготовила более 500 молодых футболистов.' ),
+		] )
+		
+		->add_tab( 'Статистика', [
+			Field::make( 'complex', '_academy_history_stat_cards', 'Статистические карточки' )
+				->add_fields( [
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
+					Field::make( 'text', 'number', 'Цифра' ),
+					Field::make( 'text', 'label', 'Название' ),
+				] )
+				->set_header_template( '
+					<% if (label) { %>
+						<%- number %> <%- label %>
+					<% } else { %>
+						Новая карточка
+					<% } %>
+				' ),
+		] )
+		
+		->add_tab( 'Ключевые события', [
+			Field::make( 'complex', '_academy_history_timeline', 'События' )
+				->add_fields( [
+					Field::make( 'text', 'title', 'Название события' ),
+					Field::make( 'text', 'year', 'Год' ),
+					Field::make( 'textarea', 'description', 'Описание' ),
+				] )
+				->set_header_template( '
+					<% if (title) { %>
+						<%- title %> (<%- year %>)
+					<% } else { %>
+						Новое событие
+					<% } %>
+				' ),
+		] )
+		
+		->add_tab( 'Тренерский штаб', [
+			Field::make( 'complex', '_academy_history_staff', 'Тренеры' )
+				->add_fields( [
+					Field::make( 'text', 'name', 'ФИ' ),
+					Field::make( 'text', 'position', 'Должность' ),
+					Field::make( 'text', 'since', 'С какого года' ),
+				] )
+				->set_header_template( '
+					<% if (name) { %>
+						<%- name %>
+					<% } else { %>
+						Новый тренер
 					<% } %>
 				' ),
 		] );

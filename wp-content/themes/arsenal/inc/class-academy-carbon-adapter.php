@@ -116,14 +116,14 @@ class Arsenal_Academy_Carbon_Adapter {
 			'phone'            => carbon_get_post_meta( $post_id, '_academy_contacts_phone' ) ?: '',
 			'email'            => carbon_get_post_meta( $post_id, '_academy_contacts_email' ) ?: '',
 			'working_schedule' => is_array( $working_schedule ) ? $working_schedule : array(),
-	'map_url'          => carbon_get_post_meta( $post_id, '_academy_map_url' ) ?: '',
-		'director'         => array(
-			'title'    => 'Директор СДЮШ',
-			'name'     => carbon_get_post_meta( $post_id, '_academy_director_name' ) ?: '',
-			'role'     => carbon_get_post_meta( $post_id, '_academy_director_role' ) ?: '',
-			'contacts' => $director_contacts,
-		),
-	);
+			'map_url'          => carbon_get_post_meta( $post_id, '_academy_map_url' ) ?: '',
+			'director'         => array(
+				'title'    => 'Директор СДЮШ',
+				'name'     => carbon_get_post_meta( $post_id, '_academy_director_name' ) ?: '',
+				'role'     => carbon_get_post_meta( $post_id, '_academy_director_role' ) ?: '',
+				'contacts' => $director_contacts,
+			),
+		);
 }
 
 /**

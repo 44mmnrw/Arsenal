@@ -112,10 +112,6 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
         
-        // Классы управления историей клуба
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-manager.php';
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-admin.php';
-        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -154,10 +150,6 @@ class Arsenal_Team_Manager {
         // Инициализируем админ-интерфейс корректировок статистики
         $stats_corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
         $stats_corrections_admin->init();
-        
-        // Инициализируем админ-интерфейс истории
-        $history_admin = new Arsenal_History_Admin();
-        $history_admin->__init__();
     }
     
     /**
@@ -431,26 +423,6 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-adjustment-edit',
             array( $this, 'render_adjustment_edit' )
-        );
-        
-        // Скрытая страница добавления записи истории (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить запись истории',
-            'Добавить запись истории',
-            'manage_options',
-            'arsenal-history-add',
-            array( $this, 'render_history_form' )
-        );
-        
-        // Скрытая страница редактирования записи истории (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать запись истории',
-            'Редактировать запись истории',
-            'manage_options',
-            'arsenal-history-edit',
-            array( $this, 'render_history_form' )
         );
         
         // Скрытые страницы персонала (без пункта меню)

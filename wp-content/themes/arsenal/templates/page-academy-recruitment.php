@@ -1,7 +1,6 @@
 <?php
 /**
- * Template Name: Набор в академию
- * Template Post Type: page
+ * Template Name: Набор в академию * 
  * Description: Страница набора детей в академию СДЮШ
  *
  * @package Arsenal
