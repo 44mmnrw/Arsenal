@@ -19,6 +19,12 @@ define( 'ARSENAL_THEME_DIR', get_template_directory() );
 define( 'ARSENAL_THEME_URI', get_template_directory_uri() );
 
 /**
+ * Подключение Carbon Fields
+ */
+require_once ARSENAL_THEME_DIR . '/vendor/autoload.php';
+\Carbon_Fields\Carbon_Fields::boot();
+
+/**
  * Разбить текст по двоеточию: часть до : жирная, после обычная
  * 
  * @param string $text Текст
@@ -184,7 +190,6 @@ add_action( 'wp_enqueue_scripts', function() {
 /**
  * Подключение файлов темы
  */
-require_once ARSENAL_THEME_DIR . '/inc/academy-recruitment-api.php';
 // require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-manager.php';
 require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-players.php';
@@ -1779,3 +1784,13 @@ require_once ARSENAL_THEME_DIR . '/inc/stadium-selector-metabox.php';
  * Подключение метаокса для выбора состава на странице "page-squad-grid"
  */
 require_once ARSENAL_THEME_DIR . '/inc/squad-selector-metabox.php';
+
+/**
+ * Подключение Carbon Fields метабоксов
+ */
+require_once ARSENAL_THEME_DIR . '/inc/carbon-fields-init.php';
+
+/**
+ * Подключение Carbon Fields адаптера для академии
+ */
+require_once ARSENAL_THEME_DIR . '/inc/class-academy-carbon-adapter.php';

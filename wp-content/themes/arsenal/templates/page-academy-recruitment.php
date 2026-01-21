@@ -10,32 +10,24 @@
 
 get_header();
 
-// Используем дефолтные данные ДЛЯ HERO (быстрая отрисовка)
-$hero = array(
-	'title' => 'Набор в академию',
-	'description' => 'СДЮШ "Арсенал" объявляет набор детей в возрасте от 8 до 17 лет.',
-	'buttons' => array(
-		array( 'text' => 'Подать заявку' ),
-		array( 'text' => 'Контакты' ),
-	),
-);
+// Подключить адаптер Carbon Fields
+require_once get_template_directory() . '/inc/class-academy-carbon-adapter.php';
 
-// Загружаем остальные данные из БД синхронно
-require_once get_template_directory() . '/inc/class-academy-recruitment-manager.php';
-$data = Arsenal_Academy_Recruitment_Manager::get_page_data( 1 );
+// Получить ID текущей страницы
+$post_id = get_the_ID();
 
-if ( ! $data ) {
-	$default = Arsenal_Academy_Recruitment_Manager::get_default_data();
-	$data = $default;
-}
+// Загрузить данные через Carbon Fields адаптер
+$data = Arsenal_Academy_Carbon_Adapter::get_page_data( $post_id );
 
-// Распаковать остальные данные
+// Распаковать данные
+$hero = $data['hero_data'] ?? array();
 $benefits = $data['benefits_data'] ?? array();
 $age_groups = $data['age_groups_data'] ?? array();
 $documents = $data['documents_data'] ?? array();
 $schedule = $data['schedule_data'] ?? array();
 $contacts = $data['contacts_data'] ?? array();
 $directions = $data['directions_data'] ?? array();
+$social_data = $data['social_data'] ?? array();
 $faq = $data['faq_data'] ?? array();
 ?>
 
@@ -68,9 +60,7 @@ $faq = $data['faq_data'] ?? array();
 				<!-- Benefit Card -->
 				<article class="benefit-card">
 					<div class="benefit-icon benefit-icon-<?php echo esc_attr( $benefit['icon'] ?? 'default' ); ?>">
-						<svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $benefit['icon'] ?? 'icon-place' ); ?>"></use>
-						</svg>
+						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $benefit['icon'] ?? 'icon-place', 'icon-24' ); ?>
 					</div>
 					<h3 class="benefit-title"><?php echo esc_html( $benefit['title'] ?? '' ); ?></h3>
 					<p class="benefit-description">
@@ -96,21 +86,15 @@ $faq = $data['faq_data'] ?? array();
 					</div>
 					<ul class="age-group-details">
 						<li>
-							<svg class="icon-16" viewBox="0 0 24 24" aria-hidden="true">
-								<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-checkbox"></use>
-							</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
 							<span><?php echo esc_html( $group['age_range'] ?? '' ); ?></span>
 						</li>
 						<li>
-							<svg class="icon-16" viewBox="0 0 24 24" aria-hidden="true">
-								<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-checkbox"></use>
-							</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
 							<span><?php printf( esc_html_x( 'Год рождения: %s', 'academy', 'arsenal' ), esc_html( $group['birth_years'] ?? '' ) ); ?></span>
 						</li>
 						<li>
-							<svg class="icon-16" viewBox="0 0 24 24" aria-hidden="true">
-								<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-checkbox"></use>
-							</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
 							<span><?php echo esc_html( $group['schedule'] ?? '' ); ?></span>
 						</li>
 					</ul>
@@ -126,9 +110,7 @@ $faq = $data['faq_data'] ?? array();
 			<div class="documents-grid">
 				<?php foreach ( ( $documents['items'] ?? array() ) as $doc ) : ?>
 				<div class="document-item">
-				<svg class="icon-20 document-icon" viewBox="0 0 24 24" aria-hidden="true">
-					<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-report"></use>
-				</svg>
+					<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-report', 'icon-20 document-icon' ); ?>
 					<span><?php echo esc_html( $doc['text'] ?? '' ); ?></span>
 				</div>
 				<?php endforeach; ?>
@@ -150,9 +132,7 @@ $faq = $data['faq_data'] ?? array();
 				<?php foreach ( ( $schedule['items'] ?? array() ) as $item ) : ?>
 				<div class="schedule-item">
 					<div class="schedule-icon">
-					<svg viewBox="0 0 24 24" aria-hidden="true">
-						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $item['icon'] ?? 'icon-calendar' ); ?>"></use>
-					</svg>
+						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'] ?? 'icon-calendar' ); ?>
 					</div>
 					<h3 class="schedule-heading"><?php echo esc_html( $item['heading'] ?? '' ); ?></h3>
 					<p class="schedule-text"><?php echo esc_html( $item['text'] ?? '' ); ?></p>
@@ -184,9 +164,7 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Address -->
 							<?php if ( ! empty( $contacts['address'] ) ) : ?>
 							<div class="contact-item">
-								<svg class="icon-20" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
-								</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place' ); ?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Адрес', 'arsenal' ); ?></p>
 									<p class="contact-value"><?php echo esc_html( $contacts['address'] ); ?></p>
@@ -197,9 +175,7 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Phone -->
 							<?php if ( ! empty( $contacts['phone'] ) ) : ?>
 							<div class="contact-item">
-								<svg class="icon-20" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-phone"></use>
-								</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' ); ?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Телефон', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -214,9 +190,7 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Schedule -->
 							<?php if ( ! empty( $contacts['working_schedule'] ) && is_array( $contacts['working_schedule'] ) ) : ?>
 							<div class="contact-item">
-								<svg class="icon-20" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-clock"></use>
-								</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-clock' ); ?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Время работы', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -241,9 +215,7 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Email -->
 							<?php if ( ! empty( $contacts['email'] ) ) : ?>
 							<div class="contact-item">
-								<svg class="icon-20" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-email"></use>
-								</svg>
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' ); ?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Email', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -306,9 +278,7 @@ $faq = $data['faq_data'] ?? array();
 						<div id="academy-map-container" class="academy-map-wrapper">
 							<div id="academy-map"></div>
 							<div class="map-placeholder">
-								<svg class="map-icon" viewBox="0 0 24 24" aria-hidden="true">
-									<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#icon-place"></use>
-								</svg>
+								<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place', 'map-icon' ); ?>
 								<p class="map-text"><?php esc_html_e( 'Интерактивная карта', 'arsenal' ); ?></p>
 								<p class="map-subtext"><?php esc_html_e( 'Спортивный комплекс "Арсенал"', 'arsenal' ); ?><br><?php esc_html_e( '15 минут от центра города', 'arsenal' ); ?></p>
 							</div>
@@ -321,9 +291,9 @@ $faq = $data['faq_data'] ?? array();
 							<p>
 								<strong>
 									<?php if ( ! empty( $item['icon'] ) ) : ?>
-									<svg class="icon-16" viewBox="0 0 24 24" aria-hidden="true" style="display: inline-block; vertical-align: middle; margin-right: 6px; width: 14px; height: 14px;">
-										<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $item['icon'] ); ?>"></use>
-									</svg>
+									<span style="display: inline-block; vertical-align: middle; margin-right: 6px; width: 14px; height: 14px;">
+										<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'], 'icon-16' ); ?>
+									</span>
 									<?php endif; ?>
 									<?php echo esc_html( $item['transport'] ); ?>
 								</strong> 
@@ -340,17 +310,15 @@ $faq = $data['faq_data'] ?? array();
 			</div>
 
 			<!-- FULL WIDTH: Social Media Section -->
-			<?php if ( isset( $contacts['social'] ) && is_array( $contacts['social'] ) && count( $contacts['social'] ) > 0 ) : ?>
-			<div class="contacts-social-section">
-				<h3 class="contacts-section-title"><?php esc_html_e( 'Мы в социальных сетях', 'arsenal' ); ?></h3>
-				
-				<div class="social-links-grid">
-					<?php foreach ( $contacts['social'] as $social ) : ?>
+		<?php if ( ! empty( $social_data ) && is_array( $social_data ) ) : ?>
+		<div class="contacts-social-section">
+			<h3 class="contacts-section-title"><?php esc_html_e( 'Мы в социальных сетях', 'arsenal' ); ?></h3>
+			
+			<div class="social-links-grid">
+				<?php foreach ( $social_data as $social ) : ?>
 					<?php if ( ! empty( $social['url'] ) && ! empty( $social['icon'] ) ) : ?>
 					<a href="<?php echo esc_url( $social['url'] ); ?>" class="social-button" target="_blank" rel="noopener noreferrer" title="<?php echo esc_attr( ucfirst( str_replace( 'icon-', '', $social['icon'] ) ) ); ?>">
-						<svg class="icon-24" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $social['icon'] ); ?>"></use>
-						</svg>
+						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $social['icon'], 'icon-24' ); ?>
 					</a>
 					<?php endif; ?>
 					<?php endforeach; ?>
@@ -383,24 +351,74 @@ $faq = $data['faq_data'] ?? array();
 function initAcademyMap() {
 	// Инициализация Leaflet карты
 	if ( typeof L !== 'undefined' && document.getElementById( 'academy-map' ) ) {
-		// Координаты Дзержинска, Беларусь (центр города)
-		var mapContainer = document.getElementById( 'academy-map' );
-		var academyMap = L.map( 'academy-map', {
-			attributionControl: false
-		} ).setView( [53.6603, 27.5334], 14 );
+	<?php
+	// Получить URL карты из БД
+	$map_url = isset( $contacts['map_url'] ) ? $contacts['map_url'] : '';
+	$lat = null;
+	$lng = null;
+	
+	// Развернуть короткие ссылки (Google: goo.gl, maps.app.goo.gl | Яндекс: yandex.ru/maps/-)
+	if ( preg_match( '/goo\.gl|maps\.app\.goo\.gl|yandex\.ru\/maps\/-/', $map_url ) ) {
+		$response = wp_remote_get( $map_url, array(
+			'redirection' => 0,
+			'timeout'     => 5,
+		) );
 		
-		// Добавить слой карты (OpenStreetMap)
-		L.tileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			minZoom: 10
-		} ).addTo( academyMap );
-		
-		// Добавить маркер с иконкой
-		var marker = L.marker( [53.6603, 27.5334] ).addTo( academyMap );
-		marker.bindPopup( '<strong>СДЮШ "Арсенал"</strong><br>г. Дзержинск' );
-		
-		// Открыть попап при загрузке
-		marker.openPopup();
+		if ( ! is_wp_error( $response ) ) {
+			$location = wp_remote_retrieve_header( $response, 'location' );
+			if ( $location ) {
+				// Если Яндекс вернул относительный URL, собрать полный
+				if ( strpos( $location, '/' ) === 0 ) {
+					$parsed = parse_url( $map_url );
+					$location = $parsed['scheme'] . '://' . $parsed['host'] . $location;
+				}
+				$map_url = $location;
+			}
+		}
+	}
+	
+	// Декодировать URL-encoded параметры
+	$map_url = urldecode( $map_url );
+	
+	// Google Maps: @lat,lng,zoom
+	if ( preg_match( '/@(-?\d+\.?\d*),(-?\d+\.?\d*)/', $map_url, $matches ) ) {
+		$lat = floatval( $matches[1] );
+		$lng = floatval( $matches[2] );
+	}
+	// Google Maps: ?q=lat,lng
+	elseif ( preg_match( '/[?&]q=(-?\d+\.?\d*),(-?\d+\.?\d*)/', $map_url, $matches ) ) {
+		$lat = floatval( $matches[1] );
+		$lng = floatval( $matches[2] );
+	}
+	// Яндекс Карты: ll=lng,lat (обратный порядок!)
+	elseif ( preg_match( '/ll=(-?\d+\.?\d*),(-?\d+\.?\d*)/', $map_url, $matches ) ) {
+		$lng = floatval( $matches[1] );
+		$lat = floatval( $matches[2] );
+	}
+	?>
+	
+	<?php if ( $lat && $lng ) : ?>
+	// Координаты извлечены из URL: <?php echo esc_js( $map_url ); ?>
+	var mapContainer = document.getElementById( 'academy-map' );
+	var academyMap = L.map( 'academy-map', {
+		attributionControl: false
+	} ).setView( [<?php echo $lat; ?>, <?php echo $lng; ?>], 14 );
+	
+	// Добавить слой карты (OpenStreetMap)
+	L.tileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		minZoom: 10
+	} ).addTo( academyMap );
+	
+	// Добавить маркер с иконкой
+	var marker = L.marker( [<?php echo $lat; ?>, <?php echo $lng; ?>] ).addTo( academyMap );
+	marker.bindPopup( '<strong>СДЮШ "Арсенал"</strong><br>г. Дзержинск' );
+	
+	// Открыть попап при загрузке
+	marker.openPopup();
+	<?php else : ?>
+	console.warn( 'Карта не отображается: координаты не найдены в URL' );
+	<?php endif; ?>
 	}
 }
 
@@ -433,17 +451,6 @@ if ( document.readyState === 'loading' ) {
 		}, 100 );
 	}
 }
-</script>
-
-<script>
-// Асинхронная загрузка данных для страницы
-document.addEventListener( 'DOMContentLoaded', function() {
-	fetch( '<?php echo esc_url( rest_url( 'arsenal/v1/academy-recruitment/1' ) ); ?>' )
-		.then( response => response.json() )
-		.then( data => {
-			// Данные загружены
-		} );
-} );
 </script>
 
 <?php
