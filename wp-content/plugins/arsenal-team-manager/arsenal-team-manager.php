@@ -116,9 +116,6 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-history-admin.php';
         
-        // Классы управления набором в академию
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-academy-recruitment-admin.php';
-        
         // Инициализируем админ-интерфейсы
         new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
@@ -164,7 +161,7 @@ class Arsenal_Team_Manager {
         
         // Инициализируем админ-интерфейс набора в академию
         $academy_admin = new Arsenal_Academy_Recruitment_Admin();
-        $academy_admin->__init__();
+        $academy_admin->init();
     }
     
     /**
@@ -938,7 +935,7 @@ class Arsenal_Team_Manager {
      */
     public function render_academy_recruitment() {
         $academy_admin = new Arsenal_Academy_Recruitment_Admin();
-        $academy_admin->__init__();
+        $academy_admin->init();
         $academy_admin->render_page();
     }
 
