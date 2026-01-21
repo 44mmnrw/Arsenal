@@ -16,11 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Массив с годами и описаниями.
  */
 function arsenal_get_timeline() {
-	if ( ! class_exists( 'Arsenal_History_Manager' ) ) {
-		return array();
-	}
-
-	$history = Arsenal_History_Manager::get_history();
+	$history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 	
 	if ( empty( $history['scale'] ) ) {
 		return array();

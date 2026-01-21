@@ -1794,3 +1794,4 @@ require_once ARSENAL_THEME_DIR . '/inc/carbon-fields-init.php';
  * Подключение Carbon Fields адаптера для академии
  */
 require_once ARSENAL_THEME_DIR . '/inc/class-academy-carbon-adapter.php';
+require_once ARSENAL_THEME_DIR . '/inc/class-history-carbon-adapter.php';

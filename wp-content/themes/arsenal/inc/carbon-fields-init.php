@@ -222,4 +222,90 @@ add_action( 'carbon_fields_register_fields', function() {
 					<% } %>
 				' ),
 		] );
+
+	// Метабокс для страницы История клуба
+	Container::make( 'post_meta', 'history_page_data', 'История клуба' )
+		->where( 'post_template', '=', 'templates/page-history.php' )
+		->add_tab( 'Основная информация', [
+			Field::make( 'text', '_history_title', 'Название секции' )
+				->set_default_value( 'История клуба' ),
+			Field::make( 'rich_text', '_history_description', 'Описание' ),
+		] )
+		
+		->add_tab( 'Временная шкала', [
+			Field::make( 'complex', '_history_scale', 'События' )
+				->add_fields( [
+					Field::make( 'text', 'year', 'Год' )
+						->set_attribute( 'type', 'number' ),
+					Field::make( 'text', 'event', 'Событие' ),
+				] )
+				->set_header_template( '
+					<% if (year) { %>
+						<%- year %> <% if (event) { %>— <%- event %><% } %>
+					<% } else { %>
+						Новое событие
+					<% } %>
+				' ),
+		] )
+		
+		->add_tab( 'Рекорды и достижения', [
+			Field::make( 'text', '_history_title_second', 'Название секции' )
+				->set_default_value( 'Рекорды и достижения' ),
+			
+			Field::make( 'complex', '_history_records', 'Рекорды' )
+				->add_fields( [
+					Field::make( 'text', 'title', 'Название' ),
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
+					Field::make( 'select', 'style', 'Стиль' )
+						->add_options( [
+							'primary' => 'Primary',
+							'white'   => 'White',
+						] ),
+					Field::make( 'complex', 'items', 'Пункты' )
+						->add_fields( [
+							Field::make( 'text', 'text', 'Текст' ),
+						] ),
+				] )
+				->set_header_template( '
+					<% if (title) { %>
+						<%- title %>
+					<% } else { %>
+						Новый рекорд
+					<% } %>
+				' ),
+			
+			Field::make( 'complex', '_history_achievements', 'Достижения' )
+				->add_fields( [
+					Field::make( 'text', 'label', 'Название' ),
+					Field::make( 'text', 'description', 'Значение' ),
+				] )
+				->set_header_template( '
+					<% if (label) { %>
+						<%- label %>
+					<% } else { %>
+						Новое достижение
+					<% } %>
+				' ),
+		] )
+		
+		->add_tab( 'Дополнительная секция', [
+			Field::make( 'text', '_history_title_third', 'Название секции' )
+				->set_default_value( 'Дополнительная информация' ),
+			
+			Field::make( 'complex', '_history_additional_cards', 'Карточки' )
+				->add_fields( [
+					Field::make( 'text', 'label', 'Название' ),
+					Field::make( 'text', 'description', 'Описание' ),
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
+				] )
+				->set_header_template( '
+					<% if (label) { %>
+						<%- label %>
+					<% } else { %>
+						Новая карточка
+					<% } %>
+				' ),
+		] );
 } );

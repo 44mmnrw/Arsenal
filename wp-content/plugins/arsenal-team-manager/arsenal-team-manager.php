@@ -313,16 +313,6 @@ class Arsenal_Team_Manager {
             array( $this, 'render_sponsors_list' )
         );
         
-        // Подменю: История клуба
-        add_submenu_page(
-            $parent_slug,
-            'История клуба',
-            'История клуба',
-            'manage_options',
-            'arsenal-history',
-            array( $this, 'render_history_form' )
-        );
-        
         // Скрытая страница добавления спонсора (без пункта меню)
         add_submenu_page(
             '',
@@ -905,15 +895,6 @@ class Arsenal_Team_Manager {
     public function render_player_stats_corrections() {
         $corrections_admin = Arsenal_Player_Stats_Corrections_Admin::get_instance();
         $corrections_admin->render_page();
-    }
-    
-    /**
-     * Форма управления историей клуба
-     */
-    public function render_history_form() {
-        $history_admin = new Arsenal_History_Admin();
-        $history_admin->__init__(); // Инициализируем хуки
-        $history_admin->render_history_form();
     }
     
     /**
