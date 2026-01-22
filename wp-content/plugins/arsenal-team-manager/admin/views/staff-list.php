@@ -41,220 +41,176 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
             </div>
         </div>
 
-        <!-- Фильтры -->
-        <div class="staff-filters">
-            <form method="get" class="staff-filters-form">
-                <input type="hidden" name="page" value="arsenal-staff">
-                
-                <div class="filter-group">
-                    <label for="filter-job-title">Должность:</label>
-                    <select name="job_title" id="filter-job-title">
-                        <option value="">— Все должности —</option>
-                        <?php foreach ( $job_titles as $job ): ?>
-                            <option value="<?php echo $job->id; ?>" <?php selected( $job_title_id, $job->id ); ?>>
-                                <?php echo esc_html( $job->job_title_name ); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
 
-                <div class="filter-group">
-                    <label for="filter-search">Поиск:</label>
-                    <input type="text" name="s" id="filter-search" value="<?php echo esc_attr( $search ); ?>" 
-                           placeholder="Имя, фамилия...">
-                </div>
-
-                <button type="submit" class="button">Фильтр</button>
-                <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff' ); ?>" class="button">Очистить</a>
-            </form>
-        </div>
-
-        <!-- Таблица сотрудников -->
-        <div class="staff-list-container">
-            <table class="wp-list-table widefat striped">
-                <thead>
-                    <tr>
-                        <th class="staff-col-photo">Фото</th>
-                        <th class="staff-col-name">ФИО</th>
-                        <th class="staff-col-job">Должность</th>
-                        <th class="staff-col-dept">Отдел</th>
-                        <th class="staff-col-club-type">Тип клуба</th>
-                        <th class="staff-col-contract">Контракт</th>
-                        <th class="staff-col-action">Действие</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ( $staff ): ?>
-                        <?php foreach ( $staff as $person ): ?>
-                        <tr>
-                            <td class="staff-col-photo">
-                                <?php if ( $person->photo_url ): ?>
-                                    <img src="<?php echo esc_url( $person->photo_url ); ?>" 
-                                         alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
-                                         class="staff-thumbnail">
-                                <?php else: ?>
-                                    <div class="staff-thumbnail-empty">
-                                        <span class="dashicons dashicons-admin-users"></span>
-                                    </div>
-                                <?php endif; ?>
-                            </td>
-                            <td class="staff-col-name">
-                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
-                                   class="staff-name-link">
-                                    <?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?>
-                                </a>
-                                <?php if ( $person->email ): ?>
-                                    <br><small style="color: #666;">📧 <?php echo esc_html( $person->email ); ?></small>
-                                <?php endif; ?>
-                            </td>
-                            <td class="staff-col-job">
-                                <span class="job-title-badge">
-                                    <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
-                                </span>
-                            </td>
-                            <td class="staff-col-dept">
-                                <span class="department-badge">
-                                    <?php 
-                                    if ( $person->department_id ) {
-                                        $dept = Arsenal_Staff_Manager::get_department( $person->department_id );
-                                        echo esc_html( $dept ? $dept->department_name : '—' );
-                                    } else {
-                                        echo '—';
-                                    }
-                                    ?>
-                                </span>
-                            </td>
-                            <td class="staff-col-club-type">
-                                <span class="club-type-badge">
-                                    <?php 
-                                    if ( $person->squad_id ) {
-                                        $squad = $wpdb->get_row( $wpdb->prepare( "SELECT squad_name FROM {$wpdb->prefix}arsenal_squad WHERE id = %d", $person->squad_id ) );
-                                        echo esc_html( $squad ? $squad->squad_name : '—' );
-                                    } else {
-                                        echo '—';
-                                    }
-                                    ?>
-                                </span>
-                            </td>
-                            <td class="staff-col-contract">
-                                <?php if ( $person->contract_start && $person->contract_end ): ?>
-                                    <small>
-                                        📅 <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_start ) ); ?> — 
-                                        <?php echo wp_date( 'd.m.Y', strtotime( $person->contract_end ) ); ?>
-                                    </small>
-                                <?php else: ?>
-                                    <small style="color: #999;">—</small>
-                                <?php endif; ?>
-                            </td>
-                            <td class="staff-col-action">
-                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
-                                   class="button button-small">
-                                    ✏️ Редактировать
-                                </a>
-                                <button class="button button-small button-delete" 
-                                        data-staff-id="<?php echo $person->id; ?>"
-                                        data-action="delete-staff">
-                                    🗑️ Удалить
-                                </button>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="7" style="padding: 20px; text-align: center; color: #999;">
-                                Сотрудников не найдено
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Раздел отделов и должностей -->
+        <!-- Раздел вкладок по составам -->
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc;">
-            <h2>🏢 Отделы и должности</h2>
+            <h2>👥 Сотрудники по составам</h2>
 
-            <a href="<?php echo admin_url( 'admin.php?page=arsenal-department-add' ); ?>" class="button button-primary">
-                ➕ Добавить отдел
-            </a>
-            <a href="<?php echo admin_url( 'admin.php?page=arsenal-job-title-add' ); ?>" class="button button-primary">
-                ➕ Добавить должность
-            </a>
+            <?php
+            // Получаем все составы из wp_arsenal_squad
+            $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY id ASC" );
+            
+            if ( $squads ):
+            ?>
+                <div class="squad-tabs-wrapper">
+                    <!-- Вкладки навигации -->
+                    <div class="squad-tabs-nav" style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; gap: 5px;">
+                        <?php foreach ( $squads as $index => $squad ): ?>
+                            <button class="squad-tab-button" 
+                                    data-squad-id="<?php echo $squad->id; ?>"
+                                    style="padding: 10px 20px; border: 2px solid #ddd; background: #f5f5f5; cursor: pointer; border-bottom: none; border-radius: 5px 5px 0 0; font-weight: <?php echo $index === 0 ? 'bold' : 'normal'; ?>; background: <?php echo $index === 0 ? '#fff' : '#f5f5f5'; ?>;">
+                                <?php echo esc_html( $squad->squad_name ); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
 
-            <div class="departments-list" style="margin-top: 20px;">
-                <?php 
-                require_once get_template_directory() . '/inc/classes/class-arsenal-staff-department-manager.php';
-                $all_departments = Arsenal_Staff_Department_Manager::get_all_departments();
-                
-                if ( $all_departments ):
-                ?>
-                    <?php foreach ( $all_departments as $dept ): ?>
-                        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9;">
-                            <h3 style="margin-top: 0;">
-                                📁 <?php echo esc_html( $dept->department_name ); ?>
-                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-department-edit&dept_id=' . $dept->id ); ?>" 
-                                   class="button button-small" style="margin-left: 10px;">
-                                    ✏️ Редактировать отдел
-                                </a>
-                                <button class="button button-small button-delete" 
-                                        data-dept-id="<?php echo $dept->id; ?>"
-                                        data-action="delete-department">
-                                    🗑️ Удалить отдел
-                                </button>
-                            </h3>
-                            
-                            <!-- Должности в отделе -->
-                            <?php 
-                            $dept_job_titles = Arsenal_Staff_Manager::get_job_titles();
-                            $dept_job_titles = array_filter( $dept_job_titles, function( $job ) use ( $dept ) {
-                                // Если нужна связь должностей с отделами, добавить поле в структуру
-                                // Пока выводим все должности
-                                return true;
+                    <!-- Содержимое вкладок -->
+                    <div class="squad-tabs-content">
+                        <?php foreach ( $squads as $index => $squad ): 
+                            // Получаем сотрудников для каждого состава с JOIN на должности
+                            $squad_staff = $wpdb->get_results( $wpdb->prepare(
+                                "SELECT s.*, j.job_title_name 
+                                 FROM {$wpdb->prefix}arsenal_staff s
+                                 LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles j ON s.job_title_id = j.id
+                                 WHERE s.squad_id = %d 
+                                 ORDER BY s.second_name ASC",
+                                $squad->id
+                            ) );
+                        ?>
+                            <div class="squad-tab-content" 
+                                 data-squad-id="<?php echo $squad->id; ?>"
+                                 style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>;">
+                                
+                                <?php if ( $squad_staff ): ?>
+                                    <table class="wp-list-table widefat striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 15%;">Фото</th>
+                                                <th style="width: 25%;">ФИО</th>
+                                                <th style="width: 20%;">Должность</th>
+                                                <th style="width: 20%;">Отдел</th>
+                                                <th style="width: 20%;">Действие</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ( $squad_staff as $person ): ?>
+                                            <tr>
+                                                <td>
+                                                    <?php if ( $person->photo_url ): ?>
+                                                        <img src="<?php echo esc_url( $person->photo_url ); ?>" 
+                                                             alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
+                                                             class="staff-thumbnail"
+                                                             style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <div class="staff-thumbnail-empty" style="width: 50px; height: 50px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                                            <span class="dashicons dashicons-admin-users"></span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <strong><?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?></strong>
+                                                    <?php if ( $person->email ): ?>
+                                                        <br><small style="color: #666;">📧 <?php echo esc_html( $person->email ); ?></small>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <span class="job-title-badge">
+                                                        <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="department-badge">
+                                                        <?php 
+                                                        if ( $person->department_id ) {
+                                                            $dept = Arsenal_Staff_Manager::get_department( $person->department_id );
+                                                            echo esc_html( $dept ? $dept->department_name : '—' );
+                                                        } else {
+                                                            echo '—';
+                                                        }
+                                                        ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
+                                                       class="button button-small">
+                                                        ✏️ Редактировать
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else: ?>
+                                    <p style="padding: 20px; text-align: center; color: #999; background: #f9f9f9; border-radius: 5px;">
+                                        В этом составе нет сотрудников
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
+                <style>
+                    .squad-tabs-nav {
+                        flex-wrap: wrap;
+                    }
+                    
+                    .squad-tab-button {
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .squad-tab-button:hover {
+                        background-color: #e8e8e8 !important;
+                    }
+                    
+                    .squad-tab-button.active {
+                        background-color: #fff !important;
+                        font-weight: bold;
+                        border-bottom: 2px solid #0073aa !important;
+                        border-bottom-color: #fff !important;
+                    }
+                </style>
+
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const tabButtons = document.querySelectorAll('.squad-tab-button');
+                    const tabContents = document.querySelectorAll('.squad-tab-content');
+
+                    tabButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            const squadId = this.dataset.squadId;
+
+                            // Скрываем все содержимое
+                            tabContents.forEach(content => {
+                                content.style.display = 'none';
                             });
-                            
-                            if ( $dept_job_titles ):
-                            ?>
-                                <table class="widefat striped" style="margin-top: 10px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 40%;">Должность</th>
-                                            <th style="width: 40%;">Описание</th>
-                                            <th style="width: 20%;">Действие</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ( $dept_job_titles as $job ): ?>
-                                        <tr>
-                                            <td>
-                                                <strong><?php echo esc_html( $job->job_title_name ); ?></strong>
-                                            </td>
-                                            <td>
-                                                <?php echo esc_html( $job->description ?: '—' ); ?>
-                                            </td>
-                                            <td>
-                                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-job-title-edit&job_title_id=' . $job->id ); ?>" 
-                                                   class="button button-small">
-                                                    ✏️ Редактировать
-                                                </a>
-                                                <button class="button button-small button-delete" 
-                                                        data-job-title-id="<?php echo $job->id; ?>"
-                                                        data-action="delete-job-title">
-                                                    🗑️ Удалить
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
-                            <?php else: ?>
-                                <p style="color: #999; margin: 10px 0;">Должностей в этом отделе не создано</p>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p style="color: #999;">Отделов не создано</p>
-                <?php endif; ?>
-            </div>
+
+                            // Удаляем активный класс у всех кнопок
+                            tabButtons.forEach(btn => {
+                                btn.classList.remove('active');
+                                btn.style.background = '#f5f5f5';
+                                btn.style.fontWeight = 'normal';
+                                btn.style.borderBottom = '2px solid #ddd';
+                            });
+
+                            // Показываем выбранный контент
+                            const activeContent = document.querySelector('[data-squad-id="' + squadId + '"].squad-tab-content');
+                            if (activeContent) {
+                                activeContent.style.display = 'block';
+                            }
+
+                            // Отмечаем активную кнопку
+                            this.classList.add('active');
+                            this.style.background = '#fff';
+                            this.style.fontWeight = 'bold';
+                            this.style.borderBottom = '2px solid #fff';
+                        });
+                    });
+                });
+                </script>
+            <?php else: ?>
+                <p style="color: #999; padding: 20px;">Составы не созданы в wp_arsenal_squad</p>
+            <?php endif; ?>
         </div>
     </div>
 </div>
