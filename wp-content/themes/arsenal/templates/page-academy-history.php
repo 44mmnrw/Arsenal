@@ -121,17 +121,17 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 			<div class="academy-enrollment-info">
 				<div class="academy-enrollment-column">
 					<div class="academy-enrollment-item">
-				<div class="academy-enrollment-item__icon">
-						<?php echo arsenal_get_icon( 'icon-place' ); ?>
-					</div>
+						<div class="academy-enrollment-item__icon">
+							<?php echo arsenal_get_icon( 'icon-place' ); ?>
+						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Адрес:</strong> <?php echo esc_html( $data['contacts']['address'] ); ?>
 						</div>
 					</div>
 					<div class="academy-enrollment-item">
-				<div class="academy-enrollment-item__icon">
-						<?php echo arsenal_get_icon( 'icon-phone' ); ?>
-					</div>
+						<div class="academy-enrollment-item__icon">
+							<?php echo arsenal_get_icon( 'icon-phone' ); ?>
+						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Телефон:</strong> <?php echo esc_html( $data['contacts']['phone'] ); ?>
 						</div>
@@ -140,17 +140,17 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 
 				<div class="academy-enrollment-column">
 					<div class="academy-enrollment-item">
-				<div class="academy-enrollment-item__icon">
-						<?php echo arsenal_get_icon( 'icon-email' ); ?>
-					</div>
+						<div class="academy-enrollment-item__icon">
+							<?php echo arsenal_get_icon( 'icon-email' ); ?>
+						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Email:</strong> <?php echo esc_html( $data['contacts']['email'] ); ?>
 						</div>
 					</div>
 					<div class="academy-enrollment-item">
-				<div class="academy-enrollment-item__icon">
-						<?php echo arsenal_get_icon( 'icon-clock' ); ?>
-					</div>
+						<div class="academy-enrollment-item__icon">
+							<?php echo arsenal_get_icon( 'icon-clock' ); ?>
+						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Просмотры:</strong> <?php echo esc_html( $data['contacts']['schedule'] ); ?>
 						</div>

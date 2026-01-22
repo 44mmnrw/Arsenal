@@ -263,11 +263,11 @@ class Arsenal_Staff_Manager {
 			$format[] = '%d';
 		}
 
-		if ( ! empty( $data['club_type'] ) ) {
-			$insert['club_type'] = sanitize_text_field( $data['club_type'] );
-			$format[] = '%s';
+		if ( ! empty( $data['squad_id'] ) ) {
+			$insert['squad_id'] = (int) $data['squad_id'];
+			$format[] = '%d';
 		} else {
-			$insert['club_type'] = 'Основной клуб';
+			$insert['squad_id'] = null;
 			$format[] = '%s';
 		}
 
@@ -373,8 +373,8 @@ class Arsenal_Staff_Manager {
 			$format[] = null === $update['department_id'] ? '%s' : '%d';
 		}
 
-		if ( isset( $data['club_type'] ) ) {
-			$update['club_type'] = sanitize_text_field( $data['club_type'] ?? 'Основной клуб' );
+		if ( isset( $data['squad_id'] ) ) {
+			$update['squad_id'] = empty( $data['squad_id'] ) ? null : (int) $data['squad_id'];
 			$format[] = '%s';
 		}
 

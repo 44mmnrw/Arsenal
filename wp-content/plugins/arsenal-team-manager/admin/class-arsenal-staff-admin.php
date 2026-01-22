@@ -76,7 +76,7 @@ class Arsenal_Staff_Admin {
             'second_name' => sanitize_text_field( $_POST['second_name'] ?? '' ),
             'job_title_id' => ! empty( $_POST['job_title_id'] ) ? intval( $_POST['job_title_id'] ) : null,
             'department_id' => ! empty( $_POST['department_id'] ) ? intval( $_POST['department_id'] ) : null,
-            'club_type' => sanitize_text_field( $_POST['club_type'] ?? 'Основной клуб' ),
+            'squad_id' => ! empty( $_POST['squad_id'] ) ? intval( $_POST['squad_id'] ) : null,
             'birth_date' => ! empty( $_POST['birth_date'] ) ? sanitize_text_field( $_POST['birth_date'] ) : null,
             'contract_start' => ! empty( $_POST['contract_start'] ) ? sanitize_text_field( $_POST['contract_start'] ) : null,
             'contract_end' => ! empty( $_POST['contract_end'] ) ? sanitize_text_field( $_POST['contract_end'] ) : null,

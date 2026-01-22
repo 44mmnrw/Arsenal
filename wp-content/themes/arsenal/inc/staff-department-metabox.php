@@ -100,8 +100,8 @@ if ( ! function_exists( 'arsenal_save_staff_department_filter' ) ) {
 	add_action( 'save_post_page', 'arsenal_save_staff_department_filter' );
 }
 
-if ( ! function_exists( 'arsenal_register_staff_club_type_metabox' ) ) {
-	function arsenal_register_staff_club_type_metabox() {
+if ( ! function_exists( 'arsenal_register_staff_squad_id_metabox' ) ) {
+	function arsenal_register_staff_squad_id_metabox() {
 		// Показываем метаокс на странице редактирования поста
 		if ( ! isset( $_GET['post'] ) ) {
 			return;
@@ -116,9 +116,9 @@ if ( ! function_exists( 'arsenal_register_staff_club_type_metabox' ) ) {
 		}
 
 		add_meta_box(
-			'arsenal_staff_club_type_filter',
+			'arsenal_staff_squad_id_filter',
 			'Фильтр типа клуба',
-			'arsenal_staff_club_type_metabox_callback',
+			'arsenal_staff_squad_id_metabox_callback',
 			'page',
 			'side',
 			'high',
@@ -126,32 +126,35 @@ if ( ! function_exists( 'arsenal_register_staff_club_type_metabox' ) ) {
 		);
 	}
 
-	add_action( 'add_meta_boxes', 'arsenal_register_staff_club_type_metabox' );
+	add_action( 'add_meta_boxes', 'arsenal_register_staff_squad_id_metabox' );
 }
 
-if ( ! function_exists( 'arsenal_staff_club_type_metabox_callback' ) ) {
-	function arsenal_staff_club_type_metabox_callback( $post ) {
-		$club_type = get_post_meta( $post->ID, '_arsenal_staff_club_type_filter', true );
+if ( ! function_exists( 'arsenal_staff_squad_id_metabox_callback' ) ) {
+	function arsenal_staff_squad_id_metabox_callback( $post ) {
+		global $wpdb;
 		
-		wp_nonce_field( 'arsenal_staff_club_type_filter', 'arsenal_staff_club_type_filter_nonce' );
+		$squad_id = get_post_meta( $post->ID, '_arsenal_staff_squad_id_filter', true );
+		
+		// Получаем составы из таблицы wp_arsenal_squad
+		$squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
+		
+		wp_nonce_field( 'arsenal_staff_squad_id_filter', 'arsenal_staff_squad_id_filter_nonce' );
 		?>
 		<div style="margin-bottom: 15px;">
-			<label for="arsenal_staff_club_type_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
+			<label for="arsenal_staff_squad_id_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
 				Выбрать тип клуба:
 			</label>
 			<select 
-				id="arsenal_staff_club_type_filter_select"
-				name="arsenal_staff_club_type_filter" 
+				id="arsenal_staff_squad_id_filter_select"
+				name="arsenal_staff_squad_id_filter" 
 				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
 				<option value="">— Все типы —</option>
-				<option value="Основной клуб" 
-					<?php selected( $club_type, 'Основной клуб' ); ?>>
-					Основной клуб
-				</option>
-				<option value="СДЮШ" 
-					<?php selected( $club_type, 'СДЮШ' ); ?>>
-					СДЮШ
-				</option>
+				<?php foreach ( $squads as $squad ) : ?>
+					<option value="<?php echo esc_attr( $squad->id ); ?>" 
+						<?php selected( $squad_id, $squad->id ); ?>>
+						<?php echo esc_html( $squad->squad_name ); ?>
+					</option>
+				<?php endforeach; ?>
 			</select>
 		</div>
 		<p style="font-size: 12px; color: #666; margin: 0;">
@@ -161,11 +164,11 @@ if ( ! function_exists( 'arsenal_staff_club_type_metabox_callback' ) ) {
 	}
 }
 
-if ( ! function_exists( 'arsenal_save_staff_club_type_filter' ) ) {
-	function arsenal_save_staff_club_type_filter( $post_id ) {
+if ( ! function_exists( 'arsenal_save_staff_squad_id_filter' ) ) {
+	function arsenal_save_staff_squad_id_filter( $post_id ) {
 		// Проверяем nonce
-		if ( ! isset( $_POST['arsenal_staff_club_type_filter_nonce'] ) || 
-			 ! wp_verify_nonce( $_POST['arsenal_staff_club_type_filter_nonce'], 'arsenal_staff_club_type_filter' ) ) {
+		if ( ! isset( $_POST['arsenal_staff_squad_id_filter_nonce'] ) || 
+			 ! wp_verify_nonce( $_POST['arsenal_staff_squad_id_filter_nonce'], 'arsenal_staff_squad_id_filter' ) ) {
 			return;
 		}
 
@@ -180,19 +183,19 @@ if ( ! function_exists( 'arsenal_save_staff_club_type_filter' ) ) {
 		}
 
 		// Сохраняем значение
-		if ( isset( $_POST['arsenal_staff_club_type_filter'] ) ) {
-			$club_type = sanitize_text_field( $_POST['arsenal_staff_club_type_filter'] );
-			update_post_meta( $post_id, '_arsenal_staff_club_type_filter', $club_type );
+		if ( isset( $_POST['arsenal_staff_squad_id_filter'] ) ) {
+			$squad_id = intval( $_POST['arsenal_staff_squad_id_filter'] );
+			update_post_meta( $post_id, '_arsenal_staff_squad_id_filter', $squad_id );
 		} else {
-			delete_post_meta( $post_id, '_arsenal_staff_club_type_filter' );
+			delete_post_meta( $post_id, '_arsenal_staff_squad_id_filter' );
 		}
 	}
 
-	add_action( 'save_post_page', 'arsenal_save_staff_club_type_filter' );
+	add_action( 'save_post_page', 'arsenal_save_staff_squad_id_filter' );
 }
 
-if ( ! function_exists( 'arsenal_register_management_club_type_metabox' ) ) {
-	function arsenal_register_management_club_type_metabox() {
+if ( ! function_exists( 'arsenal_register_management_squad_id_metabox' ) ) {
+	function arsenal_register_management_squad_id_metabox() {
 		// Показываем метаокс на странице редактирования поста
 		if ( ! isset( $_GET['post'] ) ) {
 			return;
@@ -207,9 +210,9 @@ if ( ! function_exists( 'arsenal_register_management_club_type_metabox' ) ) {
 		}
 
 		add_meta_box(
-			'arsenal_management_club_type_filter',
+			'arsenal_management_squad_id_filter',
 			'Фильтр типа клуба',
-			'arsenal_management_club_type_metabox_callback',
+			'arsenal_management_squad_id_metabox_callback',
 			'page',
 			'side',
 			'high',
@@ -217,32 +220,35 @@ if ( ! function_exists( 'arsenal_register_management_club_type_metabox' ) ) {
 		);
 	}
 
-	add_action( 'add_meta_boxes', 'arsenal_register_management_club_type_metabox' );
+	add_action( 'add_meta_boxes', 'arsenal_register_management_squad_id_metabox' );
 }
 
-if ( ! function_exists( 'arsenal_management_club_type_metabox_callback' ) ) {
-	function arsenal_management_club_type_metabox_callback( $post ) {
-		$club_type = get_post_meta( $post->ID, '_arsenal_management_club_type_filter', true );
+if ( ! function_exists( 'arsenal_management_squad_id_metabox_callback' ) ) {
+	function arsenal_management_squad_id_metabox_callback( $post ) {
+		global $wpdb;
 		
-		wp_nonce_field( 'arsenal_management_club_type_filter', 'arsenal_management_club_type_filter_nonce' );
+		$squad_id = get_post_meta( $post->ID, '_arsenal_management_squad_id_filter', true );
+		
+		// Получаем составы из таблицы wp_arsenal_squad
+		$squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
+		
+		wp_nonce_field( 'arsenal_management_squad_id_filter', 'arsenal_management_squad_id_filter_nonce' );
 		?>
 		<div style="margin-bottom: 15px;">
-			<label for="arsenal_management_club_type_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
+			<label for="arsenal_management_squad_id_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
 				Выбрать тип клуба:
 			</label>
 			<select 
-				id="arsenal_management_club_type_filter_select"
-				name="arsenal_management_club_type_filter" 
+				id="arsenal_management_squad_id_filter_select"
+				name="arsenal_management_squad_id_filter" 
 				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
 				<option value="">— Все типы —</option>
-				<option value="Основной клуб" 
-					<?php selected( $club_type, 'Основной клуб' ); ?>>
-					Основной клуб
-				</option>
-				<option value="СДЮШ" 
-					<?php selected( $club_type, 'СДЮШ' ); ?>>
-					СДЮШ
-				</option>
+				<?php foreach ( $squads as $squad ) : ?>
+					<option value="<?php echo esc_attr( $squad->id ); ?>" 
+						<?php selected( $squad_id, $squad->id ); ?>>
+						<?php echo esc_html( $squad->squad_name ); ?>
+					</option>
+				<?php endforeach; ?>
 			</select>
 		</div>
 		<p style="font-size: 12px; color: #666; margin: 0;">
@@ -252,11 +258,11 @@ if ( ! function_exists( 'arsenal_management_club_type_metabox_callback' ) ) {
 	}
 }
 
-if ( ! function_exists( 'arsenal_save_management_club_type_filter' ) ) {
-	function arsenal_save_management_club_type_filter( $post_id ) {
+if ( ! function_exists( 'arsenal_save_management_squad_id_filter' ) ) {
+	function arsenal_save_management_squad_id_filter( $post_id ) {
 		// Проверяем nonce
-		if ( ! isset( $_POST['arsenal_management_club_type_filter_nonce'] ) || 
-			 ! wp_verify_nonce( $_POST['arsenal_management_club_type_filter_nonce'], 'arsenal_management_club_type_filter' ) ) {
+		if ( ! isset( $_POST['arsenal_management_squad_id_filter_nonce'] ) || 
+			 ! wp_verify_nonce( $_POST['arsenal_management_squad_id_filter_nonce'], 'arsenal_management_squad_id_filter' ) ) {
 			return;
 		}
 
@@ -271,13 +277,13 @@ if ( ! function_exists( 'arsenal_save_management_club_type_filter' ) ) {
 		}
 
 		// Сохраняем значение
-		if ( isset( $_POST['arsenal_management_club_type_filter'] ) ) {
-			$club_type = sanitize_text_field( $_POST['arsenal_management_club_type_filter'] );
-			update_post_meta( $post_id, '_arsenal_management_club_type_filter', $club_type );
+		if ( isset( $_POST['arsenal_management_squad_id_filter'] ) ) {
+			$squad_id = intval( $_POST['arsenal_management_squad_id_filter'] );
+			update_post_meta( $post_id, '_arsenal_management_squad_id_filter', $squad_id );
 		} else {
-			delete_post_meta( $post_id, '_arsenal_management_club_type_filter' );
+			delete_post_meta( $post_id, '_arsenal_management_squad_id_filter' );
 		}
 	}
 
-	add_action( 'save_post_page', 'arsenal_save_management_club_type_filter' );
+	add_action( 'save_post_page', 'arsenal_save_management_squad_id_filter' );
 }

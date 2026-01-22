@@ -30,7 +30,7 @@ global $wpdb;
 // Получить фильтры из post_meta текущей страницы
 $post_id = get_the_ID();
 $department_id = get_post_meta( $post_id, '_arsenal_staff_department_filter', true );
-$club_type_filter = get_post_meta( $post_id, '_arsenal_staff_club_type_filter', true );
+$squad_id_filter = get_post_meta( $post_id, '_arsenal_staff_squad_id_filter', true );
 
 // Получить название отдела
 $department_name = '';
@@ -51,8 +51,8 @@ if ( ! empty( $department_id ) ) {
 	$where_conditions[] = $wpdb->prepare( "s.department_id = %d", intval( $department_id ) );
 }
 
-if ( ! empty( $club_type_filter ) ) {
-	$where_conditions[] = $wpdb->prepare( "s.club_type = %s", sanitize_text_field( $club_type_filter ) );
+if ( ! empty( $squad_id_filter ) ) {
+	$where_conditions[] = $wpdb->prepare( "s.squad_id = %d", intval( $squad_id_filter ) );
 }
 
 $where_clause = '';

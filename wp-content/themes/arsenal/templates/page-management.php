@@ -15,15 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-// Получить фильтр club_type из post_meta
+// Получить фильтр squad_id из post_meta
 $post_id = get_the_ID();
-$club_type_filter = get_post_meta( $post_id, '_arsenal_management_club_type_filter', true );
+$squad_id_filter = get_post_meta( $post_id, '_arsenal_management_squad_id_filter', true );
 
 // Построить SQL запрос с фильтром
 global $wpdb;
 $where_clause = '';
-if ( ! empty( $club_type_filter ) ) {
-	$where_clause = $wpdb->prepare( " WHERE club_type = %s", sanitize_text_field( $club_type_filter ) );
+if ( ! empty( $squad_id_filter ) ) {
+	$where_clause = $wpdb->prepare( " WHERE squad_id = %d", intval( $squad_id_filter ) );
 }
 
 $management_team = $wpdb->get_results( 

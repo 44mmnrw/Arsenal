@@ -5,6 +5,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+global $wpdb;
+
 require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
 // Получаем все сотрудники с фильтрацией
@@ -124,7 +126,14 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                             </td>
                             <td class="staff-col-club-type">
                                 <span class="club-type-badge">
-                                    <?php echo esc_html( $person->club_type ?? 'Основной клуб' ); ?>
+                                    <?php 
+                                    if ( $person->squad_id ) {
+                                        $squad = $wpdb->get_row( $wpdb->prepare( "SELECT squad_name FROM {$wpdb->prefix}arsenal_squad WHERE id = %d", $person->squad_id ) );
+                                        echo esc_html( $squad ? $squad->squad_name : '—' );
+                                    } else {
+                                        echo '—';
+                                    }
+                                    ?>
                                 </span>
                             </td>
                             <td class="staff-col-contract">
@@ -161,53 +170,89 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
             </table>
         </div>
 
-        <!-- Раздел должностей -->
+        <!-- Раздел отделов и должностей -->
         <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc;">
-            <h2>📋 Должности</h2>
-            
+            <h2>🏢 Отделы и должности</h2>
+
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-department-add' ); ?>" class="button button-primary">
+                ➕ Добавить отдел
+            </a>
             <a href="<?php echo admin_url( 'admin.php?page=arsenal-job-title-add' ); ?>" class="button button-primary">
                 ➕ Добавить должность
             </a>
 
-            <div class="job-titles-list" style="margin-top: 20px;">
+            <div class="departments-list" style="margin-top: 20px;">
                 <?php 
-                $all_job_titles = Arsenal_Staff_Manager::get_job_titles();
-                if ( $all_job_titles ):
+                require_once get_template_directory() . '/inc/classes/class-arsenal-staff-department-manager.php';
+                $all_departments = Arsenal_Staff_Department_Manager::get_all_departments();
+                
+                if ( $all_departments ):
                 ?>
-                    <table class="widefat striped">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%;">Название должности</th>
-                                <th style="width: 40%;">Описание</th>
-                                <th style="width: 20%;">Действие</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ( $all_job_titles as $job ): ?>
-                            <tr>
-                                <td>
-                                    <strong><?php echo esc_html( $job->job_title_name ); ?></strong>
-                                </td>
-                                <td>
-                                    <?php echo esc_html( $job->description ?: '—' ); ?>
-                                </td>
-                                <td>
-                                    <a href="<?php echo admin_url( 'admin.php?page=arsenal-job-title-edit&job_title_id=' . $job->id ); ?>" 
-                                       class="button button-small">
-                                        ✏️ Редактировать
-                                    </a>
-                                    <button class="button button-small button-delete" 
-                                            data-job-title-id="<?php echo $job->id; ?>"
-                                            data-action="delete-job-title">
-                                        🗑️ Удалить
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                    <?php foreach ( $all_departments as $dept ): ?>
+                        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; background: #f9f9f9;">
+                            <h3 style="margin-top: 0;">
+                                📁 <?php echo esc_html( $dept->department_name ); ?>
+                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-department-edit&dept_id=' . $dept->id ); ?>" 
+                                   class="button button-small" style="margin-left: 10px;">
+                                    ✏️ Редактировать отдел
+                                </a>
+                                <button class="button button-small button-delete" 
+                                        data-dept-id="<?php echo $dept->id; ?>"
+                                        data-action="delete-department">
+                                    🗑️ Удалить отдел
+                                </button>
+                            </h3>
+                            
+                            <!-- Должности в отделе -->
+                            <?php 
+                            $dept_job_titles = Arsenal_Staff_Manager::get_job_titles();
+                            $dept_job_titles = array_filter( $dept_job_titles, function( $job ) use ( $dept ) {
+                                // Если нужна связь должностей с отделами, добавить поле в структуру
+                                // Пока выводим все должности
+                                return true;
+                            });
+                            
+                            if ( $dept_job_titles ):
+                            ?>
+                                <table class="widefat striped" style="margin-top: 10px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40%;">Должность</th>
+                                            <th style="width: 40%;">Описание</th>
+                                            <th style="width: 20%;">Действие</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ( $dept_job_titles as $job ): ?>
+                                        <tr>
+                                            <td>
+                                                <strong><?php echo esc_html( $job->job_title_name ); ?></strong>
+                                            </td>
+                                            <td>
+                                                <?php echo esc_html( $job->description ?: '—' ); ?>
+                                            </td>
+                                            <td>
+                                                <a href="<?php echo admin_url( 'admin.php?page=arsenal-job-title-edit&job_title_id=' . $job->id ); ?>" 
+                                                   class="button button-small">
+                                                    ✏️ Редактировать
+                                                </a>
+                                                <button class="button button-small button-delete" 
+                                                        data-job-title-id="<?php echo $job->id; ?>"
+                                                        data-action="delete-job-title">
+                                                    🗑️ Удалить
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php else: ?>
+                                <p style="color: #999; margin: 10px 0;">Должностей в этом отделе не создано</p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 <?php else: ?>
-                    <p style="color: #999;">Должностей не создано</p>
+                    <p style="color: #999;">Отделов не создано</p>
                 <?php endif; ?>
             </div>
         </div>

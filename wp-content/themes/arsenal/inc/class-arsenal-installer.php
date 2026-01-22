@@ -146,8 +146,15 @@ class Arsenal_Theme_Installer {
 	
 	/**
 	 * Создание главного меню
+	 * Создается только при первой установке!
 	 */
 	private static function create_menu() {
+		// ВАЖНО: Проверяем, уже ли было меню создано
+		// Если меню существует - НЕ пересоздаем его, пользователь может его отредактировал
+		if ( get_option( 'arsenal_menu_created' ) ) {
+			return; // Меню уже было создано - не трогаем!
+		}
+		
 		// Проверяем, существует ли меню
 		$menu_id = self::get_menu_id( 'Главное меню' );
 		if ( ! $menu_id ) {
@@ -331,19 +338,63 @@ class Arsenal_Theme_Installer {
 			return; // Файл не найден
 		}
 		
-		// Читаем SQL файл
+		// Увеличиваем timeout для больших файлов
+		set_time_limit( 600 ); // 10 минут
+		
+		// Читаем SQL файл (может быть большой)
 		$sql = file_get_contents( $sql_file );
 		
+		if ( empty( $sql ) ) {
+			return;
+		}
+		
+		// Удаляем комментарии
+		$sql = preg_replace( '/--.*?\n/', "\n", $sql );
+		$sql = preg_replace( '/^\s*\n/m', '', $sql );
+		
 		// Разбиваем на отдельные запросы (разделены ;)
+		// Более тщательная обработка для больших файлов
 		$queries = array_filter( array_map( 'trim', explode( ';', $sql ) ) );
 		
+		// Отключаем проверку FK для скорости
+		$wpdb->query( 'SET FOREIGN_KEY_CHECKS=0' );
+		
+		// Отключаем индексы во время импорта (ОЧЕНЬ БЫСТРО)
+		$wpdb->query( 'SET UNIQUE_CHECKS=0' );
+		
 		// Выполняем каждый запрос
+		$count = 0;
 		foreach ( $queries as $query ) {
 			if ( ! empty( $query ) ) {
+				// Пропускаем DROP TABLE - создаем новые
+				if ( strpos( $query, 'DROP TABLE' ) === 0 ) {
+					$wpdb->query( $query );
+					continue;
+				}
+				
 				// Заменяем wp_ на префикс базы
 				$query = str_replace( 'wp_', $wpdb->prefix, $query );
+				
+				// Выполняем запрос
 				$wpdb->query( $query );
+				$count++;
+				
+				// Каждые 500 запросов - флаш памяти
+				if ( $count % 500 === 0 ) {
+					wp_cache_flush();
+				}
 			}
+		}
+		
+		// Включаем индексы и FK проверку обратно
+		$wpdb->query( 'SET UNIQUE_CHECKS=1' );
+		$wpdb->query( 'SET FOREIGN_KEY_CHECKS=1' );
+		
+		// Оптимизируем таблицы
+		$tables = $wpdb->get_results( "SHOW TABLES LIKE '" . $wpdb->prefix . "arsenal_%'" );
+		foreach ( $tables as $table_obj ) {
+			$table = current( (array) $table_obj );
+			$wpdb->query( "OPTIMIZE TABLE $table" );
 		}
 	}
 }

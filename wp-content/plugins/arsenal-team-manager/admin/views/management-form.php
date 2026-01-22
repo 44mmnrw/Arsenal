@@ -71,23 +71,21 @@ if ( $id ) {
                     </div>
 
                     <div class="form-group">
-                        <label for="club_type">
-                            <strong>Тип клуба</strong>
+                        <label for="squad_id">
+                            <strong>Тип состава</strong>
                         </label>
                         <?php
-                        $club_type = 'Основной клуб';
-                        if ( $management ) {
-                            $club_info = json_decode( $management->club_type, true );
-                            if ( is_array( $club_info ) && isset( $club_info['type'] ) ) {
-                                $club_type = $club_info['type'];
-                            } elseif ( is_string( $management->club_type ) ) {
-                                $club_type = $management->club_type;
-                            }
-                        }
+                        $squad_id = $management ? $management->squad_id : '';
+                        $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
                         ?>
-                        <select id="club_type" name="club_type" class="regular-text">
-                            <option value="Основной клуб" <?php selected( $club_type, 'Основной клуб' ); ?>>Основной клуб</option>
-                            <option value="СДЮШ" <?php selected( $club_type, 'СДЮШ' ); ?>>СДЮШ</option>
+                        <select id="squad_id" name="squad_id" class="regular-text">
+                            <option value="">— Не указан —</option>
+                            <?php foreach ( $squads as $squad ) : ?>
+                                <option value="<?php echo esc_attr( $squad->id ); ?>" 
+                                        <?php selected( $squad_id, $squad->id ); ?>>
+                                    <?php echo esc_html( $squad->squad_name ); ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                         <span class="description">Выберите тип клуба для члена руководства</span>
                     </div>

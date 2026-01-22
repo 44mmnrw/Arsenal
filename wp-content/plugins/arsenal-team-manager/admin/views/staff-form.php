@@ -23,6 +23,10 @@ if ( $staff_id ) {
 $job_titles = Arsenal_Staff_Manager::get_job_titles( true );
 $departments = Arsenal_Staff_Manager::get_departments( true );
 
+// Получаем составы из wp_arsenal_squad
+global $wpdb;
+$squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
+
 ?>
 <div class="wrap">
     <h1><?php echo $is_edit ? '✏️ Редактирование сотрудника' : '➕ Добавление нового сотрудника'; ?></h1>
@@ -77,10 +81,15 @@ $departments = Arsenal_Staff_Manager::get_departments( true );
                 </div>
 
                 <div class="form-group">
-                    <label for="club_type">Тип клуба</label>
-                    <select id="club_type" name="club_type">
-                        <option value="Основной клуб" <?php selected( $staff->club_type ?? 'Основной клуб', 'Основной клуб' ); ?>>Основной клуб</option>
-                        <option value="СДЮШ" <?php selected( $staff->club_type ?? 'Основной клуб', 'СДЮШ' ); ?>>СДЮШ</option>
+                    <label for="squad_id">Тип клуба</label>
+                    <select id="squad_id" name="squad_id">
+                        <option value="">— Не указан —</option>
+                        <?php foreach ( $squads as $squad ) : ?>
+                            <option value="<?php echo esc_attr( $squad->id ); ?>" 
+                                    <?php selected( $staff->squad_id ?? '', $squad->id ); ?>>
+                                <?php echo esc_html( $squad->squad_name ); ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>

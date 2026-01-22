@@ -117,8 +117,12 @@ $positions = $wpdb->get_col( "SELECT DISTINCT position FROM {$wpdb->prefix}arsen
                             <td class="mgmt-col-club-type">
                                 <span class="club-type-badge">
                                     <?php 
-                                    $club_type = ! empty( $member->club_type ) ? $member->club_type : 'Основной клуб';
-                                    echo esc_html( $club_type );
+                                    if ( $member->squad_id ) {
+                                        $squad = $wpdb->get_row( $wpdb->prepare( "SELECT squad_name FROM {$wpdb->prefix}arsenal_squad WHERE id = %d", $member->squad_id ) );
+                                        echo esc_html( $squad ? $squad->squad_name : '—' );
+                                    } else {
+                                        echo '—';
+                                    }
                                     ?>
                                 </span>
                             </td>

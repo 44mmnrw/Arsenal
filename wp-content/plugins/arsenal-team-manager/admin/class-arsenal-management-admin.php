@@ -54,7 +54,7 @@ class Arsenal_Management_Admin {
             'description' => sanitize_textarea_field( $_POST['description'] ?? '' ),
             'photo_url' => ! empty( $_POST['photo_url'] ) ? esc_url_raw( $_POST['photo_url'] ) : '',
             'display_order' => intval( $_POST['display_order'] ?? 0 ),
-            'club_type' => sanitize_text_field( $_POST['club_type'] ?? 'Основной клуб' ),
+            'squad_id' => ! empty( $_POST['squad_id'] ) ? intval( $_POST['squad_id'] ) : null,
         );
 
         // Валидация
