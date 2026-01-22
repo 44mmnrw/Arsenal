@@ -36,10 +36,10 @@
 	line-height: 1.3;
 }
 
-/* Сетка карточек - 2 колонки */
+/* Сетка карточек - 3 колонки */
 .management-grid {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	gap: 2rem;
 }
 
@@ -137,6 +137,7 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
 	.management-grid {
+		grid-template-columns: repeat(2, 1fr);
 		gap: 1.5rem;
 	}
 }
