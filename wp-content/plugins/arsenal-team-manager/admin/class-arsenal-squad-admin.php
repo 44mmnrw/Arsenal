@@ -22,7 +22,8 @@ class Arsenal_Squad_Admin {
     }
 
     public function __construct() {
-        add_action( 'admin_menu', array( $this, 'register_menu' ) );
+        // Управление составами скрыто от меню (может быть управляемо программно)
+        // add_action( 'admin_menu', array( $this, 'register_menu' ) );
         add_action( 'wp_ajax_arsenal_delete_squad', array( $this, 'handle_delete_squad' ) );
         add_action( 'wp_ajax_arsenal_add_squad', array( $this, 'handle_add_squad' ) );
     }

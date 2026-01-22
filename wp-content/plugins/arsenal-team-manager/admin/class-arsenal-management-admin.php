@@ -114,17 +114,4 @@ class Arsenal_Management_Admin {
         }
     }
 
-    /**
-     * Вывести список руководства
-     */
-    public function render_management_list() {
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/views/management-list.php';
-    }
-
-    /**
-     * Вывести форму добавления/редактирования
-     */
-    public function render_management_form() {
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/views/management-form.php';
-    }
 }

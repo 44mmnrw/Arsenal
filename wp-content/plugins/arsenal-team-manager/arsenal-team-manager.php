@@ -223,16 +223,6 @@ class Arsenal_Team_Manager {
             array( $this, 'render_staff_list' )
         );
         
-        // Подменю: Руководство
-        add_submenu_page(
-            $parent_slug,
-            'Руководство',
-            'Руководство',
-            'manage_options',
-            'arsenal-management',
-            array( $this, 'render_management_list' )
-        );
-        
         // Подменю: Библиотека иконок
         add_submenu_page(
             $parent_slug,
@@ -477,15 +467,6 @@ class Arsenal_Team_Manager {
             'Добавить члена руководства',
             'manage_options',
             'arsenal-management-add',
-            array( $this, 'render_management_form' )
-        );
-        
-        add_submenu_page(
-            '',
-            'Редактировать члена руководства',
-            'Редактировать члена руководства',
-            'manage_options',
-            'arsenal-management-edit',
             array( $this, 'render_management_form' )
         );
         
@@ -817,22 +798,6 @@ class Arsenal_Team_Manager {
     public function render_job_title_edit() {
         $staff_admin = new Arsenal_Staff_Admin();
         $staff_admin->render_job_title_edit();
-    }
-    
-    /**
-     * Список руководства
-     */
-    public function render_management_list() {
-        $management_admin = new Arsenal_Management_Admin();
-        $management_admin->render_management_list();
-    }
-    
-    /**
-     * Добавление/редактирование члена руководства
-     */
-    public function render_management_form() {
-        $management_admin = new Arsenal_Management_Admin();
-        $management_admin->render_management_form();
     }
     
     /**
