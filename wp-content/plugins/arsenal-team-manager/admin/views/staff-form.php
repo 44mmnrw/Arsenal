@@ -20,12 +20,40 @@ if ( $staff_id ) {
     }
 }
 
-$job_titles = Arsenal_Staff_Manager::get_job_titles( true );
-$departments = Arsenal_Staff_Manager::get_departments( true );
-
 // Получаем составы из wp_arsenal_squad
 global $wpdb;
 $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
+
+// Определяем текущий квад (при редактировании - берем из записи, при добавлении - пусто)
+$current_squad_id = $is_edit ? $staff->squad_id : null;
+
+// Получаем отделы для текущего квада
+$departments = array();
+if ( $current_squad_id ) {
+    $departments = $wpdb->get_results( $wpdb->prepare(
+        "SELECT d.id, d.department_name 
+         FROM {$wpdb->prefix}arsenal_staff_department d
+         INNER JOIN {$wpdb->prefix}arsenal_squad s ON d.squad_id = s.squad_id
+         WHERE s.id = %d
+         ORDER BY d.sort_order ASC, d.department_name ASC",
+        $current_squad_id
+    ) );
+}
+
+// Определяем текущий отдел (редактирование или первый отдел)
+$current_dept_id = $staff->department_id ?? ( ! empty( $departments ) ? $departments[0]->id : null );
+
+// Получаем должности для текущего отдела
+$job_titles = array();
+if ( $current_dept_id ) {
+    $job_titles = $wpdb->get_results( $wpdb->prepare(
+        "SELECT j.id, j.job_title_name 
+         FROM {$wpdb->prefix}arsenal_staff_job_titles j
+         WHERE j.department_id = %d
+         ORDER BY j.sort_order ASC, j.job_title_name ASC",
+        $current_dept_id
+    ) );
+}
 
 ?>
 <div class="wrap">
@@ -55,25 +83,25 @@ $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="job_title_id">Должность</label>
-                    <select id="job_title_id" name="job_title_id">
-                        <option value="">— Не указана —</option>
-                        <?php foreach ( $job_titles as $job ): ?>
-                            <option value="<?php echo $job->id; ?>" 
-                                    <?php selected( $staff->job_title_id ?? null, $job->id ); ?>>
-                                <?php echo esc_html( $job->job_title_name ); ?>
+                    <label for="squad_id">Состав/Клуб *</label>
+                    <select id="squad_id" name="squad_id" required>
+                        <option value="">— Выберите состав —</option>
+                        <?php foreach ( $squads as $squad ) : ?>
+                            <option value="<?php echo esc_attr( $squad->id ); ?>" 
+                                    <?php selected( $current_squad_id, $squad->id ); ?>>
+                                <?php echo esc_html( $squad->squad_name ); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="department_id">Отдел</label>
-                    <select id="department_id" name="department_id">
-                        <option value="">— Не указан —</option>
+                    <label for="department_id">Отдел *</label>
+                    <select id="department_id" name="department_id" required>
+                        <option value="">— Выберите отдел —</option>
                         <?php foreach ( $departments as $dept ): ?>
                             <option value="<?php echo $dept->id; ?>" 
-                                    <?php selected( $staff->department_id ?? null, $dept->id ); ?>>
+                                    <?php selected( $current_dept_id, $dept->id ); ?>>
                                 <?php echo esc_html( $dept->department_name ); ?>
                             </option>
                         <?php endforeach; ?>
@@ -81,13 +109,13 @@ $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal
                 </div>
 
                 <div class="form-group">
-                    <label for="squad_id">Тип клуба</label>
-                    <select id="squad_id" name="squad_id">
-                        <option value="">— Не указан —</option>
-                        <?php foreach ( $squads as $squad ) : ?>
-                            <option value="<?php echo esc_attr( $squad->id ); ?>" 
-                                    <?php selected( $staff->squad_id ?? '', $squad->id ); ?>>
-                                <?php echo esc_html( $squad->squad_name ); ?>
+                    <label for="job_title_id">Должность *</label>
+                    <select id="job_title_id" name="job_title_id" required>
+                        <option value="">— Выберите должность —</option>
+                        <?php foreach ( $job_titles as $job ): ?>
+                            <option value="<?php echo $job->id; ?>" 
+                                    <?php selected( $staff->job_title_id ?? null, $job->id ); ?>>
+                                <?php echo esc_html( $job->job_title_name ); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -386,4 +414,96 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 })(jQuery);
+</script>
+
+<!-- Каскадные select'ы для квада → отдел → должность -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const squadSelect = document.getElementById('squad_id');
+    const departmentSelect = document.getElementById('department_id');
+    const jobTitleSelect = document.getElementById('job_title_id');
+    const nonce = '<?php echo wp_create_nonce( 'arsenal_staff_nonce' ); ?>';
+
+    // Когда меняется квад - загружаем отделы
+    if ( squadSelect ) {
+        squadSelect.addEventListener('change', function() {
+            const squadId = this.value;
+            
+            if ( ! squadId ) {
+                departmentSelect.innerHTML = '<option value="">— Выберите отдел —</option>';
+                jobTitleSelect.innerHTML = '<option value="">— Выберите должность —</option>';
+                return;
+            }
+
+            // AJAX для получения отделов
+            fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    action: 'arsenal_get_departments_by_squad',
+                    nonce: nonce,
+                    squad_id: squadId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success && data.data ) {
+                    departmentSelect.innerHTML = '<option value="">— Выберите отдел —</option>';
+                    data.data.forEach(dept => {
+                        const option = document.createElement('option');
+                        option.value = dept.id;
+                        option.textContent = dept.department_name;
+                        departmentSelect.appendChild(option);
+                    });
+                    jobTitleSelect.innerHTML = '<option value="">— Выберите должность —</option>';
+                } else {
+                    console.error('Ошибка при получении отделов:', data.data);
+                }
+            })
+            .catch(error => console.error('AJAX ошибка:', error));
+        });
+    }
+
+    // Когда меняется отдел - загружаем должности
+    if ( departmentSelect ) {
+        departmentSelect.addEventListener('change', function() {
+            const deptId = this.value;
+            
+            if ( ! deptId ) {
+                jobTitleSelect.innerHTML = '<option value="">— Выберите должность —</option>';
+                return;
+            }
+
+            // AJAX для получения должностей
+            fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    action: 'arsenal_get_jobs_by_department',
+                    nonce: nonce,
+                    department_id: deptId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success && data.data ) {
+                    jobTitleSelect.innerHTML = '<option value="">— Выберите должность —</option>';
+                    data.data.forEach(job => {
+                        const option = document.createElement('option');
+                        option.value = job.id;
+                        option.textContent = job.job_title_name;
+                        jobTitleSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Ошибка при получении должностей:', data.data);
+                }
+            })
+            .catch(error => console.error('AJAX ошибка:', error));
+        });
+    }
+});
 </script>

@@ -3508,6 +3508,7 @@
 .staff-header .staff-col-name,
 .staff-header .staff-col-job,
 .staff-header .staff-col-dept,
+.staff-header .staff-col-squad,
 .staff-header .staff-col-contract,
 .staff-header .staff-col-action {
     font-size: 13px;
@@ -3521,6 +3522,10 @@
 
 .staff-col-photo {
     min-width: 60px;
+}
+
+.staff-col-squad {
+    min-width: 130px;
 }
 
 .staff-thumbnail,
@@ -3564,6 +3569,16 @@
 .department-badge {
     background: #ffe7e7;
     color: #990000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.squad-name-badge {
+    background: #f3e5f5;
+    color: #6a1b9a;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 12px;
@@ -6105,4 +6120,489 @@ html {
 .sectors-remove:hover {
     background: #d63638 !important;
     color: #fff !important;
+}
+
+/* ===== СТИЛИ ВКЛАДОК СОСТАВОВ ===== */
+
+.squad-tabs-wrapper {
+    margin-top: 20px;
+}
+
+.squad-tabs-nav {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.squad-tab-button {
+    padding: 10px 20px;
+    border: 2px solid #ddd;
+    background: #f5f5f5;
+    cursor: pointer;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    font-weight: normal;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.squad-tab-button:hover {
+    background-color: #e8e8e8;
+}
+
+.squad-tab-button.active {
+    background-color: #fff;
+    font-weight: bold;
+    border-bottom: 2px solid #fff;
+}
+
+.squad-tabs-content {
+    border: 1px solid #ddd;
+    border-radius: 0 5px 5px 5px;
+    padding: 20px;
+    background: #fff;
+}
+
+.squad-tab-content {
+    display: none;
+}
+
+.squad-tab-content.active {
+    display: block;
+}
+
+.squad-delete-button-footer {
+    display: inline-block !important;
+    margin-top: 10px;
+    padding: 8px 12px !important;
+    background-color: #dc3545 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.squad-delete-button-footer:hover {
+    background-color: #c82333 !important;
+}
+
+.squad-delete-button-footer:active {
+    background-color: #bd2130 !important;
+}
+
+/* ===== STAFF LIST PAGE STYLES ===== */
+
+.staff-list-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 2px solid #ccc;
+}
+
+.staff-list-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.staff-list-section-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.staff-tabs-content {
+    border: 1px solid #ddd;
+    border-radius: 0 5px 5px 5px;
+    padding: 20px;
+    background: #fff;
+}
+
+.squad-tab-content table {
+    width: 100%;
+}
+
+.staff-col-photo {
+    width: 15%;
+}
+
+.staff-col-name {
+    width: 25%;
+}
+
+.staff-col-job {
+    width: 20%;
+}
+
+.staff-col-dept {
+    width: 20%;
+}
+
+.staff-col-action {
+    width: 20%;
+}
+
+.staff-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.staff-thumbnail-empty {
+    width: 50px;
+    height: 50px;
+    background: #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.staff-thumbnail-empty .dashicons {
+    color: #666;
+}
+
+.staff-email {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 12px;
+}
+
+.staff-email-icon {
+    margin-right: 3px;
+}
+
+.job-title-badge,
+.department-badge,
+.club-type-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.staff-no-data {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    background: #f9f9f9;
+    border-radius: 5px;
+}
+
+.squad-delete-footer-wrapper {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.squad-empty-message {
+    color: #999;
+    padding: 20px;
+}
+
+/* ===== ОТДЕЛЫ В СОСТАВЕ ===== */
+
+.squad-departments-section {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+
+.squad-departments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.squad-departments-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.squad-add-department-btn {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+}
+
+.squad-departments-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.squad-department-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.dept-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.squad-department-item .dept-name {
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+}
+
+.squad-delete-department-btn {
+    padding: 3px 6px !important;
+    font-size: 11px !important;
+    height: auto !important;
+    line-height: 1 !important;
+    flex-shrink: 0;
+}
+
+.dept-job-titles-list {
+    list-style: none;
+    margin: 8px 0 0 0;
+    padding: 8px;
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    font-size: 12px;
+}
+
+.dept-job-title-item {
+    padding: 4px 0;
+    color: #666;
+}
+
+.dept-no-jobs {
+    color: #999;
+    font-size: 12px;
+    margin: 8px 0 0 0;
+    padding: 5px;
+    background: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
+.squad-no-departments {
+    color: #999;
+    font-size: 12px;
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* ===== КНОПКИ ОТДЕЛОВ ===== */
+
+.squad-departments-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+.squad-dept-button {
+    padding: 10px 15px !important;
+    background: #e8f4f8 !important;
+    color: #0073aa !important;
+    border: 1px solid #0073aa !important;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.squad-dept-button:hover {
+    background: #0073aa !important;
+    color: #fff !important;
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+
+.department-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.department-modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.department-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+.department-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.department-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.department-modal-close:hover {
+    color: #333;
+}
+
+.department-modal-body {
+    padding: 20px;
+    min-height: 150px;
+}
+
+.modal-job-titles-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.modal-job-title-item {
+    padding: 12px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+.modal-no-jobs {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.department-modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+    text-align: right;
+}
+
+.modal-delete-department-btn {
+    padding: 8px 12px !important;
+    background: #dc3545 !important;
+    color: #fff !important;
+    border: none !important;
+}
+/* Форма добавления должности в модальном окне */
+.modal-job-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f0f6ff;
+    border: 1px solid #d1e7ff;
+    border-radius: 4px;
+}
+
+.modal-job-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.modal-job-input:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.15);
+}
+
+.modal-add-job-btn {
+    white-space: nowrap;
+    padding: 8px 12px !important;
+    background: #28a745 !important;
+    color: #fff !important;
+    border: none !important;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.modal-add-job-btn:hover {
+    background: #218838 !important;
+}
+
+/* Элемент списка должности в модальном окне */
+.modal-job-title-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+.modal-job-title-item span {
+    flex: 1;
+}
+
+.modal-delete-job-btn {
+    padding: 4px 8px !important;
+    background: #dc3545 !important;
+    color: #fff !important;
+    border: none !important;
+    font-size: 12px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.modal-delete-job-btn:hover {
+    background: #c82333 !important;
 }

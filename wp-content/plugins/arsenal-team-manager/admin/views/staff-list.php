@@ -41,24 +41,30 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
             </div>
         </div>
 
-
         <!-- Раздел вкладок по составам -->
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc;">
-            <h2>👥 Сотрудники по составам</h2>
+        <div class="staff-list-section">
+            <div class="staff-list-section-header">
+                <h2>👥 Сотрудники по составам</h2>
+                <a href="<?php echo admin_url( 'admin.php?page=arsenal-squad-add' ); ?>" class="button button-primary">
+                    ➕ Добавить состав
+                </a>
+            </div>
 
             <?php
             // Получаем все составы из wp_arsenal_squad
-            $squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY id ASC" );
+            $squads = $wpdb->get_results( "SELECT id, squad_name, squad_id FROM {$wpdb->prefix}arsenal_squad ORDER BY id ASC" );
             
             if ( $squads ):
             ?>
                 <div class="squad-tabs-wrapper">
                     <!-- Вкладки навигации -->
-                    <div class="squad-tabs-nav" style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; gap: 5px;">
+                    <div class="squad-tabs-nav">
+                        <button class="squad-tab-button active" data-squad-id="all">
+                            👥 Все сотрудники
+                        </button>
                         <?php foreach ( $squads as $index => $squad ): ?>
                             <button class="squad-tab-button" 
-                                    data-squad-id="<?php echo $squad->id; ?>"
-                                    style="padding: 10px 20px; border: 2px solid #ddd; background: #f5f5f5; cursor: pointer; border-bottom: none; border-radius: 5px 5px 0 0; font-weight: <?php echo $index === 0 ? 'bold' : 'normal'; ?>; background: <?php echo $index === 0 ? '#fff' : '#f5f5f5'; ?>;">
+                                    data-squad-id="<?php echo $squad->id; ?>">
                                 <?php echo esc_html( $squad->squad_name ); ?>
                             </button>
                         <?php endforeach; ?>
@@ -77,19 +83,57 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                 $squad->id
                             ) );
                         ?>
-                            <div class="squad-tab-content" 
-                                 data-squad-id="<?php echo $squad->id; ?>"
-                                 style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>;">
+                            <div class="squad-tab-content <?php echo $index === 0 ? 'active' : ''; ?>" 
+                                 data-squad-id="<?php echo $squad->id; ?>">
+                                
+                                <!-- Раздел отделов -->
+                                <div class="squad-departments-section">
+                                    <div class="squad-departments-header">
+                                        <h3>📋 Отделы</h3>
+                                        <button class="button button-small squad-add-department-btn" 
+                                                data-squad-id="<?php echo $squad->squad_id; ?>"
+                                                data-squad-numeric-id="<?php echo $squad->id; ?>">
+                                            ➕ Добавить отдел
+                                        </button>
+                                    </div>
+                                    
+                                    <?php 
+                                    // Получаем отделы для этого состава
+                                    $squad_departments = $wpdb->get_results( $wpdb->prepare(
+                                        "SELECT * FROM {$wpdb->prefix}arsenal_staff_department WHERE squad_id = %s ORDER BY sort_order ASC, department_name ASC",
+                                        $squad->squad_id
+                                    ) );
+                                    ?>
+                                    
+                                    <?php if ( $squad_departments ): ?>
+                                        <div class="squad-departments-buttons">
+                                            <?php foreach ( $squad_departments as $dept ): ?>
+                                            <button class="button squad-dept-button" 
+                                                    data-department-id="<?php echo $dept->id; ?>"
+                                                    data-department-name="<?php echo esc_attr( $dept->department_name ); ?>"
+                                                    data-squad-id="<?php echo $squad->squad_id; ?>">
+                                                📁 <?php echo esc_html( $dept->department_name ); ?>
+                                            </button>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <p class="squad-no-departments">Отделы не созданы</p>
+                                    <?php endif; ?>
+                                </div>
+                                
+                                <!-- Раздел сотрудников -->
+                                <div class="squad-staff-section">
+                                    <h3>👥 Сотрудники</h3>
                                 
                                 <?php if ( $squad_staff ): ?>
                                     <table class="wp-list-table widefat striped">
                                         <thead>
                                             <tr>
-                                                <th style="width: 15%;">Фото</th>
-                                                <th style="width: 25%;">ФИО</th>
-                                                <th style="width: 20%;">Должность</th>
-                                                <th style="width: 20%;">Отдел</th>
-                                                <th style="width: 20%;">Действие</th>
+                                                <th class="staff-col-photo">Фото</th>
+                                                <th class="staff-col-name">ФИО</th>
+                                                <th class="staff-col-job">Должность</th>
+                                                <th class="staff-col-dept">Отдел</th>
+                                                <th class="staff-col-action">Действие</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,10 +143,9 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                                     <?php if ( $person->photo_url ): ?>
                                                         <img src="<?php echo esc_url( $person->photo_url ); ?>" 
                                                              alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
-                                                             class="staff-thumbnail"
-                                                             style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover;">
+                                                             class="staff-thumbnail">
                                                     <?php else: ?>
-                                                        <div class="staff-thumbnail-empty" style="width: 50px; height: 50px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                                        <div class="staff-thumbnail-empty">
                                                             <span class="dashicons dashicons-admin-users"></span>
                                                         </div>
                                                     <?php endif; ?>
@@ -110,7 +153,7 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                                 <td>
                                                     <strong><?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?></strong>
                                                     <?php if ( $person->email ): ?>
-                                                        <br><small style="color: #666;">📧 <?php echo esc_html( $person->email ); ?></small>
+                                                        <small class="staff-email">📧 <?php echo esc_html( $person->email ); ?></small>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
@@ -141,75 +184,155 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                         </tbody>
                                     </table>
                                 <?php else: ?>
-                                    <p style="padding: 20px; text-align: center; color: #999; background: #f9f9f9; border-radius: 5px;">
+                                    <p class="staff-no-data">
                                         В этом составе нет сотрудников
                                     </p>
                                 <?php endif; ?>
+                                </div>
+                                <!-- Конец раздела сотрудников -->
+
+                                <!-- Кнопка удаления состава -->
+                                <?php if ( count( $squads ) > 1 ): ?>
+                                    <div class="squad-delete-footer-wrapper">
+                                        <button class="button button-delete squad-delete-button-footer" 
+                                                data-squad-id="<?php echo $squad->id; ?>"
+                                                data-squad-name="<?php echo esc_attr( $squad->squad_name ); ?>">
+                                            🗑️ Удалить состав
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
+                        
+                        <!-- Вкладка "Все сотрудники" -->
+                        <div class="squad-tab-content" data-squad-id="all">
+                            <div class="squad-staff-section">
+                                <h3>👥 Все сотрудники</h3>
+                            
+                                <?php 
+                                // Получаем всех сотрудников со всех составов
+                                $all_staff = $wpdb->get_results(
+                                    "SELECT s.*, 
+                                            j.job_title_name, 
+                                            d.department_name,
+                                            sq.squad_name
+                                     FROM {$wpdb->prefix}arsenal_staff s
+                                     LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles j ON s.job_title_id = j.id
+                                     LEFT JOIN {$wpdb->prefix}arsenal_staff_department d ON s.department_id = d.id
+                                     LEFT JOIN {$wpdb->prefix}arsenal_squad sq ON s.squad_id = sq.id
+                                     ORDER BY sq.squad_name ASC, s.second_name ASC, s.first_name ASC"
+                                );
+                                ?>
+                                
+                                <?php if ( $all_staff ): ?>
+                                    <table class="wp-list-table widefat striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="staff-col-photo">Фото</th>
+                                                <th class="staff-col-name">ФИО</th>
+                                                <th class="staff-col-job">Должность</th>
+                                                <th class="staff-col-dept">Отдел</th>
+                                                <th class="staff-col-squad">Состав</th>
+                                                <th class="staff-col-action">Действие</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ( $all_staff as $person ): ?>
+                                            <tr>
+                                                <td>
+                                                    <?php if ( $person->photo_url ): ?>
+                                                        <img src="<?php echo esc_url( $person->photo_url ); ?>" 
+                                                             alt="<?php echo esc_attr( $person->first_name . ' ' . $person->second_name ); ?>"
+                                                             class="staff-thumbnail">
+                                                    <?php else: ?>
+                                                        <div class="staff-thumbnail-empty">
+                                                            <span class="dashicons dashicons-admin-users"></span>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <strong><?php echo esc_html( $person->first_name . ' ' . $person->second_name ); ?></strong>
+                                                    <?php if ( $person->email ): ?>
+                                                        <small class="staff-email">📧 <?php echo esc_html( $person->email ); ?></small>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <span class="job-title-badge">
+                                                        <?php echo esc_html( $person->job_title_name ?? '—' ); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="department-badge">
+                                                        <?php echo esc_html( $person->department_name ?? '—' ); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="squad-name-badge">
+                                                        <?php echo esc_html( $person->squad_name ?? '—' ); ?>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>" 
+                                                       class="button button-small">
+                                                        ✏️ Редактировать
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                <?php else: ?>
+                                    <p class="staff-no-data">
+                                        Нет сотрудников в базе
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <!-- Конец вкладки "Все сотрудники" -->
                     </div>
                 </div>
-
-                <style>
-                    .squad-tabs-nav {
-                        flex-wrap: wrap;
-                    }
-                    
-                    .squad-tab-button {
-                        transition: all 0.2s ease;
-                    }
-                    
-                    .squad-tab-button:hover {
-                        background-color: #e8e8e8 !important;
-                    }
-                    
-                    .squad-tab-button.active {
-                        background-color: #fff !important;
-                        font-weight: bold;
-                        border-bottom: 2px solid #0073aa !important;
-                        border-bottom-color: #fff !important;
-                    }
-                </style>
 
                 <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const tabButtons = document.querySelectorAll('.squad-tab-button');
                     const tabContents = document.querySelectorAll('.squad-tab-content');
+                    const storageKey = 'arsenal_active_squad_tab';
 
+                    // Функция активации вкладки
+                    function activateTab(squadId) {
+                        tabContents.forEach(c => c.classList.remove('active'));
+                        tabButtons.forEach(b => b.classList.remove('active'));
+                        
+                        const content = document.querySelector('[data-squad-id="' + squadId + '"].squad-tab-content');
+                        const button = document.querySelector('[data-squad-id="' + squadId + '"].squad-tab-button');
+                        
+                        if (content) content.classList.add('active');
+                        if (button) button.classList.add('active');
+                        
+                        localStorage.setItem(storageKey, squadId);
+                    }
+
+                    // При клике на вкладку
                     tabButtons.forEach(button => {
                         button.addEventListener('click', function() {
-                            const squadId = this.dataset.squadId;
-
-                            // Скрываем все содержимое
-                            tabContents.forEach(content => {
-                                content.style.display = 'none';
-                            });
-
-                            // Удаляем активный класс у всех кнопок
-                            tabButtons.forEach(btn => {
-                                btn.classList.remove('active');
-                                btn.style.background = '#f5f5f5';
-                                btn.style.fontWeight = 'normal';
-                                btn.style.borderBottom = '2px solid #ddd';
-                            });
-
-                            // Показываем выбранный контент
-                            const activeContent = document.querySelector('[data-squad-id="' + squadId + '"].squad-tab-content');
-                            if (activeContent) {
-                                activeContent.style.display = 'block';
-                            }
-
-                            // Отмечаем активную кнопку
-                            this.classList.add('active');
-                            this.style.background = '#fff';
-                            this.style.fontWeight = 'bold';
-                            this.style.borderBottom = '2px solid #fff';
+                            activateTab(this.dataset.squadId);
                         });
                     });
+
+                    // При загрузке - восстанавливаем сохраненную вкладку
+                    const saved = localStorage.getItem(storageKey);
+                    if (saved) {
+                        activateTab(saved);
+                    } else {
+                        // По умолчанию активируем первую вкладку (All Staff)
+                        if (tabButtons.length > 0) {
+                            activateTab(tabButtons[0].dataset.squadId);
+                        }
+                    }
                 });
                 </script>
             <?php else: ?>
-                <p style="color: #999; padding: 20px;">Составы не созданы в wp_arsenal_squad</p>
+                <p class="squad-empty-message">Составы не созданы в wp_arsenal_squad</p>
             <?php endif; ?>
         </div>
     </div>
@@ -278,5 +401,439 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    // Удаление состава
+    document.querySelectorAll('[data-action="delete-squad"]').forEach(button => {
+        button.addEventListener('click', function() {
+            const squadId = this.dataset.squadId;
+            const squadName = this.dataset.squadName;
+            
+            if ( ! confirm('Вы уверены, что хотите удалить состав "' + squadName + '"?') ) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'arsenal_delete_squad');
+            formData.append('squad_id', squadId);
+            formData.append('nonce', nonce);
+
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success ) {
+                    alert('Состав удален');
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + data.data);
+                }
+            });
+        });
+    });
+
+    // Удаление состава через кнопку рядом с вкладкой или внутри вкладки
+    document.querySelectorAll('.squad-delete-button, .squad-delete-button-footer').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const squadId = this.dataset.squadId;
+            const squadName = this.dataset.squadName;
+            
+            if ( ! confirm('Вы уверены, что хотите удалить состав "' + squadName + '"?') ) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'arsenal_delete_squad');
+            formData.append('squad_id', squadId);
+            formData.append('nonce', nonce);
+
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success ) {
+                    alert('Состав удален');
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + data.data);
+                }
+            });
+        });
+    });
+
+    // Добавление отдела
+    let addDepartmentSquadId = null;
+    let addDepartmentSquadNumericId = null;
+    
+    document.querySelectorAll('.squad-add-department-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            addDepartmentSquadId = this.dataset.squadId;
+            addDepartmentSquadNumericId = this.dataset.squadNumericId;
+            document.getElementById('add-department-input').value = '';
+            document.getElementById('add-department-modal').style.display = 'flex';
+        });
+    });
+
+    // Закрытие модального окна добавления отдела
+    document.querySelectorAll('[data-modal="add-department"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('add-department-modal').style.display = 'none';
+        });
+    });
+
+    // Отправка формы добавления отдела
+    document.querySelector('.add-department-submit-btn').addEventListener('click', function() {
+        const deptName = document.getElementById('add-department-input').value.trim();
+        
+        if ( ! deptName ) {
+            alert('Введите название отдела');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'arsenal_add_department');
+        formData.append('squad_id', addDepartmentSquadId);
+        formData.append('department_name', deptName);
+        formData.append('nonce', nonce);
+
+        fetch(ajaxurl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if ( data.success ) {
+                // Сохраняем numeric ID вкладки в localStorage перед перезагрузкой
+                localStorage.setItem('arsenal_active_squad_tab', addDepartmentSquadNumericId);
+                // Очищаем форму для нового отдела
+                document.getElementById('add-department-input').value = '';
+                // Перезагружаем страницу чтобы отдел появился в списке
+                location.reload();
+            } else {
+                alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+            }
+        });
+    });
+
+    // Закрытие модального окна при клике на фон
+    document.getElementById('add-department-modal').addEventListener('click', function(e) {
+        if ( e.target === this ) {
+            this.style.display = 'none';
+        }
+    });
+
+    // Удаление отдела
+    document.querySelectorAll('.squad-delete-department-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const squadId = this.dataset.squadId;
+            const departmentId = this.dataset.departmentId;
+            const departmentName = this.dataset.departmentName;
+            
+            if ( ! confirm('Вы уверены, что хотите удалить отдел "' + departmentName + '"?') ) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'arsenal_delete_department');
+            formData.append('squad_id', squadId);
+            formData.append('department_id', departmentId);
+            formData.append('nonce', nonce);
+
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success ) {
+                    alert('Отдел удален');
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+                }
+            });
+        });
+    });
+
+    // Открытие модального окна отдела
+    const modal = document.getElementById('department-modal');
+    const modalClose = document.querySelector('.department-modal-close');
+    let currentDepartmentId = null;
+    let currentSquadId = null;
+
+    document.querySelectorAll('.squad-dept-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const departmentId = this.dataset.departmentId;
+            const departmentName = this.dataset.departmentName;
+            const squadId = this.dataset.squadId;
+
+            currentDepartmentId = departmentId;
+            currentSquadId = squadId;
+
+            // Обновляем заголовок модала
+            document.getElementById('modal-department-name').textContent = departmentName;
+
+            // Получаем должности этого отдела
+            fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    action: 'arsenal_get_department_jobs',
+                    department_id: departmentId,
+                    nonce: nonce
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const jobsList = document.getElementById('modal-job-titles-list');
+                jobsList.innerHTML = '';
+
+                if ( data.success && data.data.length > 0 ) {
+                    data.data.forEach(job => {
+                        const li = document.createElement('li');
+                        li.className = 'modal-job-title-item';
+                        li.innerHTML = '<span>📌 ' + job.job_title_name + '</span><button class="button button-small modal-delete-job-btn" data-job-id="' + job.id + '">🗑️</button>';
+                        jobsList.appendChild(li);
+                        attachDeleteJobHandler(li.querySelector('.modal-delete-job-btn'));
+                    });
+                } else {
+                    const li = document.createElement('li');
+                    li.className = 'modal-no-jobs';
+                    li.textContent = 'В этом отделе нет должностей';
+                    jobsList.appendChild(li);
+                }
+
+                // Очищаем форму добавления
+                document.getElementById('new-job-title').value = '';
+
+                // Показываем модал
+                modal.style.display = 'flex';
+            });
+        });
+    });
+
+    // Закрытие модального окна отдела на крестик
+    document.querySelectorAll('.department-modal-close').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('department-modal').style.display = 'none';
+            document.getElementById('add-department-modal').style.display = 'none';
+        });
+    });
+
+    // Закрытие модального окна при клике на фон
+    document.getElementById('department-modal').addEventListener('click', function(e) {
+        if ( e.target === this ) {
+            this.style.display = 'none';
+        }
+    });
+
+    // Добавление должности в модальном окне
+    document.querySelector('.modal-add-job-btn').addEventListener('click', function() {
+        const jobTitle = document.getElementById('new-job-title').value.trim();
+        
+        if ( ! jobTitle ) {
+            alert('Введите название должности');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'arsenal_add_job_title');
+        formData.append('department_id', currentDepartmentId);
+        formData.append('job_title_name', jobTitle);
+        formData.append('nonce', nonce);
+
+        fetch(ajaxurl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if ( data.success ) {
+                document.getElementById('new-job-title').value = '';
+                // Обновляем список должностей
+                fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        action: 'arsenal_get_department_jobs',
+                        department_id: currentDepartmentId,
+                        nonce: nonce
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const jobsList = document.getElementById('modal-job-titles-list');
+                    jobsList.innerHTML = '';
+
+                    if ( data.success && data.data.length > 0 ) {
+                        data.data.forEach(job => {
+                            const li = document.createElement('li');
+                            li.className = 'modal-job-title-item';
+                            li.innerHTML = '<span>📌 ' + job.job_title_name + '</span><button class="button button-small modal-delete-job-btn" data-job-id="' + job.id + '">🗑️</button>';
+                            jobsList.appendChild(li);
+                            attachDeleteJobHandler(li.querySelector('.modal-delete-job-btn'));
+                        });
+                    } else {
+                        const li = document.createElement('li');
+                        li.className = 'modal-no-jobs';
+                        li.textContent = 'В этом отделе нет должностей';
+                        jobsList.appendChild(li);
+                    }
+                });
+            } else {
+                alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+            }
+        });
+    });
+
+    // Функция для подключения обработчика удаления должности
+    function attachDeleteJobHandler(button) {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const jobId = this.dataset.jobId;
+            
+            if ( ! confirm('Вы уверены, что хотите удалить эту должность?') ) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('action', 'arsenal_delete_job_title');
+            formData.append('job_title_id', jobId);
+            formData.append('nonce', nonce);
+
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success ) {
+                    // Обновляем список должностей
+                    fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+                        method: 'POST',
+                        body: new URLSearchParams({
+                            action: 'arsenal_get_department_jobs',
+                            department_id: currentDepartmentId,
+                            nonce: nonce
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const jobsList = document.getElementById('modal-job-titles-list');
+                        jobsList.innerHTML = '';
+
+                        if ( data.success && data.data.length > 0 ) {
+                            data.data.forEach(job => {
+                                const li = document.createElement('li');
+                                li.className = 'modal-job-title-item';
+                                li.innerHTML = '<span>📌 ' + job.job_title_name + '</span><button class="button button-small modal-delete-job-btn" data-job-id="' + job.id + '">🗑️</button>';
+                                jobsList.appendChild(li);
+                                attachDeleteJobHandler(li.querySelector('.modal-delete-job-btn'));
+                            });
+                        } else {
+                            const li = document.createElement('li');
+                            li.className = 'modal-no-jobs';
+                            li.textContent = 'В этом отделе нет должностей';
+                            jobsList.appendChild(li);
+                        }
+                    });
+                } else {
+                    alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+                }
+            });
+        });
+    }
+
+    // Закрытие модального окна
+    modalClose.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Удаление отдела из модального окна
+    document.querySelector('.modal-delete-department-btn').addEventListener('click', function() {
+        if ( ! confirm('Вы уверены, что хотите удалить этот отдел?') ) {
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'arsenal_delete_department');
+        formData.append('squad_id', currentSquadId);
+        formData.append('department_id', currentDepartmentId);
+        formData.append('nonce', nonce);
+
+        fetch(ajaxurl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if ( data.success ) {
+                alert('Отдел удален');
+                location.reload();
+            } else {
+                alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+            }
+        });
+    });
+
+    // Закрытие модала при клике вне окна
+    modal.addEventListener('click', function(e) {
+        if ( e.target === modal ) {
+            modal.style.display = 'none';
+        }
+    });
 });
 </script>
+
+<!-- Модальное окно для добавления отдела -->
+<div id="add-department-modal" class="department-modal" style="display: none;">
+    <div class="department-modal-content">
+        <div class="department-modal-header">
+            <h3>➕ Добавить новый отдел</h3>
+            <button class="department-modal-close" data-modal="add-department">&times;</button>
+        </div>
+        <div class="department-modal-body">
+            <div class="form-group">
+                <label for="add-department-input">Название отдела *</label>
+                <input 
+                    type="text" 
+                    id="add-department-input" 
+                    class="form-control" 
+                    placeholder="Например: Тренерский штаб"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;"
+                />
+            </div>
+        </div>
+        <div class="department-modal-footer">
+            <button class="button button-secondary" data-modal="add-department">Отмена</button>
+            <button class="button button-primary add-department-submit-btn">➕ Добавить отдел</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для отдела -->
+<div id="department-modal" class="department-modal" style="display: none;">
+    <div class="department-modal-content">
+        <div class="department-modal-header">
+            <h3 id="modal-department-name"></h3>
+            <button class="department-modal-close">&times;</button>
+        </div>
+        <div class="department-modal-body">
+            <div class="modal-job-form">
+                <input 
+                    type="text" 
+                    id="new-job-title" 
+                    class="modal-job-input" 
+                    placeholder="Введите название должности"
+                />
+                <button class="button button-primary modal-add-job-btn">➕ Добавить должность</button>
+            </div>
+            <ul id="modal-job-titles-list" class="modal-job-titles-list"></ul>
+        </div>
+        <div class="department-modal-footer">
+            <button class="button button-delete modal-delete-department-btn">🗑️ Удалить отдел</button>
+        </div>
+    </div>
+</div>

@@ -110,6 +110,9 @@ class Arsenal_Team_Manager {
         // Классы управления персоналом
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-staff-admin.php';
         
+        // Классы управления составами
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-squad-admin.php';
+        
         // Классы управления руководством
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-management-admin.php';
         
