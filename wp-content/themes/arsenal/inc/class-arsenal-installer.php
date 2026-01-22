@@ -322,9 +322,29 @@ class Arsenal_Theme_Installer {
 	 * Создание кастомных таблиц БД
 	 */
 	private static function create_database_tables() {
-		require_once get_template_directory() . '/inc/database/class-arsenal-database.php';
-		$db = Arsenal_Database::get_instance();
-		$db->init();
+		global $wpdb;
+		
+		// Путь к SQL файлу
+		$sql_file = get_template_directory() . '/inc/database/create-tables.sql';
+		
+		if ( ! file_exists( $sql_file ) ) {
+			return; // Файл не найден
+		}
+		
+		// Читаем SQL файл
+		$sql = file_get_contents( $sql_file );
+		
+		// Разбиваем на отдельные запросы (разделены ;)
+		$queries = array_filter( array_map( 'trim', explode( ';', $sql ) ) );
+		
+		// Выполняем каждый запрос
+		foreach ( $queries as $query ) {
+			if ( ! empty( $query ) ) {
+				// Заменяем wp_ на префикс базы
+				$query = str_replace( 'wp_', $wpdb->prefix, $query );
+				$wpdb->query( $query );
+			}
+		}
 	}
 }
 
