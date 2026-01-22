@@ -109,7 +109,7 @@ $faq = $data['faq_data'] ?? array();
 			<div class="documents-grid">
 				<?php foreach ( ( $documents['items'] ?? array() ) as $doc ) : ?>
 				<div class="document-item">
-					<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-report', 'icon-20 document-icon' ); ?>
+					<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $doc['icon'] ?? 'icon-report', 'icon-20 document-icon' ); ?>
 					<span><?php echo esc_html( $doc['text'] ?? '' ); ?></span>
 				</div>
 				<?php endforeach; ?>
@@ -247,14 +247,14 @@ $faq = $data['faq_data'] ?? array();
 								<div class="director-contacts">
 									<?php if ( ! empty( $phone ) ) : ?>
 									<p class="director-contact">
-										📞 <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', $phone ) ); ?>">
-											<?php echo esc_html( $phone ); ?>
-										</a>
-									</p>
-									<?php endif; ?>
-									<?php if ( ! empty( $email ) ) : ?>
-									<p class="director-contact">
-										📧 <a href="mailto:<?php echo esc_attr( $email ); ?>">
+									<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' ); ?> <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', $phone ) ); ?>">
+										<?php echo esc_html( $phone ); ?>
+									</a>
+								</p>
+								<?php endif; ?>
+								<?php if ( ! empty( $email ) ) : ?>
+								<p class="director-contact">
+									<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' ); ?> <a href="mailto:<?php echo esc_attr( $email ); ?>">
 											<?php echo esc_html( $email ); ?>
 										</a>
 									</p>
@@ -290,7 +290,7 @@ $faq = $data['faq_data'] ?? array();
 							<p>
 								<strong>
 									<?php if ( ! empty( $item['icon'] ) ) : ?>
-									<span style="display: inline-block; vertical-align: middle; margin-right: 6px; width: 14px; height: 14px;">
+									<span class="transport-icon">
 										<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'], 'icon-16' ); ?>
 									</span>
 									<?php endif; ?>
@@ -298,7 +298,7 @@ $faq = $data['faq_data'] ?? array();
 								</strong> 
 								<?php echo esc_html( $item['route'] ?? '' ); ?>
 								<?php if ( ! empty( $item['time'] ) ) : ?>
-									<span style="color: #99a1af;"> (<?php echo esc_html( $item['time'] ); ?>)</span>
+									<span class="transport-time"> (<?php echo esc_html( $item['time'] ); ?>)</span>
 								<?php endif; ?>
 							</p>
 							<?php endforeach; ?>
@@ -334,7 +334,10 @@ $faq = $data['faq_data'] ?? array();
 				<?php foreach ( ( $faq ?? array() ) as $item ) : ?>
 				<details class="faq-item">
 					<summary class="faq-question">
-						<?php echo esc_html( $item['question'] ?? '' ); ?>
+						<span class="faq-question__text"><?php echo esc_html( $item['question'] ?? '' ); ?></span>
+						<span class="faq-question__icon">
+							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-arrow-down' ); ?>
+						</span>
 					</summary>
 					<p class="faq-answer">
 						<?php echo esc_html( $item['answer'] ?? '' ); ?>

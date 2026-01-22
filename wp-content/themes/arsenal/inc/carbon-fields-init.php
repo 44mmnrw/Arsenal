@@ -100,6 +100,8 @@ add_action( 'carbon_fields_register_fields', function() {
 		->add_tab( 'Документы', [
 			Field::make( 'complex', '_academy_documents', 'Список документов' )
 				->add_fields( [
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
 					Field::make( 'text', 'text', 'Описание документа' ),
 				] )
 				->set_header_template( '
@@ -302,8 +304,10 @@ add_action( 'carbon_fields_register_fields', function() {
 		->where( 'post_template', '=', 'templates/page-academy-history.php' )
 		
 		->add_tab( 'Hero секция', [
+			Field::make( 'text', '_academy_history_hero_title', 'Заголовок' )
+				->set_default_value( 'История ДЮСШ' ),
+			
 			Field::make( 'textarea', '_academy_history_hero_description', 'Описание' )
-
 				->set_default_value( 'Спортивная детско-юношеская школа "Арсенал" — футбольная академия клуба, основанная в 2010 году. За 15 лет работы школа подготовила более 500 молодых футболистов.' ),
 		] )
 		
@@ -327,6 +331,8 @@ add_action( 'carbon_fields_register_fields', function() {
 		->add_tab( 'Ключевые события', [
 			Field::make( 'complex', '_academy_history_timeline', 'События' )
 				->add_fields( [
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
 					Field::make( 'text', 'title', 'Название события' ),
 					Field::make( 'text', 'year', 'Год' ),
 					Field::make( 'textarea', 'description', 'Описание' ),
@@ -354,5 +360,48 @@ add_action( 'carbon_fields_register_fields', function() {
 						Новый тренер
 					<% } %>
 				' ),
+		] )
+		
+		->add_tab( 'Тренировочная база', [
+			Field::make( 'complex', '_academy_history_facilities', 'Объекты' )
+				->add_fields( [
+					Field::make( 'text', 'title', 'Название' ),
+					Field::make( 'select', 'icon', 'Иконка' )
+						->add_options( 'arsenal_get_sprite_icons' ),
+					Field::make( 'complex', 'items', 'Список характеристик' )
+						->add_fields( [
+							Field::make( 'text', 'text', 'Характеристика' ),
+						] ),
+				] )
+				->set_header_template( '
+					<% if (title) { %>
+						<%- title %>
+					<% } else { %>
+						Новый объект
+					<% } %>
+				' ),
+		] )
+		
+		->add_tab( 'Запись в академию', [
+			Field::make( 'text', '_academy_history_enrollment_title', 'Заголовок' )
+				->set_default_value( 'Запись в академию' ),
+			
+			Field::make( 'textarea', '_academy_history_enrollment_description', 'Описание' )
+				->set_default_value( 'Мы приглашаем детей от 8 до 17 лет на занятия в нашей футбольной академии. Тренировки проводятся профессиональными тренерами с лицензиями UEFA.' ),
+		] )
+		
+		->add_tab( 'Контакты', [
+			Field::make( 'text', '_academy_history_contacts_address', 'Адрес' )
+				->set_default_value( 'ул. Спортивная, 2, г. Дзержинск' ),
+			
+			Field::make( 'text', '_academy_history_contacts_phone', 'Телефон' )
+				->set_default_value( '+375 (17) 123-45-70' ),
+			
+			Field::make( 'text', '_academy_history_contacts_email', 'Email' )
+				->set_default_value( 'academy@arsenal-dzr.by' ),
+			
+			Field::make( 'text', '_academy_history_contacts_schedule', 'Просмотры' )
+				->set_help_text( 'Например: каждую субботу в 10:00' )
+				->set_default_value( 'каждую субботу в 10:00' ),
 		] );
 } );
