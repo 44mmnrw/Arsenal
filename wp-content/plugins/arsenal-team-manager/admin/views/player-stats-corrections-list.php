@@ -10,12 +10,32 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+global $wpdb;
+
 // Получаем статистику
 $stats = array(
     'total'     => isset( $total_count ) ? $total_count : 0,
     'unapplied' => isset( $unapplied_count ) ? $unapplied_count : 0,
     'applied'   => isset( $applied_count ) ? $applied_count : 0,
 );
+
+// Получаем информацию о контрактах: какие игроки имеют активный контракт
+// (текущая дата между contract_start и contract_end)
+$contracts_info = array();
+
+$contract_records = $wpdb->get_results(
+    "SELECT DISTINCT player_id FROM {$wpdb->prefix}arsenal_team_contracts 
+     WHERE contract_start IS NOT NULL 
+       AND contract_end IS NOT NULL
+       AND contract_start <= CURDATE() 
+       AND contract_end >= CURDATE()"
+);
+
+if ( ! empty( $contract_records ) ) {
+    foreach ( $contract_records as $record ) {
+        $contracts_info[ $record->player_id ] = true;
+    }
+}
 ?>
 
 <div class="corrections-wrapper">
@@ -79,13 +99,20 @@ $stats = array(
                 <!-- Первая строка: Игрок и Турнир -->
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="player_select">👤 Игрок <span class="required">*</span></label>
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                            <label for="player_select" style="margin: 0; white-space: nowrap;">👤 Игрок <span class="required">*</span></label>
+                            <label style="display: flex; align-items: center; gap: 4px; margin: 0; font-weight: normal; font-size: 13px; color: #666; white-space: nowrap;">
+                                <input type="checkbox" id="contract_filter_checkbox" checked style="margin: 0; width: 16px; height: 16px; cursor: pointer;">
+                                <span>Только Арсенал</span>
+                            </label>
+                        </div>
                         <select id="player_select" name="player_id" required class="arsenal-searchable-select">
                             <option value="">— Введите имя игрока или выберите из списка —</option>
                             <?php if ( ! empty( $players ) ) : ?>
                                 <?php foreach ( $players as $player ) : ?>
-                                    <option value="<?php echo esc_attr( $player->player_id ); ?>" data-search="<?php echo esc_attr( strtolower( $player->full_name ) ); ?>">
-                                        <?php echo esc_html( $player->full_name ); ?>
+                                    <?php $has_contract = isset( $contracts_info[ $player->player_id ] ) ? 'true' : 'false'; ?>
+                                    <option value="<?php echo esc_attr( $player->player_id ); ?>" data-search="<?php echo esc_attr( strtolower( $player->full_name ) ); ?>" data-has-contract="<?php echo esc_attr( $has_contract ); ?>">
+                                        <?php echo esc_html( $player->full_name ); ?> <?php echo $has_contract === 'true' ? '✓' : ''; ?>
                                     </option>
                                 <?php endforeach; ?>
                             <?php endif; ?>
@@ -214,29 +241,23 @@ $stats = array(
                     <label for="filter_player">👤 Игрок:</label>
                     <select name="player_id" id="filter_player">
                         <option value="">— Все игроки —</option>
-                        <?php if ( ! empty( $players ) ) : ?>
-                            <?php foreach ( $players as $player ) : ?>
-                                <option value="<?php echo esc_attr( $player->player_id ); ?>" 
+                        <?php 
+                        // Получаем только игроков из истории корректировок
+                        $history_players = $wpdb->get_results( 
+                            "SELECT DISTINCT pc.player_id, p.full_name 
+                             FROM {$wpdb->prefix}arsenal_player_stats_corrections pc
+                             JOIN {$wpdb->prefix}arsenal_players p ON pc.player_id = p.player_id
+                             ORDER BY p.full_name" 
+                        );
+                        if ( ! empty( $history_players ) ) : 
+                            foreach ( $history_players as $player ) : 
+                        ?>
+                                <option value="<?php echo esc_attr( $player->player_id ); ?>"
                                     <?php selected( isset( $_GET['player_id'] ) && $_GET['player_id'] === $player->player_id ); ?>>
                                     <?php echo esc_html( $player->full_name ); ?>
                                 </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="filter_tournament">🏆 Турнир:</label>
-                    <select name="tournament_id" id="filter_tournament">
-                        <option value="">— Все турниры —</option>
-                        <?php if ( ! empty( $tournaments ) ) : ?>
-                            <?php foreach ( $tournaments as $tournament ) : ?>
-                                <option value="<?php echo esc_attr( $tournament->tournament_id ); ?>" 
-                                    <?php selected( isset( $_GET['tournament_id'] ) && $_GET['tournament_id'] === $tournament->tournament_id ); ?>>
-                                    <?php echo esc_html( $tournament->name ); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            <?php endforeach; 
+                        endif; ?>
                     </select>
                 </div>
 
@@ -482,3 +503,44 @@ $stats = array(
     font-size: 13px;
 }
 </style>
+
+<script>
+jQuery(document).ready(function($) {
+    // Функция для фильтрации опций по наличию контракта (форма добавления)
+    function filterPlayersByContract() {
+        var filterEnabled = $('#contract_filter_checkbox').is(':checked');
+        var $playerSelect = $('#player_select');
+        
+        $playerSelect.find('option').each(function() {
+            var $option = $(this);
+            var isFirstOption = $option.attr('value') === '';
+            var hasContract = $option.data('has-contract') === true || $option.data('has-contract') === 'true';
+            
+            if (isFirstOption) {
+                $option.show();
+                return;
+            }
+            
+            if (filterEnabled) {
+                // Показываем только игроков с контрактом
+                if (hasContract) {
+                    $option.show();
+                } else {
+                    $option.hide();
+                }
+            } else {
+                // Показываем всех
+                $option.show();
+            }
+        });
+    }
+    
+    // При загрузке страницы чекбокс включен и фильтр активен
+    filterPlayersByContract();
+    
+    // При клике на чекбокс применяем фильтр
+    $('#contract_filter_checkbox').on('change', function() {
+        filterPlayersByContract();
+    });
+});
+</script>

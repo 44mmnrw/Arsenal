@@ -392,6 +392,7 @@
 	border-radius: 9999px;
 	background: var(--red-900);
 	color: var(--color-white);
+	padding: 0.5rem;
 }
 
 .staff-fact-icon .staff-section__icon {

@@ -450,6 +450,11 @@ jQuery(document).ready(function($) {
         <div class="arsenal-modal-body" style="padding: 20px;">
             <input type="hidden" id="coaches-modal-team-id" value="">
             
+            <!-- Информационный блок -->
+            <div style="background: #e8f4f8; border-left: 4px solid #0073aa; padding: 12px 15px; margin-bottom: 20px; border-radius: 3px; font-size: 13px; line-height: 1.6; color: #0a0a0a;">
+                <strong>💡 Совет:</strong> Актуальные даты работы тренеров критически важны для корректного отображения информации о тренерском штабе на странице матча. Убедитесь, что сроки всегда соответствуют реальным периодам работы с командой.
+            </div>
+            
             <!-- Список тренеров -->
             <div id="coaches-modal-content" style="min-height: 100px; margin-bottom: 20px;">
                 <!-- Содержимое со списком тренеров -->

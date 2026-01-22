@@ -35,63 +35,29 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
 
             <?php wp_nonce_field( 'arsenal_stadium_form', 'arsenal_stadium_nonce' ); ?>
 
-            <!-- Единый список иконок для всех секций -->
+            <!-- Единый список иконок для всех секций (динамически из sprite.svg) -->
             <script>
-            const STADIUM_FORM_ICONS = [
-                // Стрелки
-                { id: 'icon-arrow-right', name: '➡️ Стрелка вправо' },
-                { id: 'icon-arrow-down', name: '⬇️ Стрелка вниз' },
-                { id: 'icon-arrow-up', name: '⬆️ Стрелка вверх' },
-                { id: 'icon-arrow-left', name: '⬅️ Стрелка влево' },
-                { id: 'icon-arrow-banner', name: '🔀 Стрелка баннера' },
-                { id: 'icon-chevron-left', name: '◀ Шеврон влево' },
-                { id: 'icon-chevron-right', name: '▶ Шеврон вправо' },
+            const STADIUM_FORM_ICONS = <?php 
+                // Получить иконки из спрайта, как в Carbon Fields
+                $sprite_path = get_template_directory() . '/assets/images/sprite.svg';
+                $icons_array = array();
                 
-                // Социальные сети
-                { id: 'icon-facebook', name: '📱 Facebook' },
-                { id: 'icon-instagram', name: '📱 Instagram' },
-                { id: 'icon-youtube', name: '📹 YouTube' },
-                { id: 'icon-telegram', name: '✈️ Telegram' },
-                { id: 'icon-vk', name: '🔗 VKontakte' },
+                if ( file_exists( $sprite_path ) ) {
+                    $sprite_content = file_get_contents( $sprite_path );
+                    preg_match_all( '/<symbol\s+id="([^"]+)"[^>]*data-name="([^"]+)"/', $sprite_content, $matches );
+                    
+                    if ( ! empty( $matches[1] ) ) {
+                        for ( $i = 0; $i < count( $matches[1] ); $i++ ) {
+                            $icons_array[] = array(
+                                'id'   => $matches[1][$i],
+                                'name' => $matches[2][$i]
+                            );
+                        }
+                    }
+                }
                 
-                // Контакты
-                { id: 'icon-phone', name: '☎️ Телефон' },
-                { id: 'icon-email', name: '📧 Email' },
-                { id: 'icon-clock', name: '🕐 Часы/Время' },
-                { id: 'icon-place', name: '📍 Место/Локация' },
-                { id: 'icon-people', name: '👥 Люди/Фанаты' },
-                { id: 'icon-team-placeholder', name: '⬜ Заполнитель команды' },
-                
-                // Документы
-                { id: 'icon-report', name: '📄 Отчет/Документ' },
-                { id: 'icon-event', name: '⚡ События/Молния' },
-                { id: 'icon-calendar', name: '📅 Календарь' },
-                { id: 'icon-date', name: '📆 Дата' },
-                { id: 'icon-map', name: '🗺️ Карта' },
-                { id: 'icon-checkbox', name: '✓ Чекбокс/Галочка' },
-                
-                // Спорт
-                { id: 'icon-dumbbell', name: '🏋️ Гантель/Тренажер' },
-                { id: 'icon-stadium', name: '🏟️ Стадион' },
-                { id: 'icon-cup', name: '🏆 Кубок/Трофей' },
-                { id: 'icon-medal', name: '🎖️ Медаль' },
-                
-                // Транспорт
-                { id: 'icon-car', name: '🚗 Машина/Транспорт' },
-                { id: 'icon-bus', name: '🚌 Автобус' },
-                
-                // Люди и персонал
-                { id: 'icon-staff-stat', name: '📋 Статистика персонала' },
-                { id: 'icon-bio', name: '👤 Биография' },
-                { id: 'icon-career', name: '💼 Карьера' },
-                { id: 'icon-partner', name: '🤝 Партнер' },
-                
-                // Утилиты
-                { id: 'icon-ruler', name: '📏 Линейка/Размер' },
-                { id: 'icon-medicine', name: '⛑️ Медицина/Крест' },
-                { id: 'icon-fact', name: '👁️ Интересный факт' },
-                { id: 'icon-chart', name: '📊 График/Статистика' },
-            ];
+                echo wp_json_encode( $icons_array );
+            ?>;
             </script>
 
             <!-- Левая колонка: Основная информация -->

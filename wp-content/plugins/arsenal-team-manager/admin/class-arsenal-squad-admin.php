@@ -32,14 +32,21 @@ class Arsenal_Squad_Admin {
      * Регистрация меню
      */
     public function register_menu() {
+        // Страница скрыта из меню, но доступна программно
         add_submenu_page(
             'arsenal-team',
             'Добавить состав',
             'Состав',
             'manage_options',
             'arsenal-squad-add',
-            array( $this, 'render_squad_form' )
+            array( $this, 'render_squad_form' ),
+            999 // Высокий приоритет для скрытия
         );
+        
+        // Скрываем меню-пункт через CSS
+        add_action( 'admin_head', function() {
+            echo '<style>#adminmenu a[href*="arsenal-squad-add"] { display: none !important; }</style>';
+        });
     }
 
     /**

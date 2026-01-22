@@ -309,7 +309,7 @@ if ( empty( $staff_nationality ) ) {
 				<?php if ( ! empty( $staff_interesting_fact ) ) : ?>
 				<div class="staff-fact-card">
 					<div class="staff-fact-icon">
-						<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-fact"></use></svg>
+						<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-lamp"></use></svg>
 					</div>
 					<h3 class="staff-fact-title">Интересный факт</h3>
 					<p class="staff-fact-text">

@@ -46,7 +46,7 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
             <div class="staff-list-section-header">
                 <h2>👥 Сотрудники по составам</h2>
                 <a href="<?php echo admin_url( 'admin.php?page=arsenal-squad-add' ); ?>" class="button button-primary">
-                    ➕ Добавить состав
+                    Состав/Тип команды
                 </a>
             </div>
 
