@@ -423,6 +423,11 @@ class Arsenal_Staff_Manager {
 			$format[] = '%s';
 		}
 
+		if ( isset( $data['sort_order'] ) ) {
+			$update['sort_order'] = (int) $data['sort_order'];
+			$format[] = '%d';
+		}
+
 		if ( isset( $data['interesting_fact'] ) ) {
 			$update['interesting_fact'] = wp_kses_post( $data['interesting_fact'] ?? '' );
 			$format[] = '%s';

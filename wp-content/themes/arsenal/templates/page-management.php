@@ -46,7 +46,7 @@ $management_team = $wpdb->get_results(
 	 LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
 	 LEFT JOIN {$wpdb->prefix}arsenal_staff_department sd ON s.department_id = sd.id
 	 {$where_clause}
-	 ORDER BY sd.department_name ASC, jt.job_title_name ASC, s.second_name ASC, s.first_name ASC" 
+	 ORDER BY s.sort_order ASC, sd.department_name ASC, jt.job_title_name ASC, s.second_name ASC, s.first_name ASC" 
 );
 
 ?>

@@ -633,9 +633,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Добавление должности в модальном окне
     document.querySelector('.modal-add-job-btn').addEventListener('click', function() {
         const jobTitle = document.getElementById('new-job-title').value.trim();
+        const jobTitlePlural = document.getElementById('new-job-title-plural').value.trim();
         
         if ( ! jobTitle ) {
-            alert('Введите название должности');
+            alert('Введите название должности (единственное число)');
             return;
         }
 
@@ -643,6 +644,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('action', 'arsenal_add_job_title');
         formData.append('department_id', currentDepartmentId);
         formData.append('job_title_name', jobTitle);
+        formData.append('job_title_name_plural', jobTitlePlural);
         formData.append('nonce', nonce);
 
         fetch(ajaxurl, {
@@ -653,6 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if ( data.success ) {
                 document.getElementById('new-job-title').value = '';
+                document.getElementById('new-job-title-plural').value = '';
                 // Обновляем список должностей
                 fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
                     method: 'POST',
@@ -751,6 +754,75 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'none';
     });
 
+    // Редактирование названия отдела
+    let editDeptModal = document.getElementById('edit-department-name-modal');
+    let editDeptNameBtn = document.getElementById('edit_department_name_btn');
+    let editDeptInput = document.getElementById('edit_department_name_input');
+    let saveDeptBtn = document.getElementById('save-edit-dept-btn');
+    let cancelDeptBtn = document.getElementById('cancel-edit-dept-btn');
+    let closeDeptModalBtn = document.getElementById('close-edit-dept-modal');
+    
+    if ( editDeptNameBtn ) {
+        editDeptNameBtn.addEventListener('click', function() {
+            const currentName = document.getElementById('modal-department-name').textContent;
+            editDeptInput.value = currentName;
+            editDeptModal.style.display = 'flex';
+        });
+    }
+    
+    if ( closeDeptModalBtn ) {
+        closeDeptModalBtn.addEventListener('click', function() {
+            editDeptModal.style.display = 'none';
+        });
+    }
+    
+    if ( cancelDeptBtn ) {
+        cancelDeptBtn.addEventListener('click', function() {
+            editDeptModal.style.display = 'none';
+        });
+    }
+    
+    if ( saveDeptBtn ) {
+        saveDeptBtn.addEventListener('click', function() {
+            const newName = editDeptInput.value.trim();
+            
+            if ( ! newName ) {
+                alert('Введите название отдела');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('action', 'arsenal_update_department_name');
+            formData.append('department_id', currentDepartmentId);
+            formData.append('department_name', newName);
+            formData.append('nonce', nonce);
+            
+            fetch(ajaxurl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success ) {
+                    document.getElementById('modal-department-name').textContent = newName;
+                    editDeptModal.style.display = 'none';
+                    alert('Отдел обновлен');
+                } else {
+                    alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+                }
+            });
+        });
+    }
+    
+    // Закрытие модала при клике вне окна
+    if ( editDeptModal ) {
+        editDeptModal.addEventListener('click', function(e) {
+            if ( e.target === this ) {
+                this.style.display = 'none';
+            }
+        });
+    }
+
     // Удаление отдела из модального окна
     document.querySelector('.modal-delete-department-btn').addEventListener('click', function() {
         if ( ! confirm('Вы уверены, что хотите удалить этот отдел?') ) {
@@ -817,23 +889,66 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="department-modal" class="department-modal" style="display: none;">
     <div class="department-modal-content">
         <div class="department-modal-header">
-            <h3 id="modal-department-name"></h3>
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1;">
+                <h3 id="modal-department-name" style="margin: 0;"></h3>
+                <button type="button" id="edit_department_name_btn" style="height: 32px; width: 32px; padding: 0; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #f5f5f5; font-size: 16px; display: flex; align-items: center; justify-content: center;">
+                    ✏️
+                </button>
+            </div>
             <button class="department-modal-close">&times;</button>
         </div>
         <div class="department-modal-body">
+            <h4 style="margin-top: 0; margin-bottom: 15px;">Добавление должностей</h4>
             <div class="modal-job-form">
-                <input 
-                    type="text" 
-                    id="new-job-title" 
-                    class="modal-job-input" 
-                    placeholder="Введите название должности"
-                />
+                <div style="margin-bottom: 12px;">
+                    <input 
+                        type="text" 
+                        id="new-job-title" 
+                        class="modal-job-input" 
+                        placeholder="Единственное число (напр. Массажист)"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;"
+                    />
+                    <input 
+                        type="text" 
+                        id="new-job-title-plural" 
+                        class="modal-job-input" 
+                        placeholder="Множественное число (напр. Массажисты)"
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;"
+                    />
+                    <small style="color: #666; display: block; margin-bottom: 10px;">ℹ️ Множественное число используется на странице профиля сотрудника в разделе команды</small>
+                </div>
                 <button class="button button-primary modal-add-job-btn">➕ Добавить должность</button>
             </div>
             <ul id="modal-job-titles-list" class="modal-job-titles-list"></ul>
         </div>
         <div class="department-modal-footer">
             <button class="button button-delete modal-delete-department-btn">🗑️ Удалить отдел</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования названия отдела -->
+<div id="edit-department-name-modal" class="department-modal" style="display: none;">
+    <div class="department-modal-content">
+        <div class="department-modal-header">
+            <h3>✏️ Редактирование названия отдела</h3>
+            <button class="department-modal-close" id="close-edit-dept-modal">&times;</button>
+        </div>
+        <div class="department-modal-body">
+            <div class="form-group">
+                <label for="edit_department_name_input">Название отдела *</label>
+                <input 
+                    type="text" 
+                    id="edit_department_name_input" 
+                    class="form-control" 
+                    placeholder="Например: Тренерский штаб"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;"
+                />
+            </div>
+        </div>
+        <div class="department-modal-footer">
+            <button class="button button-secondary" id="cancel-edit-dept-btn">Отмена</button>
+            <button class="button button-primary" id="save-edit-dept-btn">💾 Сохранить</button>
         </div>
     </div>
 </div>

@@ -110,23 +110,33 @@ if ( $current_dept_id ) {
 
                 <div class="form-group">
                     <label for="job_title_id">Должность *</label>
-                    <select id="job_title_id" name="job_title_id" required>
-                        <option value="">— Выберите должность —</option>
-                        <?php foreach ( $job_titles as $job ): ?>
-                            <option value="<?php echo $job->id; ?>" 
-                                    <?php selected( $staff->job_title_id ?? null, $job->id ); ?>>
-                                <?php echo esc_html( $job->job_title_name ); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <select id="job_title_id" name="job_title_id" required style="flex: 1;">
+                            <option value="">— Выберите должность —</option>
+                            <?php foreach ( $job_titles as $job ): ?>
+                                <option value="<?php echo $job->id; ?>" 
+                                        <?php selected( $staff->job_title_id ?? null, $job->id ); ?>>
+                                    <?php echo esc_html( $job->job_title_name ); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button type="button" id="edit_job_title_btn" style="height: 100%; padding: 0 8px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #f5f5f5; font-size: 18px; display: flex; align-items: center; justify-content: center;">
+                            ✏️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="sort_order">Порядок сортировки <span style="color: #999; font-size: 12px;">(чем меньше - тем выше)</span></label>
+                    <input type="number" id="sort_order" name="sort_order" value="<?php echo intval( $staff->sort_order ?? 0 ); ?>">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="birth_date">Дата рождения</label>
-                    <input type="date" id="birth_date" name="birth_date"
-                           value="<?php echo esc_attr( $staff->birth_date ?? '' ); ?>">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" id="phone" name="phone"
+                           value="<?php echo esc_attr( $staff->phone ?? '' ); ?>">
                 </div>
 
                 <div class="form-group">
@@ -138,9 +148,9 @@ if ( $current_dept_id ) {
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="phone">Телефон</label>
-                    <input type="tel" id="phone" name="phone"
-                           value="<?php echo esc_attr( $staff->phone ?? '' ); ?>">
+                    <label for="birth_date">Дата рождения</label>
+                    <input type="date" id="birth_date" name="birth_date"
+                           value="<?php echo esc_attr( $staff->birth_date ?? '' ); ?>">
                 </div>
             </div>
 
@@ -505,5 +515,146 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('AJAX ошибка:', error));
         });
     }
+});
+</script>
+
+<!-- Модальное окно редактирования должности -->
+<div id="edit-job-title-modal" class="department-modal" style="display: none;">
+    <div class="department-modal-content">
+        <div class="department-modal-header">
+            <h3>✏️ Редактирование должности</h3>
+            <button class="department-modal-close" data-modal="edit-job-title">&times;</button>
+        </div>
+        <div class="department-modal-body">
+            <div class="form-group">
+                <label for="edit-job-title-name">Единственное число *</label>
+                <input 
+                    type="text" 
+                    id="edit-job-title-name" 
+                    class="form-control" 
+                    placeholder="Например: Массажист"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;"
+                />
+            </div>
+            <div class="form-group">
+                <label for="edit-job-title-plural">Множественное число *</label>
+                <input 
+                    type="text" 
+                    id="edit-job-title-plural" 
+                    class="form-control" 
+                    placeholder="Например: Массажисты"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px;"
+                />
+                <small style="color: #666;">Используется для отображения списков сотрудников по должностям</small>
+            </div>
+        </div>
+        <div class="department-modal-footer">
+            <button class="button button-secondary" data-modal="edit-job-title">Отмена</button>
+            <button class="button button-primary" id="save-job-title-btn">💾 Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const nonce = '<?php echo wp_create_nonce( 'arsenal_staff_nonce' ); ?>';
+    const editJobBtn = document.getElementById('edit_job_title_btn');
+    const editJobModal = document.getElementById('edit-job-title-modal');
+    const jobTitleSelect = document.getElementById('job_title_id');
+    let currentJobTitleId = null;
+
+    // Открыть модальное окно редактирования
+    if ( editJobBtn ) {
+        editJobBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const jobTitleId = jobTitleSelect.value;
+            if ( ! jobTitleId ) {
+                alert('Сначала выберите должность');
+                return;
+            }
+
+            currentJobTitleId = jobTitleId;
+
+            // AJAX запрос для получения данных должности
+            fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    action: 'arsenal_get_job_title_data',
+                    job_title_id: jobTitleId,
+                    nonce: nonce
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if ( data.success && data.data ) {
+                    document.getElementById('edit-job-title-name').value = data.data.job_title_name || '';
+                    document.getElementById('edit-job-title-plural').value = data.data.job_title_name_plural || '';
+                    editJobModal.style.display = 'flex';
+                } else {
+                    alert('Ошибка: не удалось загрузить данные должности');
+                }
+            })
+            .catch(error => {
+                console.error('AJAX ошибка:', error);
+                alert('Ошибка при загрузке данных');
+            });
+        });
+    }
+
+    // Закрытие модального окна
+    document.querySelectorAll('[data-modal="edit-job-title"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            editJobModal.style.display = 'none';
+        });
+    });
+
+    // Закрытие модала при клике на фон
+    editJobModal.addEventListener('click', function(e) {
+        if ( e.target === this ) {
+            this.style.display = 'none';
+        }
+    });
+
+    // Сохранение изменений
+    document.getElementById('save-job-title-btn').addEventListener('click', function() {
+        const jobTitleName = document.getElementById('edit-job-title-name').value.trim();
+        const jobTitlePlural = document.getElementById('edit-job-title-plural').value.trim();
+        
+        if ( ! jobTitleName || ! jobTitlePlural ) {
+            alert('Заполните оба поля');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('action', 'arsenal_update_job_title');
+        formData.append('job_title_id', currentJobTitleId);
+        formData.append('job_title_name', jobTitleName);
+        formData.append('job_title_name_plural', jobTitlePlural);
+        formData.append('nonce', nonce);
+
+        fetch('<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if ( data.success ) {
+                alert('Должность обновлена');
+                editJobModal.style.display = 'none';
+                // Обновляем select на странице
+                const option = jobTitleSelect.querySelector('option[value="' + currentJobTitleId + '"]');
+                if ( option ) {
+                    option.textContent = jobTitleName;
+                }
+            } else {
+                alert('Ошибка: ' + (data.data || 'Неизвестная ошибка'));
+            }
+        })
+        .catch(error => {
+            console.error('AJAX ошибка:', error);
+            alert('Ошибка при сохранении');
+        });
+    });
 });
 </script>

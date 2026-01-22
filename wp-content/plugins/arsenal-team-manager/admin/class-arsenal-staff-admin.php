@@ -29,9 +29,12 @@ class Arsenal_Staff_Admin {
         add_action( 'wp_ajax_arsenal_add_job_title', array( $this, 'add_job_title_ajax' ) );
         add_action( 'wp_ajax_arsenal_add_department', array( $this, 'add_department_ajax' ) );
         add_action( 'wp_ajax_arsenal_delete_department', array( $this, 'delete_department_ajax' ) );
+        add_action( 'wp_ajax_arsenal_update_department_name', array( $this, 'update_department_name_ajax' ) );
         add_action( 'wp_ajax_arsenal_get_department_jobs', array( $this, 'get_department_jobs_ajax' ) );
         add_action( 'wp_ajax_arsenal_get_departments_by_squad', array( $this, 'get_departments_by_squad_ajax' ) );
         add_action( 'wp_ajax_arsenal_get_jobs_by_department', array( $this, 'get_jobs_by_department_ajax' ) );
+        add_action( 'wp_ajax_arsenal_get_job_title_data', array( $this, 'get_job_title_data_ajax' ) );
+        add_action( 'wp_ajax_arsenal_update_job_title', array( $this, 'update_job_title_ajax' ) );
         add_action( 'admin_init', array( $this, 'handle_form_submission' ) );
     }
 
@@ -93,6 +96,7 @@ class Arsenal_Staff_Admin {
             'experience' => ! empty( $_POST['experience'] ) ? intval( $_POST['experience'] ) : null,
             'citizenship' => sanitize_text_field( $_POST['citizenship'] ?? '' ),
             'interesting_fact' => sanitize_textarea_field( $_POST['interesting_fact'] ?? '' ),
+            'sort_order' => ! empty( $_POST['sort_order'] ) ? intval( $_POST['sort_order'] ) : 0,
             'achievements' => $achievements_json,
             'career_positions' => $career_positions_json,
         );
@@ -113,13 +117,17 @@ class Arsenal_Staff_Admin {
                 wp_die( 'Ошибка: выбранная должность не принадлежит этому отделу!' );
             }
 
-            // Проверить что отдел принадлежит кведу
+            // Проверить что отдел принадлежит составу
             if ( $data['squad_id'] ) {
                 $dept_check = $wpdb->get_var( $wpdb->prepare(
                     "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_staff_department d
-                     INNER JOIN {$wpdb->prefix}arsenal_squad s ON d.squad_id = s.squad_id
-                     WHERE d.id = %d AND s.id = %d",
+                     WHERE d.id = %d AND (
+                        d.squad_id = %d OR d.squad_id IN (
+                            SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d
+                        )
+                     )",
                     $data['department_id'],
+                    $data['squad_id'],
                     $data['squad_id']
                 ) );
 
@@ -356,6 +364,40 @@ class Arsenal_Staff_Admin {
     }
 
     /**
+     * AJAX обновление названия отдела
+     */
+    public function update_department_name_ajax() {
+        check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Недостаточно прав' );
+        }
+
+        $department_id = intval( $_POST['department_id'] ?? 0 );
+        $department_name = sanitize_text_field( $_POST['department_name'] ?? '' );
+
+        if ( ! $department_id || ! $department_name ) {
+            wp_send_json_error( 'Параметры не указаны' );
+        }
+
+        global $wpdb;
+
+        $result = $wpdb->update(
+            "{$wpdb->prefix}arsenal_staff_department",
+            array( 'department_name' => $department_name ),
+            array( 'id' => $department_id ),
+            array( '%s' ),
+            array( '%d' )
+        );
+
+        if ( $result !== false ) {
+            wp_send_json_success( 'Отдел обновлен' );
+        } else {
+            wp_send_json_error( 'Ошибка при обновлении отдела' );
+        }
+    }
+
+    /**
      * AJAX получение должностей отдела
      */
     public function get_department_jobs_ajax() {
@@ -444,10 +486,9 @@ class Arsenal_Staff_Admin {
             wp_send_json_error( 'Недостаточно прав' );
         }
 
-        require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
-
         $department_id = intval( $_POST['department_id'] ?? 0 );
         $job_title_name = sanitize_text_field( $_POST['job_title_name'] ?? '' );
+        $job_title_name_plural = sanitize_text_field( $_POST['job_title_name_plural'] ?? '' );
 
         if ( ! $department_id ) {
             wp_send_json_error( 'ID отдела не указан' );
@@ -457,13 +498,107 @@ class Arsenal_Staff_Admin {
             wp_send_json_error( 'Название должности не может быть пустым' );
         }
 
-        // Порядок параметров: name, description, sort_order, department_id
-        $result = Arsenal_Staff_Manager::add_job_title( $job_title_name, '', 0, $department_id );
+        // Добавляем должность с множественным числом
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'arsenal_staff_job_titles';
+        
+        $inserted = $wpdb->insert(
+            $table_name,
+            array(
+                'department_id' => $department_id,
+                'job_title_name' => $job_title_name,
+                'job_title_name_plural' => $job_title_name_plural,
+                'sort_order' => 0
+            ),
+            array( '%d', '%s', '%s', '%d' )
+        );
 
-        if ( $result ) {
-            wp_send_json_success( array( 'id' => $result, 'job_title_name' => $job_title_name ) );
+        if ( $inserted ) {
+            wp_send_json_success( array( 
+                'id' => $wpdb->insert_id, 
+                'job_title_name' => $job_title_name,
+                'job_title_name_plural' => $job_title_name_plural
+            ) );
         } else {
-            wp_send_json_error( 'Ошибка при добавлении должности' );
+            wp_send_json_error( 'Ошибка при добавлении должности: ' . $wpdb->last_error );
+        }
+    }
+
+    /**
+     * AJAX получение данных должности для редактирования
+     */
+    public function get_job_title_data_ajax() {
+        check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Недостаточно прав' );
+        }
+
+        $job_title_id = intval( $_POST['job_title_id'] ?? 0 );
+
+        if ( ! $job_title_id ) {
+            wp_send_json_error( 'ID должности не указан' );
+        }
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'arsenal_staff_job_titles';
+        
+        $job_title = $wpdb->get_row( $wpdb->prepare(
+            "SELECT id, job_title_name, job_title_name_plural FROM {$table_name} WHERE id = %d",
+            $job_title_id
+        ));
+
+        if ( $job_title ) {
+            wp_send_json_success( (array) $job_title );
+        } else {
+            wp_send_json_error( 'Должность не найдена' );
+        }
+    }
+
+    /**
+     * AJAX обновление должности
+     */
+    public function update_job_title_ajax() {
+        check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( 'Недостаточно прав' );
+        }
+
+        $job_title_id = intval( $_POST['job_title_id'] ?? 0 );
+        $job_title_name = sanitize_text_field( $_POST['job_title_name'] ?? '' );
+        $job_title_name_plural = sanitize_text_field( $_POST['job_title_name_plural'] ?? '' );
+
+        if ( ! $job_title_id ) {
+            wp_send_json_error( 'ID должности не указан' );
+        }
+
+        if ( empty( $job_title_name ) ) {
+            wp_send_json_error( 'Название должности не может быть пустым' );
+        }
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'arsenal_staff_job_titles';
+        
+        $updated = $wpdb->update(
+            $table_name,
+            array(
+                'job_title_name' => $job_title_name,
+                'job_title_name_plural' => $job_title_name_plural
+            ),
+            array( 'id' => $job_title_id ),
+            array( '%s', '%s' ),
+            array( '%d' )
+        );
+
+        if ( $updated !== false ) {
+            wp_send_json_success( array( 
+                'id' => $job_title_id, 
+                'job_title_name' => $job_title_name,
+                'job_title_name_plural' => $job_title_name_plural
+            ) );
+        } else {
+            wp_send_json_error( 'Ошибка при обновлении должности: ' . $wpdb->last_error );
         }
     }
 }
