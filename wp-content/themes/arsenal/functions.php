@@ -1806,3 +1806,52 @@ require_once ARSENAL_THEME_DIR . '/inc/carbon-fields-init.php';
 require_once ARSENAL_THEME_DIR . '/inc/class-academy-carbon-adapter.php';
 require_once ARSENAL_THEME_DIR . '/inc/class-academy-history-carbon-adapter.php';
 require_once ARSENAL_THEME_DIR . '/inc/class-history-carbon-adapter.php';
+
+/**
+ * Исправить статус страниц на "publish" при добавлении в меню или сохранении
+ * Предотвращает автоматическое изменение статуса на "pending"
+ */
+
+// Метод 1: При сохранении поста через wp_insert_post_data
+add_filter( 'wp_insert_post_data', function( $data, $postarr ) {
+	// Если это страница (page) и статус "pending", меняем на "publish"
+	if ( 'page' === $data['post_type'] && 'pending' === $data['post_status'] ) {
+		// Проверяем, был ли статус "publish" до этого
+		if ( ! empty( $postarr['ID'] ) ) {
+			$old_post = get_post( $postarr['ID'] );
+			if ( $old_post && 'publish' === $old_post->post_status ) {
+				$data['post_status'] = 'publish';
+			}
+		}
+	}
+	return $data;
+}, 10, 2 );
+
+// Метод 2: После сохранения страницы - дополнительная подстраховка
+add_action( 'save_post_page', function( $post_id ) {
+	$post = get_post( $post_id );
+	if ( $post && 'pending' === $post->post_status ) {
+		// Если это существующая страница (не новая), переводим в publish
+		if ( get_post_meta( $post_id, '_wp_page_template' ) ) {
+			wp_update_post( array(
+				'ID'          => $post_id,
+				'post_status' => 'publish',
+			) );
+		}
+	}
+}, 20 );
+
+// Метод 3: При обновлении пункта меню - самый прямой способ
+add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id, $args ) {
+	if ( ! empty( $args['menu-item-object-id'] ) ) {
+		$post_id = $args['menu-item-object-id'];
+		$post = get_post( $post_id );
+		
+		if ( $post && 'page' === $post->post_type && 'pending' === $post->post_status ) {
+			wp_update_post( array(
+				'ID'          => $post_id,
+				'post_status' => 'publish',
+			) );
+		}
+	}
+}, 10, 3 );
