@@ -138,7 +138,7 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                         </thead>
                                         <tbody>
                                             <?php foreach ( $squad_staff as $person ): ?>
-                                            <tr>
+                                            <tr class="clickable-row" data-staff-id="<?php echo $person->id; ?>" data-edit-url="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>">
                                                 <td>
                                                     <?php if ( $person->photo_url ): ?>
                                                         <img src="<?php echo esc_url( $person->photo_url ); ?>" 
@@ -238,7 +238,7 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                         </thead>
                                         <tbody>
                                             <?php foreach ( $all_staff as $person ): ?>
-                                            <tr>
+                                            <tr class="clickable-row" data-staff-id="<?php echo $person->id; ?>" data-edit-url="<?php echo admin_url( 'admin.php?page=arsenal-staff-edit&staff_id=' . $person->id ); ?>">
                                                 <td>
                                                     <?php if ( $person->photo_url ): ?>
                                                         <img src="<?php echo esc_url( $person->photo_url ); ?>" 
@@ -341,6 +341,21 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const nonce = '<?php echo wp_create_nonce( 'arsenal_staff_nonce' ); ?>';
+
+    // Кликабельные строки таблицы
+    document.querySelectorAll('tr.clickable-row').forEach(row => {
+        row.addEventListener('click', function(e) {
+            // Не открываем, если клик по кнопке или ссылке
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('a') || e.target.closest('button')) {
+                return;
+            }
+            
+            const editUrl = this.dataset.editUrl;
+            if (editUrl) {
+                window.location.href = editUrl;
+            }
+        });
+    });
 
     // Удаление сотрудника
     document.querySelectorAll('[data-action="delete-staff"]').forEach(button => {
