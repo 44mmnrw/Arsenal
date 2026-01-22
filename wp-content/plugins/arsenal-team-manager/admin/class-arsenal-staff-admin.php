@@ -394,13 +394,15 @@ class Arsenal_Staff_Admin {
         global $wpdb;
 
         // Получаем отделы для этого квада
+        // Проверяем напрямую по squad_id (может быть INT или VARCHAR в зависимости от таблицы)
         $departments = $wpdb->get_results( $wpdb->prepare(
             "SELECT d.id, d.department_name 
              FROM {$wpdb->prefix}arsenal_staff_department d
-             INNER JOIN {$wpdb->prefix}arsenal_squad s ON d.squad_id = s.squad_id
-             WHERE s.id = %d
+             WHERE d.squad_id = %d OR d.squad_id IN (
+                SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d
+             )
              ORDER BY d.sort_order ASC, d.department_name ASC",
-            $squad_id
+            $squad_id, $squad_id
         ) );
 
         wp_send_json_success( $departments );
