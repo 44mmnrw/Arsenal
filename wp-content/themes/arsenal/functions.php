@@ -1883,3 +1883,30 @@ add_action( 'wp_insert_post', function( $post_id, $post ) {
 		}
 	}
 }, 20, 2 );
+
+// Метод 6: Перехватить переход статуса и запретить pending для страниц
+add_filter( 'transition_post_status', function( $new_status, $old_status, $post ) {
+	if ( 'page' === $post->post_type && 'pending' === $new_status && 'publish' === $old_status ) {
+		// Страница была publish, не даём ей стать pending
+		return 'publish';
+	}
+	return $new_status;
+}, 10, 3 );
+
+// Метод 7: Финальный перехват - если всё равно pending, то publish (максимальный приоритет)
+add_action( 'shutdown', function() {
+	// Проверяем все страницы которые могли стать pending
+	global $wpdb;
+	$pending_pages = $wpdb->get_results(
+		"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'pending' AND post_modified > DATE_SUB(NOW(), INTERVAL 5 MINUTE)"
+	);
+	
+	if ( ! empty( $pending_pages ) ) {
+		foreach ( $pending_pages as $page ) {
+			wp_update_post( array(
+				'ID'          => $page->ID,
+				'post_status' => 'publish',
+			) );
+		}
+	}
+}, 99 );
