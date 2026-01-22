@@ -25,9 +25,9 @@ require_once ARSENAL_THEME_DIR . '/vendor/autoload.php';
 \Carbon_Fields\Carbon_Fields::boot();
 
 /**
- * Подключение установщика темы
+ * Подключение всех компонентов темы через центральный bootstrap
  */
-require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-installer.php';
+require_once ARSENAL_THEME_DIR . '/inc/bootstrap.php';
 
 /**
  * Разбить текст по двоеточию: часть до : жирная, после обычная
@@ -193,14 +193,6 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 
 /**
- * Подключение файлов темы
- */
-// require_once ARSENAL_THEME_DIR . '/inc/image-placeholders.php';
-require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-manager.php';
-require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-players.php';
-require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-sponsors.php';
-
-/**
  * Паттерны отключены - используется классический редактор
  */
 
@@ -359,7 +351,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 	}
 
 	// Стили страницы тренерского штаба (для страницы Тренеры)
-	if ( is_page_template( 'templates/page-coaches-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
+	if ( is_page_template( 'templates/page-coaches-grid.php' ) || is_page_template( 'templates/page-staff-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
 		wp_enqueue_style(
 			'arsenal-staff-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
@@ -473,7 +465,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		if ( is_page_template( 'templates/page-history.php' ) || is_page( 'history' ) || is_page( 'история' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-history',
-				ARSENAL_THEME_URI . '/assets/css/page-history.css',
+				ARSENAL_THEME_URI . '/assets/css/pages/page-history.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -1619,14 +1611,6 @@ if ( ! function_exists( 'arsenal_pluralize' ) ) {
 }
 
 /**
- * Подключение дополнительных файлов
- */
-require_once ARSENAL_THEME_DIR . '/inc/functions/template-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/functions/player-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/functions/match-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/functions/timeline-functions.php';
-require_once ARSENAL_THEME_DIR . '/inc/customizer.php';
-/**
  * Функция расчёта турнирной таблицы по сезону
  * 
  * @param string $season_id ID сезона
@@ -1781,39 +1765,6 @@ if ( ! function_exists( 'arsenal_render_camera_placeholder' ) ) {
 		echo '<lottie-player src="' . esc_attr( $icon_url ) . '" background="transparent" style="width: 100%; height: 100%; min-height: 300px;"></lottie-player>';
 	}
 }
-
-/**
- * Подключение класса Arsenal_Staff_Department_Manager
- * для управления отделами сотрудников
- */
-require_once ARSENAL_THEME_DIR . '/inc/classes/class-arsenal-staff-department-manager.php';
-
-/**
- * Подключение метаокса для фильтра отдела на странице сотрудников
- */
-require_once ARSENAL_THEME_DIR . '/inc/staff-department-metabox.php';
-
-/**
- * Подключение метаокса для выбора стадиона на странице "page-stadium"
- */
-require_once ARSENAL_THEME_DIR . '/inc/stadium-selector-metabox.php';
-
-/**
- * Подключение метаокса для выбора состава на странице "page-squad-grid"
- */
-require_once ARSENAL_THEME_DIR . '/inc/squad-selector-metabox.php';
-
-/**
- * Подключение Carbon Fields метабоксов
- */
-require_once ARSENAL_THEME_DIR . '/inc/carbon-fields-init.php';
-
-/**
- * Подключение Carbon Fields адаптера для академии
- */
-require_once ARSENAL_THEME_DIR . '/inc/class-academy-carbon-adapter.php';
-require_once ARSENAL_THEME_DIR . '/inc/class-academy-history-carbon-adapter.php';
-require_once ARSENAL_THEME_DIR . '/inc/class-history-carbon-adapter.php';
 
 /**
  * Исправить статус страниц на "publish" при добавлении в меню или сохранении

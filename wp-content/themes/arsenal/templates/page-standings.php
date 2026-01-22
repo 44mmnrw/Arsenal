@@ -22,9 +22,6 @@
 
 get_header();
 
-// Явное подключение стилей страницы
-wp_enqueue_style( 'arsenal-standings', get_template_directory_uri() . '/assets/css/pages/page-standings.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
-
 global $wpdb;
 
 // Получаем список доступных сезонов из таблицы wp_arsenal_seasons для нужного турнира
@@ -397,6 +394,8 @@ usort( $standings, function( $a, $b ) use ( $get_h2h_stats ) {
                                         <td class="col-team">
                                             <?php if ( ! empty( $logo_url ) ) : ?>
                                                 <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $team['name'] ); ?>" class="team-badge" width="24" height="24" loading="lazy">
+                                            <?php else : ?>
+                                                <lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 24px; height: 24px; display: inline-block; margin-right: 8px;"></lottie-player>
                                             <?php endif; ?>
                                             <span class="team-name"><?php echo esc_html( $team['name'] ); ?></span>
                                         </td>

@@ -56,19 +56,5 @@ if ( ! function_exists( 'arsenal_excerpt_more' ) ) {
 }
 add_filter( 'excerpt_more', 'arsenal_excerpt_more' );
 
-/**
- * ═══════════════════════════════════════════════════════════════
- * ФУНКЦИИ ДЛЯ СТРАНИЦЫ СТАТИСТИКИ ИГРОКА
- * 
- * ВАЖНО: Функции для работы с игроками определены в inc/functions/player-functions.php
- * которые используют правильную структуру новой БД Arsenal (wp_arsenal_*)
- * 
- * Используйте:
- * - arsenal_get_player_data($player_id)
- * - arsenal_get_player_seasons($player_id)
- * - arsenal_get_player_stats($player_id)
- * - arsenal_get_player_events($player_id, $year)
- * - arsenal_get_player_position($position_id)
- * ═══════════════════════════════════════════════════════════════
- */
+
 

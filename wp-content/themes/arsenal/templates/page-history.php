@@ -11,9 +11,6 @@
 
 get_header();
 
-// Подключение стилей страницы
-wp_enqueue_style( 'arsenal-history', get_template_directory_uri() . '/assets/css/pages/page-history.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
-
 // Получить историю клуба из Carbon Fields
 $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 

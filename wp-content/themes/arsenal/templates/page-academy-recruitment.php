@@ -10,7 +10,7 @@
 get_header();
 
 // Подключить адаптер Carbon Fields
-require_once get_template_directory() . '/inc/class-academy-carbon-adapter.php';
+require_once get_template_directory() . '/inc/classes/class-academy-carbon-adapter.php';
 
 // Получить ID текущей страницы
 $post_id = get_the_ID();

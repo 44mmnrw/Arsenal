@@ -4651,9 +4651,6 @@
     display: contents;
 }
 
-.corrections-row.corrections-header {
-}
-
 .corrections-row > div {
     padding: 14px 12px;
     text-align: left;

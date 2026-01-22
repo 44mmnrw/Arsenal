@@ -114,17 +114,10 @@ function arsenal_match_result_calendar( $match, $arsenal_team_id ) {
 		if ( $match->home_score < $match->away_score ) return 'loss';
 		return 'draw';
 	} else {
-		if ( $match->away_score > $match->home_score ) return 'win';
-		if ( $match->away_score < $match->home_score ) return 'loss';
+		if ( $match->away_score > $match->home_team_id ) return 'win';
+		if ( $match->away_score < $match->home_team_id ) return 'loss';
 		return 'draw';
 	}
-}
-
-function arsenal_get_logo_url_calendar( $url ) {
-	if ( ! empty( $url ) ) {
-		return $url;
-	}
-	return get_template_directory_uri() . '/assets/images/placeholder-logo.png';
 }
 
 $has_matches = ! empty( $matches );
@@ -289,9 +282,9 @@ $has_matches = ! empty( $matches );
 												<div class="calendar-team-avatar">
 													<div class="calendar-team-avatar-content">
 														<?php if ( ! empty( $match->home_logo ) ) : ?>
-															<img src="<?php echo esc_url( arsenal_get_logo_url_calendar( $match->home_logo ) ); ?>" alt="<?php echo esc_attr( $match->home_team ); ?>" loading="lazy">
+															<img src="<?php echo esc_url( $match->home_logo ); ?>" alt="<?php echo esc_attr( $match->home_team ); ?>" loading="lazy">
 														<?php else : ?>
-															<span class="calendar-team-initials"><?php echo esc_html( substr( $match->home_team, 0, 2 ) ); ?></span>
+															<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%; min-height: 80px;"></lottie-player>
 														<?php endif; ?>
 													</div>
 												</div>
@@ -303,9 +296,9 @@ $has_matches = ! empty( $matches );
 												<div class="calendar-team-avatar">
 													<div class="calendar-team-avatar-content">
 														<?php if ( ! empty( $match->away_logo ) ) : ?>
-															<img src="<?php echo esc_url( arsenal_get_logo_url_calendar( $match->away_logo ) ); ?>" alt="<?php echo esc_attr( $match->away_team ); ?>" loading="lazy">
+															<img src="<?php echo esc_url( $match->away_logo ); ?>" alt="<?php echo esc_attr( $match->away_team ); ?>" loading="lazy">
 														<?php else : ?>
-															<span class="calendar-team-initials"><?php echo esc_html( substr( $match->away_team, 0, 2 ) ); ?></span>
+															<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%; min-height: 80px;"></lottie-player>
 														<?php endif; ?>
 													</div>
 												</div>

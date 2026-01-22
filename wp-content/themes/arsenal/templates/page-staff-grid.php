@@ -11,19 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Подключаем стили страницы
-if ( function_exists( 'wp_enqueue_style' ) && defined( 'ARSENAL_THEME_URI' ) ) {
-	wp_enqueue_style(
-		'arsenal-page-staff-grid',
-		ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
-		array( 'arsenal-footer' ),
-		defined( 'ARSENAL_VERSION' ) ? ARSENAL_VERSION : null
-	);
-}
-
 get_header();
-
-require_once get_template_directory() . '/inc/classes/class-arsenal-staff-department-manager.php';
 
 global $wpdb;
 
@@ -60,7 +48,7 @@ if ( ! empty( $where_conditions ) ) {
 	$where_clause = ' WHERE ' . implode( ' AND ', $where_conditions );
 }
 
-$sql = "SELECT s.*, jt.job_title_name as job_title, CONCAT(s.first_name, ' ', s.second_name) as full_name
+$sql = "SELECT s.*, jt.job_title_name as job_title, jt.job_title_name_plural, CONCAT(s.first_name, ' ', s.second_name) as full_name
 	FROM {$wpdb->prefix}arsenal_staff s
 	LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
 	{$where_clause}
@@ -91,9 +79,14 @@ foreach ( $staff as $person ) {
 				<div class="teams-content">
 					<?php
 					foreach ( $staff_by_job_title as $job_title => $job_staff ) :
+						// Получить множественную форму из первого сотрудника
+						$job_title_display = $job_title;
+						if ( ! empty( $job_staff[0]->job_title_name_plural ) ) {
+							$job_title_display = $job_staff[0]->job_title_name_plural;
+						}
 					?>
 						<div class="position-group">
-							<h2 class="position-heading"><?php echo esc_html( $job_title ); ?></h2>
+							<h2 class="position-heading"><?php echo esc_html( $job_title_display ); ?></h2>
 							
 							<div class="staff-grid">
 								<?php foreach ( $job_staff as $person ) : 
@@ -105,9 +98,9 @@ foreach ( $staff as $person ) {
 									// Динамический URL сотрудника (по аналогии со страницей игрока)
 									$staff_url = ! empty( $person->id ) ? arsenal_get_staff_url( $person->id ) : '#';
 								?>
-										<a href="<?php echo esc_url( $staff_url ); ?>" class="staff-card" title="<?php echo esc_attr( $name_display ); ?>">
+									<a href="<?php echo esc_url( $staff_url ); ?>" class="staff-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото -->
-												<div class="staff-card__photo">
+										<div class="staff-card__photo">
 											<?php if ( ! empty( $photo_url ) ) : ?>
 												<img 
 													src="<?php echo esc_url( $photo_src ); ?>" 
@@ -121,9 +114,9 @@ foreach ( $staff as $person ) {
 										</div>
 
 										<!-- Правая колонка 50%: Информация -->
-												<div class="staff-card__info">
-													<h3 class="staff-card__name"><?php echo esc_html( $name_display ); ?></h3>
-													<p class="staff-card__position"><?php echo esc_html( $position ); ?></p>
+										<div class="staff-card__info">
+											<h3 class="staff-card__name"><?php echo esc_html( $name_display ); ?></h3>
+											<p class="staff-card__position"><?php echo esc_html( $position ); ?></p>
 										</div>
 									</a>
 								<?php endforeach; ?>

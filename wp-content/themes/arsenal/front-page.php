@@ -16,25 +16,25 @@ get_header();
 	
 	<?php
 	// Баннер-карусель
-	get_template_part( 'template-parts/widgets/banner' );
+	get_template_part( 'template-parts/components/banner' );
 	
 	// Статистика клуба (красная полоса) - ДИНАМИЧЕСКАЯ ИЗ БД
-	get_template_part( 'template-parts/widgets/stats-bar' );
+	get_template_part( 'template-parts/blocks/stats-bar' );
 	
 	// Ближайший матч - ДИНАМИЧЕСКИЙ ИЗ БД
-	get_template_part( 'template-parts/widgets/upcoming-match' );
+	get_template_part( 'template-parts/blocks/upcoming-match' );
 	
 	// Новости
-	get_template_part( 'template-parts/widgets/news' );
+	get_template_part( 'template-parts/components/news' );
 	
 	// Результаты прошедших игр - ДИНАМИЧЕСКИЕ ИЗ БД
-	get_template_part( 'template-parts/widgets/last-games' );
+	get_template_part( 'template-parts/blocks/last-games' );
 	
 	// Турнирная таблица (уже использует JSON)
-	get_template_part( 'template-parts/widgets/tournament-table' );
+	get_template_part( 'template-parts/blocks/tournament-table' );
 	
 	// Партнёры и спонсоры
-	get_template_part( 'template-parts/widgets/sponsors' );
+	get_template_part( 'template-parts/components/sponsors' );
 	
 	// Здесь будут добавлены другие секции главной страницы
 	?>
