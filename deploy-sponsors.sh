@@ -12,7 +12,7 @@
 #
 
 # === КОНФИГУРАЦИЯ ===
-REMOTE_USER="site_user"
+REMOTE_USER="site_user76"
 REMOTE_HOST="212.113.120.197"
 REMOTE_PATH="/tmp/"
 REMOTE_DB="arsenal"

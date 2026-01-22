@@ -3,10 +3,10 @@ import subprocess
 import sys
 
 commands = [
-    'ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && git add -A"',
-    'ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && git commit -m \'Improve match validation - show specific missing fields\'"',
-    'ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && git push origin dev_main"',
-    'ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && bash deploy.sh"'
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git add -A"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git commit -m \'Improve match validation - show specific missing fields\'"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git push origin dev_main"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && bash deploy.sh"'
 ]
 
 for i, cmd in enumerate(commands, 1):

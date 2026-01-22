@@ -12,8 +12,8 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Конфигурация
-REPO_DIR="/var/www/site_user/data/arsenal-repo"
-WEB_DIR="/var/www/site_user/data/www/1779917-cq85026.twc1.net"
+REPO_DIR="/var/www/site_user76/data/arsenal-repo"
+WEB_DIR="/var/www/site_user76/data/www/1779917-cq85026.twc1.net"
 REPO_URL="https://github.com/44mmnrw/arsenal.git"
 BRANCH="dev_main"
 
