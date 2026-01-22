@@ -257,15 +257,18 @@ add_action( 'after_setup_theme', 'arsenal_setup' );
  * Отключение Gutenberg editor и его скриптов
  */
 function arsenal_disable_gutenberg() {
-	// Отключаем стили Gutenberg
-	wp_dequeue_style( 'wp-block-library' );
-	wp_dequeue_style( 'wp-block-library-theme' );
-	wp_dequeue_style( 'global-styles' );
-	
-	// Отключаем скрипты
-	wp_dequeue_script( 'wp-embed' );
-	wp_dequeue_script( 'wp-editor' );
-	wp_dequeue_script( 'edit-widgets' );
+	// Отключаем стили Gutenberg ТОЛЬКО на фронтенде
+	// НЕ отключаем в админке - это ломает React скрипты меню
+	if ( ! is_admin() ) {
+		wp_dequeue_style( 'wp-block-library' );
+		wp_dequeue_style( 'wp-block-library-theme' );
+		wp_dequeue_style( 'global-styles' );
+		
+		// Отключаем скрипты
+		wp_dequeue_script( 'wp-embed' );
+		wp_dequeue_script( 'wp-editor' );
+		wp_dequeue_script( 'edit-widgets' );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'arsenal_disable_gutenberg' );
 add_action( 'admin_enqueue_scripts', 'arsenal_disable_gutenberg' );
