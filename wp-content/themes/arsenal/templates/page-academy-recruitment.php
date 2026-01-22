@@ -37,7 +37,7 @@ $faq = $data['faq_data'] ?? array();
 			<div class="hero-content">
 				<h1 id="academy-title" class="hero-title"><?php echo esc_html( $hero['title'] ?? 'Набор в академию' ); ?></h1>
 				<p class="hero-description">
-					<?php echo esc_html( $hero['description'] ?? 'СДЮШ "Арсенал" объявляет набор детей в возрасте от 8 до 17 лет.' ); ?>
+					<?php echo wpautop( wp_kses_post( $hero['description'] ?? 'СДЮШ "Арсенал" объявляет набор детей в возрасте от 8 до 17 лет.' ) ); ?>
 				</p>
 				<div class="hero-actions">
 					<button class="btn btn-primary btn-lg" data-action="apply">
@@ -63,7 +63,7 @@ $faq = $data['faq_data'] ?? array();
 					</div>
 					<h3 class="benefit-title"><?php echo esc_html( $benefit['title'] ?? '' ); ?></h3>
 					<p class="benefit-description">
-						<?php echo esc_html( $benefit['description'] ?? '' ); ?>
+						<?php echo wpautop( wp_kses_post( $benefit['description'] ?? '' ) ); ?>
 					</p>
 				</article>
 				<?php endforeach; ?>
@@ -118,7 +118,7 @@ $faq = $data['faq_data'] ?? array();
 			<?php if ( ! empty( $documents['notice'] ) ) : ?>
 			<div class="documents-notice">
 				<strong><?php esc_html_e( 'Важно:', 'arsenal' ); ?></strong>
-				<?php echo esc_html( $documents['notice'] ); ?>
+				<?php echo wpautop( wp_kses_post( $documents['notice'] ) ); ?>
 			</div>
 			<?php endif; ?>
 		</section>
@@ -141,7 +141,7 @@ $faq = $data['faq_data'] ?? array();
 
 			<?php if ( ! empty( $schedule['notice'] ) ) : ?>
 			<div class="schedule-notice">
-				<strong><?php echo esc_html( $schedule['notice'] ); ?></strong>
+			<strong><?php echo wpautop( wp_kses_post( $schedule['notice'] ) ); ?></strong>
 			</div>
 			<?php endif; ?>
 		</section>
@@ -340,7 +340,7 @@ $faq = $data['faq_data'] ?? array();
 						</span>
 					</summary>
 					<p class="faq-answer">
-						<?php echo esc_html( $item['answer'] ?? '' ); ?>
+						<?php echo wpautop( wp_kses_post( $item['answer'] ?? '' ) ); ?>
 					</p>
 				</details>
 				<?php endforeach; ?>

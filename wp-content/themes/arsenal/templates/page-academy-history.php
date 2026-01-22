@@ -26,7 +26,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 		<section class="academy-history-intro">
 			<div class="academy-history-intro__header">
 				<h1 class="academy-history-intro__title"><?php echo esc_html( $data['hero_title'] ); ?></h1>
-				<p class="academy-history-intro__description"><?php echo esc_html( $data['hero_description'] ); ?></p>
+				<p class="academy-history-intro__description"><?php echo wpautop( wp_kses_post( $data['hero_description'] ) ); ?></p>
 			</div>
 
 			<!-- Статистические карточки -->
@@ -63,7 +63,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 									<h3 class="academy-event-card__title"><?php echo esc_html( $event['title'] ); ?></h3>
 									<span class="academy-event-card__year"><?php echo esc_html( $event['year'] ); ?></span>
 								</div>
-								<p class="academy-event-card__description"><?php echo esc_html( $event['description'] ); ?></p>
+							<p class="academy-event-card__description"><?php echo wpautop( wp_kses_post( $event['description'] ) ); ?></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -116,7 +116,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 		<!-- Запись в академию -->
 		<section class="academy-enrollment-section">
 			<h2 class="academy-enrollment-section__title"><?php echo esc_html( $data['enrollment']['title'] ); ?></h2>
-			<p class="academy-enrollment-section__description"><?php echo esc_html( $data['enrollment']['description'] ); ?></p>
+			<p class="academy-enrollment-section__description"><?php echo wpautop( wp_kses_post( $data['enrollment']['description'] ) ); ?></p>
 			
 			<div class="academy-enrollment-info">
 				<div class="academy-enrollment-column">

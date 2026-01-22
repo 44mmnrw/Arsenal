@@ -29,7 +29,7 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 
 		<section class="history-intro">
 			<div class="history-intro__text">
-				<?php echo wp_kses_post( $history['description'] ); ?>
+				<?php echo wpautop( wp_kses_post( $history['description'] ) ); ?>
 			</div>
 		</section>
 
