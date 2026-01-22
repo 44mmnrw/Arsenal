@@ -46,7 +46,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'text', '_academy_hero_title', 'Заголовок' )
 				->set_default_value( 'Набор в академию' ),
 			
-		Field::make( 'textarea', '_academy_hero_description', 'Описание' ),
+		Field::make( 'rich_text', '_academy_hero_description', 'Описание' ),
 		] )
 		
 		->add_tab( 'Преимущества', [
@@ -55,7 +55,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					Field::make( 'select', 'icon', 'Иконка' )
 						->add_options( 'arsenal_get_sprite_icons' ),
 					Field::make( 'text', 'title', 'Заголовок' ),
-					Field::make( 'textarea', 'description', 'Описание' ),
+					Field::make( 'rich_text', 'description', 'Описание' ),
 				] )
 				->set_header_template( '
 					<% if (title) { %>
@@ -112,7 +112,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					<% } %>
 				' ),
 			
-			Field::make( 'textarea', '_academy_documents_notice', 'Примечание' ),
+			Field::make( 'rich_text', '_academy_documents_notice', 'Примечание' ),
 		] )
 		
 		->add_tab( 'Расписание просмотров', [
@@ -133,7 +133,7 @@ add_action( 'carbon_fields_register_fields', function() {
 					<% } %>
 				' ),
 			
-			Field::make( 'textarea', '_academy_schedule_notice', 'Примечание' ),
+			Field::make( 'rich_text', '_academy_schedule_notice', 'Примечание' ),
 		] )
 		
 		->add_tab( 'Контакты', [
@@ -206,7 +206,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'complex', '_academy_faq', 'Частые вопросы' )
 				->add_fields( [
 					Field::make( 'text', 'question', 'Вопрос' ),
-					Field::make( 'textarea', 'answer', 'Ответ' ),
+					Field::make( 'rich_text', 'answer', 'Ответ' ),
 				] )
 				->set_header_template( '
 					<% if (question) { %>
@@ -223,7 +223,7 @@ add_action( 'carbon_fields_register_fields', function() {
 		->add_tab( 'Основная информация', [
 			Field::make( 'text', '_history_title', 'Название секции' )
 				->set_default_value( 'История клуба' ),
-			Field::make( 'textarea', '_history_description', 'Описание' ),
+			Field::make( 'rich_text', '_history_description', 'Описание' ),
 			Field::make( 'complex', '_history_scale', 'События' )
 				->add_fields( [
 					Field::make( 'text', 'year', 'Год' ),
@@ -307,7 +307,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'text', '_academy_history_hero_title', 'Заголовок' )
 				->set_default_value( 'История ДЮСШ' ),
 			
-			Field::make( 'textarea', '_academy_history_hero_description', 'Описание' )
+			Field::make( 'rich_text', '_academy_history_hero_description', 'Описание' )
 				->set_default_value( 'Спортивная детско-юношеская школа "Арсенал" — футбольная академия клуба, основанная в 2010 году. За 15 лет работы школа подготовила более 500 молодых футболистов.' ),
 		] )
 		
@@ -335,7 +335,7 @@ add_action( 'carbon_fields_register_fields', function() {
 						->add_options( 'arsenal_get_sprite_icons' ),
 					Field::make( 'text', 'title', 'Название события' ),
 					Field::make( 'text', 'year', 'Год' ),
-					Field::make( 'textarea', 'description', 'Описание' ),
+					Field::make( 'rich_text', 'description', 'Описание' ),
 				] )
 				->set_header_template( '
 					<% if (title) { %>
@@ -386,7 +386,7 @@ add_action( 'carbon_fields_register_fields', function() {
 			Field::make( 'text', '_academy_history_enrollment_title', 'Заголовок' )
 				->set_default_value( 'Запись в академию' ),
 			
-			Field::make( 'textarea', '_academy_history_enrollment_description', 'Описание' )
+			Field::make( 'rich_text', '_academy_history_enrollment_description', 'Описание' )
 				->set_default_value( 'Мы приглашаем детей от 8 до 17 лет на занятия в нашей футбольной академии. Тренировки проводятся профессиональными тренерами с лицензиями UEFA.' ),
 		] )
 		
