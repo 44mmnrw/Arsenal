@@ -1855,3 +1855,31 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id, $ar
 		}
 	}
 }, 10, 3 );
+
+// Метод 4: Перехватить прямо перед сохранением при редакте поста
+add_action( 'pre_post_update', function( $post_id, $data ) {
+	// Если это страница и пытаемся установить pending, меняем на publish
+	if ( isset( $data['post_status'] ) && 'pending' === $data['post_status'] ) {
+		$post = get_post( $post_id );
+		if ( $post && 'page' === $post->post_type && 'publish' === $post->post_status ) {
+			// Это уже опубликованная страница - не позволяем менять на pending
+			remove_action( 'pre_post_update', [ $this, 'pre_post_update' ] );
+			wp_update_post( array(
+				'ID'          => $post_id,
+				'post_status' => 'publish',
+			) );
+		}
+	}
+}, 9, 2 );
+
+// Метод 5: После полного сохранения - финальная подстраховка
+add_action( 'wp_insert_post', function( $post_id, $post ) {
+	if ( 'page' === $post->post_type && 'pending' === $post->post_status ) {
+		if ( get_post_meta( $post_id, '_wp_page_template' ) ) {
+			wp_update_post( array(
+				'ID'          => $post_id,
+				'post_status' => 'publish',
+			) );
+		}
+	}
+}, 20, 2 );
