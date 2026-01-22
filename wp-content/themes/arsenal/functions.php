@@ -25,6 +25,11 @@ require_once ARSENAL_THEME_DIR . '/vendor/autoload.php';
 \Carbon_Fields\Carbon_Fields::boot();
 
 /**
+ * Подключение установщика темы
+ */
+require_once ARSENAL_THEME_DIR . '/inc/class-arsenal-installer.php';
+
+/**
  * Разбить текст по двоеточию: часть до : жирная, после обычная
  * 
  * @param string $text Текст
@@ -1909,4 +1914,12 @@ add_action( 'shutdown', function() {
 			) );
 		}
 	}
+}, 99 );
+
+// Метод 8: Самый агрессивный - каждый час очищаем все pending страницы (работает в фоне)
+add_action( 'wp_scheduled_delete', function() {
+	global $wpdb;
+	$wpdb->query(
+		"UPDATE {$wpdb->posts} SET post_status = 'publish' WHERE post_type = 'page' AND post_status = 'pending'"
+	);
 }, 99 );
