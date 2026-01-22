@@ -146,7 +146,7 @@ foreach ( $players as $player ) {
 								?>
 									<a href="<?php echo esc_url( $player_url ); ?>" class="player-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото + Номер -->
-										<div class="player-card__photo<?php echo empty( $photo_url ) ? ' player-card__photo--placeholder' : ''; ?>">
+										<div class="player-card__photo">
 											<?php if ( ! empty( $photo_url ) ) : ?>
 												<img 
 													src="<?php echo esc_url( $photo_url ); ?>" 
@@ -155,7 +155,7 @@ foreach ( $players as $player ) {
 													loading="lazy"
 												>
 											<?php else : ?>
-												<?php arsenal_render_camera_placeholder(); ?>
+												<lottie-player src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/wired-outline-61-camera-hover-flash.json' ); ?>" background="transparent" style="width: 100%; height: 100%; min-height: 300px;"></lottie-player>
 											<?php endif; ?>
 											<?php if ( $shirt_number ) : ?>
 												<div class="player-card__number">
