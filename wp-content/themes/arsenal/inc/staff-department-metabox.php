@@ -28,8 +28,8 @@ if ( ! function_exists( 'arsenal_register_staff_filter_metabox' ) ) {
 			'⚙️ Фильтр сотрудников',
 			'arsenal_staff_filters_metabox_callback',
 			'page',
-			'side',
-			'high',
+			'normal',
+			'low',
 			array( 'show_in_rest' => true )
 		);
 	}
@@ -306,11 +306,11 @@ if ( ! function_exists( 'arsenal_register_management_squad_id_metabox' ) ) {
 
 		add_meta_box(
 			'arsenal_management_squad_id_filter',
-			'Фильтр типа клуба',
+			'⚙️ Фильтр сотрудников',
 			'arsenal_management_squad_id_metabox_callback',
 			'page',
-			'side',
-			'high',
+			'normal',
+			'low',
 			array( 'show_in_rest' => true )
 		);
 	}
@@ -323,21 +323,35 @@ if ( ! function_exists( 'arsenal_management_squad_id_metabox_callback' ) ) {
 		global $wpdb;
 		
 		$squad_id = get_post_meta( $post->ID, '_arsenal_management_squad_id_filter', true );
+		$department_id = get_post_meta( $post->ID, '_arsenal_management_department_id_filter', true );
 		
 		// Получаем составы из таблицы wp_arsenal_squad
 		$squads = $wpdb->get_results( "SELECT id, squad_name FROM {$wpdb->prefix}arsenal_squad ORDER BY squad_name ASC" );
 		
+		// Получаем отделы для выбранного состава или все отделы
+		$departments = array();
+		if ( ! empty( $squad_id ) ) {
+			$departments = $wpdb->get_results( $wpdb->prepare(
+				"SELECT DISTINCT sd.id, sd.department_name FROM {$wpdb->prefix}arsenal_staff_department sd
+				 INNER JOIN {$wpdb->prefix}arsenal_staff s ON sd.id = s.department_id
+				 WHERE s.squad_id = %d
+				 ORDER BY sd.department_name ASC",
+				intval( $squad_id )
+			) );
+		}
+		
 		wp_nonce_field( 'arsenal_management_squad_id_filter', 'arsenal_management_squad_id_filter_nonce' );
 		?>
-		<div style="margin-bottom: 15px;">
-			<label for="arsenal_management_squad_id_filter_select" style="display: block; margin-bottom: 8px; font-weight: 500;">
-				Выбрать тип клуба:
+		<!-- Фильтр состава -->
+		<div style="margin-bottom: 20px;">
+			<label for="arsenal_management_squad_id_filter_select" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+				📋 Состав/Команда:
 			</label>
 			<select 
 				id="arsenal_management_squad_id_filter_select"
 				name="arsenal_management_squad_id_filter" 
 				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
-				<option value="">— Все типы —</option>
+				<option value="">— Все составы —</option>
 				<?php foreach ( $squads as $squad ) : ?>
 					<option value="<?php echo esc_attr( $squad->id ); ?>" 
 						<?php selected( $squad_id, $squad->id ); ?>>
@@ -346,8 +360,28 @@ if ( ! function_exists( 'arsenal_management_squad_id_metabox_callback' ) ) {
 				<?php endforeach; ?>
 			</select>
 		</div>
+
+		<!-- Фильтр отдела (зависимый от состава) -->
+		<div style="margin-bottom: 15px;">
+			<label for="arsenal_management_department_filter_select" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+				🏢 Отдел:
+			</label>
+			<select 
+				id="arsenal_management_department_filter_select"
+				name="arsenal_management_department_id_filter" 
+				style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+				<option value="">— Все отделы —</option>
+				<?php foreach ( $departments as $dept ) : ?>
+					<option value="<?php echo esc_attr( $dept->id ); ?>" 
+						<?php selected( $department_id, $dept->id ); ?>>
+						<?php echo esc_html( $dept->department_name ); ?>
+					</option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+
 		<p style="font-size: 12px; color: #666; margin: 0;">
-			Оставьте пустым для отображения всех
+			Оставьте оба поля пустыми для отображения всех сотрудников
 		</p>
 		<?php
 	}
@@ -371,14 +405,111 @@ if ( ! function_exists( 'arsenal_save_management_squad_id_filter' ) ) {
 			return;
 		}
 
-		// Сохраняем значение
-		if ( isset( $_POST['arsenal_management_squad_id_filter'] ) ) {
+		// Сохраняем состав
+		if ( isset( $_POST['arsenal_management_squad_id_filter'] ) && ! empty( $_POST['arsenal_management_squad_id_filter'] ) ) {
 			$squad_id = intval( $_POST['arsenal_management_squad_id_filter'] );
 			update_post_meta( $post_id, '_arsenal_management_squad_id_filter', $squad_id );
 		} else {
 			delete_post_meta( $post_id, '_arsenal_management_squad_id_filter' );
 		}
+
+		// Сохраняем отдел
+		if ( isset( $_POST['arsenal_management_department_id_filter'] ) && ! empty( $_POST['arsenal_management_department_id_filter'] ) ) {
+			$department_id = intval( $_POST['arsenal_management_department_id_filter'] );
+			update_post_meta( $post_id, '_arsenal_management_department_id_filter', $department_id );
+		} else {
+			delete_post_meta( $post_id, '_arsenal_management_department_id_filter' );
+		}
 	}
 
 	add_action( 'save_post_page', 'arsenal_save_management_squad_id_filter' );
+}
+
+// AJAX обработчик для загрузки отделов по выбранному составу в management метабоксе
+if ( ! function_exists( 'arsenal_get_departments_by_squad_management_ajax' ) ) {
+	function arsenal_get_departments_by_squad_management_ajax() {
+		global $wpdb;
+		
+		check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
+		
+		$squad_id = intval( $_POST['squad_id'] ?? 0 );
+		
+		if ( empty( $squad_id ) ) {
+			wp_send_json_error( 'Squad ID not provided' );
+		}
+		
+		// Получаем отделы для этого состава
+		$departments = $wpdb->get_results( $wpdb->prepare(
+			"SELECT DISTINCT sd.id, sd.department_name FROM {$wpdb->prefix}arsenal_staff_department sd
+			 INNER JOIN {$wpdb->prefix}arsenal_staff s ON sd.id = s.department_id
+			 WHERE s.squad_id = %d
+			 ORDER BY sd.department_name ASC",
+			$squad_id
+		) );
+		
+		wp_send_json_success( array( 'departments' => $departments ) );
+	}
+	
+	add_action( 'wp_ajax_arsenal_get_departments_by_squad_management', 'arsenal_get_departments_by_squad_management_ajax' );
+}
+
+// JavaScript для каскадного селекта в management метабоксе
+if ( ! function_exists( 'arsenal_enqueue_management_metabox_script' ) ) {
+	function arsenal_enqueue_management_metabox_script() {
+		$current_screen = get_current_screen();
+		
+		// Только на странице редактирования поста с page-management
+		if ( $current_screen && $current_screen->base === 'post' && isset( $_GET['post'] ) ) {
+			$post_id = intval( $_GET['post'] );
+			$template = get_page_template_slug( $post_id );
+			
+			if ( $template === 'templates/page-management.php' ) {
+				?><script>
+				document.addEventListener('DOMContentLoaded', function() {
+					const squadSelect = document.getElementById('arsenal_management_squad_id_filter_select');
+					const departmentSelect = document.getElementById('arsenal_management_department_filter_select');
+					
+					if (squadSelect && departmentSelect) {
+						squadSelect.addEventListener('change', function() {
+							const squadId = this.value;
+							
+							if (!squadId) {
+								// Если состав не выбран - очищаем отделы
+								departmentSelect.innerHTML = '<option value="">— Все отделы —</option>';
+								return;
+							}
+							
+							const formData = new FormData();
+							formData.append('action', 'arsenal_get_departments_by_squad_management');
+							formData.append('squad_id', squadId);
+							formData.append('nonce', '<?php echo wp_create_nonce( "arsenal_staff_nonce" ); ?>');
+							
+							fetch(ajaxurl, {
+								method: 'POST',
+								body: formData
+							})
+							.then(response => response.json())
+							.then(data => {
+								if (data.success) {
+									// Очищаем старые опции
+									departmentSelect.innerHTML = '<option value="">— Все отделы —</option>';
+									
+									// Добавляем новые опции
+									data.data.departments.forEach(function(dept) {
+										const option = document.createElement('option');
+										option.value = dept.id;
+										option.textContent = dept.department_name;
+										departmentSelect.appendChild(option);
+									});
+								}
+							});
+						});
+					}
+				});
+				</script><?php
+			}
+		}
+	}
+	
+	add_action( 'admin_footer', 'arsenal_enqueue_management_metabox_script' );
 }

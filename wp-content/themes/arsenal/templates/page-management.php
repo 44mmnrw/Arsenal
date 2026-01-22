@@ -15,19 +15,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-// Получить фильтр squad_id из post_meta
+// Получить фильтры из post_meta
 $post_id = get_the_ID();
 $squad_id_filter = get_post_meta( $post_id, '_arsenal_management_squad_id_filter', true );
+$department_id_filter = get_post_meta( $post_id, '_arsenal_management_department_id_filter', true );
 
-// Построить SQL запрос с фильтром
+// Построить SQL запрос с фильтрами
 global $wpdb;
-$where_clause = '';
+$where_conditions = array();
+
 if ( ! empty( $squad_id_filter ) ) {
-	$where_clause = $wpdb->prepare( " WHERE squad_id = %d", intval( $squad_id_filter ) );
+	$where_conditions[] = $wpdb->prepare( "s.squad_id = %d", intval( $squad_id_filter ) );
 }
 
+if ( ! empty( $department_id_filter ) ) {
+	$where_conditions[] = $wpdb->prepare( "s.department_id = %d", intval( $department_id_filter ) );
+}
+
+$where_clause = '';
+if ( ! empty( $where_conditions ) ) {
+	$where_clause = ' WHERE ' . implode( ' AND ', $where_conditions );
+}
+
+// Запрос: сотрудники с JOIN к должностям и отделам
 $management_team = $wpdb->get_results( 
-	"SELECT * FROM {$wpdb->prefix}arsenal_management{$where_clause} ORDER BY display_order ASC, position, name ASC" 
+	"SELECT s.id, s.photo_url, CONCAT(s.first_name, ' ', s.second_name) as name,
+			jt.job_title_name as position,
+			s.bio as description
+	 FROM {$wpdb->prefix}arsenal_staff s
+	 LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
+	 LEFT JOIN {$wpdb->prefix}arsenal_staff_department sd ON s.department_id = sd.id
+	 {$where_clause}
+	 ORDER BY sd.department_name ASC, jt.job_title_name ASC, s.second_name ASC, s.first_name ASC" 
 );
 
 ?>
