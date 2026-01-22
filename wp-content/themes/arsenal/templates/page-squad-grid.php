@@ -85,7 +85,12 @@ foreach ( $players as $player ) {
 							<div class="players-grid">
 								<?php foreach ( $position_players as $player ) : 
 									// Получаем данные игрока
-											$photo_url = ! empty( $player->photo_url ) ? $player->photo_url : '';
+									// Проверка фото: валидная ссылка и не пуста
+									$photo_url = '';
+									if ( ! empty( $player->photo_url ) && is_string( $player->photo_url ) && strlen( trim( $player->photo_url ) ) > 0 ) {
+										$photo_url = trim( $player->photo_url );
+									}
+									
 									$position = ! empty( $player->position_name ) ? $player->position_name : 'Не указана';
 									$shirt_number = ! empty( $player->shirt_number ) ? intval( $player->shirt_number ) : null;
 									$name_display = ! empty( $player->full_name ) ? $player->full_name : 'Неизвестно';

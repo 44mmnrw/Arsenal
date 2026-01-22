@@ -107,6 +107,17 @@ h1 {
 	display: block;
 }
 
+/* Заглушка (плейсхолдер) при отсутствии фото */
+.player-card__photo--placeholder {
+	background: linear-gradient(180deg, var(--gray-100) 0%, var(--gray-50) 100%);
+}
+
+.player-card__photo--placeholder lottie-player {
+	width: 100%;
+	height: 100%;
+	min-height: 300px;
+}
+
 /* Номер игрока */
 .player-card__number {
 	position: absolute;
