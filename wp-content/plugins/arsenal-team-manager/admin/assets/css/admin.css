@@ -1,5 +1,69 @@
 /* Arsenal Team Manager - Стили админки */
 
+/* ========== Быстрая навигация на Dashboard ========== */
+.dashboard-quick-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 25px 0 35px 0;
+    padding: 0;
+}
+
+.nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px 20px;
+    background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 115, 170, 0.2);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    min-height: 120px;
+}
+
+.nav-button:hover {
+    background: linear-gradient(135deg, #005a87 0%, #004470 100%);
+    box-shadow: 0 4px 16px rgba(0, 115, 170, 0.35);
+    transform: translateY(-3px);
+}
+
+.nav-button:active {
+    transform: translateY(-1px);
+}
+
+.nav-button-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.nav-button-label {
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 0.3px;
+}
+
+.nav-button-matches:hover {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    box-shadow: 0 4px 16px rgba(255, 107, 107, 0.35);
+}
+
+.nav-button-staff:hover {
+    background: linear-gradient(135deg, #4ecdc4 0%, #44b3aa 100%);
+    box-shadow: 0 4px 16px rgba(78, 205, 196, 0.35);
+}
+
+.nav-button-players:hover {
+    background: linear-gradient(135deg, #ffa502 0%, #ff8c00 100%);
+    box-shadow: 0 4px 16px rgba(255, 165, 2, 0.35);
+}
+
 /* ========== Форма редактирования игрока (2 колонки) ========== */
 .player-form-wrapper {
     display: grid;
@@ -6317,4 +6381,66 @@ tr.clickable-row:hover {
 
 tr.clickable-row:active {
     background-color: #e0eef9 !important;
+}
+
+/* ========== Быстрая навигация на Dashboard ========== */
+.dashboard-quick-nav {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #e5e5e5;
+}
+
+.dashboard-quick-nav h2 {
+    color: #0073aa;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.quick-nav-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    max-width: 700px;
+}
+
+.quick-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 25px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f0f3f7 100%);
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #0073aa;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 115, 170, 0.1);
+}
+
+.quick-nav-btn:hover {
+    background: linear-gradient(135deg, #0073aa 0%, #005a87 100%);
+    color: #fff;
+    border-color: #0073aa;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 115, 170, 0.25);
+}
+
+.quick-nav-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 115, 170, 0.15);
+}
+
+.quick-nav-btn .btn-icon {
+    font-size: 32px;
+    display: block;
+}
+
+.quick-nav-btn .btn-label {
+    font-size: 14px;
+    text-align: center;
 }

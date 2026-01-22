@@ -227,7 +227,7 @@ class Arsenal_Team_Manager {
         add_submenu_page(
             $parent_slug,
             'Библиотека иконок',
-            '🎨 Иконки',
+            'Иконки',
             'manage_options',
             'arsenal-icon-library',
             array( $this, 'render_icon_library' )

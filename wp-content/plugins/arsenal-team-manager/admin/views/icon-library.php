@@ -61,16 +61,10 @@ ksort( $icons_by_category );
 ?>
 
 <div class="wrap icon-library-wrapper">
-	<h1>🎨 Библиотека иконок</h1>
+	<h1>Библиотека иконок</h1>
 	
 	<div class="icon-library-header">
 		<p>Все доступные иконки из <code>sprite.svg</code>. Иконки динамически парсятся из файла.</p>
-		<div class="icon-library-code-example">
-			<p><strong>Пример использования в шаблоне:</strong></p>
-			<pre><code>&lt;svg class="icon"&gt;
-  &lt;use xlink:href="&lt;?php echo get_template_directory_uri(); ?&gt;/assets/images/sprite.svg#icon-name"&gt;&lt;/use&gt;
-&lt;/svg&gt;</code></pre>
-		</div>
 		<p><strong>Всего иконок:</strong> <?php echo count( $icons ); ?> | <strong>Категорий:</strong> <?php echo count( $icons_by_category ); ?></p>
 	</div>
 	
@@ -100,7 +94,7 @@ ksort( $icons_by_category );
 		<?php endforeach; ?>
 	<?php else : ?>
 		<div class="icon-library-error">
-			<p>⚠️ Не удалось загрузить иконки. Проверьте, что файл <code>sprite.svg</code> существует и содержит иконки с метаданными <code>data-name</code> и <code>data-category</code>.</p>
+			<p>Не удалось загрузить иконки. Проверьте, что файл <code>sprite.svg</code> существует и содержит иконки с метаданными <code>data-name</code> и <code>data-category</code>.</p>
 		</div>
 	<?php endif; ?>
 </div>
@@ -122,34 +116,6 @@ ksort( $icons_by_category );
 .icon-library-header p {
 	margin: 10px 0;
 	font-size: 14px;
-}
-
-.icon-library-code-example {
-	background: #f5f5f5;
-	padding: 15px;
-	border-left: 4px solid #0073aa;
-	margin-top: 15px;
-	border-radius: 4px;
-}
-
-.icon-library-code-example p {
-	margin: 0 0 10px 0;
-	font-weight: 600;
-	color: #0073aa;
-}
-
-.icon-library-code-example pre {
-	margin: 0;
-	overflow-x: auto;
-	background: #fff;
-	padding: 10px;
-	border-radius: 3px;
-	font-size: 12px;
-}
-
-.icon-library-code-example code {
-	font-family: 'Courier New', monospace;
-	color: #333;
 }
 
 .icon-library-error {
@@ -210,7 +176,8 @@ ksort( $icons_by_category );
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 80px;
+	width: 100%;
+	aspect-ratio: 1;
 	margin-bottom: 15px;
 	background: #fff;
 	border-radius: 4px;
@@ -218,8 +185,8 @@ ksort( $icons_by_category );
 }
 
 .icon-preview .icon {
-	width: 48px;
-	height: 48px;
+	width: 60%;
+	height: 60%;
 	color: #0073aa;
 	flex-shrink: 0;
 }

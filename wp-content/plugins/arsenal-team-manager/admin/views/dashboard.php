@@ -228,4 +228,23 @@ $standings = (object) array(
         
     </div>
     
+    <!-- Раздел быстрой навигации -->
+    <div class="dashboard-quick-nav">
+        <h2>📌 Быстрая навигация</h2>
+        <div class="quick-nav-buttons">
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-matches' ); ?>" class="quick-nav-btn matches-btn">
+                <span class="btn-icon">⚽</span>
+                <span class="btn-label">Матчи</span>
+            </a>
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-staff' ); ?>" class="quick-nav-btn staff-btn">
+                <span class="btn-icon">👔</span>
+                <span class="btn-label">Персонал</span>
+            </a>
+            <a href="<?php echo admin_url( 'admin.php?page=arsenal-players' ); ?>" class="quick-nav-btn players-btn">
+                <span class="btn-icon">👥</span>
+                <span class="btn-label">Игроки</span>
+            </a>
+        </div>
+    </div>
+    
 </div>
