@@ -10,25 +10,29 @@ echo "PHP: " . PHP_VERSION . "\n\n";
 
 echo "=== Активные плагины ===\n";
 $plugins = get_plugins();
+$active_count = 0;
 foreach ( $plugins as $plugin => $data ) {
 	if ( is_plugin_active( $plugin ) ) {
 		echo "✓ " . $data['Name'] . "\n";
+		$active_count++;
 	}
 }
+if ( $active_count === 0 ) {
+	echo "(нет активных плагинов)\n";
+}
 
-echo "\n=== Пользователи с правами publish_pages ===\n";
+echo "\n=== Проверка статуса страниц ===\n";
 global $wpdb;
-$users = $wpdb->get_results( "SELECT u.ID, u.user_login FROM {$wpdb->users} u LIMIT 10" );
-foreach ( $users as $user ) {
-	$u = get_user_by( 'id', $user->ID );
-	$can_publish = user_can( $u, 'publish_pages' ) ? 'ДА' : 'НЕТ';
-	$role = implode( ', ', $u->roles );
-	echo "{$user->user_login} ({$role}) - publish_pages: {$can_publish}\n";
+$pages = $wpdb->get_results( 
+	$wpdb->prepare( "SELECT ID, post_title, post_status FROM {$wpdb->posts} WHERE post_type = %s LIMIT 10", 'page' )
+);
+if ( ! empty( $pages ) ) {
+	foreach ( $pages as $page ) {
+		echo "{$page->ID}: {$page->post_title} - {$page->post_status}\n";
+	}
+} else {
+	echo "(нет страниц)\n";
 }
 
-echo "\n=== Тестовая страница ===\n";
-$test_page = get_page_by_title( 'Тест', OBJECT, 'page' );
-if ( $test_page ) {
-	echo "ID: {$test_page->ID}\n";
-	echo "Status: {$test_page->post_status}\n";
-}
+echo "\n";
+
