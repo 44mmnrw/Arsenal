@@ -338,7 +338,7 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 	}
 
 	// Стили страницы команды (только для страницы Команда)
-	if ( is_page_template( 'page-squad-grid.php' ) || is_page_template( 'templates/page-squad-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'squad' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'team' ) ) || is_page( 'main-squad' ) ) {
+	if ( is_page_template( 'templates/page-squad-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'squad' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'team' ) ) || is_page( 'main-squad' ) ) {
 		wp_enqueue_style(
 			'arsenal-players-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-squad-grid.css',
@@ -377,21 +377,11 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
-		// Стили страницы матча
-		if ( is_page_template( 'dynamic-pages/page-match.php' ) || ( get_query_var( 'match_date' ) && get_query_var( 'team_id' ) ) ) {
+		// Стили страницы матча (динамическая страница)
+		if ( get_query_var( 'match_date' ) && get_query_var( 'team_id' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-match',
 				ARSENAL_THEME_URI . '/assets/css/pages/page-match.css',
-				array( 'arsenal-footer' ),
-				ARSENAL_VERSION
-			);
-		}
-
-		// Стили страницы История клуба (для HTML версии)
-		if ( is_page( 'history' ) || is_page( 'история' ) ) {
-			wp_enqueue_style(
-				'arsenal-page-history',
-				ARSENAL_THEME_URI . '/assets/css/pages/page-history.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
@@ -443,16 +433,6 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			wp_enqueue_style(
 				'arsenal-page-staff',
 				ARSENAL_THEME_URI . '/assets/css/pages/page-staff.css',
-				array( 'arsenal-footer' ),
-				ARSENAL_VERSION
-			);
-		}
-
-		// Стили страницы Набор в академию
-		if ( is_page_template( 'templates/page-academy-recruitment.php' ) || is_page( 'academy-recruitment' ) ) {
-			wp_enqueue_style(
-				'arsenal-academy-recruitment',
-				ARSENAL_THEME_URI . '/assets/css/pages/page-academy-recruitment.css',
 				array( 'arsenal-footer' ),
 				ARSENAL_VERSION
 			);
