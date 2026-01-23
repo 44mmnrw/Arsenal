@@ -72,15 +72,18 @@ get_header();
 					<span class="single-news-share__icon">
 						<?php arsenal_icon( 'icon-share', 20, 20 ); ?>
 					</span>
-					<a href="javascript:void(0);" 
-					   onclick="shareToFacebook('<?php echo esc_js( get_permalink() ); ?>')" 
+					<a href="#" 
 					   class="single-news-share__btn single-news-share__btn--facebook" 
+					   data-social="facebook"
+					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в Facebook', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-facebook', 18, 18 ); ?>
 					</a>
-					<a href="javascript:void(0);" 
-					   onclick="shareToVK('<?php echo esc_js( get_permalink() ); ?>', '<?php echo esc_js( get_the_title() ); ?>')" 
+					<a href="#" 
 					   class="single-news-share__btn single-news-share__btn--vk" 
+					   data-social="vk"
+					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
+					   data-title="<?php echo esc_attr( get_the_title() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в ВКонтакте', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-vk', 18, 18 ); ?>
 					</a>
@@ -88,57 +91,74 @@ get_header();
 			</div>
 
 			<script>
-			// Шаринг в Facebook
-			function shareToFacebook(url) {
-				const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
-				const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-				
-				// Создаем hidden iframe для попытки открыть приложение
-				const iframe = document.createElement('iframe');
-				iframe.style.display = 'none';
-				document.body.appendChild(iframe);
-				iframe.src = appUrl;
-				
-				// Если приложение не откроется за 2 сек, откроем браузер
-				const timer = setTimeout(() => {
-					document.body.removeChild(iframe);
-					window.open(browserUrl, '_blank');
-				}, 2000);
-				
-				// Если пользователь вернулся в браузер - отменяем таймер
-				window.addEventListener('focus', () => {
-					clearTimeout(timer);
-					if (document.body.contains(iframe)) {
-						document.body.removeChild(iframe);
-					}
-				}, { once: true });
-			}
+			document.addEventListener('DOMContentLoaded', function() {
+				// Facebook шаринг
+				const facebookBtn = document.querySelector('[data-social="facebook"]');
+				if (facebookBtn) {
+					facebookBtn.addEventListener('click', function(e) {
+						e.preventDefault();
+						const url = this.dataset.url;
+						const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
+						const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+						
+						// Создаем hidden iframe
+						const iframe = document.createElement('iframe');
+						iframe.style.display = 'none';
+						document.body.appendChild(iframe);
+						iframe.src = appUrl;
+						
+						// Таймаут 2 сек для fallback
+						const timer = setTimeout(() => {
+							if (document.body.contains(iframe)) {
+								document.body.removeChild(iframe);
+							}
+							window.open(browserUrl, '_blank');
+						}, 2000);
+						
+						// Отмена если вернулся в браузер
+						window.addEventListener('focus', () => {
+							clearTimeout(timer);
+							if (document.body.contains(iframe)) {
+								document.body.removeChild(iframe);
+							}
+						}, { once: true });
+					});
+				}
 
-			// Шаринг в VK
-			function shareToVK(url, title) {
-				const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-				const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-				
-				// Создаем hidden iframe для попытки открыть приложение
-				const iframe = document.createElement('iframe');
-				iframe.style.display = 'none';
-				document.body.appendChild(iframe);
-				iframe.src = appUrl;
-				
-				// Если приложение не откроется за 2 сек, откроем браузер
-				const timer = setTimeout(() => {
-					document.body.removeChild(iframe);
-					window.open(browserUrl, '_blank');
-				}, 2000);
-				
-				// Если пользователь вернулся в браузер - отменяем таймер
-				window.addEventListener('focus', () => {
-					clearTimeout(timer);
-					if (document.body.contains(iframe)) {
-						document.body.removeChild(iframe);
-					}
-				}, { once: true });
-			}
+				// VK шаринг
+				const vkBtn = document.querySelector('[data-social="vk"]');
+				if (vkBtn) {
+					vkBtn.addEventListener('click', function(e) {
+						e.preventDefault();
+						const url = this.dataset.url;
+						const title = this.dataset.title;
+						const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+						const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+						
+						// Создаем hidden iframe
+						const iframe = document.createElement('iframe');
+						iframe.style.display = 'none';
+						document.body.appendChild(iframe);
+						iframe.src = appUrl;
+						
+						// Таймаут 2 сек для fallback
+						const timer = setTimeout(() => {
+							if (document.body.contains(iframe)) {
+								document.body.removeChild(iframe);
+							}
+							window.open(browserUrl, '_blank');
+						}, 2000);
+						
+						// Отмена если вернулся в браузер
+						window.addEventListener('focus', () => {
+							clearTimeout(timer);
+							if (document.body.contains(iframe)) {
+								document.body.removeChild(iframe);
+							}
+						}, { once: true });
+					});
+				}
+			});
 			</script>
 
 			<!-- Похожие новости -->
