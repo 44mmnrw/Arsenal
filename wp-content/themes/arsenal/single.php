@@ -92,12 +92,18 @@ get_header();
 
 			<script>
 			document.addEventListener('DOMContentLoaded', function() {
+				console.log('Share buttons initializing...');
+				
 				// Facebook шаринг
 				const facebookBtn = document.querySelector('[data-social="facebook"]');
+				console.log('Facebook button found:', facebookBtn);
+				
 				if (facebookBtn) {
 					facebookBtn.addEventListener('click', function(e) {
 						e.preventDefault();
+						console.log('Facebook button clicked');
 						const url = this.dataset.url;
+						console.log('Share URL:', url);
 						const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
 						const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 						
@@ -106,9 +112,11 @@ get_header();
 						iframe.style.display = 'none';
 						document.body.appendChild(iframe);
 						iframe.src = appUrl;
+						console.log('Trying app URL:', appUrl);
 						
 						// Таймаут 2 сек для fallback
 						const timer = setTimeout(() => {
+							console.log('App not detected, opening browser');
 							if (document.body.contains(iframe)) {
 								document.body.removeChild(iframe);
 							}
@@ -127,11 +135,15 @@ get_header();
 
 				// VK шаринг
 				const vkBtn = document.querySelector('[data-social="vk"]');
+				console.log('VK button found:', vkBtn);
+				
 				if (vkBtn) {
 					vkBtn.addEventListener('click', function(e) {
 						e.preventDefault();
+						console.log('VK button clicked');
 						const url = this.dataset.url;
 						const title = this.dataset.title;
+						console.log('Share URL:', url, 'Title:', title);
 						const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 						const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 						
@@ -140,9 +152,11 @@ get_header();
 						iframe.style.display = 'none';
 						document.body.appendChild(iframe);
 						iframe.src = appUrl;
+						console.log('Trying app URL:', appUrl);
 						
 						// Таймаут 2 сек для fallback
 						const timer = setTimeout(() => {
+							console.log('App not detected, opening browser');
 							if (document.body.contains(iframe)) {
 								document.body.removeChild(iframe);
 							}
