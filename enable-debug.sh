@@ -1,7 +1,7 @@
 #!/bin/bash
 # Enable WordPress debug logging on production server
 
-PROD_PATH="${PROD_PATH}"
+PROD_PATH="/var/www/site_user76/data/www/1779917-cq85026.twc1.net"
 WP_CONFIG="$PROD_PATH/wp-config.php"
 
 echo "Enabling WordPress debug logging..."

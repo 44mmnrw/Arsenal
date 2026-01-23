@@ -3,10 +3,10 @@ import subprocess
 import sys
 
 commands = [
-    'ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && git add -A"',
-    'ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && git commit -m \'Обновления\'"',
-    'ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && git push origin dev_main"',
-    'ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && bash deploy.sh"'
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git add -A"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git commit -m \'Обновления\'"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && git push origin dev_main"',
+    'ssh site_user76@212.113.120.197 "cd /var/www/site_user76/data/arsenal-repo && bash deploy.sh"'
 ]
 
 for i, cmd in enumerate(commands, 1):
