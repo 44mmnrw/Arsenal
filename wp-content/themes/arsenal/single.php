@@ -72,22 +72,61 @@ get_header();
 					<span class="single-news-share__icon">
 						<?php arsenal_icon( 'icon-share', 20, 20 ); ?>
 					</span>
-					<a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo esc_url( get_permalink() ); ?>" 
+					<a href="javascript:void(0);" 
+					   onclick="shareToFacebook(event)" 
 					   class="single-news-share__btn single-news-share__btn--facebook" 
-					   target="_blank" 
-					   rel="noopener noreferrer"
+					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
+					   data-title="<?php echo esc_attr( get_the_title() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в Facebook', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-facebook', 18, 18 ); ?>
 					</a>
-					<a href="https://vk.com/share.php?url=<?php echo esc_url( get_permalink() ); ?>&title=<?php echo esc_attr( get_the_title() ); ?>" 
+					<a href="javascript:void(0);" 
+					   onclick="shareToVK(event)" 
 					   class="single-news-share__btn single-news-share__btn--vk" 
-					   target="_blank" 
-					   rel="noopener noreferrer"
+					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
+					   data-title="<?php echo esc_attr( get_the_title() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в ВКонтакте', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-vk', 18, 18 ); ?>
 					</a>
 				</div>
 			</div>
+
+			<script>
+			// Шаринг в Facebook с поддержкой приложения
+			function shareToFacebook(e) {
+				e.preventDefault();
+				const url = document.querySelector('[onclick="shareToFacebook(event)"]').dataset.url;
+				const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
+				const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+				
+				// Пытаемся открыть приложение
+				const timeout = setTimeout(() => {
+					window.open(browserUrl, '_blank');
+				}, 500);
+				
+				// Если приложение откроется, таймаут не сработает
+				window.location.href = appUrl;
+				clearTimeout(timeout);
+			}
+
+			// Шаринг в VK с поддержкой приложения
+			function shareToVK(e) {
+				e.preventDefault();
+				const url = document.querySelector('[onclick="shareToVK(event)"]').dataset.url;
+				const title = document.querySelector('[onclick="shareToVK(event)"]').dataset.title;
+				const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+				const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+				
+				// Пытаемся открыть приложение
+				const timeout = setTimeout(() => {
+					window.open(browserUrl, '_blank');
+				}, 500);
+				
+				// Если приложение откроется, таймаут не сработает
+				window.location.href = appUrl;
+				clearTimeout(timeout);
+			}
+			</script>
 
 			<!-- Похожие новости -->
 			<div class="single-news-related">
