@@ -1,26 +1,19 @@
 #!/usr/bin/env pwsh
 <#
 .SYNOPSIS
-    Скрипт деплоя для сайта ФК Арсенал Дзержинск
+    Скрипт деплоя для ФК Арсенал Дзержинск
     
 .DESCRIPTION
-    Выполняет полный деплой темы на production сервер:
-    1. Добавляет изменения в Git
-    2. Создаёт коммит с описанием
-    3. Пушит на GitHub (dev_main)
-    4. Копирует тему на production сервер через SSH
+    Простой деплой процесс:
+    1. Git commit локально
+    2. Git push на GitHub (dev_main)
+    3. Git pull на production сервер
     
 .PARAMETER Message
     Описание коммита (обязательный параметр)
     
 .EXAMPLE
-    .\deploy.ps1 "Refactor: Reorganize template structure"
-    
-.NOTES
-    Требует:
-    - Git установлен
-    - SSH доступ настроен
-    - Переменные окружения: SSH_USER, SSH_HOST, REPO_DIR, WEB_ROOT
+    .\deploy.ps1 "Fix: typo in player page"
 #>
 
 param(
@@ -28,10 +21,9 @@ param(
     [string]$Message
 )
 
-# === КОНФИГУРАЦИЯ ===
+# Конфигурация сервера
 $SSH_USER = "site_user76"
 $SSH_HOST = "212.113.120.197"
-$REPO_DIR = "/var/www/site_user76/data/arsenal-repo"
 $WEB_ROOT = "/var/www/site_user76/data/www/1779917-cq85026.twc1.net"
 
 $ErrorActionPreference = "Stop"
@@ -54,54 +46,32 @@ function Write-Status {
 }
 
 try {
-    Write-Host "`n=== НАЧАЛО ДЕПЛОЯ ===" -ForegroundColor Cyan
-    Write-Status "Сообщение коммита: $Message"
+    Write-Host "`n════════════════════════════════════════" -ForegroundColor Cyan
+    Write-Host "    ДЕПЛОЙ АРСЕНАЛ ДЗЕРЖИНСК" -ForegroundColor Cyan
+    Write-Host "════════════════════════════════════════`n" -ForegroundColor Cyan
     
-    # === ШАГ 1: GIT ADD ===
-    Write-Host "`n[1/4] Добавление изменений в Git..." -ForegroundColor Cyan
+    # Шаг 1: Git commit
+    Write-Host "[1/3] Коммит изменений..." -ForegroundColor Yellow
     git add -A
-    Write-Status "Изменения добавлены"
-    
-    # === ШАГ 2: GIT COMMIT ===
-    Write-Host "`n[2/4] Создание коммита..." -ForegroundColor Cyan
     git commit -m $Message
-    if ($LASTEXITCODE -eq 1) {
-        Write-Status "Нет изменений для коммита" "warning"
-    } else {
-        Write-Status "Коммит создан"
-    }
+    Write-Status "Коммит создан: $Message" "success"
     
-    # === ШАГ 3: GIT PUSH ===
-    Write-Host "`n[3/4] Пуш на GitHub (dev_main)..." -ForegroundColor Cyan
+    # Шаг 2: Git push
+    Write-Host "`n[2/3] Пуш на GitHub..." -ForegroundColor Yellow
     git push origin dev_main
-    Write-Status "Коммит отправлен на GitHub"
+    Write-Status "Отправлено на GitHub (dev_main)" "success"
     
-    # === ШАГ 4: DEPLOY НА СЕРВЕР ===
-    Write-Host "`n[4/4] Копирование темы на production..." -ForegroundColor Cyan
-    $deployCmd = @"
-rm -rf $WEB_ROOT/wp-content/themes/arsenal && `
-cp -r $REPO_DIR/wp-content/themes/arsenal $WEB_ROOT/wp-content/themes/ && `
-echo 'Тема скопирована успешно' && `
-ls -la $WEB_ROOT/wp-content/themes/arsenal/template-parts/
-"@
+    # Шаг 3: Git pull на production
+    Write-Host "`n[3/3] Пулл на production сервер..." -ForegroundColor Yellow
+    $pullCmd = "cd $WEB_ROOT && git pull origin dev_main && echo 'Pull успешен' && git log --oneline -1"
+    ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" $pullCmd | Tee-Object -Variable pullOutput | Select-Object -Last 5
     
-    ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" $deployCmd | Select-Object -Last 10
-    Write-Status "Тема скопирована на production"
+    Write-Status "Production обновлен" "success"
     
-    # === ИТОГИ ===
-    Write-Host "`n=== ДЕПЛОЙ ЗАВЕРШЕН ===" -ForegroundColor Green
-    Write-Status "✅ Все операции выполнены успешно!"
-    Write-Host @"
-
-📊 Статус:
-  ✓ Git коммит создан
-  ✓ GitHub обновлен (dev_main)
-  ✓ Production обновлен ($WEB_ROOT)
-  
-🌐 Сайт: http://1779917-cq85026.twc1.net
-📝 Коммит: $Message
-
-"@ -ForegroundColor Green
+    Write-Host "`n════════════════════════════════════════" -ForegroundColor Green
+    Write-Host "    ✅ ДЕПЛОЙ ЗАВЕРШЕН" -ForegroundColor Green
+    Write-Host "════════════════════════════════════════" -ForegroundColor Green
+    Write-Host "`nСайт: http://1779917-cq85026.twc1.net`n" -ForegroundColor Green
     
 } catch {
     Write-Status "ОШИБКА: $_" "error"

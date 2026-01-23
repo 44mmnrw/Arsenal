@@ -208,6 +208,15 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 
 /**
+ * Отладка: вывести информацию о подключении скриптов
+ */
+add_action( 'wp_footer', function() {
+	if ( is_singular( 'post' ) && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		echo '<!-- DEBUG: is_singular(post)=true, sharing.js should be loaded -->';
+	}
+} );
+
+/**
  * Паттерны отключены - используется классический редактор
  */
 

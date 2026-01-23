@@ -69,6 +69,13 @@ get_header();
 			<!-- Блок шаринга -->
 			<?php get_template_part( 'template-parts/social-share' ); ?>
 
+			<script>
+			console.log('DEBUG: single.php loaded');
+			console.log('Checking for social share buttons...');
+			const shareBtn = document.querySelector('[data-social="facebook"]');
+			console.log('Facebook button found:', shareBtn);
+			</script>
+
 			<!-- Похожие новости -->
 			<div class="single-news-related">
 				<h2 class="single-news-related__title"><?php esc_html_e( 'Похожие новости', 'arsenal' ); ?></h2>
