@@ -45,14 +45,14 @@ require_once ARSENAL_THEME_DIR . '/inc/functions/timeline-functions.php';
  * Файлы админ-панели загружаются только в контексте админки
  */
 if ( is_admin() ) {
-	// Customizer
-	require_once ARSENAL_THEME_DIR . '/inc/admin/customizer.php';
-	
 	// Metaboxes
 	require_once ARSENAL_THEME_DIR . '/inc/admin/metaboxes/squad-selector-metabox.php';
 	require_once ARSENAL_THEME_DIR . '/inc/admin/metaboxes/stadium-selector-metabox.php';
 	require_once ARSENAL_THEME_DIR . '/inc/admin/metaboxes/staff-department-metabox.php';
 }
+
+// Customizer (загружается везде, т.к. работает на фронтенде и в админке)
+require_once ARSENAL_THEME_DIR . '/inc/admin/customizer.php';
 
 /**
  * === CARBON FIELDS ===

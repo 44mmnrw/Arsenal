@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'ARSENAL_VERSION', '1.0.0' );
 define( 'ARSENAL_THEME_DIR', get_template_directory() );
 define( 'ARSENAL_THEME_URI', get_template_directory_uri() );
-
 /**
  * Подключение Carbon Fields
  */
@@ -249,21 +248,19 @@ add_action( 'after_setup_theme', 'arsenal_setup' );
  * Отключение Gutenberg editor и его скриптов
  */
 function arsenal_disable_gutenberg() {
-	// Отключаем стили Gutenberg ТОЛЬКО на фронтенде
-	// НЕ отключаем в админке - это ломает React скрипты меню
-	if ( ! is_admin() ) {
-		wp_dequeue_style( 'wp-block-library' );
-		wp_dequeue_style( 'wp-block-library-theme' );
-		wp_dequeue_style( 'global-styles' );
-		
-		// Отключаем скрипты
-		wp_dequeue_script( 'wp-embed' );
-		wp_dequeue_script( 'wp-editor' );
-		wp_dequeue_script( 'edit-widgets' );
-	}
+	// Отключаем стили и скрипты Gutenberg ТОЛЬКО на фронтенде
+	// НЕ отключаем в админке - это ломает React компоненты (меню, customizer и т.д.)
+	wp_dequeue_style( 'wp-block-library' );
+	wp_dequeue_style( 'wp-block-library-theme' );
+	wp_dequeue_style( 'global-styles' );
+	
+	// Отключаем скрипты
+	wp_dequeue_script( 'wp-embed' );
+	wp_dequeue_script( 'wp-editor' );
+	wp_dequeue_script( 'edit-widgets' );
 }
 add_action( 'wp_enqueue_scripts', 'arsenal_disable_gutenberg' );
-add_action( 'admin_enqueue_scripts', 'arsenal_disable_gutenberg' );
+// НЕ добавляем в admin_enqueue_scripts - это ломает админку!
 
 /**
  * Подключение стилей и скриптов

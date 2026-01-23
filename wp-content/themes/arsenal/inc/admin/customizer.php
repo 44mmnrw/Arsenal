@@ -1453,17 +1453,3 @@ add_action( 'customize_register', 'arsenal_customize_register' );
 function arsenal_sanitize_checkbox( $checked ) {
 	return ( isset( $checked ) && true === $checked ) ? true : false;
 }
-
-/**
- * Добавление JS для live preview в Customizer
- */
-function arsenal_customize_preview_js() {
-	wp_enqueue_script(
-		'arsenal-customizer-preview',
-		get_template_directory_uri() . '/assets/js/customizer-preview.js',
-		array( 'customize-preview' ),
-		wp_get_theme()->get( 'Version' ),
-		true
-	);
-}
-add_action( 'customize_preview_init', 'arsenal_customize_preview_js' );
