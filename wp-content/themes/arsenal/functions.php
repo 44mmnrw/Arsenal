@@ -195,12 +195,13 @@ add_action( 'wp_enqueue_scripts', function() {
  * Подключение скрипта социального шаринга
  */
 add_action( 'wp_enqueue_scripts', function() {
-	if ( is_single() && 'post' === get_post_type() ) {
+	// Подключаем на всех страницах записей (посты)
+	if ( is_singular( 'post' ) ) {
 		wp_enqueue_script(
 			'arsenal-sharing',
 			get_template_directory_uri() . '/assets/js/sharing.js',
 			array(),
-			filemtime( get_template_directory() . '/assets/js/sharing.js' ),
+			time(),  // Используем текущее время для разработки (отключит кеширование)
 			true
 		);
 	}
