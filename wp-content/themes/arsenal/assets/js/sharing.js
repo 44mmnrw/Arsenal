@@ -1,6 +1,7 @@
 /**
  * Класс для управления социальным шарингом
- * Использует Web Share API на мобильных, веб-ссылки на десктопе
+ * Использует простые шаринг-ссылки Facebook и VK
+ * Работает везде: веб, мобильный браузер, приложения
  * 
  * @class SocialSharing
  */
@@ -9,7 +10,6 @@ class SocialSharing {
 	 * Конструктор класса
 	 */
 	constructor() {
-		this.isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 		this.init();
 	}
 
@@ -40,58 +40,36 @@ class SocialSharing {
 
 	/**
 	 * Обработка Facebook шаринга
+	 * Открывает веб-форму Facebook Sharer с ссылкой на страницу
+	 * 
 	 * @param {Event} e - Событие клика
 	 */
 	handleFacebookShare(e) {
 		e.preventDefault();
 		const url = e.currentTarget.dataset.url;
-		const title = document.querySelector('.single-news-title')?.textContent || 'Arsenal';
-
-		if (this.isMobile) {
-			// Мобильные: прямая ссылка на приложение Facebook
-			const facebookAppUrl = 'fb://share/?quote=' + encodeURIComponent(title) + '&href=' + encodeURIComponent(url);
-			const fallbackUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-			
-			// Пробуем открыть приложение Facebook
-			window.location.href = facebookAppUrl;
-			
-			// Если приложение не установлено, откроем веб-версию через 1.5 сек
-			setTimeout(() => {
-				window.open(fallbackUrl, '_blank');
-			}, 1500);
-		} else {
-			// Десктоп: открыть веб-диалог Facebook
-			const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-			window.open(shareUrl, 'facebook-share', 'width=600,height=400');
-		}
+		const quote = document.querySelector('.single-news-title')?.textContent || 'Arsenal Derzhinsk';
+		
+		// Facebook Sharer - работает везде (веб, мобиль, приложение)
+		const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(quote);
+		
+		window.open(shareUrl, 'facebook-share', 'width=600,height=400');
 	}
 
 	/**
 	 * Обработка VK шаринга
+	 * Открывает веб-форму VK Share с ссылкой на страницу
+	 * 
 	 * @param {Event} e - Событие клика
 	 */
 	handleVKShare(e) {
 		e.preventDefault();
 		const url = e.currentTarget.dataset.url;
-		const title = e.currentTarget.dataset.title || document.querySelector('.single-news-title')?.textContent || 'Arsenal';
-
-		if (this.isMobile) {
-			// Мобильные: прямая ссылка на приложение VK (Android/iOS)
-			const vkAppUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-			const fallbackUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-			
-			// Пробуем открыть приложение VK
-			window.location.href = vkAppUrl;
-			
-			// Если приложение не установлено, откроем веб-версию через 1.5 сек
-			setTimeout(() => {
-				window.open(fallbackUrl, '_blank');
-			}, 1500);
-		} else {
-			// Десктоп: открыть веб-диалог VK
-			const shareUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
-			window.open(shareUrl, 'vk-share', 'width=600,height=400');
-		}
+		const title = e.currentTarget.dataset.title || document.querySelector('.single-news-title')?.textContent || 'Arsenal Derzhinsk';
+		
+		// VK Share - работает везде (веб, мобиль, приложение)
+		const shareUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+		
+		window.open(shareUrl, 'vk-share', 'width=600,height=400');
 	}
 }
 
