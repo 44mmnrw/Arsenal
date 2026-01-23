@@ -73,18 +73,14 @@ get_header();
 						<?php arsenal_icon( 'icon-share', 20, 20 ); ?>
 					</span>
 					<a href="javascript:void(0);" 
-					   onclick="shareToFacebook(event)" 
+					   onclick="shareToFacebook('<?php echo esc_js( get_permalink() ); ?>')" 
 					   class="single-news-share__btn single-news-share__btn--facebook" 
-					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
-					   data-title="<?php echo esc_attr( get_the_title() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в Facebook', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-facebook', 18, 18 ); ?>
 					</a>
 					<a href="javascript:void(0);" 
-					   onclick="shareToVK(event)" 
+					   onclick="shareToVK('<?php echo esc_js( get_permalink() ); ?>', '<?php echo esc_js( get_the_title() ); ?>')" 
 					   class="single-news-share__btn single-news-share__btn--vk" 
-					   data-url="<?php echo esc_attr( get_permalink() ); ?>"
-					   data-title="<?php echo esc_attr( get_the_title() ); ?>"
 					   title="<?php esc_attr_e( 'Поделиться в ВКонтакте', 'arsenal' ); ?>">
 						<?php arsenal_icon( 'icon-vk', 18, 18 ); ?>
 					</a>
@@ -92,45 +88,32 @@ get_header();
 			</div>
 
 			<script>
-			// Шаринг в Facebook с поддержкой приложения
-			function shareToFacebook(e) {
-				e.preventDefault();
-				const url = document.querySelector('[onclick="shareToFacebook(event)"]').dataset.url;
+			// Шаринг в Facebook
+			function shareToFacebook(url) {
 				const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
 				const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 				
-				// Используем iframe для открытия app URL
-				const iframe = document.createElement('iframe');
-				iframe.style.display = 'none';
-				iframe.src = appUrl;
-				document.body.appendChild(iframe);
-				
-				// Если приложение не откроется за 1.5 сек, откроем браузер
-				setTimeout(() => {
-					document.body.removeChild(iframe);
+				// Пытаемся открыть приложение
+				const timeoutId = setTimeout(() => {
 					window.open(browserUrl, '_blank');
-				}, 1500);
+				}, 1000);
+				
+				// Попытка открыть app
+				window.location = appUrl;
 			}
 
-			// Шаринг в VK с поддержкой приложения
-			function shareToVK(e) {
-				e.preventDefault();
-				const url = document.querySelector('[onclick="shareToVK(event)"]').dataset.url;
-				const title = document.querySelector('[onclick="shareToVK(event)"]').dataset.title;
+			// Шаринг в VK
+			function shareToVK(url, title) {
 				const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				
-				// Используем iframe для открытия app URL
-				const iframe = document.createElement('iframe');
-				iframe.style.display = 'none';
-				iframe.src = appUrl;
-				document.body.appendChild(iframe);
-				
-				// Если приложение не откроется за 1.5 сек, откроем браузер
-				setTimeout(() => {
-					document.body.removeChild(iframe);
+				// Пытаемся открыть приложение
+				const timeoutId = setTimeout(() => {
 					window.open(browserUrl, '_blank');
-				}, 1500);
+				}, 1000);
+				
+				// Попытка открыть app
+				window.location = appUrl;
 			}
 			</script>
 
