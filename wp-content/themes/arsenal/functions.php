@@ -192,6 +192,21 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 
 /**
+ * Подключение скрипта социального шаринга
+ */
+add_action( 'wp_enqueue_scripts', function() {
+	if ( is_single() && 'post' === get_post_type() ) {
+		wp_enqueue_script(
+			'arsenal-sharing',
+			get_template_directory_uri() . '/assets/js/sharing.js',
+			array(),
+			ARSENAL_VERSION,
+			true
+		);
+	}
+} );
+
+/**
  * Паттерны отключены - используется классический редактор
  */
 
