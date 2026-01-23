@@ -450,10 +450,6 @@ class Arsenal_Staff_Manager {
 
 		$format[] = '%d'; // для WHERE
 
-		error_log( '=== update_staff() ===' );
-		error_log( 'Update array: ' . json_encode( $update ) );
-		error_log( 'Format array: ' . json_encode( $format ) );
-
 		return $wpdb->update(
 			$wpdb->prefix . 'arsenal_staff',
 			$update,
