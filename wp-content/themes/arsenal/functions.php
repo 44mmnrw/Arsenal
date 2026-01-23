@@ -550,19 +550,10 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			true
 		);
 
-		// Динамический расчет расстояния между точками timeline
+		// Консолидированный скрипт для страницы истории (timeline + hover + smooth scroll)
 		wp_enqueue_script(
-			'timeline-dynamic',
-			ARSENAL_THEME_URI . '/assets/js/timeline-dynamic.js',
-			array(),
-			ARSENAL_VERSION,
-			true
-		);
-
-		// Обработчик hover на timeline точках
-		wp_enqueue_script(
-			'arsenal-timeline',
-			ARSENAL_THEME_URI . '/assets/js/timeline.js',
+			'arsenal-page-history-js',
+			ARSENAL_THEME_URI . '/assets/js/page-history.js',
 			array(),
 			ARSENAL_VERSION,
 			true
