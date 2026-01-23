@@ -122,28 +122,54 @@ define( 'WP_DEBUG_DISPLAY', false ); # Не показывать ошибки н
 
 ## 🔄 Git Workflow
 
+## 🚀 Быстрый деплой
+
+### Одна команда — и все готово!
+
+**Windows (PowerShell):**
+```powershell
+.\deploy.ps1 "Описание изменений"
+```
+
+**Linux/Mac (Bash):**
+```bash
+./deploy.sh "Описание изменений"
+```
+
+Скрипт автоматически:
+1. ✅ Создаёт коммит в Git
+2. ✅ Пушит на GitHub (dev_main)
+3. ✅ Копирует тему на production сервер
+4. ✅ Показывает результаты
+
+## 🔄 Git Workflow
+
 ### Ветки
 
 - **`main`** — Production-ready код (боевой сервер)
-- **`dev_main`** — Разработка (staging)
+- **`dev_main`** — Разработка (staging, автоматический деплой)
 
-### Деплой
+### Учетные данные сервера
+
+```
+SSH: site_user76@212.113.120.197
+Repository: /var/www/site_user76/data/arsenal-repo
+Web Root: /var/www/site_user76/data/www/1779917-cq85026.twc1.net
+```
+
+### Ручной деплой (если скрипт не работает)
 
 ```bash
-# Автоматический деплой (Windows)
-.\deploy-windows.ps1 "Описание изменений"
-
-# Или вручную
+# 1. Локально
 git add .
 git commit -m "Описание"
 git push origin dev_main
-```
 
-### Синхронизация с сервером
-
-```bash
-# SSH на сервер и запуск скрипта
-ssh ${SSH_USER}@${SSH_HOST} "cd ${REPO_DIR} && bash deploy.sh"
+# 2. На сервере (SSH)
+ssh site_user76@212.113.120.197
+cd /var/www/site_user76/data/arsenal-repo
+git pull origin dev_main
+cp -r wp-content/themes/arsenal/* /var/www/site_user76/data/www/1779917-cq85026.twc1.net/wp-content/themes/arsenal/
 ```
 
 ## 📊 Парсер данных (ABFF)
