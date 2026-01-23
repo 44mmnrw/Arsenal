@@ -5,9 +5,9 @@
 
 **Среды:**
 - **Локальная**: Laragon (Windows) → `http://arsenal.test`
-- **Продакшн**: `http://1779917-cq85026.twc1.net/` (через Git-деплой)
+- **Продакшн**: (через Git-деплой)
 - **БД**: `arsenal` (MySQL, префикс `wp_`, user: `arsenal_user`)
-- **Репозиторий**: https://github.com/44mmnrw/Arsenal (ветка `dev_main`)
+- **Репозиторий**: https://github.com/arsenal-derzhinsk/Arsenal (ветка `dev_main`)
 
 
 ## Архитектура проекта
@@ -299,8 +299,8 @@ ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && bash deploy.sh"
 ```
 
 **Архитектура деплоя:**
-- Git-репозиторий на сервере: `/var/www/site_user/data/arsenal-repo`
-- Рабочий сайт: `/var/www/site_user/data/www/1779917-cq85026.twc1.net/`
+- Git-репозиторий на сервере: `/var/www/site_user76/data/arsenal-repo`
+- Рабочий сайт: `/var/www/site_user76/data/www/`
 - Скрипт `deploy.sh` копирует тему `arsenal/` из репо на рабочий сайт
 - **НЕ синхронизируются**: `wp-config.php`, `wp-content/uploads/`, `*.sql`
 
