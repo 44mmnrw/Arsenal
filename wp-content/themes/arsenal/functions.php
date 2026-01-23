@@ -200,7 +200,7 @@ add_action( 'wp_enqueue_scripts', function() {
 			'arsenal-sharing',
 			get_template_directory_uri() . '/assets/js/sharing.js',
 			array(),
-			ARSENAL_VERSION,
+			filemtime( get_template_directory() . '/assets/js/sharing.js' ),
 			true
 		);
 	}
