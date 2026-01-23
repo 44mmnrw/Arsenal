@@ -47,18 +47,18 @@ class SocialSharing {
 		const url = e.currentTarget.dataset.url;
 		const title = document.querySelector('.single-news-title')?.textContent || 'Arsenal';
 
-		if (this.isMobile && navigator.share) {
-			// Мобильные: Web Share API
-			navigator.share({
-				title: 'Arsenal Derzhinsk',
-				text: title,
-				url: url
-			}).catch(err => {
-				// Если пользователь отменил, просто выходим
-				if (err.name !== 'AbortError') {
-					console.log('Share failed:', err);
-				}
-			});
+		if (this.isMobile) {
+			// Мобильные: прямая ссылка на приложение Facebook
+			const facebookAppUrl = 'fb://share/?quote=' + encodeURIComponent(title) + '&href=' + encodeURIComponent(url);
+			const fallbackUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+			
+			// Пробуем открыть приложение Facebook
+			window.location.href = facebookAppUrl;
+			
+			// Если приложение не установлено, откроем веб-версию через 1.5 сек
+			setTimeout(() => {
+				window.open(fallbackUrl, '_blank');
+			}, 1500);
 		} else {
 			// Десктоп: открыть веб-диалог Facebook
 			const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
@@ -75,17 +75,18 @@ class SocialSharing {
 		const url = e.currentTarget.dataset.url;
 		const title = e.currentTarget.dataset.title || document.querySelector('.single-news-title')?.textContent || 'Arsenal';
 
-		if (this.isMobile && navigator.share) {
-			// Мобильные: Web Share API
-			navigator.share({
-				title: 'Arsenal Derzhinsk',
-				text: title,
-				url: url
-			}).catch(err => {
-				if (err.name !== 'AbortError') {
-					console.log('Share failed:', err);
-				}
-			});
+		if (this.isMobile) {
+			// Мобильные: прямая ссылка на приложение VK (Android/iOS)
+			const vkAppUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+			const fallbackUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
+			
+			// Пробуем открыть приложение VK
+			window.location.href = vkAppUrl;
+			
+			// Если приложение не установлено, откроем веб-версию через 1.5 сек
+			setTimeout(() => {
+				window.open(fallbackUrl, '_blank');
+			}, 1500);
 		} else {
 			// Десктоп: открыть веб-диалог VK
 			const shareUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
