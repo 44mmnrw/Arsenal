@@ -66,10 +66,10 @@ get_header();
 				if ( $news_query->have_posts() ) :
 					while ( $news_query->have_posts() ) : $news_query->the_post();
 						?>
-						<article class="news-card">
-							<a href="<?php the_permalink(); ?>" class="news-card-link">
+						<div class="page-news-card">
+							<a href="<?php the_permalink(); ?>" class="page-news-card-link">
 								<!-- Изображение новости -->
-								<div class="news-card-image">
+								<div class="page-news-card-image">
 									<?php if ( has_post_thumbnail() ) : ?>
 										<?php the_post_thumbnail( 'medium_large' ); ?>
 									<?php else : ?>
@@ -84,7 +84,7 @@ get_header();
 								</div>
 
 								<!-- Содержимое карточки -->
-								<div class="news-card-content">
+								<div class="page-news-card-content">
 									<!-- Категория и дата -->
 									<div class="news-meta">
 										<span class="news-category">
@@ -103,21 +103,22 @@ get_header();
 
 									<!-- Краткое описание -->
 									<div class="news-excerpt">
-									<?php 
-									$excerpt = wp_trim_words( get_the_excerpt(), 20, '...' );
-									 if ( ! empty( $excerpt ) ) {
-									 	echo wp_kses_post( $excerpt );
-									 }
-									?>
+										<?php 
+										$excerpt = wp_trim_words( get_the_excerpt(), 20, '...' );
+										if ( ! empty( $excerpt ) ) {
+											echo wp_kses_post( $excerpt );
+										}
+										?>
+									</div>
+									
 									<!-- Автор -->
 									<div class="news-author">
 										Автор: <?php echo get_the_author(); ?>
 									</div>
 								</div>
 							</a>
-						</article>
-						<?php
-					endwhile;
+						</div>
+					<?php endwhile;
 					
 					// Пагинация
 					if ( $news_query->max_num_pages > 1 ) : ?>
@@ -133,8 +134,9 @@ get_header();
 							) );
 							?>
 						</div>
-					<?php endif;
+					<?php endif; ?>
 					
+					<?php
 					wp_reset_postdata();
 				else :
 					?>

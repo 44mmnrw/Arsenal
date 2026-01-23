@@ -328,10 +328,20 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		}
 
 	// Стили страницы новостей (только для страницы Новости)
-	if ( is_page_template( 'templates/page-news.php' ) || is_home() || is_archive() || is_single() ) {
+	if ( is_page_template( 'templates/page-news.php' ) || is_home() || is_archive() || is_category() ) {
 		wp_enqueue_style(
 			'arsenal-news-page',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-news.css',
+			array( 'arsenal-footer' ),
+			ARSENAL_VERSION
+		);
+	}
+
+	// Стили одиночной новости (только для одиночной записи)
+	if ( is_single() ) {
+		wp_enqueue_style(
+			'arsenal-single-news',
+			ARSENAL_THEME_URI . '/assets/css/pages/single-news.css',
 			array( 'arsenal-footer' ),
 			ARSENAL_VERSION
 		);

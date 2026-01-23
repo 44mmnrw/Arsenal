@@ -179,6 +179,25 @@
 		</g>
 	</symbol>
 
+	<!-- Тег/Метка (для категории) -->
+	<symbol id="icon-tag" viewBox="0 0 18 18" data-name="Тег" data-category="Документы">
+		<g clip-path="url(#clip0_318_306)">
+			<path d="M9.4395 1.9395C9.15826 1.65818 8.77679 1.50008 8.379 1.5H3C2.60218 1.5 2.22064 1.65804 1.93934 1.93934C1.65804 2.22064 1.5 2.60218 1.5 3V8.379C1.50008 8.77679 1.65818 9.15826 1.9395 9.4395L8.4675 15.9675C8.80839 16.3062 9.26943 16.4964 9.75 16.4964C10.2306 16.4964 10.6916 16.3062 11.0325 15.9675L15.9675 11.0325C16.3062 10.6916 16.4964 10.2306 16.4964 9.75C16.4964 9.26943 16.3062 8.80839 15.9675 8.4675L9.4395 1.9395Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+			<path d="M5.625 6C5.83211 6 6 5.83211 6 5.625C6 5.41789 5.83211 5.25 5.625 5.25C5.41789 5.25 5.25 5.41789 5.25 5.625C5.25 5.83211 5.41789 6 5.625 6Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+		</g>
+		<defs>
+			<clipPath id="clip0_318_306">
+				<rect width="18" height="18" fill="white"/>
+			</clipPath>
+		</defs>
+	</symbol>
+
+	<!-- Человек/Пользователь (для автора) -->
+	<symbol id="icon-man" viewBox="0 0 18 18" data-name="Человек" data-category="Люди">
+		<path d="M14.25 15.75V14.25C14.25 13.4544 13.9339 12.6913 13.3713 12.1287C12.8087 11.5661 12.0456 11.25 11.25 11.25H6.75C5.95435 11.25 5.19129 11.5661 4.62868 12.1287C4.06607 12.6913 3.75 13.4544 3.75 14.25V15.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+		<path d="M9 8.25C10.6569 8.25 12 6.90685 12 5.25C12 3.59315 10.6569 2.25 9 2.25C7.34315 2.25 6 3.59315 6 5.25C6 6.90685 7.34315 8.25 9 8.25Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+	</symbol>
+
 	<!-- Линейка/размер (для размеров поля) -->
 	<symbol id="icon-ruler" viewBox="0 0 24 24" data-name="Линейка/Размер" data-category="Утилиты">
 		<g id="Слой_x0020_1">
@@ -315,5 +334,14 @@
 		<path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M12.0001 7.89014L10.9301 9.75014C10.6901 10.1601 10.8901 10.5001 11.3601 10.5001H12.6301C13.1101 10.5001 13.3001 10.8401 13.0601 11.2501L12.0001 13.1101"/>
 		<path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M8.30035 18.0402V16.8802C6.00035 15.4902 4.11035 12.7802 4.11035 9.90018C4.11035 4.95018 8.66035 1.07018 13.8004 2.19018C16.0604 2.69018 18.0404 4.19018 19.0704 6.26018C21.1604 10.4602 18.9604 14.9202 15.7304 16.8702V18.0302C15.7304 18.3202 15.8404 18.9902 14.7704 18.9902H9.26035C8.16035 19.0002 8.30035 18.5702 8.30035 18.0402Z"/>
 		<path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M8.5 22.0002C10.79 21.3502 13.21 21.3502 15.5 22.0002"/>
+	</symbol>
+
+	<!-- Поделиться -->
+	<symbol id="icon-share" viewBox="0 0 20 20" data-name="Поделиться" data-category="Социальные">
+		<path d="M15 6.66663C16.3807 6.66663 17.5 5.54734 17.5 4.16663C17.5 2.78591 16.3807 1.66663 15 1.66663C13.6193 1.66663 12.5 2.78591 12.5 4.16663C12.5 5.54734 13.6193 6.66663 15 6.66663Z" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+		<path d="M5 12.5C6.38071 12.5 7.5 11.3807 7.5 10C7.5 8.61929 6.38071 7.5 5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5Z" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+		<path d="M15 18.3334C16.3807 18.3334 17.5 17.2141 17.5 15.8334C17.5 14.4527 16.3807 13.3334 15 13.3334C13.6193 13.3334 12.5 14.4527 12.5 15.8334C12.5 17.2141 13.6193 18.3334 15 18.3334Z" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+		<path d="M7.15833 11.2583L12.85 14.575" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+		<path d="M12.8417 5.42505L7.15833 8.74172" stroke="currentColor" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
 	</symbol>
 </svg>

@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				while ( $news_query->have_posts() ) : $news_query->the_post();
 					$category = get_the_category();
 					?>
-					<article class="news-card">
+					<div class="news-card">
 						<div class="news-card__image">
 							<?php if ( has_post_thumbnail() ) : ?>
 								<a href="<?php the_permalink(); ?>">
@@ -81,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php arsenal_icon( 'icon-arrow-right', 16, 16 ); ?>
 							</a>
 						</div>
-					</article>
+					</div>
 					<?php
 				endwhile;
 				wp_reset_postdata();
@@ -89,7 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				// Если новостей нет, показываем заглушку
 				for ( $i = 0; $i < 3; $i++ ) :
 					?>
-					<article class="news-card">
+					<div class="news-card">
 						<div class="news-card__image">
 							<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/news-placeholder.jpg' ); ?>" alt="<?php esc_attr_e( 'Новость', 'arsenal' ); ?>">
 						</div>
@@ -106,7 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php esc_html_e( 'Добавьте новости через админ-панель WordPress, и они автоматически появятся здесь.', 'arsenal' ); ?>
 							</p>
 						</div>
-					</article>
+					</div>
 					<?php
 				endfor;
 			endif;

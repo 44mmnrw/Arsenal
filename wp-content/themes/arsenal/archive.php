@@ -69,7 +69,7 @@ get_header();
 				if ( have_posts() ) :
 					while ( have_posts() ) : the_post();
 						?>
-						<article class="news-card">
+						<div class="news-card">
 							<a href="<?php the_permalink(); ?>" class="news-card-link">
 								<!-- Изображение новости -->
 								<div class="news-card-image">
