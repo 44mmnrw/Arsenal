@@ -27,9 +27,9 @@ $PROD_PASS = "XD&Hqt1PyzP4"
 $PROD_DB = "1779917_cq85"
 
 # Сервер
-$SSH_USER = "site_user76"
-$SSH_HOST = "212.113.120.197"
-$WEB_ROOT = "/var/www/site_user76/data/www/1779917-cq85026.twc1.net"
+$SSH_USER = $env:SSH_USER
+$SSH_HOST = $env:SSH_HOST
+$WEB_ROOT = $env:WEB_ROOT
 
 # URL
 $LOCAL_URL_FULL = "http://arsenal.test:8080"

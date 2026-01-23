@@ -11,9 +11,9 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Конфигурация
-REPO_DIR="/var/www/site_user76/data/arsenal-repo"
-WEB_DIR="/var/www/site_user76/data/www/1779917-cq85026.twc1.net"
+# Конфигурация - используйте переменные окружения
+REPO_DIR="${REPO_DIR:?Установите переменную REPO_DIR}"
+WEB_DIR="${WEB_DIR:?Установите переменную WEB_DIR}"
 REPO_URL="https://github.com/44mmnrw/arsenal.git"
 BRANCH="dev_main"
 

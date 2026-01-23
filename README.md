@@ -143,7 +143,7 @@ git push origin dev_main
 
 ```bash
 # SSH на сервер и запуск скрипта
-ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && bash deploy.sh"
+ssh ${SSH_USER}@${SSH_HOST} "cd ${REPO_DIR} && bash deploy.sh"
 ```
 
 ## 📊 Парсер данных (ABFF)

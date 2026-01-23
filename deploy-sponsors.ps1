@@ -4,8 +4,8 @@ param(
     [string]$Command = 'full'
 )
 
-$REMOTE_USER = "site_user76"
-$REMOTE_HOST = "212.113.120.197"
+$REMOTE_USER = $env:SSH_USER
+$REMOTE_HOST = $env:SSH_HOST
 $REMOTE_PATH = "/tmp/"
 $REMOTE_DB = "arsenal"
 

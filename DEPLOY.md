@@ -3,6 +3,11 @@
 ## Быстрый старт
 
 ```powershell
+# Установка переменных окружения (Windows PowerShell)
+$env:SSH_USER = "ваш_пользователь"
+$env:SSH_HOST = "ваш_хост"
+$env:WEB_ROOT = "путь_на_сервере"
+
 # Полный деплой (база + файлы)
 .\deploy.ps1
 
@@ -44,7 +49,7 @@
 - SCP для передачи файлов
 
 ### Сервер
-- SSH доступ: `site_user@212.113.120.197`
+- SSH доступ: переменные окружения SSH_USER@SSH_HOST
 - MySQL 5.7.42
 - PHP 8.3
 - Nginx
@@ -54,12 +59,10 @@
 **Локальная БД:**
 - База: `arsenal`
 - Пользователь: `arsenal_usr`
-- Пароль: `Arsenal_Secure_2025!`
+- Пароль: см. `.env` файл
 
 **Продакшн БД:**
-- База: `1779917_cq85`
-- Пользователь: `1779917_cq85`
-- Пароль: `jV:<Mn2E_&RPZckF`
+- Установите переменные окружения: SSH_USER, SSH_HOST, REPO_DIR, WEB_ROOT, PROD_PATH
 
 ## После деплоя
 
@@ -122,13 +125,13 @@ arsenal/
 ### "Connection refused" при загрузке на сервер
 **Решение:** Проверьте SSH подключение:
 ```powershell
-ssh site_user@212.113.120.197 "echo 'Connected OK'"
+ssh ${SSH_USER}@${SSH_HOST} "echo 'Connected OK'"
 ```
 
 ### Изображения не отображаются
 **Решение:** Проверьте права доступа на сервере:
 ```bash
-chmod -R 755 /var/www/site_user/data/www/*/wp-content/uploads/
+chmod -R 755 ${WEB_ROOT}/wp-content/uploads/
 ```
 
 ### "Error establishing database connection"
@@ -170,11 +173,11 @@ FastPanel иногда прописывает домен в локальный `
 
 ```powershell
 # На локальной машине
-scp database\deploy_backup.sql site_user@212.113.120.197:/tmp/restore.sql
+scp database\deploy_backup.sql ${SSH_USER}@${SSH_HOST}:/tmp/restore.sql
 
 # На сервере
-ssh site_user@212.113.120.197
-mysql -u 1779917_cq85 -p'XD&Hqt1PyzP4' 1779917_cq85 < /tmp/restore.sql
+ssh ${SSH_USER}@${SSH_HOST}
+mysql -u ${DB_USER} -p'${DB_PASS}' ${DB_NAME} < /tmp/restore.sql
 ```
 
 ## Автоматический деплой (CI/CD)

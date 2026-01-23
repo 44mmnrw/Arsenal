@@ -292,7 +292,7 @@ git commit -m "Описание изменений"
 git push origin dev_main
 
 # 2. Деплой на сервер (одна команда)
-ssh site_user@212.113.120.197 "cd /var/www/site_user/data/arsenal-repo && bash deploy.sh"
+ssh "${SSH_USER}@${SSH_HOST}" "cd ${REPO_DIR} && bash deploy.sh"
 
 # ИЛИ автоматически через скрипт (Windows)
 .\deploy-windows.ps1 "Описание изменений"

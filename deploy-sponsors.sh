@@ -12,8 +12,8 @@
 #
 
 # === КОНФИГУРАЦИЯ ===
-REMOTE_USER="site_user76"
-REMOTE_HOST="212.113.120.197"
+REMOTE_USER="${SSH_USER}"
+REMOTE_HOST="${SSH_HOST}"
 REMOTE_PATH="/tmp/"
 REMOTE_DB="arsenal"
 REMOTE_DB_USER="arsenal_user"
