@@ -28,13 +28,20 @@ class Arsenal_Academy_Carbon_Adapter {
 		return array(
 			'hero_data'       => self::get_hero_data( $post_id ),
 			'benefits_data'   => self::get_benefits_data( $post_id ),
+			'benefits_title'  => self::get_benefits_title( $post_id ),
 			'age_groups_data' => self::get_age_groups_data( $post_id ),
+			'age_groups_title' => self::get_age_groups_title( $post_id ),
 			'documents_data'  => self::get_documents_data( $post_id ),
+			'documents_title' => self::get_documents_title( $post_id ),
 			'schedule_data'   => self::get_schedule_data( $post_id ),
+			'schedule_title'  => self::get_schedule_title( $post_id ),
 			'contacts_data'   => self::get_contacts_data( $post_id ),
+			'contacts_title'  => self::get_contacts_title( $post_id ),
+			'social_title'    => self::get_social_title( $post_id ),
 			'directions_data' => self::get_directions_data( $post_id ),
 			'social_data'     => self::get_social_data( $post_id ),
 			'faq_data'        => self::get_faq_data( $post_id ),
+			'faq_title'       => self::get_faq_title( $post_id ),
 		);
 	}
 
@@ -50,6 +57,55 @@ class Arsenal_Academy_Carbon_Adapter {
 				array( 'text' => 'Контакты', 'action' => '#contacts', 'style' => 'secondary' ),
 			),
 		);
+	}
+
+	/**
+	 * Преимущества - название секции
+	 */
+	private static function get_benefits_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_benefits_title' ) ?: 'Почему мы?';
+	}
+
+	/**
+	 * Возрастные группы - название секции
+	 */
+	private static function get_age_groups_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_age_groups_title' ) ?: 'Возрастные группы';
+	}
+
+	/**
+	 * Документы - название секции
+	 */
+	private static function get_documents_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_documents_title' ) ?: 'Необходимые документы';
+	}
+
+	/**
+	 * Расписание - название секции
+	 */
+	private static function get_schedule_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_schedule_title' ) ?: 'Расписание просмотров';
+	}
+
+	/**
+	 * Контакты - название секции
+	 */
+	private static function get_contacts_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_contacts_title' ) ?: 'Контакты';
+	}
+
+	/**
+	 * Социальные сети - название секции
+	 */
+	private static function get_social_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_social_title' ) ?: 'Мы в социальных сетях';
+	}
+
+	/**
+	 * FAQ - название секции
+	 */
+	private static function get_faq_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_faq_title' ) ?: 'Частые вопросы';
 	}
 
 	/**

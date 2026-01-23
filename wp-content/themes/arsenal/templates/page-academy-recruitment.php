@@ -52,7 +52,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- Why Us Section -->
 		<section class="academy-why-us" aria-labelledby="why-us-title">
-			<h2 id="why-us-title" class="section-title"><?php esc_html_e( 'Почему мы?', 'arsenal' ); ?></h2>
+			<h2 id="why-us-title" class="section-title"><?php echo esc_html( $data['benefits_title'] ); ?></h2>
 			
 			<div class="benefits-grid">
 				<?php foreach ( $benefits as $benefit ) : ?>
@@ -72,7 +72,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- Age Groups Section -->
 		<section class="academy-age-groups" aria-labelledby="age-groups-title">
-			<h2 id="age-groups-title" class="section-title"><?php esc_html_e( 'Возрастные группы', 'arsenal' ); ?></h2>
+			<h2 id="age-groups-title" class="section-title"><?php echo esc_html( $data['age_groups_title'] ); ?></h2>
 			
 			<div class="age-groups-grid">
 				<?php foreach ( $age_groups as $group ) : ?>
@@ -104,7 +104,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- Required Documents Section -->
 		<section class="academy-documents" aria-labelledby="documents-title">
-			<h2 id="documents-title" class="section-title"><?php esc_html_e( 'Необходимые документы', 'arsenal' ); ?></h2>
+			<h2 id="documents-title" class="section-title"><?php echo esc_html( $data['documents_title'] ); ?></h2>
 			
 			<div class="documents-grid">
 				<?php foreach ( ( $documents['items'] ?? array() ) as $doc ) : ?>
@@ -125,7 +125,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- Tryout Schedule Section -->
 		<section class="academy-schedule" aria-labelledby="schedule-title">
-			<h2 id="schedule-title" class="section-title"><?php esc_html_e( 'Расписание просмотров', 'arsenal' ); ?></h2>
+			<h2 id="schedule-title" class="section-title"><?php echo esc_html( $data['schedule_title'] ); ?></h2>
 			
 			<div class="schedule-grid">
 				<?php foreach ( ( $schedule['items'] ?? array() ) as $item ) : ?>
@@ -148,7 +148,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- Contacts Section -->
 		<section id="contacts" class="academy-contacts" aria-labelledby="contacts-title">
-			<h2 id="contacts-title" class="section-title"><?php esc_html_e( 'Контакты', 'arsenal' ); ?></h2>
+			<h2 id="contacts-title" class="section-title"><?php echo esc_html( $data['contacts_title'] ); ?></h2>
 			
 			<!-- 2-Column Grid Layout -->
 			<div class="contacts-2col">
@@ -311,7 +311,7 @@ $faq = $data['faq_data'] ?? array();
 			<!-- FULL WIDTH: Social Media Section -->
 		<?php if ( ! empty( $social_data ) && is_array( $social_data ) ) : ?>
 		<div class="contacts-social-section">
-			<h3 class="contacts-section-title"><?php esc_html_e( 'Мы в социальных сетях', 'arsenal' ); ?></h3>
+			<h3 class="contacts-section-title"><?php echo esc_html( $data['social_title'] ); ?></h3>
 			
 			<div class="social-links-grid">
 				<?php foreach ( $social_data as $social ) : ?>
@@ -328,7 +328,7 @@ $faq = $data['faq_data'] ?? array();
 
 		<!-- FAQ Section -->
 		<section class="academy-faq" aria-labelledby="faq-title">
-			<h2 id="faq-title" class="section-title"><?php esc_html_e( 'Частые вопросы', 'arsenal' ); ?></h2>
+			<h2 id="faq-title" class="section-title"><?php echo esc_html( $data['faq_title'] ); ?></h2>
 			
 			<div class="faq-list">
 				<?php foreach ( ( $faq ?? array() ) as $item ) : ?>

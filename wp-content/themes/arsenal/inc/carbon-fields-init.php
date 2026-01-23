@@ -50,6 +50,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Преимущества', [
+			Field::make( 'text', '_academy_benefits_title', 'Заголовок секции' )
+				->set_default_value( 'Почему мы?' ),
+			
 			Field::make( 'complex', '_academy_benefits', 'Карточки преимуществ' )
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
@@ -67,6 +70,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Возрастные группы', [
+			Field::make( 'text', '_academy_age_groups_title', 'Заголовок секции' )
+				->set_default_value( 'Возрастные группы' ),
+			
 			Field::make( 'complex', '_academy_age_groups', 'Группы' )
 				->add_fields( [
 					Field::make( 'text', 'name', 'Название' )
@@ -98,6 +104,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Документы', [
+			Field::make( 'text', '_academy_documents_title', 'Заголовок секции' )
+				->set_default_value( 'Необходимые документы' ),
+			
 			Field::make( 'complex', '_academy_documents', 'Список документов' )
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
@@ -116,6 +125,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Расписание просмотров', [
+			Field::make( 'text', '_academy_schedule_title', 'Заголовок секции' )
+				->set_default_value( 'Расписание просмотров' ),
+			
 			Field::make( 'complex', '_academy_schedule', 'Расписание' )
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
@@ -137,6 +149,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Контакты', [
+			Field::make( 'text', '_academy_contacts_title', 'Заголовок секции' )
+				->set_default_value( 'Контакты' ),
+			
 			Field::make( 'text', '_academy_contacts_address', 'Адрес' ),
 			Field::make( 'text', '_academy_contacts_phone', 'Телефон' ),
 			Field::make( 'text', '_academy_contacts_email', 'Email' ),
@@ -177,16 +192,19 @@ add_action( 'carbon_fields_register_fields', function() {
 					Field::make( 'text', 'time', 'Время в пути' )
 						->set_help_text( 'Например: 15 минут' ),
 				] )
-					->set_header_template( '
-						<% if (transport) { %>
-							<%- transport %> <% if (route) { %>— <%- route %><% } %>
-						<% } else { %>
-							Новый маршрут
-						<% } %>
-					' ),
+				->set_header_template( '
+					<% if (transport) { %>
+						<%- transport %> <% if (route) { %>— <%- route %><% } %>
+					<% } else { %>
+						Новый маршрут
+					<% } %>
+				' ),
 		] )
 		
 		->add_tab( 'Социальные сети', [
+			Field::make( 'text', '_academy_social_title', 'Заголовок секции' )
+				->set_default_value( 'Мы в социальных сетях' ),
+			
 			Field::make( 'complex', '_academy_social', 'Ссылки на соцсети' )
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
@@ -203,6 +221,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'FAQ', [
+			Field::make( 'text', '_academy_faq_title', 'Заголовок секции' )
+				->set_default_value( 'Частые вопросы' ),
+			
 			Field::make( 'complex', '_academy_faq', 'Частые вопросы' )
 				->add_fields( [
 					Field::make( 'text', 'question', 'Вопрос' ),
