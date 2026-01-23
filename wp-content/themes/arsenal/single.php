@@ -93,13 +93,25 @@ get_header();
 				const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
 				const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 				
-				// Пытаемся открыть приложение
-				const timeoutId = setTimeout(() => {
-					window.open(browserUrl, '_blank');
-				}, 1000);
+				// Создаем hidden iframe для попытки открыть приложение
+				const iframe = document.createElement('iframe');
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+				iframe.src = appUrl;
 				
-				// Попытка открыть app
-				window.location = appUrl;
+				// Если приложение не откроется за 2 сек, откроем браузер
+				const timer = setTimeout(() => {
+					document.body.removeChild(iframe);
+					window.open(browserUrl, '_blank');
+				}, 2000);
+				
+				// Если пользователь вернулся в браузер - отменяем таймер
+				window.addEventListener('focus', () => {
+					clearTimeout(timer);
+					if (document.body.contains(iframe)) {
+						document.body.removeChild(iframe);
+					}
+				}, { once: true });
 			}
 
 			// Шаринг в VK
@@ -107,13 +119,25 @@ get_header();
 				const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				
-				// Пытаемся открыть приложение
-				const timeoutId = setTimeout(() => {
-					window.open(browserUrl, '_blank');
-				}, 1000);
+				// Создаем hidden iframe для попытки открыть приложение
+				const iframe = document.createElement('iframe');
+				iframe.style.display = 'none';
+				document.body.appendChild(iframe);
+				iframe.src = appUrl;
 				
-				// Попытка открыть app
-				window.location = appUrl;
+				// Если приложение не откроется за 2 сек, откроем браузер
+				const timer = setTimeout(() => {
+					document.body.removeChild(iframe);
+					window.open(browserUrl, '_blank');
+				}, 2000);
+				
+				// Если пользователь вернулся в браузер - отменяем таймер
+				window.addEventListener('focus', () => {
+					clearTimeout(timer);
+					if (document.body.contains(iframe)) {
+						document.body.removeChild(iframe);
+					}
+				}, { once: true });
 			}
 			</script>
 
