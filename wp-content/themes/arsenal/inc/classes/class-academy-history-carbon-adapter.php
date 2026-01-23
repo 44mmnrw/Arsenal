@@ -31,8 +31,11 @@ class Arsenal_Academy_History_Carbon_Adapter {
 			'hero_description' => self::get_hero_description( $post_id ),
 			'stat_cards'       => self::get_stat_cards( $post_id ),
 			'timeline_events'  => self::get_timeline_events( $post_id ),
+			'timeline_title'   => self::get_timeline_title( $post_id ),
 			'staff_members'    => self::get_staff_members( $post_id ),
+			'staff_title'      => self::get_staff_title( $post_id ),
 			'facilities'       => self::get_facilities( $post_id ),
+			'facilities_title' => self::get_facilities_title( $post_id ),
 			'contacts'         => self::get_contacts( $post_id ),
 			'enrollment'       => self::get_enrollment( $post_id ),
 		);
@@ -85,6 +88,39 @@ class Arsenal_Academy_History_Carbon_Adapter {
 
 		return $result;
 	}
+
+	/**
+	 * Получить заголовок секции "Ключевые события"
+	 *
+	 * @param int $post_id ID страницы
+	 * @return string
+	 */
+	private static function get_timeline_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_history_timeline_title' ) ?: 'Ключевые события';
+	}
+
+	/**
+	 * Получить заголовок секции "Тренерский штаб"
+	 *
+	 * @param int $post_id ID страницы
+	 * @return string
+	 */
+	private static function get_staff_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_history_staff_title' ) ?: 'Тренерский штаб';
+	}
+
+	/**
+	 * Получить заголовок секции "Тренировочная база"
+	 *
+	 * @param int $post_id ID страницы
+	 * @return string
+	 */
+	private static function get_facilities_title( $post_id ) {
+		return carbon_get_post_meta( $post_id, '_academy_history_facilities_title' ) ?: 'Тренировочная база';
+	}
+
+	/**
+	 * Получить 
 
 	/**
 	 * Получить события timeline

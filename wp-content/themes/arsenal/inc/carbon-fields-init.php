@@ -329,6 +329,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Ключевые события', [
+			Field::make( 'text', '_academy_history_timeline_title', 'Заголовок секции' )
+				->set_default_value( 'Ключевые события' ),
+			
 			Field::make( 'complex', '_academy_history_timeline', 'События' )
 				->add_fields( [
 					Field::make( 'select', 'icon', 'Иконка' )
@@ -347,6 +350,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Тренерский штаб', [
+			Field::make( 'text', '_academy_history_staff_title', 'Заголовок секции' )
+				->set_default_value( 'Тренерский штаб' ),
+			
 			Field::make( 'complex', '_academy_history_staff', 'Тренеры' )
 				->add_fields( [
 					Field::make( 'text', 'name', 'ФИ' ),
@@ -363,6 +369,9 @@ add_action( 'carbon_fields_register_fields', function() {
 		] )
 		
 		->add_tab( 'Тренировочная база', [
+			Field::make( 'text', '_academy_history_facilities_title', 'Заголовок секции' )
+				->set_default_value( 'Тренировочная база' ),
+			
 			Field::make( 'complex', '_academy_history_facilities', 'Объекты' )
 				->add_fields( [
 					Field::make( 'text', 'title', 'Название' ),

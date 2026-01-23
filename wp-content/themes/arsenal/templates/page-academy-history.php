@@ -50,7 +50,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 		<!-- Ключевые события -->
 		<?php if ( ! empty( $data['timeline_events'] ) ) : ?>
 			<section class="academy-events-section">
-				<h2 class="academy-events-section__title">Ключевые события</h2>
+				<h2 class="academy-events-section__title"><?php echo esc_html( $data['timeline_title'] ); ?></h2>
 				
 				<div class="academy-events-timeline">
 					<?php foreach ( $data['timeline_events'] as $event ) : ?>
@@ -74,7 +74,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 		<!-- Тренерский штаб -->
 		<?php if ( ! empty( $data['staff_members'] ) ) : ?>
 			<section class="academy-staff-section">
-				<h2 class="academy-staff-section__title">Тренерский штаб</h2>
+				<h2 class="academy-staff-section__title"><?php echo esc_html( $data['staff_title'] ); ?></h2>
 				
 				<div class="academy-coaches-grid">
 					<?php foreach ( $data['staff_members'] as $staff ) : ?>
@@ -91,7 +91,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 		<!-- Тренировочная база -->
 		<?php if ( ! empty( $data['facilities'] ) ) : ?>
 			<section class="academy-facilities-section">
-				<h2 class="academy-facilities-section__title">Тренировочная база</h2>
+				<h2 class="academy-facilities-section__title"><?php echo esc_html( $data['facilities_title'] ); ?></h2>
 				
 				<div class="academy-facilities-grid">
 					<?php foreach ( $data['facilities'] as $facility ) : ?>
