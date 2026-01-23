@@ -18,7 +18,6 @@ global $wpdb;
 // Получить фильтры из post_meta текущей страницы
 $post_id = get_the_ID();
 $department_id = get_post_meta( $post_id, '_arsenal_staff_department_filter', true );
-$squad_id_filter = get_post_meta( $post_id, '_arsenal_staff_squad_id_filter', true );
 
 // Получить название отдела
 $department_name = '';
@@ -33,26 +32,15 @@ if ( ! empty( $department_id ) ) {
 }
 
 // Построить SQL запрос с фильтрами
-$where_conditions = array();
-
-if ( ! empty( $department_id ) ) {
-	$where_conditions[] = $wpdb->prepare( "s.department_id = %d", intval( $department_id ) );
-}
-
-if ( ! empty( $squad_id_filter ) ) {
-	$where_conditions[] = $wpdb->prepare( "s.squad_id = %d", intval( $squad_id_filter ) );
-}
-
-$where_clause = '';
-if ( ! empty( $where_conditions ) ) {
-	$where_clause = ' WHERE ' . implode( ' AND ', $where_conditions );
-}
-
 $sql = "SELECT s.*, jt.job_title_name as job_title, jt.job_title_name_plural, CONCAT(s.first_name, ' ', s.second_name) as full_name
 	FROM {$wpdb->prefix}arsenal_staff s
-	LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
-	{$where_clause}
-	ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
+	INNER JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id";
+
+if ( ! empty( $department_id ) ) {
+	$sql .= $wpdb->prepare( " WHERE s.department_id = %d", intval( $department_id ) );
+}
+
+$sql .= " ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
 
 $staff = $wpdb->get_results( $sql );
 
@@ -96,7 +84,7 @@ foreach ( $staff as $person ) {
 									$position = ! empty( $person->job_title ) ? $person->job_title : 'Специалист';
 								
 									// Динамический URL сотрудника (по аналогии со страницей игрока)
-									$staff_url = ! empty( $person->id ) ? arsenal_get_staff_url( $person->id ) : '#';
+									$staff_url = function_exists( 'arsenal_get_staff_url' ) && ! empty( $person->id ) ? arsenal_get_staff_url( $person->id ) : '#';
 								?>
 									<a href="<?php echo esc_url( $staff_url ); ?>" class="staff-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото -->
