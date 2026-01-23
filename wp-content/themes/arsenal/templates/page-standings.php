@@ -24,6 +24,9 @@ get_header();
 
 global $wpdb;
 
+// Tournament ID для этой страницы (чемпионат Беларуси)
+$tournament_id = '71CFDAA6';
+
 // Получаем список доступных сезонов из таблицы wp_arsenal_seasons для нужного турнира
 $available_seasons = $wpdb->get_results(
     $wpdb->prepare(
@@ -33,7 +36,7 @@ $available_seasons = $wpdb->get_results(
          WHERE m.tournament_id = %s
          GROUP BY s.season_id, s.season_name
          ORDER BY s.start_date DESC",
-        '71CFDAA6'
+        $tournament_id
     )
 );
 
@@ -88,7 +91,7 @@ $query = "SELECT DISTINCT t.id, t.name, t.logo_url, t.team_id
          WHERE m.season_id = %s AND m.tournament_id = %s
          ORDER BY t.name";
 
-$query = $wpdb->prepare( $query, $current_season_id, '71CFDAA6' );
+$query = $wpdb->prepare( $query, $current_season_id, $tournament_id );
 $teams = $wpdb->get_results( $query );
 
 // ОТЛАДКА
@@ -138,7 +141,7 @@ $yellow_cards_data = $wpdb->get_results(
          AND me.event_type = 'yellow_card' 
          GROUP BY ml.team_id",
         $current_season_id,
-        '71CFDAA6'
+        $tournament_id
     )
 );
 
@@ -160,7 +163,7 @@ $matches = $wpdb->get_results(
          AND m.away_score IS NOT NULL
          ORDER BY m.match_date ASC",
         $current_season_id,
-        '71CFDAA6'
+        $tournament_id
     )
 );
 
@@ -210,7 +213,7 @@ $adjustments_data = $wpdb->get_results(
          WHERE season_id = %s
          AND tournament_id = %s",
         $current_season_id,
-        '71CFDAA6'
+        $tournament_id
     )
 );
 
@@ -230,32 +233,35 @@ foreach ( $adjustments_data as $adjustment ) {
 }
 
 // ===== ФУНКЦИЯ РАСЧЁТА СТАТИСТИКИ ЛИЧНЫХ ВСТРЕЧ (HEAD-TO-HEAD) =====
-$get_h2h_stats = function( $team1_id, $team2_id ) use ( $wpdb, $current_season_id ) {
-    $h2h = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT m.home_team_id, m.away_team_id, m.home_score, m.away_score
-             FROM {$wpdb->prefix}arsenal_matches m
-             WHERE m.season_id = %s
-             AND m.tournament_id = %s
-             AND m.status = '0083CE05'
-             AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
-             AND (
-                (m.home_team_id = %s AND m.away_team_id = %s) OR
-                (m.home_team_id = %s AND m.away_team_id = %s)
-             )",
-            $current_season_id,
-            '71CFDAA6',
-            $team1_id, $team2_id, $team2_id, $team1_id
-        )
-    );
-    
+// Получаем ВСЕ личные встречи для всех пар команд ДО сортировки (кеширование)
+$all_h2h_matches = $wpdb->get_results(
+    $wpdb->prepare(
+        "SELECT m.home_team_id, m.away_team_id, m.home_score, m.away_score
+         FROM {$wpdb->prefix}arsenal_matches m
+         WHERE m.season_id = %s
+         AND m.tournament_id = %s
+         AND m.status = '0083CE05'
+         AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL",
+        $current_season_id,
+        $tournament_id
+    )
+);
+
+// Функция расчета H2H из кешированных данных
+$get_h2h_stats = function( $team1_id, $team2_id ) use ( $all_h2h_matches ) {
     $stats = [
         'points'      => 0,
         'goals_for'   => 0,
         'goals_against' => 0,
     ];
     
-    foreach ( $h2h as $match ) {
+    foreach ( $all_h2h_matches as $match ) {
+        // Проверяем, участвуют ли нужные команды
+        if ( ! ( ( (string) $match->home_team_id === (string) $team1_id && (string) $match->away_team_id === (string) $team2_id ) || 
+                 ( (string) $match->home_team_id === (string) $team2_id && (string) $match->away_team_id === (string) $team1_id ) ) ) {
+            continue;
+        }
+        
         if ( (string) $match->home_team_id === (string) $team1_id ) {
             $team1_score = intval( $match->home_score );
             $team2_score = intval( $match->away_score );
