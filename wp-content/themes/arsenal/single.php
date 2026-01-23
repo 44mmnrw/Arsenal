@@ -99,14 +99,17 @@ get_header();
 				const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
 				const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 				
-				// Пытаемся открыть приложение
-				const timeout = setTimeout(() => {
-					window.open(browserUrl, '_blank');
-				}, 500);
+				// Используем iframe для открытия app URL
+				const iframe = document.createElement('iframe');
+				iframe.style.display = 'none';
+				iframe.src = appUrl;
+				document.body.appendChild(iframe);
 				
-				// Если приложение откроется, таймаут не сработает
-				window.location.href = appUrl;
-				clearTimeout(timeout);
+				// Если приложение не откроется за 1.5 сек, откроем браузер
+				setTimeout(() => {
+					document.body.removeChild(iframe);
+					window.open(browserUrl, '_blank');
+				}, 1500);
 			}
 
 			// Шаринг в VK с поддержкой приложения
@@ -117,14 +120,17 @@ get_header();
 				const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 				
-				// Пытаемся открыть приложение
-				const timeout = setTimeout(() => {
-					window.open(browserUrl, '_blank');
-				}, 500);
+				// Используем iframe для открытия app URL
+				const iframe = document.createElement('iframe');
+				iframe.style.display = 'none';
+				iframe.src = appUrl;
+				document.body.appendChild(iframe);
 				
-				// Если приложение откроется, таймаут не сработает
-				window.location.href = appUrl;
-				clearTimeout(timeout);
+				// Если приложение не откроется за 1.5 сек, откроем браузер
+				setTimeout(() => {
+					document.body.removeChild(iframe);
+					window.open(browserUrl, '_blank');
+				}, 1500);
 			}
 			</script>
 
