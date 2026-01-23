@@ -92,84 +92,94 @@ get_header();
 
 			<script>
 			document.addEventListener('DOMContentLoaded', function() {
-				console.log('Share buttons initializing...');
-				
 				// Facebook шаринг
 				const facebookBtn = document.querySelector('[data-social="facebook"]');
-				console.log('Facebook button found:', facebookBtn);
-				
 				if (facebookBtn) {
 					facebookBtn.addEventListener('click', function(e) {
 						e.preventDefault();
-						console.log('Facebook button clicked');
 						const url = this.dataset.url;
-						console.log('Share URL:', url);
 						const appUrl = 'fb://share/?link=' + encodeURIComponent(url);
 						const browserUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
 						
-						// Создаем hidden iframe
-						const iframe = document.createElement('iframe');
-						iframe.style.display = 'none';
-						document.body.appendChild(iframe);
-						iframe.src = appUrl;
-						console.log('Trying app URL:', appUrl);
-						
-						// Таймаут 2 сек для fallback
-						const timer = setTimeout(() => {
-							console.log('App not detected, opening browser');
-							if (document.body.contains(iframe)) {
-								document.body.removeChild(iframe);
-							}
-							window.open(browserUrl, '_blank');
-						}, 2000);
-						
-						// Отмена если вернулся в браузер
-						window.addEventListener('focus', () => {
-							clearTimeout(timer);
-							if (document.body.contains(iframe)) {
-								document.body.removeChild(iframe);
-							}
-						}, { once: true });
+						// На мобильных: прямой переход по app scheme
+						if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+							// Попытка открыть приложение через window.location
+							const timeout = setTimeout(() => {
+								// Если приложение не откроется, открыть браузер
+								window.location.href = browserUrl;
+							}, 1500);
+							
+							window.location.href = appUrl;
+							
+							// Если пользователь вернулся в браузер, отменить fallback
+							window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
+						} else {
+							// На десктопе: iframe подход
+							const iframe = document.createElement('iframe');
+							iframe.style.display = 'none';
+							document.body.appendChild(iframe);
+							iframe.src = appUrl;
+							
+							const timer = setTimeout(() => {
+								if (document.body.contains(iframe)) {
+									document.body.removeChild(iframe);
+								}
+								window.open(browserUrl, '_blank');
+							}, 2000);
+							
+							window.addEventListener('focus', () => {
+								clearTimeout(timer);
+								if (document.body.contains(iframe)) {
+									document.body.removeChild(iframe);
+								}
+							}, { once: true });
+						}
 					});
 				}
 
 				// VK шаринг
 				const vkBtn = document.querySelector('[data-social="vk"]');
-				console.log('VK button found:', vkBtn);
-				
 				if (vkBtn) {
 					vkBtn.addEventListener('click', function(e) {
 						e.preventDefault();
-						console.log('VK button clicked');
 						const url = this.dataset.url;
 						const title = this.dataset.title;
-						console.log('Share URL:', url, 'Title:', title);
 						const appUrl = 'vkontakte://share?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 						const browserUrl = 'https://vk.com/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(title);
 						
-						// Создаем hidden iframe
-						const iframe = document.createElement('iframe');
-						iframe.style.display = 'none';
-						document.body.appendChild(iframe);
-						iframe.src = appUrl;
-						console.log('Trying app URL:', appUrl);
-						
-						// Таймаут 2 сек для fallback
-						const timer = setTimeout(() => {
-							console.log('App not detected, opening browser');
-							if (document.body.contains(iframe)) {
-								document.body.removeChild(iframe);
-							}
-							window.open(browserUrl, '_blank');
-						}, 2000);
-						
-						// Отмена если вернулся в браузер
-						window.addEventListener('focus', () => {
-							clearTimeout(timer);
-							if (document.body.contains(iframe)) {
-								document.body.removeChild(iframe);
-							}
-						}, { once: true });
+						// На мобильных: прямой переход по app scheme
+						if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+							// Попытка открыть приложение через window.location
+							const timeout = setTimeout(() => {
+								// Если приложение не откроется, открыть браузер
+								window.location.href = browserUrl;
+							}, 1500);
+							
+							window.location.href = appUrl;
+							
+							// Если пользователь вернулся в браузер, отменить fallback
+							window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
+						} else {
+							// На десктопе: iframe подход
+							const iframe = document.createElement('iframe');
+							iframe.style.display = 'none';
+							document.body.appendChild(iframe);
+							iframe.src = appUrl;
+							
+							const timer = setTimeout(() => {
+								if (document.body.contains(iframe)) {
+									document.body.removeChild(iframe);
+								}
+								window.open(browserUrl, '_blank');
+							}, 2000);
+							
+							window.addEventListener('focus', () => {
+								clearTimeout(timer);
+								if (document.body.contains(iframe)) {
+									document.body.removeChild(iframe);
+								}
+							}, { once: true });
+						}
 					});
 				}
 			});
