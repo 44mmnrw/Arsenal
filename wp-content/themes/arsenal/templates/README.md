@@ -48,10 +48,10 @@ get_header();
 4. Нажмите Update
 
 ### Использование компонентов
-Page templates включают компоненты из `template-parts/`:
+Page templates включают компоненты из `template-parts/widgets/`:
 ```php
-get_template_part( 'template-parts/components/players-grid' );
-get_template_part( 'template-parts/blocks/last-games' );
+get_template_part( 'template-parts/widgets/news' );
+get_template_part( 'template-parts/widgets/sponsors' );
 ```
 
 ## Иерархия Template'ов

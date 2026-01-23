@@ -29,15 +29,17 @@ get_header();
 				$current_cat = isset($_GET['cat']) ? intval($_GET['cat']) : 0;
 				?>
 				
-				<a href="<?php echo get_permalink(); ?>" class="filter-btn <?php echo ($current_cat == 0) ? 'active' : ''; ?>">
+				<a href="<?php echo esc_url( get_permalink() ); ?>" class="filter-btn <?php echo ($current_cat == 0) ? 'active' : ''; ?>">
 					Все новости
 				</a>
 				
 				<?php foreach ( $categories as $category ) : ?>
-					<a href="<?php echo add_query_arg('cat', $category->term_id, get_permalink()); ?>" 
-					   class="filter-btn <?php echo ($current_cat == $category->term_id) ? 'active' : ''; ?>">
-						<?php echo esc_html( $category->name ); ?>
-					</a>
+					<?php if ( term_exists( $category->term_id, 'category' ) ) : ?>
+						<a href="<?php echo esc_url( add_query_arg( 'cat', $category->term_id, get_permalink() ) ); ?>" 
+						   class="filter-btn <?php echo ($current_cat == $category->term_id) ? 'active' : ''; ?>">
+							<?php echo esc_html( $category->name ); ?>
+						</a>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 
@@ -101,9 +103,12 @@ get_header();
 
 									<!-- Краткое описание -->
 									<div class="news-excerpt">
-										<?php echo wp_trim_words( get_the_excerpt(), 20, '...' ); ?>
-									</div>
-
+									<?php 
+									$excerpt = wp_trim_words( get_the_excerpt(), 20, '...' );
+									 if ( ! empty( $excerpt ) ) {
+									 	echo wp_kses_post( $excerpt );
+									 }
+									?>
 									<!-- Автор -->
 									<div class="news-author">
 										Автор: <?php echo get_the_author(); ?>

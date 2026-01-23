@@ -15,7 +15,11 @@ if ( ! $player_id ) {
 // Если ID не передан или игрок не найден, используем дефолтный title
 $custom_title = '';
 if ( $player_id ) {
-	$player = arsenal_get_player_data( $player_id );
+	if ( function_exists( 'arsenal_get_player_data' ) ) {
+		$player = arsenal_get_player_data( $player_id );
+	} else {
+		$player = null;
+	}
 	if ( $player ) {
 		$display_name = $player->full_name ?: trim($player->last_name . ' ' . $player->first_name);
 		$position_name = $player->position_name ?? 'игрок';
@@ -50,7 +54,11 @@ if ( ! $player_id ) {
 
 // Получаем данные игрока
 // Функция: arsenal_get_player_data() - см. inc/player-functions.php
-$player = arsenal_get_player_data( $player_id );
+if ( function_exists( 'arsenal_get_player_data' ) ) {
+	$player = arsenal_get_player_data( $player_id );
+} else {
+	$player = null;
+}
 
 if ( ! $player ) {
 	?>
@@ -76,7 +84,11 @@ $url_player_id = $player_id;
 $player_id = $player->player_id;
 
 // Получаем position_code для определения позиции на поле
-$position_code = arsenal_get_player_position( $player->position_id );
+if ( function_exists( 'arsenal_get_player_position' ) ) {
+	$position_code = arsenal_get_player_position( $player->position_id );
+} else {
+	$position_code = null;
+}
 
 // Название позиции берем прямо из БД
 $position_name = $player->position_name ?? 'Не указана';
@@ -90,6 +102,11 @@ if ( $player->birth_date ) {
 	$birth_date = new DateTime( $player->birth_date );
 	$today = new DateTime();
 	$age = $today->diff( $birth_date )->y;
+	if ( $age && function_exists( 'arsenal_pluralize_years' ) ) {
+		$age_display = arsenal_pluralize_years( $age );
+	} else {
+		$age_display = $age;
+	}
 }
 
 // Гражданство
@@ -97,13 +114,28 @@ $citizenship = $player->citizenship ?? 'Беларусь';
 
 // Команда (основа/резерв)
 global $wpdb;
-$squad_type = arsenal_get_player_squad_type( $player_id );
+if ( function_exists( 'arsenal_get_player_squad_type' ) ) {
+	$squad_type = arsenal_get_player_squad_type( $player_id );
+} else {
+	$squad_type = 'Основа';
+}
 
 // Определяем выбранный турнир (из GET или по умолчанию 71CFDAA6)
 $selected_tournament_id = isset( $_GET['tournament'] ) ? sanitize_text_field( $_GET['tournament'] ) : '71CFDAA6';
 
 // Получаем ВСЕ данные за один вызов (оптимизация: вместо 5 отдельных запросов)
-$player_data = arsenal_get_player_full_data( $player_id, $selected_tournament_id );
+if ( function_exists( 'arsenal_get_player_full_data' ) ) {
+	$player_data = arsenal_get_player_full_data( $player_id, $selected_tournament_id );
+} else {
+	$player_data = array(
+		'seasons' => array(),
+		'stats' => null,
+		'events' => array(),
+		'years' => array(),
+		'yearly_stats' => array(),
+		'selected_year' => intval( date( 'Y' ) ),
+	);
+}
 
 $available_seasons = $player_data['seasons'] ?? array();
 $selected_season_stats = $player_data['stats'];
@@ -114,8 +146,12 @@ $selected_year = $player_data['selected_year'] ?? intval( date( 'Y' ) ); // По
 
 // Применяем коррекции статистики (если они есть в таблице wp_arsenal_player_stats_corrections)
 // Передаем год чтобы применять коррекции только для конкретного года
-$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
-$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
+if ( function_exists( 'arsenal_apply_player_corrections' ) ) {
+	$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
+}
+if ( function_exists( 'arsenal_apply_player_corrections_to_yearly_stats' ) ) {
+	$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
+}
 
 // Определяем название выбранного турнира
 $selected_tournament_name = '';
@@ -132,14 +168,20 @@ if ( ! empty( $available_seasons ) ) {
 		$selected_tournament_id = $available_seasons[0]->tournament_id;
 		$selected_tournament_name = $available_seasons[0]->tournament_name;
 		// Переполучаем данные с правильным турниром
-		$player_data = arsenal_get_player_full_data( $player_id, $selected_tournament_id );
-		$selected_season_stats = $player_data['stats'];
-		$player_events = $player_data['events'];
-		$years_stats = $player_data['yearly_stats'];
-		$selected_year = $player_data['selected_year'] ?? intval( date( 'Y' ) );
-		// Применяем коррекции для новыого турнира
-		$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
-		$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
+		if ( function_exists( 'arsenal_get_player_full_data' ) ) {
+			$player_data = arsenal_get_player_full_data( $player_id, $selected_tournament_id );
+			$selected_season_stats = $player_data['stats'];
+			$player_events = $player_data['events'];
+			$years_stats = $player_data['yearly_stats'];
+			$selected_year = $player_data['selected_year'] ?? intval( date( 'Y' ) );
+			// Применяем коррекции для новыого турнира
+			if ( function_exists( 'arsenal_apply_player_corrections' ) ) {
+				$selected_season_stats = arsenal_apply_player_corrections( $selected_season_stats, $player_id, $selected_tournament_id, $selected_year );
+			}
+			if ( function_exists( 'arsenal_apply_player_corrections_to_yearly_stats' ) ) {
+				$years_stats = arsenal_apply_player_corrections_to_yearly_stats( $years_stats, $player_id, $selected_tournament_id );
+			}
+		}
 	}
 }
 
@@ -156,7 +198,11 @@ if ( ! empty( $available_seasons ) ) {
 					<?php if ( ! empty( $player->photo_url ) ) : ?>
 						<img src="<?php echo esc_url( home_url( $player->photo_url ) ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" loading="lazy">
 					<?php else : ?>
-						<?php arsenal_render_camera_placeholder(); ?>
+					<?php 
+					if ( function_exists( 'arsenal_render_camera_placeholder' ) ) {
+						arsenal_render_camera_placeholder();
+					}
+					?>
 					<?php endif; ?>
 				</div>
 				
@@ -180,7 +226,7 @@ if ( ! empty( $available_seasons ) ) {
 						<?php if ( $age !== null ) : ?>
 							<div class="stat-box">
 								<div class="stat-box-label">Возраст</div>
-								<div class="stat-box-value"><?php echo esc_html( arsenal_pluralize_years( $age ) ); ?></div>
+								<div class="stat-box-value"><?php echo esc_html( $age_display ?? $age ); ?></div>
 							</div>
 						<?php endif; ?>
 						
@@ -370,10 +416,14 @@ if ( ! empty( $available_seasons ) ) {
 						</svg>
 						<?php
 						// Определяем позицию на поле в процентах от размеров SVG (320x214)
-						$field_positions = arsenal_get_field_positions();
-						$pos = isset($field_positions[$position_code]) ? $field_positions[$position_code] : $field_positions['M'];
+						$field_positions = array();
+						if ( function_exists( 'arsenal_get_field_positions' ) ) {
+							$field_positions = arsenal_get_field_positions();
+						}
+						// Fallback: используем позицию полузащитника M (55%, 50%)
+						$pos = ( isset($field_positions[$position_code]) ? $field_positions[$position_code] : ( isset($field_positions['M']) ? $field_positions['M'] : array('x' => 55, 'y' => 50) ) );
 						?>
-						<div class="player-position-marker" style="left: <?php echo $pos['x']; ?>%; top: <?php echo $pos['y']; ?>%; transform: translate(-50%, -50%);">
+						<div class="player-position-marker" style="left: <?php echo esc_attr( $pos['x'] ); ?>%; top: <?php echo esc_attr( $pos['y'] ); ?>%; transform: translate(-50%, -50%);">
 						<div class="marker-content">
 							<div class="marker-number"><?php echo esc_html( $player->shirt_number ? $player->shirt_number : '?' ); ?></div>
 						</div>
@@ -501,7 +551,15 @@ if ( ! empty( $available_seasons ) ) {
 							<?php foreach ( $years_stats as $stat ) : ?>
 								<tr>
 									<td data-label="Год" class="year-cell"><?php echo esc_html( $stat->year ); ?></td>
-									<td data-label="Команда"><?php echo esc_html( arsenal_get_player_team_by_year( $player_id, $selected_tournament_id, $stat->year ) ); ?></td>
+									<td data-label="Команда">
+										<?php 
+										if ( function_exists( 'arsenal_get_player_team_by_year' ) ) {
+											echo esc_html( arsenal_get_player_team_by_year( $player_id, $selected_tournament_id, $stat->year ) );
+										} else {
+											echo '—';
+										}
+										?>
+									</td>
 									<td data-label="Матчей сыграно"><?php echo esc_html( $stat->matches_played ); ?></td>
 									<td data-label="Минут за сезон"><?php echo esc_html( number_format( $stat->minutes_played, 0, '', ' ' ) ); ?></td>
 									<td data-label="<?php echo $position_code === 'A98B3A74' ? 'Голов пропущено' : 'Голов забито'; ?>">

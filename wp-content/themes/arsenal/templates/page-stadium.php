@@ -8,6 +8,9 @@
 
 get_header();
 
+// Закешируем URL шаблона для многократного использования
+$template_uri = get_template_directory_uri();
+
 // Получаем ID выбранного стадиона из метаполя
 $stadium_id = get_post_meta( get_the_ID(), '_arsenal_stadium_id', true );
 
@@ -62,19 +65,19 @@ if ( $stadium_id ) {
 					<?php if ( $stadium && ! empty( $stadium->city ) ) : ?>
 					<div class="stadium-hero__meta-item">
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-place"></use>
+							<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg?v=1.1#icon-place"></use>
 						</svg>
 						<span><?php echo esc_html( $stadium->city . ', Беларусь' ); ?></span>
 					</div>
 					<?php endif; ?>
 					<div class="stadium-hero__meta-item">
 					<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-						<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-people"></use>
+						<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg?v=1.1#icon-people"></use>
 						</svg>
 						<span>
 							<?php 
 							if ( $stadium && ! is_null( $stadium->capacity ) ) {
-								echo esc_html_e( 'Вместимость:', 'arsenal' ) . ' ' . number_format( $stadium->capacity );
+								echo esc_html__( 'Вместимость:', 'arsenal' ) . ' ' . number_format( $stadium->capacity );
 
 							}
 							?>
@@ -83,7 +86,7 @@ if ( $stadium_id ) {
 					<?php if ( $stadium ) : ?>
 						<div class="stadium-hero__meta-item">
 						<svg class="stadium-hero__meta-icon" viewBox="0 0 24 24" aria-hidden="true">
-							<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg?v=1.1#icon-date"></use>
+							<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg?v=1.1#icon-date"></use>
 							</svg>
 						<span><?php printf( esc_html__( 'Открыт: %s г.', 'arsenal' ), ! empty( $stadium->open_date ) ? esc_html( $stadium->open_date ) : '' ); ?></span>
 						</div>
@@ -213,7 +216,7 @@ if ( $stadium_id ) {
 									<div class="timeline-item<?php echo esc_attr( $last_class ); ?>">
 									<div class="timeline-item__icon">
 										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-												<use xlink:href="<?php echo get_template_directory_uri(); ?>/assets/images/sprite.svg#<?php echo esc_attr( $icon_id ); ?>"></use>
+										<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg#<?php echo esc_attr( $icon_id ); ?>"></use>
 											</svg>
 										</div>
 										<div class="timeline-item__content">

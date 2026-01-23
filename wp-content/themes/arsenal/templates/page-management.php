@@ -38,15 +38,20 @@ if ( ! empty( $where_conditions ) ) {
 }
 
 // Запрос: сотрудники с JOIN к должностям и отделам
+// CONCAT_WS обрабатывает NULL значения корректно, COALESCE дает fallback значения
+// ORDER BY оптимизирован для LEFT JOIN (без зависимости от NULL полей в join таблицах)
 $management_team = $wpdb->get_results( 
-	"SELECT s.id, s.photo_url, CONCAT(s.first_name, ' ', s.second_name) as name,
-			jt.job_title_name as position,
+	"SELECT s.id, s.photo_url, 
+			CONCAT_WS( ' ', COALESCE( s.first_name, '' ), COALESCE( s.second_name, '' ) ) as name,
+			COALESCE( jt.job_title_name, 'Должность не указана' ) as position,
 			s.bio as description
 	 FROM {$wpdb->prefix}arsenal_staff s
 	 LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id
 	 LEFT JOIN {$wpdb->prefix}arsenal_staff_department sd ON s.department_id = sd.id
 	 {$where_clause}
-	 ORDER BY s.sort_order ASC, sd.department_name ASC, jt.job_title_name ASC, s.second_name ASC, s.first_name ASC" 
+	 ORDER BY COALESCE( s.sort_order, 999 ) ASC, 
+	 		 COALESCE( s.second_name, '' ) ASC, 
+	 		 COALESCE( s.first_name, '' ) ASC" 
 );
 
 ?>
@@ -59,8 +64,9 @@ $management_team = $wpdb->get_results(
 			</div>
 			
 			<div class="management-grid">
-				<?php foreach ( $management_team as $person ) : ?>
-					<div class="management-card">
+				<?php if ( ! empty( $management_team ) ) : ?>
+					<?php foreach ( $management_team as $person ) : ?>
+						<div class="management-card">
 						<div class="management-card-image-wrapper">
 							<?php if ( ! empty( $person->photo_url ) ) : ?>
 								<img 
@@ -84,8 +90,11 @@ $management_team = $wpdb->get_results(
 							<p class="management-card-description"><?php echo esc_html( $person->description ); ?></p>
 						</div>
 					</div>
-				<?php endforeach; ?>
-			</div>
+				<?php endforeach; ?>				<?php else : ?>
+					<p style="text-align: center; padding: 40px 20px; color: #666; font-size: 16px;">
+						Руководящий состав не указан
+					</p>
+				<?php endif; ?>			</div>
 		</div>
 	</div>
 </main>

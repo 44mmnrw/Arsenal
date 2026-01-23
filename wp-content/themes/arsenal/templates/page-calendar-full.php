@@ -108,17 +108,8 @@ if ( ! empty( $selected_month ) && $selected_month > 0 && $selected_month <= 12 
 $query .= " ORDER BY m.match_date ASC";
 $matches = $wpdb->get_results( $wpdb->prepare( $query, ...$prepare_values ) );
 
-function arsenal_match_result_calendar( $match, $arsenal_team_id ) {
-	if ( $match->home_team_id == $arsenal_team_id ) {
-		if ( $match->home_score > $match->away_score ) return 'win';
-		if ( $match->home_score < $match->away_score ) return 'loss';
-		return 'draw';
-	} else {
-		if ( $match->away_score > $match->home_team_id ) return 'win';
-		if ( $match->away_score < $match->home_team_id ) return 'loss';
-		return 'draw';
-	}
-}
+// Примечание: функция arsenal_match_result_calendar() не используется
+// и была удалена как мертвый код
 
 $has_matches = ! empty( $matches );
 ?>
@@ -260,16 +251,34 @@ $has_matches = ! empty( $matches );
 										<!-- Левая панель: Дата, время, стадион -->
 										<div class="calendar-left-panel">
 											<div class="calendar-info-row">
-												<?php arsenal_icon( 'icon-calendar', 16, 16, 'calendar-icon' ); ?>
-												<span class="calendar-date"><?php echo esc_html( wp_date( 'j.m.Y', strtotime( $match->match_date ) ) ); ?></span>
-											</div>
-											<div class="calendar-info-row">
-												<?php arsenal_icon( 'icon-clock', 16, 16, 'calendar-icon' ); ?>
-												<span class="calendar-time"><?php echo esc_html( ! empty( $match->match_time ) ? substr( $match->match_time, 0, 5 ) : '—' ); ?></span>
-											</div>
-											<?php if ( ! empty( $match->venue ) ) : ?>
-											<div class="calendar-info-row">
-												<?php arsenal_icon( 'icon-place', 16, 16, 'calendar-icon' ); ?>
+											<?php 
+											if ( function_exists( 'arsenal_icon' ) ) {
+												arsenal_icon( 'icon-calendar', 16, 16, 'calendar-icon' );
+											} else {
+												echo '📅 ';
+											}
+											?>
+											<span class="calendar-date"><?php echo esc_html( wp_date( 'j.m.Y', strtotime( $match->match_date ) ) ); ?></span>
+										</div>
+										<div class="calendar-info-row">
+											<?php 
+											if ( function_exists( 'arsenal_icon' ) ) {
+												arsenal_icon( 'icon-clock', 16, 16, 'calendar-icon' );
+											} else {
+												echo '🕐 ';
+											}
+											?>
+											<span class="calendar-time"><?php echo esc_html( ! empty( $match->match_time ) ? substr( $match->match_time, 0, 5 ) : '—' ); ?></span>
+										</div>
+										<?php if ( ! empty( $match->venue ) ) : ?>
+										<div class="calendar-info-row">
+											<?php 
+											if ( function_exists( 'arsenal_icon' ) ) {
+												arsenal_icon( 'icon-place', 16, 16, 'calendar-icon' );
+											} else {
+												echo '📍 ';
+											}
+											?>
 											<span class="calendar-stadium"><?php echo esc_html( $match->venue . ( ! empty( $match->stadium_city ) ? ', ' . $match->stadium_city : '' ) ); ?></span>
 											</div>
 											<?php endif; ?>
@@ -288,7 +297,7 @@ $has_matches = ! empty( $matches );
 														<?php endif; ?>
 													</div>
 												</div>
-												<span class="calendar-team-name"><?php echo esc_html( $match->home_team ); ?></span>
+												<span class="calendar-team-name"><?php echo esc_html( ! empty( $match->home_team ) ? $match->home_team : 'Команда 1' ); ?></span>
 											</div>
 
 											<!-- Гостевая команда -->
@@ -302,7 +311,7 @@ $has_matches = ! empty( $matches );
 														<?php endif; ?>
 													</div>
 												</div>
-												<span class="calendar-team-name"><?php echo esc_html( $match->away_team ); ?></span>
+												<span class="calendar-team-name"><?php echo esc_html( ! empty( $match->away_team ) ? $match->away_team : 'Команда 2' ); ?></span>
 											</div>
 										</div>
 
@@ -329,7 +338,16 @@ $has_matches = ! empty( $matches );
 												?>
 												<span class="calendar-status"><?php echo esc_html( $status_display ); ?></span>
 												<?php if ( $has_result ) : ?>
-													<span class="calendar-link-text">Матч-центр <?php arsenal_icon( 'icon-arrow-right', 16, 16, 'calendar-link-icon' ); ?></span>
+													<span class="calendar-link-text">
+														Матч-центр 
+														<?php 
+														if ( function_exists( 'arsenal_icon' ) ) {
+															arsenal_icon( 'icon-arrow-right', 16, 16, 'calendar-link-icon' );
+														} else {
+															echo '→';
+														}
+														?>
+													</span>
 												<?php endif; ?>
 											</div>
 										</div>

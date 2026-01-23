@@ -14,12 +14,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Закешируем URL шаблона для многократного использования
+$template_uri = get_template_directory_uri();
+
 // Подключаем класс управления спонсорами
 require_once get_template_directory() . '/inc/classes/class-arsenal-sponsors.php';
 
 // Получаем спонсоров из БД
-$general_sponsor = Arsenal_Sponsors::get_general_sponsor();
-$partners = Arsenal_Sponsors::get_partners();
+$general_sponsor = null;
+$partners = array();
+if ( class_exists( 'Arsenal_Sponsors' ) ) {
+	$general_sponsor = Arsenal_Sponsors::get_general_sponsor();
+	$partners = Arsenal_Sponsors::get_partners();
+}
 
 get_header(); 
 ?>
@@ -37,7 +44,7 @@ get_header();
 			<section class="sponsors-section">
 				<div class="sponsors-section-header">
 					<svg class="sponsors-icon" width="24" height="24">
-						<use xlink:href="#icon-medal"></use>
+						<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg?v=1.1#icon-medal"></use>
 					</svg>
 					<h2 class="sponsors-section-title">Генеральный спонсор</h2>
 				</div>
@@ -49,7 +56,11 @@ get_header();
 								<?php if ( $general_sponsor->logo_url ) : ?>
 									<img src="<?php echo esc_url( $general_sponsor->logo_url ); ?>" alt="<?php echo esc_attr( $general_sponsor->name ); ?>" class="sponsors-logo-image">
 								<?php else : ?>
-								<?php arsenal_render_camera_placeholder(); ?>
+									<?php if ( function_exists( 'arsenal_render_camera_placeholder' ) ) : ?>
+										<?php arsenal_render_camera_placeholder(); ?>
+									<?php else : ?>
+										<div style="background: #f0f0f0; height: 300px; display: flex; align-items: center; justify-content: center; color: #999;">Нет фото</div>
+									<?php endif; ?>
 								<?php endif; ?>
 							</div>
 						</div>
@@ -78,7 +89,7 @@ get_header();
 			<section class="sponsors-section">
 				<div class="sponsors-section-header">
 					<svg class="sponsors-icon" width="24" height="24">
-						<use xlink:href="#icon-partner"></use>
+						<use xlink:href="<?php echo esc_url( $template_uri ); ?>/assets/images/sprite.svg?v=1.1#icon-partner"></use>
 					</svg>
 					<h2 class="sponsors-section-title">Партнеры клуба</h2>
 				</div>
@@ -91,7 +102,11 @@ get_header();
 									<?php if ( $partner->logo_url ) : ?>
 										<img src="<?php echo esc_url( $partner->logo_url ); ?>" alt="<?php echo esc_attr( $partner->name ); ?>" class="sponsors-partner-logo-image">
 									<?php else : ?>
-										<?php arsenal_render_camera_placeholder(); ?>
+										<?php if ( function_exists( 'arsenal_render_camera_placeholder' ) ) : ?>
+											<?php arsenal_render_camera_placeholder(); ?>
+										<?php else : ?>
+											<div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">Нет фото</div>
+										<?php endif; ?>
 									<?php endif; ?>
 								</div>
 

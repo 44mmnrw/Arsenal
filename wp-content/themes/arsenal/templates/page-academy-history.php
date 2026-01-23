@@ -11,11 +11,41 @@
 
 get_header();
 
-// Подключение стилей страницы
-wp_enqueue_style( 'arsenal-academy-history', get_template_directory_uri() . '/assets/css/pages/page-academy-history.css', array( 'arsenal-footer' ), wp_get_theme()->get( 'Version' ) );
+// Подключение стилей страницы (используем константу версии)
+$theme_version = defined( 'ARSENAL_VERSION' ) ? ARSENAL_VERSION : wp_get_theme()->get( 'Version' );
+wp_enqueue_style( 'arsenal-academy-history', get_template_directory_uri() . '/assets/css/pages/page-academy-history.css', array( 'arsenal-footer' ), $theme_version );
 
-// Получить данные страницы истории академии из Carbon Fields
-$data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
+// Получить данные страницы истории академии из Carbon Fields (с защитой)
+$data = array();
+if ( class_exists( 'Arsenal_Academy_History_Carbon_Adapter' ) ) {
+	$page_data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
+	if ( is_array( $page_data ) ) {
+		$data = $page_data;
+	}
+}
+
+// Установить fallback значения если данные не загружены
+$data = wp_parse_args( $data, array(
+	'hero_title'       => get_the_title(),
+	'hero_description' => '',
+	'stat_cards'       => array(),
+	'timeline_title'   => 'Ключевые события',
+	'timeline_events'  => array(),
+	'staff_title'      => 'Тренерский штаб',
+	'staff_members'    => array(),
+	'facilities_title' => 'Тренировочная база',
+	'facilities'       => array(),
+	'enrollment'       => array(
+		'title'       => 'Запись в академию',
+		'description' => '',
+	),
+	'contacts'         => array(
+		'address'  => '',
+		'phone'    => '',
+		'email'    => '',
+		'schedule' => '',
+	),
+) );
 
 ?>
 
@@ -35,11 +65,15 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 					<?php foreach ( $data['stat_cards'] as $card ) : ?>
 						<div class="academy-stat-card">
 							<div class="academy-stat-card__icon">
-								<?php echo arsenal_get_icon( $card['icon'] ); ?>
+								<?php 
+								if ( function_exists( 'arsenal_get_icon' ) ) {
+									echo arsenal_get_icon( $card['icon'] ?? 'star' );
+								}
+								?>
 							</div>
 							<div class="academy-stat-card__content">
-								<h3 class="academy-stat-card__number"><?php echo esc_html( $card['number'] ); ?></h3>
-								<p class="academy-stat-card__label"><?php echo esc_html( $card['label'] ); ?></p>
+								<h3 class="academy-stat-card__number"><?php echo esc_html( $card['number'] ?? '' ); ?></h3>
+								<p class="academy-stat-card__label"><?php echo esc_html( $card['label'] ?? '' ); ?></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -56,14 +90,18 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 					<?php foreach ( $data['timeline_events'] as $event ) : ?>
 						<div class="academy-event-card">
 							<div class="academy-event-card__icon">
-								<?php echo arsenal_get_icon( $event['icon'] ); ?>
+								<?php 
+								if ( function_exists( 'arsenal_get_icon' ) ) {
+									echo arsenal_get_icon( $event['icon'] ?? 'calendar' );
+								}
+								?>
 							</div>
 							<div class="academy-event-card__content">
 								<div class="academy-event-card__header">
-									<h3 class="academy-event-card__title"><?php echo esc_html( $event['title'] ); ?></h3>
-									<span class="academy-event-card__year"><?php echo esc_html( $event['year'] ); ?></span>
+									<h3 class="academy-event-card__title"><?php echo esc_html( $event['title'] ?? '' ); ?></h3>
+									<span class="academy-event-card__year"><?php echo esc_html( $event['year'] ?? '' ); ?></span>
 								</div>
-							<p class="academy-event-card__description"><?php echo wpautop( wp_kses_post( $event['description'] ) ); ?></p>
+							<p class="academy-event-card__description"><?php echo wpautop( wp_kses_post( $event['description'] ?? '' ) ); ?></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -81,7 +119,7 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 						<div class="academy-coach-card">
 							<h3 class="academy-coach-card__name"><?php echo esc_html( $staff['name'] ); ?></h3>
 							<p class="academy-coach-card__position"><?php echo esc_html( $staff['position'] ); ?></p>
-							<p class="academy-coach-card__since"><?php echo esc_html( 'С ' . $staff['since'] . ' года' ); ?></p>
+						<p class="academy-coach-card__since"><?php echo esc_html( $staff['since'] ); ?></p>
 						</div>
 					<?php endforeach; ?>
 				</div>
@@ -97,12 +135,16 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 					<?php foreach ( $data['facilities'] as $facility ) : ?>
 						<div class="academy-facility-item">
 							<div class="academy-facility-item__icon">
-								<?php echo arsenal_get_icon( $facility['icon'] ); ?>
+								<?php 
+								if ( function_exists( 'arsenal_get_icon' ) ) {
+									echo arsenal_get_icon( $facility['icon'] ?? 'building' );
+								}
+								?>
 							</div>
 							<div class="academy-facility-item__content">
-								<h3 class="academy-facility-item__heading"><?php echo esc_html( $facility['title'] ); ?></h3>
+								<h3 class="academy-facility-item__heading"><?php echo esc_html( $facility['title'] ?? '' ); ?></h3>
 								<ul class="academy-facility-item__list">
-									<?php foreach ( $facility['items'] as $item ) : ?>
+									<?php foreach ( ( $facility['items'] ?? array() ) as $item ) : ?>
 										<li>• <?php echo esc_html( $item ); ?></li>
 									<?php endforeach; ?>
 								</ul>
@@ -120,41 +162,67 @@ $data = Arsenal_Academy_History_Carbon_Adapter::get_page_data( get_the_ID() );
 			
 			<div class="academy-enrollment-info">
 				<div class="academy-enrollment-column">
+					<?php if ( ! empty( $data['contacts']['address'] ) ) : ?>
 					<div class="academy-enrollment-item">
 						<div class="academy-enrollment-item__icon">
-							<?php echo arsenal_get_icon( 'icon-place' ); ?>
+							<?php 
+							if ( function_exists( 'arsenal_get_icon' ) ) {
+								echo arsenal_get_icon( 'icon-place' );
+							}
+							?>
 						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Адрес:</strong> <?php echo esc_html( $data['contacts']['address'] ); ?>
 						</div>
 					</div>
+					<?php endif; ?>
+					
+					<?php if ( ! empty( $data['contacts']['phone'] ) ) : ?>
 					<div class="academy-enrollment-item">
 						<div class="academy-enrollment-item__icon">
-							<?php echo arsenal_get_icon( 'icon-phone' ); ?>
+							<?php 
+							if ( function_exists( 'arsenal_get_icon' ) ) {
+								echo arsenal_get_icon( 'icon-phone' );
+							}
+							?>
 						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Телефон:</strong> <?php echo esc_html( $data['contacts']['phone'] ); ?>
 						</div>
 					</div>
+					<?php endif; ?>
 				</div>
 
 				<div class="academy-enrollment-column">
+					<?php if ( ! empty( $data['contacts']['email'] ) ) : ?>
 					<div class="academy-enrollment-item">
 						<div class="academy-enrollment-item__icon">
-							<?php echo arsenal_get_icon( 'icon-email' ); ?>
+							<?php 
+							if ( function_exists( 'arsenal_get_icon' ) ) {
+								echo arsenal_get_icon( 'icon-email' );
+							}
+							?>
 						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Email:</strong> <?php echo esc_html( $data['contacts']['email'] ); ?>
 						</div>
 					</div>
+					<?php endif; ?>
+					
+					<?php if ( ! empty( $data['contacts']['schedule'] ) ) : ?>
 					<div class="academy-enrollment-item">
 						<div class="academy-enrollment-item__icon">
-							<?php echo arsenal_get_icon( 'icon-clock' ); ?>
+							<?php 
+							if ( function_exists( 'arsenal_get_icon' ) ) {
+								echo arsenal_get_icon( 'icon-clock' );
+							}
+							?>
 						</div>
 						<div class="academy-enrollment-item__content">
 							<strong>Просмотры:</strong> <?php echo esc_html( $data['contacts']['schedule'] ); ?>
 						</div>
 					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		</section>

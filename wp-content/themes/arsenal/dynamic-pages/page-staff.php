@@ -34,7 +34,10 @@ $post_id = get_the_ID();
 
 // Если пришли по /staff/{id}/ — загружаем сотрудника по ID
 if ( $staff_id ) {
-	$staff = Arsenal_Staff_Manager::get_staff_member( $staff_id );
+	$staff = null;
+	if ( class_exists( 'Arsenal_Staff_Manager' ) ) {
+		$staff = Arsenal_Staff_Manager::get_staff_member( $staff_id );
+	}
 	if ( $staff ) {
 		$staff_full_name = trim( $staff->first_name . ' ' . $staff->second_name );
 		add_filter( 'pre_get_document_title', function() use ( $staff_full_name ) {
@@ -62,7 +65,7 @@ if ( $staff_id && ! $staff ) {
 // Если сотрудник найден в БД - загрузить его данные
 if ( $staff ) {
 	$staff_position = '';
-	if ( $staff->job_title_id ) {
+	if ( $staff->job_title_id && class_exists( 'Arsenal_Staff_Manager' ) ) {
 		$job_title = Arsenal_Staff_Manager::get_job_title( $staff->job_title_id );
 		$staff_position = $job_title ? $job_title->job_title_name : '';
 	}
@@ -88,9 +91,6 @@ if ( $staff ) {
 	$staff_contract_start = ! empty( $staff->contract_start ) ? $staff->contract_start : '';
 	$staff_nationality = ! empty( $staff->citizenship ) ? $staff->citizenship : '';
 	$staff_interesting_fact = ! empty( $staff->interesting_fact ) ? $staff->interesting_fact : '';
-	if ( ! $staff_nationality && property_exists( $staff, 'nationality' ) && ! empty( $staff->nationality ) ) {
-		$staff_nationality = $staff->nationality;
-	}
 	
 	// Применяем склонение к experience если это число
 	if ( ! empty( $staff_experience ) && is_numeric( $staff_experience ) ) {
@@ -114,7 +114,7 @@ if ( ! empty( $staff_birthdate ) ) {
 // Опыт работы: если не указан явно, вычисляем по contract_start
 if ( empty( $staff_experience ) && ! empty( $staff_contract_start ) ) {
 	$contract_timestamp = strtotime( $staff_contract_start );
-	if ( $contract_timestamp ) {
+	if ( $contract_timestamp && function_exists( 'wp_timezone' ) ) {
 		$contract_date = new DateTime( '@' . $contract_timestamp );
 		$contract_date->setTimezone( wp_timezone() );
 		$now = new DateTime( 'now', wp_timezone() );

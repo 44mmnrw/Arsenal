@@ -4,17 +4,14 @@
 
 ### Template Parts
 ```php
-// Статические компоненты
-get_template_part( 'template-parts/components/banner' );
-get_template_part( 'template-parts/components/news' );
-get_template_part( 'template-parts/components/sponsors' );
-
-// Динамические блоки (с БД)
-get_template_part( 'template-parts/blocks/stats-bar' );
-get_template_part( 'template-parts/blocks/last-games' );
-get_template_part( 'template-parts/blocks/upcoming-match' );
-get_template_part( 'template-parts/blocks/tournament-table' );
-get_template_part( 'template-parts/blocks/template-standings' );
+// Динамические виджеты главной (с БД)
+get_template_part( 'template-parts/widgets/banner' );
+get_template_part( 'template-parts/widgets/news' );
+get_template_part( 'template-parts/widgets/sponsors' );
+get_template_part( 'template-parts/widgets/stats-bar' );
+get_template_part( 'template-parts/widgets/last-games' );
+get_template_part( 'template-parts/widgets/upcoming-match' );
+get_template_part( 'template-parts/widgets/tournament-table' );
 
 // Сложные layouts
 get_template_part( 'template-parts/layouts/tournament-bracket' );

@@ -15,10 +15,16 @@ require_once get_template_directory() . '/inc/classes/class-academy-carbon-adapt
 // Получить ID текущей страницы
 $post_id = get_the_ID();
 
-// Загрузить данные через Carbon Fields адаптер
-$data = Arsenal_Academy_Carbon_Adapter::get_page_data( $post_id );
+// Загрузить данные через Carbon Fields адаптер (с защитой)
+$data = array();
+if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+	$page_data = Arsenal_Academy_Carbon_Adapter::get_page_data( $post_id );
+	if ( is_array( $page_data ) ) {
+		$data = $page_data;
+	}
+}
 
-// Распаковать данные
+// Распаковать данные с fallback значениями
 $hero = $data['hero_data'] ?? array();
 $benefits = $data['benefits_data'] ?? array();
 $age_groups = $data['age_groups_data'] ?? array();
@@ -40,11 +46,24 @@ $faq = $data['faq_data'] ?? array();
 					<?php echo wpautop( wp_kses_post( $hero['description'] ?? 'СДЮШ "Арсенал" объявляет набор детей в возрасте от 8 до 17 лет.' ) ); ?>
 				</p>
 				<div class="hero-actions">
-					<button class="btn btn-primary btn-lg" data-action="apply">
-						<?php echo esc_html( ( $hero['buttons'][0]['text'] ?? 'Подать заявку' ) ); ?>
-					</button>
-					<a href="#contacts" class="btn btn-secondary btn-lg">
-						<?php echo esc_html( ( $hero['buttons'][1]['text'] ?? 'Контакты' ) ); ?>
+				<?php 
+				$btn1_text = 'Подать заявку';
+				$btn2_text = 'Контакты';
+				
+				if ( ! empty( $hero['buttons'] ) && is_array( $hero['buttons'] ) ) {
+					if ( isset( $hero['buttons'][0]['text'] ) ) {
+						$btn1_text = $hero['buttons'][0]['text'];
+					}
+					if ( isset( $hero['buttons'][1]['text'] ) ) {
+						$btn2_text = $hero['buttons'][1]['text'];
+					}
+				}
+				?>
+				<button class="btn btn-primary btn-lg" data-action="apply">
+					<?php echo esc_html( $btn1_text ); ?>
+				</button>
+				<a href="#contacts" class="btn btn-secondary btn-lg">
+					<?php echo esc_html( $btn2_text ); ?>
 					</a>
 				</div>
 			</div>
@@ -59,7 +78,13 @@ $faq = $data['faq_data'] ?? array();
 				<!-- Benefit Card -->
 				<article class="benefit-card">
 					<div class="benefit-icon benefit-icon-<?php echo esc_attr( $benefit['icon'] ?? 'default' ); ?>">
-						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $benefit['icon'] ?? 'icon-place', 'icon-24' ); ?>
+						<?php 
+						if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+							echo Arsenal_Academy_Carbon_Adapter::render_icon( $benefit['icon'] ?? 'icon-place', 'icon-24' );
+						} else {
+							echo '⭐';
+						}
+						?>
 					</div>
 					<h3 class="benefit-title"><?php echo esc_html( $benefit['title'] ?? '' ); ?></h3>
 					<p class="benefit-description">
@@ -85,15 +110,33 @@ $faq = $data['faq_data'] ?? array();
 					</div>
 					<ul class="age-group-details">
 						<li>
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' );
+							} else {
+								echo '✓ ';
+							}
+							?>
 							<span><?php echo esc_html( $group['age_range'] ?? '' ); ?></span>
 						</li>
 						<li>
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' );
+							} else {
+								echo '✓ ';
+							}
+							?>
 							<span><?php printf( esc_html_x( 'Год рождения: %s', 'academy', 'arsenal' ), esc_html( $group['birth_years'] ?? '' ) ); ?></span>
 						</li>
 						<li>
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-checkbox', 'icon-16' );
+							} else {
+								echo '✓ ';
+							}
+							?>
 							<span><?php echo esc_html( $group['schedule'] ?? '' ); ?></span>
 						</li>
 					</ul>
@@ -109,7 +152,13 @@ $faq = $data['faq_data'] ?? array();
 			<div class="documents-grid">
 				<?php foreach ( ( $documents['items'] ?? array() ) as $doc ) : ?>
 				<div class="document-item">
-					<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $doc['icon'] ?? 'icon-report', 'icon-20 document-icon' ); ?>
+					<?php 
+					if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+						echo Arsenal_Academy_Carbon_Adapter::render_icon( $doc['icon'] ?? 'icon-report', 'icon-20 document-icon' );
+					} else {
+						echo '📄 ';
+					}
+					?>
 					<span><?php echo esc_html( $doc['text'] ?? '' ); ?></span>
 				</div>
 				<?php endforeach; ?>
@@ -131,7 +180,13 @@ $faq = $data['faq_data'] ?? array();
 				<?php foreach ( ( $schedule['items'] ?? array() ) as $item ) : ?>
 				<div class="schedule-item">
 					<div class="schedule-icon">
-						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'] ?? 'icon-calendar' ); ?>
+						<?php 
+						if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+							echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'] ?? 'icon-calendar' );
+						} else {
+							echo '📅';
+						}
+						?>
 					</div>
 					<h3 class="schedule-heading"><?php echo esc_html( $item['heading'] ?? '' ); ?></h3>
 					<p class="schedule-text"><?php echo esc_html( $item['text'] ?? '' ); ?></p>
@@ -163,7 +218,13 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Address -->
 							<?php if ( ! empty( $contacts['address'] ) ) : ?>
 							<div class="contact-item">
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place' );
+							} else {
+								echo '📍 ';
+							}
+							?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Адрес', 'arsenal' ); ?></p>
 									<p class="contact-value"><?php echo esc_html( $contacts['address'] ); ?></p>
@@ -174,7 +235,13 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Phone -->
 							<?php if ( ! empty( $contacts['phone'] ) ) : ?>
 							<div class="contact-item">
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' );
+							} else {
+								echo '☎️ ';
+							}
+							?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Телефон', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -189,7 +256,13 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Schedule -->
 							<?php if ( ! empty( $contacts['working_schedule'] ) && is_array( $contacts['working_schedule'] ) ) : ?>
 							<div class="contact-item">
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-clock' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-clock' );
+							} else {
+								echo '🕒 ';
+							}
+							?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Время работы', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -214,7 +287,13 @@ $faq = $data['faq_data'] ?? array();
 							<!-- Email -->
 							<?php if ( ! empty( $contacts['email'] ) ) : ?>
 							<div class="contact-item">
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' );
+							} else {
+								echo '✉️ ';
+							}
+							?>
 								<div class="contact-content">
 									<p class="contact-label"><?php esc_html_e( 'Email', 'arsenal' ); ?></p>
 									<p class="contact-value">
@@ -241,20 +320,51 @@ $faq = $data['faq_data'] ?? array();
 							
 							<?php if ( ! empty( $contacts['director']['contacts'] ) && is_array( $contacts['director']['contacts'] ) ) : ?>
 								<?php 
-								$phone = $contacts['director']['contacts'][0]['value'] ?? '';
-								$email = $contacts['director']['contacts'][1]['value'] ?? '';
+								$phone = '';
+								$email = '';
+								
+								// Безопасно получаем контакты по индексам
+								foreach ( $contacts['director']['contacts'] as $contact ) {
+									if ( ! empty( $contact['type'] ) ) {
+										if ( 'phone' === $contact['type'] && empty( $phone ) ) {
+											$phone = $contact['value'] ?? '';
+										} elseif ( 'email' === $contact['type'] && empty( $email ) ) {
+											$email = $contact['value'] ?? '';
+										}
+									}
+								}
+								
+								// Fallback для старого формата ([0] = phone, [1] = email)
+								if ( empty( $phone ) && isset( $contacts['director']['contacts'][0]['value'] ) ) {
+									$phone = $contacts['director']['contacts'][0]['value'];
+								}
+								if ( empty( $email ) && isset( $contacts['director']['contacts'][1]['value'] ) ) {
+									$email = $contacts['director']['contacts'][1]['value'];
+								}
 								?>
 								<div class="director-contacts">
 									<?php if ( ! empty( $phone ) ) : ?>
 									<p class="director-contact">
-									<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' ); ?> <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', $phone ) ); ?>">
+									<?php 
+									if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+										echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-phone' );
+									} else {
+										echo '☎️ ';
+									}
+									?> <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', $phone ) ); ?>">
 										<?php echo esc_html( $phone ); ?>
 									</a>
 								</p>
 								<?php endif; ?>
 								<?php if ( ! empty( $email ) ) : ?>
 								<p class="director-contact">
-									<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' ); ?> <a href="mailto:<?php echo esc_attr( $email ); ?>">
+									<?php 
+									if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+										echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-email' );
+									} else {
+										echo '✉️ ';
+									}
+									?> <a href="mailto:<?php echo esc_attr( $email ); ?>">
 											<?php echo esc_html( $email ); ?>
 										</a>
 									</p>
@@ -277,7 +387,13 @@ $faq = $data['faq_data'] ?? array();
 						<div id="academy-map-container" class="academy-map-wrapper">
 							<div id="academy-map"></div>
 							<div class="map-placeholder">
-								<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place', 'map-icon' ); ?>
+								<?php 
+								if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+									echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-place', 'map-icon' );
+								} else {
+									echo '📍';
+								}
+								?>
 								<p class="map-text"><?php esc_html_e( 'Интерактивная карта', 'arsenal' ); ?></p>
 								<p class="map-subtext"><?php esc_html_e( 'Спортивный комплекс "Арсенал"', 'arsenal' ); ?><br><?php esc_html_e( '15 минут от центра города', 'arsenal' ); ?></p>
 							</div>
@@ -291,7 +407,13 @@ $faq = $data['faq_data'] ?? array();
 								<strong>
 									<?php if ( ! empty( $item['icon'] ) ) : ?>
 									<span class="transport-icon">
-										<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'], 'icon-16' ); ?>
+										<?php 
+										if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+											echo Arsenal_Academy_Carbon_Adapter::render_icon( $item['icon'], 'icon-16' );
+										} else {
+											echo '🚌 ';
+										}
+										?>
 									</span>
 									<?php endif; ?>
 									<?php echo esc_html( $item['transport'] ); ?>
@@ -311,13 +433,19 @@ $faq = $data['faq_data'] ?? array();
 			<!-- FULL WIDTH: Social Media Section -->
 		<?php if ( ! empty( $social_data ) && is_array( $social_data ) ) : ?>
 		<div class="contacts-social-section">
-			<h3 class="contacts-section-title"><?php echo esc_html( $data['social_title'] ); ?></h3>
+			<h3 class="contacts-section-title"><?php echo esc_html( $data['social_title'] ?? 'Мы в социальных сетях' ); ?></h3>
 			
 			<div class="social-links-grid">
 				<?php foreach ( $social_data as $social ) : ?>
 					<?php if ( ! empty( $social['url'] ) && ! empty( $social['icon'] ) ) : ?>
 					<a href="<?php echo esc_url( $social['url'] ); ?>" class="social-button" target="_blank" rel="noopener noreferrer" title="<?php echo esc_attr( ucfirst( str_replace( 'icon-', '', $social['icon'] ) ) ); ?>">
-						<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( $social['icon'], 'icon-24' ); ?>
+						<?php 
+						if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+							echo Arsenal_Academy_Carbon_Adapter::render_icon( $social['icon'], 'icon-24' );
+						} else {
+							echo '🔗';
+						}
+						?>
 					</a>
 					<?php endif; ?>
 					<?php endforeach; ?>
@@ -336,7 +464,13 @@ $faq = $data['faq_data'] ?? array();
 					<summary class="faq-question">
 						<span class="faq-question__text"><?php echo esc_html( $item['question'] ?? '' ); ?></span>
 						<span class="faq-question__icon">
-							<?php echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-arrow-down' ); ?>
+							<?php 
+							if ( class_exists( 'Arsenal_Academy_Carbon_Adapter' ) ) {
+								echo Arsenal_Academy_Carbon_Adapter::render_icon( 'icon-arrow-down' );
+							} else {
+								echo '▼';
+							}
+							?>
 						</span>
 					</summary>
 					<p class="faq-answer">

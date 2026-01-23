@@ -37,7 +37,11 @@ if ( ! $team_id || ! $match_date || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $matc
 }
 
 // Получить данные матча
-$match = arsenal_get_match_by_date_and_team( $match_date, $team_id );
+if ( function_exists( 'arsenal_get_match_by_date_and_team' ) ) {
+	$match = arsenal_get_match_by_date_and_team( $match_date, $team_id );
+} else {
+	$match = null;
+}
 
 if ( ! $match ) {
 	echo '<div class="container" style="padding: 60px 0; text-align: center;">';
@@ -50,20 +54,46 @@ if ( ! $match ) {
 }
 
 // Получить события матча и составы
-$events    = arsenal_get_match_events( $match->match_id );
-$lineups   = arsenal_get_match_lineups( $match->match_id );
-$organized = arsenal_organize_lineups( $lineups, $match->home_team_id );
+$events = array();
+$lineups = array();
+$organized = array(
+	'home_starting_by_position' => array(),
+	'home_subs' => array(),
+	'away_starting_by_position' => array(),
+	'away_subs' => array()
+);
+
+if ( function_exists( 'arsenal_get_match_events' ) ) {
+	$events = arsenal_get_match_events( $match->match_id );
+}
+
+if ( function_exists( 'arsenal_get_match_lineups' ) ) {
+	$lineups = arsenal_get_match_lineups( $match->match_id );
+}
+
+if ( function_exists( 'arsenal_organize_lineups' ) ) {
+	$organized = arsenal_organize_lineups( $lineups, $match->home_team_id );
+}
 
 // Получить тренеров обеих команд
-$home_coach = arsenal_get_team_coach( $match->home_team_id, $match_date );
-$away_coach = arsenal_get_team_coach( $match->away_team_id, $match_date );
+$home_coach = null;
+$away_coach = null;
+
+if ( function_exists( 'arsenal_get_team_coach' ) ) {
+	$home_coach = arsenal_get_team_coach( $match->home_team_id, $match_date );
+	$away_coach = arsenal_get_team_coach( $match->away_team_id, $match_date );
+}
 
 // Получить информацию о стадионе для фона
-$stadium = arsenal_get_stadium_by_id( $match->stadium_id );
+$stadium = null;
+if ( function_exists( 'arsenal_get_stadium_by_id' ) ) {
+	$stadium = arsenal_get_stadium_by_id( $match->stadium_id );
+}
 $stadium_photo_url = '';
 if ( $stadium && ! empty( $stadium->photo_url ) ) {
     // Преобразовать относительный путь в полный URL при необходимости
-    if ( ! str_starts_with( $stadium->photo_url, 'http://' ) && ! str_starts_with( $stadium->photo_url, 'https://' ) ) {
+    $is_http = ( strpos( $stadium->photo_url, 'http://' ) === 0 || strpos( $stadium->photo_url, 'https://' ) === 0 );
+    if ( ! $is_http ) {
         $stadium_photo_url = home_url( $stadium->photo_url );
     } else {
         $stadium_photo_url = $stadium->photo_url;
@@ -180,7 +210,13 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				</div>
 				<div class="detail-item">
 					<?php arsenal_icon( 'icon-people', 16, 16, 'detail-icon' ); ?>
-					<?php echo esc_html( arsenal_pluralize_spectators( intval( $match->attendance ?? 3500 ) ) ); ?>
+					<?php 
+					if ( function_exists( 'arsenal_pluralize_spectators' ) ) {
+						echo esc_html( arsenal_pluralize_spectators( intval( $match->attendance ?? 3500 ) ) );
+					} else {
+						echo esc_html( intval( $match->attendance ?? 3500 ) . ' спектаторов' );
+					}
+					?>
 				</div>
 			</div>
 
@@ -282,7 +318,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								<div class="position-name"><?php echo esc_html( $position ); ?></div>
 								<div class="players-list">
 									<?php foreach ( $players as $player ) { 
-										$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+										$player_url = null;
+										if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
+											$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+										}
 									?>
 									<div class="player-entry">
 										<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>
@@ -306,7 +345,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							<h4 class="group-label">Запасные</h4>
 							<div class="players-list">
 								<?php foreach ( $organized['home_subs'] as $player ) { 
-									$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+									$player_url = null;
+									if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
+										$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+									}
 								?>
 								<div class="player-entry">
 									<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>
@@ -375,19 +417,37 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						
 						// Построить динамические карты позиций для домашней команды
 						$home_positions_map = array(
-							'Вратарь' => arsenal_get_player_coords( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 900 ),
-							'Защитник' => arsenal_get_player_coords( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 750 ),
-							'Полузащитник' => arsenal_get_player_coords( isset( $home_position_counts['Полузащитник'] ) ? $home_position_counts['Полузащитник'] : 0, 570 ),
-							'Нападающий' => arsenal_get_player_coords( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 320 )
+							'Вратарь' => array(),
+							'Защитник' => array(),
+							'Полузащитник' => array(),
+							'Нападающий' => array()
 						);
+						
+						if ( function_exists( 'arsenal_get_player_coords' ) ) {
+							$home_positions_map = array(
+								'Вратарь' => arsenal_get_player_coords( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 900 ),
+								'Защитник' => arsenal_get_player_coords( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 750 ),
+								'Полузащитник' => arsenal_get_player_coords( isset( $home_position_counts['Полузащитник'] ) ? $home_position_counts['Полузащитник'] : 0, 570 ),
+								'Нападающий' => arsenal_get_player_coords( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 320 )
+							);
+						}
 						
 						// Построить динамические карты позиций для гостевой команды
 						$away_positions_map = array(
-							'Вратарь' => arsenal_get_player_coords( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 100 ),
-							'Защитник' => arsenal_get_player_coords( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 250 ),
-							'Полузащитник' => arsenal_get_player_coords( isset( $away_position_counts['Полузащитник'] ) ? $away_position_counts['Полузащитник'] : 0, 430 ),
-							'Нападающий' => arsenal_get_player_coords( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 680 )
+							'Вратарь' => array(),
+							'Защитник' => array(),
+							'Полузащитник' => array(),
+							'Нападающий' => array()
 						);
+						
+						if ( function_exists( 'arsenal_get_player_coords' ) ) {
+							$away_positions_map = array(
+								'Вратарь' => arsenal_get_player_coords( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 100 ),
+								'Защитник' => arsenal_get_player_coords( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 250 ),
+								'Полузащитник' => arsenal_get_player_coords( isset( $away_position_counts['Полузащитник'] ) ? $away_position_counts['Полузащитник'] : 0, 430 ),
+								'Нападающий' => arsenal_get_player_coords( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 680 )
+							);
+						}
 						?>
 						<!-- ВЕРТИКАЛЬНОЕ ПОЛЕ (для мобильных 480px) -->
 						<svg class="field-svg field-svg-vertical" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 667 1000.52" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
@@ -486,18 +546,36 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						// Карты позиций для горизонтального поля
 						// Масштаб: 298.22 × 198.81 px
 						$home_positions_map_horizontal = array(
-							'Вратарь' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 25 ),
-							'Защитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 65 ),
-							'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Полузащитник'] ) ? $home_position_counts['Полузащитник'] : 0, 115 ),
-							'Нападающий' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 210 )
+							'Вратарь' => array(),
+							'Защитник' => array(),
+							'Полузащитник' => array(),
+							'Нападающий' => array()
 						);
 						
+						if ( function_exists( 'arsenal_get_player_coords_horizontal' ) ) {
+							$home_positions_map_horizontal = array(
+								'Вратарь' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Вратарь'] ) ? $home_position_counts['Вратарь'] : 0, 25 ),
+								'Защитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Защитник'] ) ? $home_position_counts['Защитник'] : 0, 65 ),
+								'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Полузащитник'] ) ? $home_position_counts['Полузащитник'] : 0, 115 ),
+								'Нападающий' => arsenal_get_player_coords_horizontal( isset( $home_position_counts['Нападающий'] ) ? $home_position_counts['Нападающий'] : 0, 210 )
+							);
+						}
+						
 						$away_positions_map_horizontal = array(
-							'Вратарь' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 273 ),
-							'Защитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 233 ),
-							'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Полузащитник'] ) ? $away_position_counts['Полузащитник'] : 0, 183 ),
-							'Нападающий' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 88 )
+							'Вратарь' => array(),
+							'Защитник' => array(),
+							'Полузащитник' => array(),
+							'Нападающий' => array()
 						);
+						
+						if ( function_exists( 'arsenal_get_player_coords_horizontal' ) ) {
+							$away_positions_map_horizontal = array(
+								'Вратарь' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Вратарь'] ) ? $away_position_counts['Вратарь'] : 0, 273 ),
+								'Защитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Защитник'] ) ? $away_position_counts['Защитник'] : 0, 233 ),
+								'Полузащитник' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Полузащитник'] ) ? $away_position_counts['Полузащитник'] : 0, 183 ),
+								'Нападающий' => arsenal_get_player_coords_horizontal( isset( $away_position_counts['Нападающий'] ) ? $away_position_counts['Нападающий'] : 0, 88 )
+							);
+						}
 						?>
 						<svg class="field-svg field-svg-horizontal" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.1" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 298.22 198.81" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
 							<defs>
@@ -606,7 +684,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								<div class="position-name"><?php echo esc_html( $position ); ?></div>
 								<div class="players-list">
 									<?php foreach ( $players as $player ) { 
-										$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+										$player_url = null;
+										if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
+											$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+										}
 									?>
 									<div class="player-entry">
 										<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>
@@ -630,7 +711,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							<h4 class="group-label">Запасные</h4>
 							<div class="players-list">
 								<?php foreach ( $organized['away_subs'] as $player ) { 
-									$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+									$player_url = null;
+									if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
+										$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
+									}
 								?>
 								<div class="player-entry">
 									<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>

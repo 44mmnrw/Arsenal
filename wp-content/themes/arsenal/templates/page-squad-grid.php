@@ -142,7 +142,7 @@ foreach ( $players as $player ) {
 									}
 									
 									// Параметры для ссылки
-									$player_url = function_exists( 'arsenal_get_player_url' ) ? arsenal_get_player_url( $player->id ) : '#';
+									$player_url = function_exists( 'arsenal_get_player_url' ) && ! empty( $player->id ) ? arsenal_get_player_url( $player->id ) : '#';
 								?>
 									<a href="<?php echo esc_url( $player_url ); ?>" class="player-card" title="<?php echo esc_attr( $name_display ); ?>">
 										<!-- Левая колонка 50%: Фото + Номер -->
@@ -169,7 +169,7 @@ foreach ( $players as $player ) {
 											<h3 class="player-card__name"><?php echo esc_html( $name_display ); ?></h3>
 											<p class="player-card__position"><?php echo esc_html( $position ); ?></p>
 											<?php if ( $age ) : ?>
-											<p class="player-card__meta"><?php echo esc_html( arsenal_pluralize_years( $age ) ); ?> • Беларусь</p>
+											<p class="player-card__meta"><?php echo esc_html( function_exists( 'arsenal_pluralize_years' ) ? arsenal_pluralize_years( $age ) : $age . ' лет' ); ?> • Беларусь</p>
 											<?php endif; ?>
 										</div>
 

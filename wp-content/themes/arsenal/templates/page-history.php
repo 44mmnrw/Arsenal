@@ -11,8 +11,26 @@
 
 get_header();
 
-// Получить историю клуба из Carbon Fields
-$history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
+// Получить историю клуба из Carbon Fields (с защитой)
+$history = array();
+if ( class_exists( 'Arsenal_History_Carbon_Adapter' ) ) {
+	$history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
+	// Убедимся что это массив
+	if ( ! is_array( $history ) ) {
+		$history = array();
+	}
+}
+
+// Если нет данных - показываем сообщение
+if ( empty( $history ) || ! isset( $history['title'] ) ) {
+	$history = array(
+		'title'       => get_the_title(),
+		'description' => '',
+		'records'     => array(),
+		'achievements' => array(),
+		'additional_cards' => array(),
+	);
+}
 
 ?>
 
@@ -32,7 +50,7 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 
 		<!-- Временная шкала -->
 		<?php
-		if ( ! empty( $history['scale'] ) ) {
+		if ( ! empty( $history['scale'] ) && function_exists( 'arsenal_display_timeline' ) ) {
 			arsenal_display_timeline();
 		}
 		?>
@@ -61,10 +79,14 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 									<div class="achievement-card__header">
 									<span class="achievement-card__icon">
 										<?php 
-										if ( isset( $record['icon'] ) && ! empty( $record['icon'] ) ) {
-											echo arsenal_get_icon( $record['icon'] );
+										if ( function_exists( 'arsenal_get_icon' ) ) {
+											if ( isset( $record['icon'] ) && ! empty( $record['icon'] ) ) {
+												echo arsenal_get_icon( $record['icon'] );
+											} else {
+												echo arsenal_get_icon( 'white' === $style_class ? 'chart' : 'cup' );
+											}
 										} else {
-											echo arsenal_get_icon( 'white' === $style_class ? 'chart' : 'cup' );
+											echo '📊';
 										}
 										?>
 									</span>
@@ -74,9 +96,25 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 										<?php foreach ( $record['items'] as $item ) : ?>
 											<li class="achievement-card__item">
 												<?php if ( 'achievement-card--primary' === $style_class ) : ?>
-													<span class="achievement-card__item-icon"><?php echo arsenal_get_icon( isset( $record['icon'] ) ? $record['icon'] : 'cup' ); ?></span>
-												<?php endif; ?>
-												<span class="achievement-card__item-text"><?php echo arsenal_format_item_text( $item ); ?></span>
+											<span class="achievement-card__item-icon">
+												<?php 
+												if ( function_exists( 'arsenal_get_icon' ) ) {
+													echo arsenal_get_icon( isset( $record['icon'] ) ? $record['icon'] : 'cup' );
+												} else {
+													echo '🏆';
+												}
+												?>
+											</span>
+										<?php endif; ?>
+										<span class="achievement-card__item-text">
+											<?php 
+											if ( function_exists( 'arsenal_format_item_text' ) ) {
+												echo arsenal_format_item_text( $item );
+											} else {
+												echo esc_html( $item );
+											}
+											?>
+										</span>
 											</li>
 										<?php endforeach; ?>
 									</ul>
@@ -101,8 +139,24 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 						if ( is_array( $achievement ) && isset( $achievement['label'], $achievement['value'] ) ) {
 							?>
 							<div class="stat-card">
-								<div class="stat-card__label"><?php echo arsenal_format_item_text( $achievement['label'] ); ?></div>
-								<div class="stat-card__value"><?php echo arsenal_format_item_text( $achievement['value'] ); ?></div>
+								<div class="stat-card__label">
+									<?php 
+									if ( function_exists( 'arsenal_format_item_text' ) ) {
+										echo arsenal_format_item_text( $achievement['label'] );
+									} else {
+										echo esc_html( $achievement['label'] );
+									}
+									?>
+								</div>
+								<div class="stat-card__value">
+									<?php 
+									if ( function_exists( 'arsenal_format_item_text' ) ) {
+										echo arsenal_format_item_text( $achievement['value'] );
+									} else {
+										echo esc_html( $achievement['value'] );
+									}
+									?>
+								</div>
 							</div>
 							<?php
 						}
@@ -131,7 +185,15 @@ $history = Arsenal_History_Carbon_Adapter::get_page_data( get_the_ID() );
 								$icon = isset( $card['icon'] ) && ! empty( $card['icon'] ) ? $card['icon'] : 'stadium';
 								?>
 								<div class="stadium-item">
-									<div class="stadium-item__icon"><?php echo arsenal_get_icon( $icon ); ?></div>
+									<div class="stadium-item__icon">
+										<?php 
+										if ( function_exists( 'arsenal_get_icon' ) ) {
+											echo arsenal_get_icon( $icon );
+										} else {
+											echo '🏟️';
+										}
+										?>
+									</div>
 									<div class="stadium-item__info">
 										<h4 class="stadium-item__name"><?php echo esc_html( $card['label'] ); ?></h4>
 										<p class="stadium-item__location"><?php echo wp_kses_post( $card['value'] ); ?></p>
