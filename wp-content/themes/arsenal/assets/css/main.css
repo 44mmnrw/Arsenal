@@ -769,7 +769,7 @@ h1 {
    ========================================================================== */
 
 .news-section {
-	background-color: var(--color-white);
+	background-color: var(--gray-50);
 	padding: 2rem 0 3rem;
 }
 
@@ -1069,7 +1069,7 @@ h1 {
 
 .last-games-section {
 	padding: 2.75rem 0;
-	background-color: #F9FAFB;
+	background-color: var(--gray-50);
 }
 
 .last-games-section .container {
@@ -1249,7 +1249,7 @@ h1 {
 
 .tournament-table-section {
 	padding: 2.75rem 0;
-	background-color: var(--color-white);
+	background-color: var(--gray-50);
 }
 
 .tournament-table-section .container {
@@ -1333,7 +1333,7 @@ h1 {
 
 
 .tournament-table thead {
-	background-color: #F9FAFB;
+	background-color: var(--gray-50);
 }
 
 .tournament-table th {
@@ -1421,7 +1421,7 @@ h1 {
 	margin: 0;
 	text-align: center;
 	color: #6B7280;
-	background: #F9FAFB;
+	background: var(--gray-50);
 }
 
 /* ==========================================================================
@@ -1535,19 +1535,19 @@ h1 {
 	}
 
 	.news-section {
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.sponsors-section {
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.last-games-section {
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.tournament-table-section {
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 }
 
@@ -1570,19 +1570,19 @@ h1 {
 	}
 
 	.news-section {
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.sponsors-section {
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.last-games-section {
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.tournament-table-section {
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.site-banner {
@@ -1728,7 +1728,7 @@ h1 {
 
 	.news-section {
 		padding: 2.5rem 0 3rem;
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.news-section .section-header {
@@ -1748,7 +1748,7 @@ h1 {
 
 	.sponsors-section {
 		padding: 2.5rem 0;
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.sponsors-section .section-header {
@@ -1799,7 +1799,7 @@ h1 {
 
 	.last-games-section {
 		padding: 2.5rem 0;
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 	
 	.last-games-section .section-header {
@@ -1833,7 +1833,7 @@ h1 {
 
 	.tournament-table-section {
 		padding: 2.5rem 0;
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.tournament-header__title {
@@ -1974,7 +1974,7 @@ h1 {
 
 	.news-section {
 		padding: 2rem 0 2.5rem;
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.news-section .container {
@@ -1995,7 +1995,7 @@ h1 {
 
 	.sponsors-section {
 		padding: 2rem 0;
-		background-color: #ffffff;
+		background-color: var(--color-white);
 	}
 
 	.sponsors-section .section-header {
@@ -2052,7 +2052,7 @@ h1 {
 	}
 
 	.tournament-table-section {
-		background-color: #f9fafb;
+		background-color: var(--gray-50);
 	}
 
 	.tournament-table-section .section-header {
