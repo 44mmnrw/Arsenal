@@ -87,28 +87,20 @@ $current_league_name = $league_info ? $league_info->league_name : 'Чемпио�
 // Получаем все команды которые участвовали в матчах текущего сезона
 $query = "SELECT DISTINCT t.id, t.name, t.logo_url, t.team_id
          FROM {$wpdb->prefix}arsenal_teams t
-         INNER JOIN {$wpdb->prefix}arsenal_matches m ON (m.home_team_id = t.id OR m.away_team_id = t.id)
+         INNER JOIN {$wpdb->prefix}arsenal_matches m ON (m.home_team_id = t.team_id OR m.away_team_id = t.team_id)
          WHERE m.season_id = %s AND m.tournament_id = %s
          ORDER BY t.name";
 
 $query = $wpdb->prepare( $query, $current_season_id, $tournament_id );
 $teams = $wpdb->get_results( $query );
 
-// ОТЛАДКА
-if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-    error_log( 'Standings Debug: year=' . $current_year . ', season_id=' . $current_season_id . ', teams=' . count( $teams ) . ', query=' . $query );
-}
-
 if ( empty( $teams ) ) {
     echo '<p class="standings-error">Команды не найдены для сезона ' . intval( $current_year ) . '</p>';
-    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-        error_log( 'Standings: No teams found for season ' . $current_season_id );
-    }
     get_footer();
     return;
 }
 
-// Инициализируем статистику по ID команды (используем team_id из матчей)
+// Инициализируем статистику по team_id из матчей
 $standings = [];
 foreach ( $teams as $team ) {
     $standings[ $team->team_id ] = [
@@ -132,14 +124,15 @@ foreach ( $teams as $team ) {
 // ===== ПОЛУЧАЕМ ЖЁЛТЫЕ КАРТОЧКИ ДЛЯ КАЖДОЙ КОМАНДЫ (текущий сезон) =====
 $yellow_cards_data = $wpdb->get_results(
     $wpdb->prepare(
-        "SELECT ml.team_id, COUNT(*) as count
+        "SELECT t.team_id, COUNT(*) as count
          FROM {$wpdb->prefix}arsenal_match_events me
          INNER JOIN {$wpdb->prefix}arsenal_matches m ON me.match_id = m.match_id
          INNER JOIN {$wpdb->prefix}arsenal_match_lineups ml ON me.player_id = ml.player_id AND me.match_id = ml.match_id
+         INNER JOIN {$wpdb->prefix}arsenal_teams t ON t.team_id = ml.team_id
          WHERE m.season_id = %s 
          AND m.tournament_id = %s
          AND me.event_type = 'yellow_card' 
-         GROUP BY ml.team_id",
+         GROUP BY t.team_id",
         $current_season_id,
         $tournament_id
     )
@@ -168,40 +161,40 @@ $matches = $wpdb->get_results(
 );
 
 foreach ( $matches as $match ) {
-    $home_id = $match->home_team_id;
-    $away_id = $match->away_team_id;
+    $home_team_id = $match->home_team_id;  // varchar(8) - team_id
+    $away_team_id = $match->away_team_id;  // varchar(8) - team_id
     $home_score = intval( $match->home_score );
     $away_score = intval( $match->away_score );
     
     // Пропускаем если команд нет в БД
-    if ( ! isset( $standings[ $home_id ] ) || ! isset( $standings[ $away_id ] ) ) {
+    if ( ! isset( $standings[ $home_team_id ] ) || ! isset( $standings[ $away_team_id ] ) ) {
         continue;
     }
     
     // Сыгранные матчи
-    $standings[ $home_id ]['played']++;
-    $standings[ $away_id ]['played']++;
+    $standings[ $home_team_id ]['played']++;
+    $standings[ $away_team_id ]['played']++;
     
     // Голы
-    $standings[ $home_id ]['goals_for'] += $home_score;
-    $standings[ $home_id ]['goals_against'] += $away_score;
-    $standings[ $away_id ]['goals_for'] += $away_score;
-    $standings[ $away_id ]['goals_against'] += $home_score;
+    $standings[ $home_team_id ]['goals_for'] += $home_score;
+    $standings[ $home_team_id ]['goals_against'] += $away_score;
+    $standings[ $away_team_id ]['goals_for'] += $away_score;
+    $standings[ $away_team_id ]['goals_against'] += $home_score;
     
     // Результаты и очки
     if ( $home_score > $away_score ) {
-        $standings[ $home_id ]['wins']++;
-        $standings[ $home_id ]['points'] += 3;
-        $standings[ $away_id ]['losses']++;
+        $standings[ $home_team_id ]['wins']++;
+        $standings[ $home_team_id ]['points'] += 3;
+        $standings[ $away_team_id ]['losses']++;
     } elseif ( $home_score < $away_score ) {
-        $standings[ $away_id ]['wins']++;
-        $standings[ $away_id ]['points'] += 3;
-        $standings[ $home_id ]['losses']++;
+        $standings[ $away_team_id ]['wins']++;
+        $standings[ $away_team_id ]['points'] += 3;
+        $standings[ $home_team_id ]['losses']++;
     } else {
-        $standings[ $home_id ]['draws']++;
-        $standings[ $away_id ]['draws']++;
-        $standings[ $home_id ]['points']++;
-        $standings[ $away_id ]['points']++;
+        $standings[ $home_team_id ]['draws']++;
+        $standings[ $away_team_id ]['draws']++;
+        $standings[ $home_team_id ]['points']++;
+        $standings[ $away_team_id ]['points']++;
     }
 }
 
@@ -218,6 +211,7 @@ $adjustments_data = $wpdb->get_results(
 );
 
 foreach ( $adjustments_data as $adjustment ) {
+    // team_id из таблицы standings_adjustments это varchar(8)
     if ( isset( $standings[ $adjustment->team_id ] ) ) {
         // Применяем корректировку (обычно отрицательное значение для штрафа)
         $standings[ $adjustment->team_id ]['points'] += intval( $adjustment->adjustment_points );
