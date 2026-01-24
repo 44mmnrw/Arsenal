@@ -930,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         placeholder="Множественное число (напр. Массажисты)"
                         style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px;"
                     />
-                    <small style="color: #666; display: block; margin-bottom: 10px;">ℹ️ Множественное число используется на странице профиля сотрудника в разделе команды</small>
+                    <small style="color: #666; display: block; margin-bottom: 10px;">ℹ️ Множественное число используется на странице персонала состава/команды для группировки сотрудников</small>
                 </div>
                 <button class="button button-primary modal-add-job-btn">➕ Добавить должность</button>
             </div>

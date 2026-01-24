@@ -6,7 +6,7 @@
 .player-page {
 	background: var(--gray-50);
 	min-height: 100vh;
-	padding-bottom: 80px;
+	padding-bottom: 5rem;
 }
 
 /* ==========================================================================
@@ -16,12 +16,12 @@
 .player-hero {
 	position: relative;
 	height: 31rem;
-	padding: 40px 0;
+	padding: 2.5rem 0;
 	background: linear-gradient(
 		165.07deg,
-		var(--red-900, #990000) 0%,
-		var(--red-800, #cc0000) 50%,
-		var(--gray-800, #101828) 100%
+		var(--red-900, var(--red-900)) 0%,
+		var(--red-800, var(--red-800)) 50%,
+		var(--gray-800, var(--gray-800)) 100%
 	);
 	overflow: hidden;
 	box-sizing: border-box;
@@ -52,7 +52,7 @@
 	width: 100%;
 	max-width: var(--container-max-width);
 	margin: 0 auto;
-	padding: 20px 40px 0;
+	padding: 1.25rem 2.5rem 0;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -64,7 +64,7 @@
 	gap: 6rem;
 	justify-content: space-between;
 	align-items: stretch;
-	min-height: 430px;
+	min-height: 26.875rem;
 }
 /*---------------------------------------------------
 Обёртка для фото: фиксированный квадрат с обводкой
@@ -75,13 +75,13 @@
 	max-width: 100%;
 	height: 100%;
 	margin: 0 auto;	
-	border-radius: 36px;
+	border-radius: 2.25rem;
 	overflow: hidden;
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-start;
-	border: 4.5px solid #ffffff26;
-	box-shadow: 0 30px 90px #4d4d4d4d;
+	border: 0.28125rem solid rgba(255, 255, 255, 0.15);
+	box-shadow: 0 1.875rem 5.625rem rgba(77, 77, 77, 0.3);
 }
 
 
@@ -104,9 +104,9 @@
 	justify-content: center;
 	background: rgba(255, 255, 255, 0.1);
 	color: rgba(255, 255, 255, 0.6);
-	font-size: 14px;
+	font-size: 0.875rem;
 	text-align: center;
-	padding: 20px;
+	padding: 1.25rem;
 }
 
 .staff-info-block {
@@ -117,44 +117,44 @@
 .staff-position-badge {
 	display: inline-flex;
 	align-items: center;
-	padding: 8px 16px;
+	padding: 0.5rem 1rem;
 	background: var(--red-700);
 	border-radius: 9999px;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 400;
-	line-height: 20px;
-	margin-bottom: 20px;
+	line-height: 1.25rem;
+	margin-bottom: 1.25rem;
 }
 
 .staff-title {
-	margin: 0 0 24px;
-	font-size: 60px;
-	line-height: 72px;
+	margin: 0 0 1.5rem;
+	font-size: 3.75rem;
+	line-height: 4.5rem;
 	font-weight: 700;
 }
 
 .staff-details-grid {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 24px;
+	gap: 1.5rem;
 	padding-top: 4rem;
 }
 
 .staff-detail-item {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 0.25rem;
 }
 
 .staff-detail-label {
-	font-size: 14px;
-	line-height: 20px;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
 	color: rgba(255, 255, 255, 0.8);
 }
 
 .staff-detail-value {
-	font-size: 24px;
-	line-height: 32px;
+	font-size: 1.5rem;
+	line-height: 2rem;
 	font-weight: 400;
 }
 
@@ -163,7 +163,7 @@
    ========================================================================== */
 
 .staff-detail-container {
-	margin: 48px auto 0;
+	margin: 3rem auto 0;
 	padding: var(--container-padding-y) var(--container-padding-x);
 	max-width: var(--container-max-width);
 	width: 100%;
@@ -172,61 +172,61 @@
 
 .staff-detail-inner {
 	display: grid;
-	grid-template-columns: minmax(0, 992px) 480px;
-	gap: 32px;
+	grid-template-columns: minmax(0, 62rem) 30rem;
+	gap: 2rem;
 	align-items: flex-start;
 }
 
 .staff-content {
 	display: flex;
 	flex-direction: column;
-	gap: 32px;
+	gap: 2rem;
 }
 
 .staff-section {
 	background: var(--color-white);
-	border-radius: 16px;
-	padding: 35px;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+	border-radius: 1rem;
+	padding: 2.1875rem;
+	box-shadow: 0 0.625rem 0.9375rem -3px rgba(0, 0, 0, 0.1), 0 0.25rem 0.375rem -4px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 }
 
 .staff-section__header {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	font-size: 20px;
+	gap: 0.5rem;
+	font-size: 1.25rem;
 	font-weight: 700;
-	color: var(--color-text, #333333);
+	color: var(--color-text);
 	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin: 0 0 25px 0;
-	padding-left: 15px;
-	border-left: 4px solid var(--red-900, #990000);
+	letter-spacing: 0.03125rem;
+	margin: 0 0 1.5625rem 0;
+	padding-left: 0.9375rem;
+	border-left: 0.25rem solid var(--red-900, var(--red-900));
 	background: transparent;
 }
 
 .staff-section__icon {
-	width: 20px;
-	height: 20px;
-	color: var(--red-900, #990000);
+	width: 1.25rem;
+	height: 1.25rem;
+	color: var(--red-900, var(--red-900));
 	flex-shrink: 0;
 }
 
 .staff-section__title {
 	margin: 0;
-	font-size: 20px;
-	line-height: 28px;
+	font-size: 1.25rem;
+	line-height: 1.75rem;
 	font-weight: 700;
 	color: inherit;
 	text-transform: uppercase;
-	letter-spacing: 0.5px;
+	letter-spacing: 0.03125rem;
 }
 
 .staff-section__text {
 	margin: 0;
-	font-size: 16px;
-	line-height: 25.6px;
+	font-size: 1rem;
+	line-height: 1.6rem;
 	color: var(--gray-700);
 	white-space: pre-wrap;
 	word-break: break-word;
@@ -236,24 +236,24 @@
 .staff-career {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 1rem;
 }
 
 .staff-achievement-item,
 .staff-career-item {
 	display: flex;
-	gap: 16px;
-	padding: 16px;
-	min-height: 80px;
+	gap: 1rem;
+	padding: 1rem;
+	min-height: 5rem;
 	background: var(--gray-50);
-	border-radius: 10px;
+	border-radius: 0.625rem;
 	align-items: center;
 }
 
 .staff-achievement-icon,
 .staff-career-icon {
-	width: 48px;
-	height: 48px;
+	width: 3rem;
+	height: 3rem;
 	border-radius: 9999px;
 	background: var(--red-100);
 	display: flex;
@@ -265,15 +265,15 @@
 
 .staff-achievement-icon svg,
 .staff-career-icon svg {
-	width: 24px;
-	height: 24px;
+	width: 1.5rem;
+	height: 1.5rem;
 	fill: currentColor;
 }
 
 .staff-achievement-text {
 	margin: 0;
-	font-size: 16px;
-	line-height: 25.6px;
+	font-size: 1rem;
+	line-height: 1.6rem;
 	color: var(--color-charcoal);
 	flex: 1;
 }
@@ -281,29 +281,29 @@
 .staff-career-info {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 0.25rem;
 	flex: 1;
 }
 
 .staff-career-title {
 	margin: 0;
-	font-size: 16px;
-	line-height: 22.4px;
+	font-size: 1rem;
+	line-height: 1.4rem;
 	font-weight: 600;
 	color: var(--gray-900);
 }
 
 .staff-career-club {
 	margin: 0;
-	font-size: 14px;
-	line-height: 22.4px;
+	font-size: 0.875rem;
+	line-height: 1.4rem;
 	color: var(--gray-600);
 }
 
 .staff-career-period {
 	margin: 0;
-	font-size: 14px;
-	line-height: 22.4px;
+	font-size: 0.875rem;
+	line-height: 1.4rem;
 	color: var(--gray-500);
 }
 
@@ -313,28 +313,28 @@
 
 .staff-sidebar {
 	position: sticky;
-	top: 120px;
+	top: 7.5rem;
 	display: flex;
 	flex-direction: column;
-	gap: 24px;
+	gap: 1.5rem;
 }
 
 .staff-info-card {
 	background: var(--color-white);
-	border-radius: 16px;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+	border-radius: 1rem;
+	box-shadow: 0 0.625rem 0.9375rem -3px rgba(0, 0, 0, 0.1), 0 0.25rem 0.375rem -4px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 }
 
 .staff-info-card__header {
-	background: linear-gradient(135deg, var(--red-900, #990000) 0%, var(--red-700, #ff1a1a) 100%);
-	padding: 16px 24px;
+	background: linear-gradient(135deg, var(--red-900, var(--red-900)) 0%, var(--red-700, var(--red-700)) 100%);
+	padding: 1rem 1.5rem;
 }
 
 .staff-info-card__title {
 	margin: 0;
-	font-size: 20px;
-	line-height: 28px;
+	font-size: 1.25rem;
+	line-height: 1.75rem;
 	font-weight: 600;
 	color: var(--color-white);
 }
@@ -342,16 +342,16 @@
 .staff-info-card__body {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	padding: 24px;
+	gap: 1rem;
+	padding: 1.5rem;
 }
 
 .staff-info-card__row {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
-	padding-bottom: 16px;
-	border-bottom: 1px solid var(--gray-200);
+	gap: 0.25rem;
+	padding-bottom: 1rem;
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .staff-info-card__row:last-child {
@@ -360,32 +360,32 @@
 }
 
 .staff-info-card__label {
-	font-size: 14px;
-	line-height: 20px;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
 	color: var(--gray-600);
 }
 
 .staff-info-card__value {
-	font-size: 18px;
-	line-height: 28px;
+	font-size: 1.125rem;
+	line-height: 1.75rem;
 	color: var(--gray-900);
 }
 
 .staff-fact-card {
 	background: linear-gradient(180deg, var(--red-50) 0%, var(--red-100) 100%);
-	border: 1px solid var(--red-100, #ffe5e5);
-	border-radius: 16px;
-	padding: 24px;
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+	border: 0.0625rem solid var(--red-100, #ffe5e5);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	box-shadow: 0 0.625rem 0.9375rem -3px rgba(0, 0, 0, 0.1), 0 0.25rem 0.375rem -4px rgba(0, 0, 0, 0.1);
 }
 
 .staff-fact-card .staff-fact-icon {
-	margin-bottom: 16px;
+	margin-bottom: 1rem;
 }
 
 .staff-fact-icon {
-	width: 48px;
-	height: 48px;
+	width: 3rem;
+	height: 3rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -406,17 +406,17 @@
 }
 
 .staff-fact-title {
-	margin: 0 0 12px;
-	font-size: 18px;
-	line-height: 25.2px;
+	margin: 0 0 0.75rem;
+	font-size: 1.125rem;
+	line-height: 1.575rem;
 	font-weight: 600;
 	color: var(--red-900);
 }
 
 .staff-fact-text {
 	margin: 0;
-	font-size: 14px;
-	line-height: 22.4px;
+	font-size: 0.875rem;
+	line-height: 1.4rem;
 	color: var(--gray-700);
 }
 
@@ -427,7 +427,7 @@
 /* Desktop Large (1024px) */
 @media (max-width: 1024px) {
 	.staff-container {
-		padding: 0 30px;
+		padding: 0 1.875rem;
 		height: auto;
 	}
 
@@ -438,7 +438,7 @@
 
 	.staff-hero__main {
 		grid-template-columns: 1fr 1.2fr;
-		gap: 40px;
+		gap: 2.5rem;
 	}
 
 	.staff-info-block {
@@ -446,23 +446,23 @@
 	}
 
 	.staff-title {
-		font-size: 42px;
-		line-height: 52px;
+		font-size: 2.625rem;
+		line-height: 3.25rem;
 	}
 
 	.staff-details-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 20px;
+		gap: 1.25rem;
 	}
 
 	.staff-detail-value {
-		font-size: 20px;
-		line-height: 28px;
+		font-size: 1.25rem;
+		line-height: 1.75rem;
 	}
 
 	.staff-detail-container {
-		padding: 0 30px;
-		margin-top: 32px;
+		padding: 0 1.875rem;
+		margin-top: 2rem;
 	}
 
 	.staff-detail-inner {
@@ -481,35 +481,35 @@
 	}
 
 	.staff-section {
-		padding: 30px;
+		padding: 1.875rem;
 	}
 
 	.staff-section__header {
-		margin-bottom: 20px;
+		margin-bottom: 1.25rem;
 	}
 
 	.staff-content {
-		gap: 24px;
+		gap: 1.5rem;
 	}
 }
 
 /* Tablet (768px) */
 @media (max-width: 768px) {
 	.player-page {
-		padding-bottom: 48px;
+		padding-bottom: 3rem;
 	}
 
 	.player-hero {
 		height: auto;
-		padding: 25px 0;
+		padding: 1.5625rem 0;
 	}
 
 	.player-hero__inner {
-		padding: 0 20px;
+		padding: 0 1.25rem;
 	}
 
 	.staff-container {
-		padding: 0 20px;
+		padding: 0 1.25rem;
 	}
 
 	.staff-hero__main {
@@ -523,61 +523,61 @@
 		width: 100%;
 		max-width: 100%;
 		height: auto;
-		border-radius: 24px;
+		border-radius: 1.5rem;
 	}
 
 	.staff-info-block {
 		padding-top: 0;
 		text-align: left;
-		background: #ffffff40;
-		border-radius: 12px;
-		padding: 20px;
+		background: rgba(255, 255, 255, 0.25);
+		border-radius: 0.75rem;
+		padding: 1.25rem;
 		height: auto;
 	}
 
 	.staff-position-badge {
-		padding: 5px 12px;
-		font-size: 12px;
+		padding: 0.3125rem 0.75rem;
+		font-size: 0.75rem;
 		width: fit-content;
 	}
 
 	.staff-title {
-		font-size: 28px;
-		line-height: 36px;
-		margin-bottom: 8px;
+		font-size: 1.75rem;
+		line-height: 2.25rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.staff-details-grid {
 		grid-template-columns: 1fr 1fr;
-		gap: 15px;
+		gap: 0.9375rem;
 		padding-top: 2rem;
 	}
 
 	.staff-detail-item {
-		gap: 2px;
+		gap: 0.125rem;
 	}
 
 	.staff-detail-label {
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
 	.staff-detail-value {
-		font-size: 20px;
-		line-height: 28px;
+		font-size: 1.25rem;
+		line-height: 1.75rem;
 	}
 
 	.staff-detail-container {
-		padding: 0 20px;
-		margin-top: 32px;
+		padding: 0 1.25rem;
+		margin-top: 2rem;
 	}
 
 	.content-container {
-		padding: 0 20px;
+		padding: 0 1.25rem;
 	}
 
 	.staff-detail-inner {
 		grid-template-columns: 1fr;
-		gap: 24px;
+		gap: 1.5rem;
 	}
 
 	.staff-sidebar {
@@ -586,94 +586,94 @@
 	}
 
 	.staff-content {
-		gap: 24px;
+		gap: 1.5rem;
 	}
 
 	.staff-section {
-		padding: 20px;
-		border-radius: 12px;
+		padding: 1.25rem;
+		border-radius: 0.75rem;
 	}
 
 	.staff-section__header {
-		font-size: 18px;
-		margin-bottom: 20px;
-		padding-left: 12px;
+		font-size: 1.125rem;
+		margin-bottom: 1.25rem;
+		padding-left: 0.75rem;
 	}
 
 	.staff-achievement-item,
 	.staff-career-item {
 		min-height: unset;
-		padding: 12px;
-		gap: 12px;
+		padding: 0.75rem;
+		gap: 0.75rem;
 	}
 
 	.staff-achievement-icon,
 	.staff-career-icon {
-		width: 40px;
-		height: 40px;
+		width: 2.5rem;
+		height: 2.5rem;
 	}
 
 	.staff-achievement-text,
 	.staff-career-info {
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 
 	.staff-info-card {
-		border-radius: 12px;
+		border-radius: 0.75rem;
 	}
 
 	.staff-info-card__header {
-		padding: 14px 20px;
+		padding: 0.875rem 1.25rem;
 	}
 
 	.staff-info-card__body {
-		padding: 20px;
-		gap: 12px;
+		padding: 1.25rem;
+		gap: 0.75rem;
 	}
 
 	.staff-info-card__title {
-		font-size: 18px;
-		line-height: 24px;
+		font-size: 1.125rem;
+		line-height: 1.5rem;
 	}
 
 	.staff-fact-card {
-		padding: 18px;
-		border-radius: 12px;
+		padding: 1.125rem;
+		border-radius: 0.75rem;
 	}
 
 	.staff-fact-title {
-		font-size: 16px;
-		line-height: 22px;
+		font-size: 1rem;
+		line-height: 1.375rem;
 	}
 
 	.staff-fact-text {
-		font-size: 13px;
-		line-height: 20px;
+		font-size: 0.8125rem;
+		line-height: 1.25rem;
 	}
 }
 
 /* Mobile (480px) */
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
 
 	.staff-container {
-		padding: 0 12px;
+		padding: 0 0.75rem;
 		height: auto;
 	}
 
 	.content-container {
-		padding: 0 12px;
+		padding: 0 0.75rem;
 	}
 
 	.player-hero {
 		height: auto;
-		padding: 15px 0;
+		padding: 0.9375rem 0;
 	}
 
 	.player-hero__inner {
-		padding: 20px 16px 0;
+		padding: 1.25rem 1rem 0;
 	}
 
 	.staff-hero__main {
@@ -685,56 +685,56 @@
 	.staff-photo-wrapper {
 		width: 100%;
 		height: auto;
-		border-radius: 16px;
-		border: 3px solid #ffffff26;
+		border-radius: 1rem;
+		border: 0.1875rem solid rgba(255, 255, 255, 0.15);
 	}
 
 	.staff-info-block {
-		padding: 16px;
-		border-radius: 10px;
-		gap: 16px;
+		padding: 1rem;
+		border-radius: 0.625rem;
+		gap: 1rem;
 		height: auto;
 	}
 
 	.staff-position-badge {
-		font-size: 11px;
-		padding: 4px 10px;
-		border-radius: 20px;
+		font-size: 0.6875rem;
+		padding: 0.25rem 0.625rem;
+		border-radius: 1.25rem;
 	}
 
 	.staff-title {
-		font-size: 24px;
-		line-height: 32px;
-		margin-bottom: 6px;
+		font-size: 1.5rem;
+		line-height: 2rem;
+		margin-bottom: 0.375rem;
 	}
 
 	.staff-details-grid {
 		grid-template-columns: 1fr;
-		gap: 8px;
+		gap: 0.5rem;
 		padding-top: 1.5rem;
 	}
 
 	.staff-detail-item {
-		gap: 2px;
+		gap: 0.125rem;
 	}
 
 	.staff-detail-label {
-		font-size: 11px;
-		line-height: 16px;
+		font-size: 0.6875rem;
+		line-height: 1rem;
 	}
 
 	.staff-detail-value {
-		font-size: 16px;
-		line-height: 24px;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	}
 
 	.staff-detail-container {
-		padding: 0 12px;
+		padding: 0 0.75rem;
 	}
 
 	.staff-detail-inner {
 		grid-template-columns: 1fr;
-		gap: 16px;
+		gap: 1rem;
 	}
 
 	.staff-sidebar {
@@ -744,107 +744,107 @@
 	}
 
 	.staff-content {
-		gap: 16px;
+		gap: 1rem;
 	}
 
 	.staff-section {
-		padding: 16px;
-		border-radius: 10px;
+		padding: 1rem;
+		border-radius: 0.625rem;
 	}
 
 	.staff-section__header {
-		font-size: 16px;
-		margin-bottom: 16px;
-		padding-left: 12px;
+		font-size: 1rem;
+		margin-bottom: 1rem;
+		padding-left: 0.75rem;
 	}
 
 	.staff-section__title {
-		font-size: 16px;
-		line-height: 20px;
+		font-size: 1rem;
+		line-height: 1.25rem;
 	}
 
 	.staff-section__text {
-		font-size: 14px;
-		line-height: 22px;
+		font-size: 0.875rem;
+		line-height: 1.375rem;
 	}
 
 	.staff-achievement-item,
 	.staff-career-item {
-		padding: 10px;
-		gap: 10px;
+		padding: 0.625rem;
+		gap: 0.625rem;
 		min-height: unset;
-		border-radius: 8px;
+		border-radius: 0.5rem;
 	}
 
 	.staff-achievement-icon,
 	.staff-career-icon {
-		width: 36px;
-		height: 36px;
+		width: 2.25rem;
+		height: 2.25rem;
 	}
 
 	.staff-achievement-text {
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
 	}
 
 	.staff-career-title {
-		font-size: 14px;
-		line-height: 20px;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
 	}
 
 	.staff-career-club,
 	.staff-career-period {
-		font-size: 12px;
-		line-height: 18px;
+		font-size: 0.75rem;
+		line-height: 1.125rem;
 	}
 
 	.staff-info-card {
-		border-radius: 10px;
+		border-radius: 0.625rem;
 	}
 
 	.staff-info-card__header {
-		padding: 12px 16px;
+		padding: 0.75rem 1rem;
 	}
 
 	.staff-info-card__title {
-		font-size: 16px;
-		line-height: 24px;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	}
 
 	.staff-info-card__body {
-		padding: 16px;
-		gap: 12px;
+		padding: 1rem;
+		gap: 0.75rem;
 	}
 
 	.staff-info-card__label {
-		font-size: 12px;
-		line-height: 18px;
+		font-size: 0.75rem;
+		line-height: 1.125rem;
 	}
 
 	.staff-info-card__value {
-		font-size: 16px;
-		line-height: 24px;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	}
 
 	.staff-fact-card {
-		padding: 16px;
-		border-radius: 10px;
+		padding: 1rem;
+		border-radius: 0.625rem;
 	}
 
 	.staff-fact-icon {
-		width: 36px;
-		height: 36px;
+		width: 2.25rem;
+		height: 2.25rem;
 	}
 
 	.staff-fact-title {
-		font-size: 14px;
-		line-height: 20px;
-		margin-bottom: 10px;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		margin-bottom: 0.625rem;
 	}
 
 	.staff-fact-text {
-		font-size: 12px;
-		line-height: 18px;
+		font-size: 0.75rem;
+		line-height: 1.125rem;
 	}
 }
 
@@ -863,13 +863,13 @@ lottie-player {
 	align-items: center !important;
 	justify-content: center !important;
 	background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%) !important;
-	border-radius: 8px;
+	border-radius: 0.5rem;
 }
 
 /* Мобильный вид */
 @media (max-width: 768px) {
 	lottie-player {
-		min-height: 200px !important;
+		min-height: 12.5rem !important;
 	}
 }
 

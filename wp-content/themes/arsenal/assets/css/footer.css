@@ -9,7 +9,7 @@
 
 /* Основная часть футера */
 .footer-main {
-	padding: 0rem 0 2.5rem;
+	padding: 0rem;
 }
 
 .footer-main .container {
@@ -316,9 +316,7 @@
 	grid-template-columns: 1fr 1fr;
 	gap: 1.5rem;
 	align-items: center;
-	border-top: 1px solid var(--color-charcoal);
-	padding-top: 1.5rem;
-	padding-bottom: 1rem;
+	border-top: 0.0625rem solid var(--color-charcoal);
 }
 
 .footer-bottom-left,
@@ -364,7 +362,7 @@
 /* Footer Responsive */
 
 /* Планшеты: 2 колонки сверху (brand + contacts), nav на всю ширину снизу */
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
@@ -402,7 +400,7 @@
 }
 
 /* Мобильные: полностью вертикальный layout */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
@@ -425,7 +423,7 @@
 }
 
 /* Маленькие мобильные: аккордеон-меню */
-@media (max-width: 576px) {
+@media (max-width: 480px) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
@@ -442,12 +440,12 @@
 	
 	.footer-nav-column,
 	.footer-contacts {
-		border-bottom: 1px solid #ffffffcc;
+		border-bottom: 0.0625rem solid #ffffffcc;
 		padding: 0;
 	}
 	
 	.footer-nav-column:last-child {
-		border-bottom: 1px solid #ffffffcc;
+		border-bottom: 0.0625rem solid #ffffffcc;
 	}
 	
 	.footer-contacts {
@@ -486,6 +484,7 @@
 		gap: 0.75rem;
 	}
 }
+
 
 
 

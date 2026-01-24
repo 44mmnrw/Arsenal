@@ -8,6 +8,19 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Добавляем CSS для правильного spacing внизу (чтобы footer не перекрывал таблицу)
+?>
+<style>
+    body.wp-admin {
+        padding-bottom: 200px !important;
+    }
+    
+    #wpfooter {
+        position: relative !important;
+    }
+</style>
+<?php
+
 global $wpdb;
 
 // Обработка действий

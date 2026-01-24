@@ -1441,6 +1441,29 @@ function arsenal_customize_register( $wp_customize ) {
 			'priority' => 62,
 		)
 	);
+
+	/*
+	 * ==============================================
+	 * Settings для Click-to-Edit (Popup редактирование)
+	 * БЕЗ UI controls - только для сохранения данных
+	 * Используется класс Arsenal_Customizer_Inline_Editor
+	 * ==============================================
+	 */
+
+	// Текст кнопки "Подать заявку"
+	Arsenal_Customizer_Inline_Editor::register_setting(
+		$wp_customize,
+		'arsenal_academy_button_apply_text',
+		'Подать заявку'
+	);
+
+	// Текст кнопки "Контакты"
+	Arsenal_Customizer_Inline_Editor::register_setting(
+		$wp_customize,
+		'arsenal_academy_button_contacts_text',
+		'Контакты'
+	);
+
 }
 add_action( 'customize_register', 'arsenal_customize_register' );
 

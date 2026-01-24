@@ -81,7 +81,7 @@ h1 {
 }
 
 .staff-card:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .staff-card__photo {
@@ -106,7 +106,7 @@ h1 {
 .staff-card__info {
 	display: flex;
 	flex-direction: column;
-	padding: 12px;
+	padding: 0.75rem;
 	grid-row: 1 / 2;
 	grid-column: 2 / 3;
 	justify-content: space-evenly;
@@ -202,7 +202,7 @@ h1 {
 	}
 	
 	.staff-card__info {
-		padding: 10px;
+		padding: 0.625rem;
 	}
 	
 	.staff-card__name {
@@ -256,7 +256,7 @@ h1 {
 	.staff-card {
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto;
-		border-radius: 8px;
+		border-radius: 0.5rem;
 	}
 	
 	.staff-card:hover {
@@ -268,7 +268,7 @@ h1 {
 	}
 	
 	.staff-card__info {
-		padding: 8px;
+		padding: 0.5rem;
 	}
 	
 	.staff-card__name {
@@ -286,7 +286,7 @@ h1 {
 }
 
 /* Mobile (480px) */
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
@@ -341,7 +341,7 @@ h1 {
 
 	.staff-card:hover {
 		transform: none;
-		box-shadow: 0px 1px 3px 0px var(--color-dark-gray)1a, 0px 1px 2px -1px var(--color-dark-gray)1a;
+		box-shadow: 0 1px 0.1875rem 0 var(--color-dark-gray)1a, 0 1px 0.125rem -1px var(--color-dark-gray)1a;
 	}
 
 	.staff-card__photo {
@@ -390,3 +390,5 @@ h1 {
 		line-height: 1.5;
 	}
 }
+
+

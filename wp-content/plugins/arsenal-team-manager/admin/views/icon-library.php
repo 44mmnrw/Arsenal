@@ -76,7 +76,7 @@ ksort( $icons_by_category );
 					<?php foreach ( $category_icons as $icon ) : ?>
 						<div class="icon-item">
 							<div class="icon-preview">
-								<svg class="icon" width="48" height="48">
+								<svg class="icon" width="12" height="12">
 									<use xlink:href="<?php echo esc_url( $sprite_url ); ?>#<?php echo esc_attr( $icon['id'] ); ?>"></use>
 								</svg>
 							</div>
@@ -177,7 +177,7 @@ ksort( $icons_by_category );
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	aspect-ratio: 1;
+	height: 70px;
 	margin-bottom: 15px;
 	background: #fff;
 	border-radius: 4px;
@@ -248,12 +248,12 @@ ksort( $icons_by_category );
 	}
 
 	.icon-preview {
-		height: 70px;
+		height: 50px;
 	}
 
 	.icon-preview .icon {
-		width: 40px;
-		height: 40px;
+		width: 10px;
+		height: 10px;
 	}
 }
 </style>

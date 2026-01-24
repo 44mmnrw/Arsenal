@@ -39,34 +39,35 @@ get_header();
 				</div>
 			<?php endif; ?>
 
-			<!-- Фильтры категорий -->
-			<div class="news-filters">
-				<?php
-				$categories = get_categories( array(
-					'orderby' => 'name',
-					'order'   => 'ASC',
-					'hide_empty' => false,
-				) );
-				
-				$current_cat = get_query_var( 'cat' );
-				?>
-				
-				<a href="<?php echo get_post_type_archive_link( 'post' ); ?>" class="filter-btn <?php echo ( ! is_category() ) ? 'active' : ''; ?>">
-					Все новости
-				</a>
-				
-				<?php foreach ( $categories as $category ) : ?>
-					<a href="<?php echo get_category_link( $category->term_id ); ?>" 
-					   class="filter-btn <?php echo ( is_category( $category->term_id ) ) ? 'active' : ''; ?>">
-						<?php echo esc_html( $category->name ); ?>
+			<!-- Фильтры категорий и сетка (только если есть посты) -->
+			<?php if ( have_posts() ) : ?>
+				<!-- Фильтры категорий -->
+				<div class="news-filters">
+					<?php
+					$categories = get_categories( array(
+						'orderby' => 'name',
+						'order'   => 'ASC',
+						'hide_empty' => true,
+					) );
+					
+					$current_cat = get_query_var( 'cat' );
+					?>
+					
+					<a href="<?php echo get_post_type_archive_link( 'post' ); ?>" class="filter-btn <?php echo ( ! is_category() ) ? 'active' : ''; ?>">
+						Все новости
 					</a>
-				<?php endforeach; ?>
-			</div>
+					
+					<?php foreach ( $categories as $category ) : ?>
+						<a href="<?php echo get_category_link( $category->term_id ); ?>" 
+						   class="filter-btn <?php echo ( is_category( $category->term_id ) ) ? 'active' : ''; ?>">
+							<?php echo esc_html( $category->name ); ?>
+						</a>
+					<?php endforeach; ?>
+				</div>
 
-			<!-- Сетка новостей -->
-			<div class="news-grid">
-				<?php
-				if ( have_posts() ) :
+				<!-- Сетка новостей -->
+				<div class="news-grid">
+					<?php
 					while ( have_posts() ) : the_post();
 						?>
 						<div class="news-card">
@@ -125,12 +126,13 @@ get_header();
 						'prev_text' => __( '← Назад', 'arsenal' ),
 						'next_text' => __( 'Вперед →', 'arsenal' ),
 					) );
-					
-				else :
 					?>
-					<p class="no-news">Новостей пока нет.</p>
-				<?php endif; ?>
-			</div>
+				</div>
+			<?php else : ?>
+				<p style="text-align: center; padding: 2rem; color: var(--gray-600);">
+					<?php esc_html_e( 'Записей не найдено.', 'arsenal' ); ?>
+				</p>
+			<?php endif; ?>
 		</div>
 	</div>
 </main>

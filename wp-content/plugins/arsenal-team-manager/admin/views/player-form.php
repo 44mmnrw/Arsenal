@@ -242,6 +242,9 @@ if ( ! $is_new ) {
                 <!-- Фото игрока -->
                 <div class="player-form-section">
                     <h3>🖼️ Фото игрока</h3>
+                    <p style="color: #666; font-size: 13px; margin: 0 0 12px 0;">
+                        💡 Используйте изображения в формате PNG с прозрачным фоном
+                    </p>
                     
                     <div class="player-photo-box">
                         <div id="photo_preview">

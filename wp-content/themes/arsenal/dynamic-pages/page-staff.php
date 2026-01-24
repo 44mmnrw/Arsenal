@@ -219,6 +219,7 @@ if ( empty( $staff_nationality ) ) {
 			</div>
 
 			<!-- ACHIEVEMENTS -->
+			<?php if ( ! empty( $staff_achievements ) && is_array( $staff_achievements ) ) : ?>
 			<div class="staff-section staff-section--achievements">
 				<div class="staff-section__header staff-section__header--achievements">
 					<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-cup"></use></svg>
@@ -227,8 +228,7 @@ if ( empty( $staff_nationality ) ) {
 
 				<div class="staff-section__content staff-achievements">
 					<?php
-					if ( ! empty( $staff_achievements ) && is_array( $staff_achievements ) ) {
-						foreach ( $staff_achievements as $achievement ) {
+					foreach ( $staff_achievements as $achievement ) {
 							?>
 							<div class="staff-achievement-item">
 							<div class="staff-achievement-icon">
@@ -240,12 +240,13 @@ if ( empty( $staff_nationality ) ) {
 							</div>
 							<?php
 						}
-					}
 					?>
 				</div>
 			</div>
+			<?php endif; ?>
 
 			<!-- CAREER -->
+			<?php if ( ! empty( $staff_career ) && is_array( $staff_career ) ) : ?>
 			<div class="staff-section staff-section--career">
 				<div class="staff-section__header staff-section__header--career">
 					<svg class="staff-section__icon"><use xlink:href="<?php echo esc_attr( ARSENAL_THEME_URI ); ?>/assets/images/sprite.svg#icon-career"></use></svg>
@@ -254,8 +255,7 @@ if ( empty( $staff_nationality ) ) {
 
 				<div class="staff-section__content staff-career">
 					<?php
-					if ( ! empty( $staff_career ) && is_array( $staff_career ) ) {
-						foreach ( $staff_career as $position ) {
+					foreach ( $staff_career as $position ) {
 							?>
 							<div class="staff-career-item">
 								<div class="staff-career-icon">
@@ -275,10 +275,10 @@ if ( empty( $staff_nationality ) ) {
 							</div>
 							<?php
 						}
-					}
 					?>
 				</div>
 			</div>
+			<?php endif; ?>
 			</div>
 
 			<!-- SIDEBAR -->

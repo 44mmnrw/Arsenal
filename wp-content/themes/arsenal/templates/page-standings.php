@@ -87,7 +87,7 @@ $current_league_name = $league_info ? $league_info->league_name : 'Чемпио�
 // Получаем все команды которые участвовали в матчах текущего сезона
 $query = "SELECT DISTINCT t.id, t.name, t.logo_url, t.team_id
          FROM {$wpdb->prefix}arsenal_teams t
-         INNER JOIN {$wpdb->prefix}arsenal_matches m ON (m.home_team_id = t.team_id OR m.away_team_id = t.team_id)
+         INNER JOIN {$wpdb->prefix}arsenal_matches m ON (m.home_team_id = t.id OR m.away_team_id = t.id)
          WHERE m.season_id = %s AND m.tournament_id = %s
          ORDER BY t.name";
 

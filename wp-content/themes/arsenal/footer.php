@@ -46,9 +46,10 @@
 			),
 		);
 		?>
-		<!-- Основная часть футера -->
-		<div class="footer-main">
-			<div class="container">
+
+		<div class="container">
+			<!-- Основная часть футера -->
+			<div class="footer-main">
 				<div class="footer-content">
 					<!-- Логотип и контакты -->
 					<div class="footer-brand">
@@ -276,11 +277,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- Нижняя часть футера с копирайтом -->
-		<div class="footer-bottom">
-			<div class="container">
+			<!-- Нижняя часть футера -->
+			<div class="footer-bottom">
 				<div class="footer-bottom-content">
 					<div class="footer-bottom-left">
 						<span class="footer-copyright">© <?php echo date( 'Y' ); ?> ФК Арсенал Дзержинск</span>
@@ -296,7 +295,7 @@
 						if ( $privacy_policy ) : ?>
 							<a href="<?php echo esc_url( get_permalink( $privacy_policy ) ); ?>" class="footer-link">Политика конфиденциальности</a>
 						<?php endif; ?>
-						<span class="footer-developer">Разработка и поддержка: <a href="#" class="footer-link footer-link--accent">Веб-студия</a></span>
+						<span class="footer-developer">Разработка и поддержка: <a href="https://axecode.tech" class="footer-link footer-link--accent" target="_blank" rel="noopener noreferrer">AxeCode</a></span>
 					</div>
 				</div>
 			</div>

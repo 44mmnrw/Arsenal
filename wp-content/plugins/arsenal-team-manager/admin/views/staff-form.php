@@ -226,6 +226,10 @@ if ( $current_dept_id ) {
         <div class="staff-form-section">
 
             <div class="staff-photo-box">
+                <p style="color: #666; font-size: 13px; margin: 0 0 12px 0;">
+                    💡 Используйте изображения в формате PNG с прозрачным фоном
+                </p>
+                
                 <?php if ( $staff->photo_url ?? null ): ?>
                     <img id="photo-preview" src="<?php echo esc_url( home_url( $staff->photo_url ) . '?v=' . time() ); ?>" alt="Фото сотрудника">
                 <?php else: ?>

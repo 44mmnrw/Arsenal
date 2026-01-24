@@ -22,7 +22,7 @@ get_header();
 				$categories = get_categories( array(
 					'orderby' => 'name',
 					'order'   => 'ASC',
-					'hide_empty' => false,
+					'hide_empty' => true,
 				) );
 				
 				// Текущая категория
@@ -134,12 +134,10 @@ get_header();
 							) );
 							?>
 						</div>
-					<?php endif; ?>
+					<?php endif;
 					
-					<?php
 					wp_reset_postdata();
-				else :
-					?>
+				else : ?>
 					<p class="no-news">Новостей пока нет.</p>
 				<?php endif; ?>
 			</div>

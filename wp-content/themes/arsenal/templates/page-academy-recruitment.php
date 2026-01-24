@@ -46,25 +46,30 @@ $faq = $data['faq_data'] ?? array();
 					<?php echo wpautop( wp_kses_post( $hero['description'] ?? 'СДЮШ "Арсенал" объявляет набор детей в возрасте от 8 до 17 лет.' ) ); ?>
 				</p>
 				<div class="hero-actions">
-				<?php 
-				$btn1_text = 'Подать заявку';
-				$btn2_text = 'Контакты';
-				
-				if ( ! empty( $hero['buttons'] ) && is_array( $hero['buttons'] ) ) {
-					if ( isset( $hero['buttons'][0]['text'] ) ) {
-						$btn1_text = $hero['buttons'][0]['text'];
-					}
-					if ( isset( $hero['buttons'][1]['text'] ) ) {
-						$btn2_text = $hero['buttons'][1]['text'];
-					}
-				}
-				?>
-				<button class="btn btn-primary btn-lg" data-action="apply">
-					<?php echo esc_html( $btn1_text ); ?>
-				</button>
-				<a href="#contacts" class="btn btn-secondary btn-lg">
-					<?php echo esc_html( $btn2_text ); ?>
-					</a>
+			<?php
+			// Используем класс-утилиту для вывода редактируемых элементов
+			Arsenal_Customizer_Inline_Editor::render_editable_element(
+				'arsenal_academy_button_apply_text',
+				'button',
+				array(
+					'class'  => 'btn btn-primary btn-lg academy-button-apply',
+					'data-action' => 'apply',
+				),
+				null,
+				'Подать заявку'
+			);
+
+			Arsenal_Customizer_Inline_Editor::render_editable_element(
+				'arsenal_academy_button_contacts_text',
+				'a',
+				array(
+					'href'  => '#contacts',
+					'class' => 'btn btn-secondary btn-lg academy-button-contacts',
+				),
+				null,
+				'Контакты'
+			);
+			?>
 				</div>
 			</div>
 		</section>

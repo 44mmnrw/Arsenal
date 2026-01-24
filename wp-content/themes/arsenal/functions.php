@@ -24,6 +24,11 @@ require_once ARSENAL_THEME_DIR . '/vendor/autoload.php';
 \Carbon_Fields\Carbon_Fields::boot();
 
 /**
+ * Подключение Customizer Inline Editor утилиты
+ */
+require_once ARSENAL_THEME_DIR . '/inc/classes/class-customizer-inline-editor.php';
+
+/**
  * Подключение всех компонентов темы через центральный bootstrap
  */
 require_once ARSENAL_THEME_DIR . '/inc/bootstrap.php';
@@ -352,13 +357,23 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			);
 		}
 
-	// Стили страницы новостей (только для страницы Новости)
-	if ( is_page_template( 'templates/page-news.php' ) || is_home() || is_archive() || is_category() ) {
+	// Стили архива новостей (для категорий, тегов, архивов, главной)
+	if ( is_singular( 'post' ) === false && ( is_page_template( 'templates/page-news.php' ) || is_home() || is_archive() || is_category() || is_tag() ) ) {
 		wp_enqueue_style(
 			'arsenal-news-page',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-news.css',
-			array( 'arsenal-footer' ),
-			ARSENAL_VERSION
+			array( 'arsenal-main' ),
+			ARSENAL_VERSION . '-news'
+		);
+	}
+
+	// Явная загрузка стилей для архива категорий (дополнительная проверка)
+	if ( is_category() || is_tag() ) {
+		wp_enqueue_style(
+			'arsenal-category-archive',
+			ARSENAL_THEME_URI . '/assets/css/pages/page-news.css',
+			array( 'arsenal-main' ),
+			ARSENAL_VERSION . '-category'
 		);
 	}
 
@@ -547,13 +562,13 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			true
 		);
 
-		// Lottie player для анимированных иконок
+		// Lottie player для анимированных иконок (локальный файл)
 		wp_enqueue_script(
 			'lottie-player',
-			'https://unpkg.com/@lottiefiles/lottie-player@latest',
+			ARSENAL_THEME_URI . '/assets/js/lottie-player.js',
 			array(),
 			'1.0',
-			true
+			false
 		);
 
 		// Контроль интервала проигрывания Lottie анимаций
@@ -1880,3 +1895,58 @@ add_action( 'wp_scheduled_delete', function() {
 		"UPDATE {$wpdb->posts} SET post_status = 'publish' WHERE post_type = 'page' AND post_status = 'pending'"
 	);
 }, 99 );
+
+/**
+ * Подключение Customizer Preview JavaScript
+ * Работает в preview iframe и обновляет элементы в реальном времени
+ */
+add_action( 'customize_preview_init', function() {
+	wp_enqueue_script(
+		'arsenal-customizer-preview',
+		get_template_directory_uri() . '/assets/js/customizer-preview.js',
+		array( 'customize-preview', 'jquery' ),
+		ARSENAL_VERSION,
+		true
+	);
+} );
+
+/**
+ * AJAX обработчик для сохранения Customizer settings
+ * Сохраняет значение в wp_options (theme_mod)
+ *
+ * @since 1.0.0
+ */
+add_action( 'wp_ajax_arsenal_save_customizer_setting', function() {
+	// Проверка nonce если передан
+	if ( ! empty( $_POST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'arsenal-customizer-nonce' ) ) {
+		wp_die( 'Security check failed' );
+	}
+
+	// Проверка прав
+	if ( ! current_user_can( 'edit_theme_options' ) ) {
+		wp_die( 'Insufficient permissions' );
+	}
+
+	// Получить параметры
+	$setting_id = isset( $_POST['setting_id'] ) ? sanitize_text_field( wp_unslash( $_POST['setting_id'] ) ) : '';
+	$setting_value = isset( $_POST['setting_value'] ) ? sanitize_text_field( wp_unslash( $_POST['setting_value'] ) ) : '';
+
+	// Проверить, разрешено ли это setting через класс-утилиту
+	if ( ! Arsenal_Customizer_Inline_Editor::is_setting_allowed( $setting_id ) ) {
+		wp_send_json_error( 'Invalid setting' );
+	}
+
+	// Сохранить в wp_options (theme_mod)
+	set_theme_mod( $setting_id, $setting_value );
+
+	wp_send_json_success( array(
+		'message' => 'Setting saved',
+		'setting_id' => $setting_id,
+		'value' => get_theme_mod( $setting_id ),
+	) );
+} );
+
+// Тоже для неавторизованных (если нужно)
+add_action( 'wp_ajax_nopriv_arsenal_save_customizer_setting', function() {
+	wp_send_json_error( 'Not authenticated' );
+} );

@@ -30,7 +30,8 @@ $upcoming_match = $wpdb->get_row( $wpdb->prepare( "
 		m.away_score as away_score,
 		s.name as stadium_name,
 		s.city as stadium_city,
-		t.name as tournament_name
+		t.name as tournament_name,
+		CONCAT(m.match_date, ' ', COALESCE(m.match_time, '00:00:00')) as match_datetime
 	FROM {$wpdb->prefix}arsenal_matches m
 	LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 	LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
@@ -54,7 +55,8 @@ if ( ! $upcoming_match ) {
 			m.away_score as away_score,
 			s.name as stadium_name,
 			s.city as stadium_city,
-			t.name as tournament_name
+			t.name as tournament_name,
+			CONCAT(m.match_date, ' ', COALESCE(m.match_time, '00:00:00')) as match_datetime
 		FROM {$wpdb->prefix}arsenal_matches m
 		LEFT JOIN {$wpdb->prefix}arsenal_teams ht ON m.home_team_id = ht.team_id
 		LEFT JOIN {$wpdb->prefix}arsenal_teams at ON m.away_team_id = at.team_id
@@ -75,20 +77,38 @@ if ( $upcoming_match ) :
 	// Матч завершён если статус "Завершено" (ID: 0083CE05)
 	$is_completed = ( $upcoming_match->status === '0083CE05' );
 	
-	// Форматирование даты
+	// Форматирование даты и времени
 	$formatted_date = '';
 	$formatted_time = '';
 	
-	if ( function_exists( 'wp_date' ) ) {
-		$formatted_date = wp_date( 'j F Y', strtotime( $upcoming_match->match_date ) );
-		$formatted_time = wp_date( 'H:i', strtotime( $upcoming_match->match_date ) );
-	} else {
-		$formatted_date = date_i18n( 'j F Y', strtotime( $upcoming_match->match_date ) );
-		$formatted_time = date_i18n( 'H:i', strtotime( $upcoming_match->match_date ) );
+	if ( $upcoming_match && ! empty( $upcoming_match->match_datetime ) ) {
+		// Используем время прямо из БД БЕЗ конвертации таймзоны
+		// (время в БД уже в нужном формате для отображения)
+		$date_parts = explode( ' ', $upcoming_match->match_datetime );
+		if ( count( $date_parts ) === 2 ) {
+			$match_date = $date_parts[0];
+			$match_time = $date_parts[1];
+			
+			// Форматируем дату с локализацией
+			$timestamp = strtotime( $match_date );
+			if ( function_exists( 'wp_date' ) ) {
+				// Используем current_time чтобы избежать двойной конвертации
+				$formatted_date = current_time( 'j F Y', false );
+				$formatted_date = date_i18n( 'j F Y', strtotime( $match_date ) );
+			} else {
+				$formatted_date = date_i18n( 'j F Y', strtotime( $match_date ) );
+			}
+			
+			// Время берём сырое из БД, без конвертации
+			$formatted_time = substr( $match_time, 0, 5 ); // HH:MM
+		}
 	}
+	
+	// Debug: показать реальное время из базы
+	// echo '<!-- DEBUG: match_datetime = ' . $upcoming_match->match_datetime . ' | formatted_time = ' . $formatted_time . ' -->';
 ?>
 
-<section class="upcoming-match-section" style="background-color: #ffffff;">
+<section class="upcoming-match-section">
 	<div class="upcoming-match-container">
 		<div class="section-header">
 			<h2 class="section-title">
@@ -133,7 +153,13 @@ if ( $upcoming_match ) :
 					<div class="match-date-time">
 						<span class="match-date"><?php echo esc_html( $formatted_date ); ?></span>
 						<?php if ( ! $is_completed ) : ?>
-							<span class="match-time-wrapper"><?php arsenal_icon( 'icon-clock', 16, 16 ); ?><span class="match-time"><?php echo esc_html( $formatted_time ); ?></span></span>
+							<div class="detail-item">
+								<lottie-player 
+									src="<?php echo esc_url( get_template_directory_uri() . '/assets/animations/clock.json' ); ?>" 
+								background="transparent">
+								</lottie-player>
+								<span class="match-time"><?php echo esc_html( $formatted_time ); ?></span>
+							</div>
 						<?php endif; ?>
 						<?php if ( $upcoming_match->stadium_name ) : ?>
 							<div class="match-venue">
@@ -170,7 +196,7 @@ if ( $upcoming_match ) :
 				<h2 class="section-title">БЛИЖАЙШИЙ МАТЧ</h2>
 			</div>
 			<div class="match-card">
-				<p style="text-align: center; padding: 2rem;">
+				<p class="match-no-data">
 					Информация о ближайшем матче появится в ближайшее время
 				</p>
 			</div>

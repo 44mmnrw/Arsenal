@@ -26,6 +26,18 @@ h1 {
 	font-size: 2rem;
 }
 
+/* ==========================================================================
+   НОВОСТИ И КАТЕГОРИИ (Глобальные стили)
+   ========================================================================== */
+
+.news-category {
+	color: #ff1a1a;
+}
+
+.single-news-category {
+	color: #ff1a1a;
+}
+
 
 
 /* ==========================================================================
@@ -357,7 +369,7 @@ h1 {
    ========================================================================== */
 
 .stats-bar {
-	background-color: var(--red-900, var(--red-900));
+	background-color: var(--red-900);
 	width: 100%;
 }
 
@@ -398,7 +410,7 @@ h1 {
    ========================================================================== */
 
 .upcoming-match-section {
-	background-color: #F9FAFB;
+	background-color: var(--gray-50);
 	padding: 1.5rem 0 2.75rem;
 }
 
@@ -414,7 +426,7 @@ h1 {
 }
 
 .section-title {
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-size: 1rem;
 	font-weight: 500;
 	text-transform: uppercase;
@@ -431,7 +443,7 @@ h1 {
 
 .match-card {
 	background: var(--color-white);
-	border: 1px solid var(--gray-200);
+	border: 0.0625rem solid var(--gray-200);
 	border-radius: 0.625rem;
 	padding: 0;
 	overflow: hidden;
@@ -440,7 +452,7 @@ h1 {
 }
 
 .match-card:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .match-card-inner {
@@ -453,13 +465,13 @@ h1 {
 	color: var(--gray-700);
 	padding: 0.75rem 1.5rem;
 	font-family: 'Inter', sans-serif;
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 600;
-	line-height: 24px;
-	letter-spacing: 0.5px;
+	line-height: 1.5;
+	letter-spacing: 0.03125rem;
 	text-transform: none;
 	text-align: left;
-	border-bottom: 1px solid var(--gray-200);
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .match-card-content {
@@ -516,7 +528,7 @@ h1 {
 }
 
 .team-logo.away-team svg {
-	fill: #4A5565;
+	fill: var(--gray-600);
 }
 
 .team-name {
@@ -530,7 +542,7 @@ h1 {
 	display: flex;
 	align-items: center;
 	gap: 0.25rem;
-	color: #4A5565;
+	color: var(--gray-600);
 	font-size: 0.875rem;
 }
 
@@ -568,7 +580,7 @@ h1 {
 .match-score-large .score-away {
 	font-size: 3.5rem;
 	font-weight: 700;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	min-width: 3.5rem;
 	text-align: center;
 }
@@ -576,7 +588,13 @@ h1 {
 .match-score-large .score-separator {
 	font-size: 3rem;
 	font-weight: 400;
-	color: #6A7282;
+	color: var(--gray-500);
+}
+
+.match-no-data {
+	text-align: center;
+	padding: 2rem;
+	color: var(--gray-700);
 }
 
 .match-date-time {
@@ -584,7 +602,7 @@ h1 {
 	flex-direction: column;
 	align-items: center;
 	gap: 0.5rem;
-	color: #4A5565;
+	color: var(--gray-600);
 	font-size: 0.875rem;
 }
 
@@ -595,7 +613,7 @@ h1 {
 }
 
 .match-time {
-	color: #4A5565;
+	color: var(--gray-600);
 	background: none;
 }
 
@@ -610,7 +628,14 @@ h1 {
 	background-color: transparent !important;
 	stroke: currentColor;
 	fill: none;
-	color: #4A5565;
+	color: var(--gray-600);
+}
+
+.match-time-wrapper lottie-player {
+	width: 1.125rem;
+	height: 1.125rem;
+	min-width: 1.125rem;
+	display: inline-block !important;
 }
 
 .match-venue {
@@ -635,7 +660,7 @@ h1 {
 }
 
 .ticket-text {
-	color: #4A5565;
+	color: var(--gray-600);
 	font-size: 0.875rem;
 	margin: 0;
 }
@@ -766,7 +791,7 @@ h1 {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -791,7 +816,7 @@ h1 {
 
 .news-card {
 	background: var(--color-white);
-	border: 1px solid var(--gray-200);
+	border: 0.0625rem solid var(--gray-200);
 	border-radius: 0.625rem;
 	display: flex;
 	flex-direction: column;
@@ -800,7 +825,7 @@ h1 {
 }
 
 .news-card:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .news-card__image {
@@ -846,18 +871,18 @@ h1 {
 }
 
 .news-card__date {
-	color: #6A7282;
+	color: var(--gray-500);
 	font-size: 0.875rem;
 	font-weight: 400;
 }
 
 .news-card__dot {
-	color: #6A7282;
+	color: var(--gray-500);
 	font-size: 0.75rem;
 }
 
 .news-card__category {
-	color: var(--red-900, var(--red-900));
+	color: var(--red-700);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -882,11 +907,11 @@ h1 {
 }
 
 .news-card__title a:hover {
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 }
 
 .news-card__excerpt {
-	color: #4A5565;
+	color: var(--gray-600);
 	font-size: 0.9375rem;
 	line-height: 1.6;
 	margin: 0 0 1rem 0;
@@ -897,7 +922,7 @@ h1 {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.375rem;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -922,7 +947,7 @@ h1 {
 .sponsors-section {
 	padding: 2.75rem 0;
 	background-color: var(--color-white);	
-	border-bottom: 1px solid var(--gray-200);
+	border-bottom: 0.0625rem solid var(--gray-200);
 }
 
 .sponsors-section .container {
@@ -943,7 +968,7 @@ h1 {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -966,11 +991,11 @@ h1 {
 	display: flex;
 	flex-wrap: nowrap;
 	flex: 1;
-	gap: 24px;
+	gap: 1.5rem;
 	overflow-x: auto;
 	scroll-behavior: smooth;
-	padding: 20px 0;
-	padding-right: 24px;
+	padding: 1.25rem 0;
+	padding-right: 1.5rem;
 	scroll-snap-type: x mandatory;
 	align-items: center;
 	
@@ -985,7 +1010,7 @@ h1 {
 .sponsor-slide {
 	scroll-snap-align: center;
 	flex-shrink: 0;
-	min-width: 240px;
+	min-width: 15rem;
 }
 
 .sponsors-carousel .sponsor-card {
@@ -993,29 +1018,29 @@ h1 {
 	align-items: center;
 	justify-content: center;
 	background: var(--gray-50);
-	border: 1px solid var(--gray-200);
-	border-radius: 8px;
-	padding: 16px;
+	border: 0.0625rem solid var(--gray-200);
+	border-radius: 0.5rem;
+	padding: 1rem;
 	text-decoration: none;
 	transition: box-shadow 0.2s ease;
 	overflow: hidden;
 }
 
 .sponsors-carousel .sponsor-card:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .sponsor-logo {
 	width: 100%;
-	max-width: 220px;
-	max-height: 100px;
+	max-width: 13.75rem;
+	max-height: 6.25rem;
 	height: auto;
 	object-fit: contain;
 }
 
 .sponsor-card lottie-player {
 	width: auto;
-	max-width: 100px;		
+	max-width: 6.25rem;		
 	background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-200) 100%);
 }
 
@@ -1023,16 +1048,16 @@ h1 {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	max-width: 220px;
-	max-height: 100px;	
+	max-width: 13.75rem;
+	max-height: 6.25rem;	
 	background: linear-gradient(135deg, var(--gray-50), var(--gray-200));
-	border-radius: 4px;
-	padding: 16px;
+	border-radius: 0.25rem;
+	padding: 1rem;
 	text-align: center;
 }
 
 .sponsor-placeholder span {
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 600;
 	color: #6b7280;
 	word-break: break-word;
@@ -1064,7 +1089,7 @@ h1 {
 .last-games-section .section-link {
 	font-size: 0.875rem;
 	font-weight: 500;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	text-decoration: none;
 	display: flex;
 	align-items: center;
@@ -1088,7 +1113,7 @@ h1 {
 
 .game-card {
 	background: var(--color-white);
-	border: 1px solid var(--gray-200);
+	border: 0.0625rem solid var(--gray-200);
 	border-radius: 0.625rem;
 	padding: 1.25rem;
 	box-shadow: 0 0.0625rem 0.1875rem var(--color-dark-gray)1a, 0 0.0625rem 0.125rem #0d0d0d0d;
@@ -1096,7 +1121,7 @@ h1 {
 }
 
 .game-card:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .game-header {
@@ -1110,7 +1135,7 @@ h1 {
 
 .game-date {
 	font-size: 0.8125rem;
-	color: #6A7282;
+	color: var(--gray-500);
 	font-weight: 400;
 }
 
@@ -1196,7 +1221,7 @@ h1 {
 .game-score .score-separator {
 	font-size: 1.75rem;
 	font-weight: 400;
-	color: #6A7282;
+	color: var(--gray-500);
 }
 
 .game-footer {
@@ -1209,7 +1234,7 @@ h1 {
 	align-items: center;
 	gap: 0.5rem;
 	font-size: 0.8125rem;
-	color: #4A5565;
+	color: var(--gray-600);
 }
 
 .game-location svg {
@@ -1256,7 +1281,7 @@ h1 {
 .tournament-header__label {
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
 }
@@ -1273,7 +1298,7 @@ h1 {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5rem;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-size: 0.875rem;
 	font-weight: 500;
 	text-decoration: none;
@@ -1291,14 +1316,14 @@ h1 {
 
 .tournament-table-wrapper {
 	background: var(--color-white);
-	border: 1px solid var(--gray-200);
+	border: 0.0625rem solid var(--gray-200);
 	border-radius: 0.625rem;	
 	overflow: hidden;
 	transition: box-shadow 0.2s ease;
 }
 
 .tournament-table-wrapper:hover {
-	box-shadow: 0px 8px 12px var(--shadow-hover);
+	box-shadow: 0 0.5rem 0.75rem var(--shadow-hover);
 }
 
 .tournament-table {
@@ -1375,7 +1400,7 @@ h1 {
 
 .tournament-table .col-points {
 	font-weight: 700;
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 }
 
 .tournament-table tbody tr.highlight-row {
@@ -1383,7 +1408,7 @@ h1 {
 }
 
 .tournament-table tbody tr.highlight-row td {
-	color: var(--red-700, var(--red-700));
+	color: var(--red-700);
 	font-weight: 600;
 }
 
@@ -1470,24 +1495,24 @@ h1 {
 	}
 
 	.sponsors-section {
-		padding: 48px 0;
+		padding: 3rem 0;
 	}
 
 	.sponsors-carousel-wrapper {
-		gap: 16px;
+		gap: 1rem;
 	}
 
 	.sponsors-carousel {
-		gap: 16px;
+		gap: 1rem;
 	}
 
 	.sponsor-slide {
-		min-width: 180px;
+		min-width: 11.25rem;
 	}
 
 	.sponsor-card {
-		height: 200px;
-		padding: 20px;
+		height: 12.5rem;
+		padding: 1.25rem;
 	}
 
 	.games-grid {
@@ -1678,7 +1703,7 @@ h1 {
 	}
 
 	.sponsors-section {
-		padding: 40px 0;
+		padding: 2.5rem 0;
 	}
 
 	.sponsors-section .section-header {
@@ -1688,43 +1713,43 @@ h1 {
 	}
 
 	.sponsors-carousel-wrapper {
-		gap: 12px;
+		gap: 0.75rem;
 	}
 
 	.sponsors-carousel {
-		gap: 12px;
-		padding: 16px 0;
+		gap: 0.75rem;
+		padding: 1rem 0;
 	}
 
 	.sponsor-slide {
-		min-width: 150px;
+		min-width: 9.375rem;
 	}
 
 	.sponsor-card {
-		height: 140px;
-		padding: 16px;
-		border-radius: 6px;
+		height: 8.75rem;
+		padding: 1rem;
+		border-radius: 0.375rem;
 	}
 
 	.sponsor-logo {
 		width: 100%;
-		max-width: 160px;
-		max-height: 90px;
+		max-width: 10rem;
+		max-height: 5.625rem;
 		height: auto;
 	}
 
 	.carousel-nav {
-		width: 36px;
-		height: 36px;
-		border-width: 1px;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-width: 0.0625rem;
 	}
 
 	.carousel-nav .arrow {
-		font-size: 14px;
+		font-size: 0.875rem;
 	}
 
 	.sponsor-placeholder span {
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
 	.last-games-section {
@@ -1796,10 +1821,10 @@ h1 {
 }
 
 /* ==========================================================================
-   RESPONSIVE STYLES - 480px and up
+   RESPONSIVE STYLES - 480 and up
    ========================================================================== */
 
-@media (max-width: 480px) {
+@media (max-width: 480) {
 	h1, h2, h3, h4, h5, h6 {
 		text-align: left;
 	}
@@ -1921,7 +1946,7 @@ h1 {
 	}
 
 	.sponsors-section {
-		padding: 32px 0;
+		padding: 2rem 0;
 	}
 
 	.sponsors-section .section-header {
@@ -1931,42 +1956,42 @@ h1 {
 	}
 
 	.sponsors-carousel-wrapper {
-		gap: 8px;
+		gap: 0.5rem;
 	}
 
 	.sponsors-carousel {
-		gap: 8px;
-		padding: 12px 0;
+		gap: 0.5rem;
+		padding: 0.75rem 0;
 	}
 
 	.sponsor-slide {
-		min-width: 130px;
+		min-width: 8.125rem;
 	}
 
 	.sponsor-card {
-		height: 120px;
-		padding: 12px;
+		height: 7.5rem;
+		padding: 0.75rem;
 	}
 
 	.sponsor-logo {
 		width: 100%;
-		max-width: 140px;
-		max-height: 80px;
+		max-width: 8.75rem;
+		max-height: 5rem;
 		height: auto;
 	}
 
 	.carousel-nav {
-		width: 32px;
-		height: 32px;
-		border-width: 1px;
+		width: 2rem;
+		height: 2rem;
+		border-width: 0.0625rem;
 	}
 
 	.carousel-nav .arrow {
-		font-size: 12px;
+		font-size: 0.75rem;
 	}
 
 	.sponsor-placeholder span {
-		font-size: 11px;
+		font-size: 10.0625rem;
 	}
 
 	.tournament-header__title {
@@ -2010,3 +2035,32 @@ h1 {
 		width: 2.5rem;
 	}
 }
+
+/* ==========================================================================
+   DETAIL ITEM & LOTTIE PLAYER
+   ========================================================================== */
+
+.detail-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--gray-600);
+	font-size: 0.875rem;
+	white-space: nowrap;
+}
+
+lottie-player {
+	color: inherit;
+	opacity: 1;
+	filter: brightness(1) contrast(1.5);
+}
+
+.detail-item lottie-player {
+		width: 1.25rem;
+		height: 1.25rem;
+		display: inline-block;
+		vertical-align: -0.15em;
+		margin-right: 4px;
+	filter: brightness(0.5) contrast(1.1);
+}
+

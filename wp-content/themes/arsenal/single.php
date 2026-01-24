@@ -66,6 +66,23 @@ get_header();
 				<?php the_content(); ?>
 			</div>
 
+			<!-- Теги -->
+			<?php
+			$tags = get_the_tags();
+			if ( $tags ) :
+				?>
+				<div class="single-news-tags">
+					<h3 class="single-news-tags__title"><?php esc_html_e( 'Теги', 'arsenal' ); ?></h3>
+					<div class="single-news-tags__list">
+						<?php
+						foreach ( $tags as $tag ) {
+							echo '<a href="' . esc_url( get_tag_link( $tag->term_id ) ) . '" class="single-news-tags__item">' . esc_html( $tag->name ) . '</a>';
+						}
+						?>
+					</div>
+				</div>
+			<?php endif; ?>
+
 			<!-- Блок шаринга -->
 			<?php get_template_part( 'template-parts/social-share' ); ?>
 
