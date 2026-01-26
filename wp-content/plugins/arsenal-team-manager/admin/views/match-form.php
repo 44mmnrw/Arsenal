@@ -123,8 +123,9 @@ $form_action = $is_edit ? 'arsenal_update_match' : 'arsenal_create_match';
                     
                     <div class="form-group">
                         <label for="tour">Номер тура</label>
-                        <input type="number" name="tour" id="tour" min="1" max="999"
-                               value="<?php echo ! empty( $match ) && ! empty( $match->tour ) ? intval( $match->tour ) : ''; ?>">
+                        <input type="number" name="tour" id="tour" min="0" max="999"
+                               value="<?php echo ! empty( $match ) && $match->tour !== '' ? intval( $match->tour ) : ''; ?>">
+                        <small>0 = не показывать тур на странице</small>
                     </div>
                 </div>
                 

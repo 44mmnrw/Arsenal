@@ -32,6 +32,7 @@ class Arsenal_Team_Manager {
     
     private static $instance = null;
     public $tournament_admin = null;
+    public $match_admin = null;
     
     /**
      * Singleton
@@ -121,7 +122,7 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
         
         // Инициализируем админ-интерфейсы
-        new Arsenal_Match_Admin();
+        $this->match_admin = new Arsenal_Match_Admin();
         new Arsenal_Lineup_Admin();
         new Arsenal_Lineup_Manager();
         new Arsenal_Match_Events_Manager();
@@ -183,6 +184,16 @@ class Arsenal_Team_Manager {
             30                                  // Позиция в меню
         );
         
+        // Подменю: Библиотека иконок
+        add_submenu_page(
+            $parent_slug,
+            'Библиотека иконок',
+            'Иконки',
+            'manage_options',
+            'arsenal-icon-library',
+            array( $this, 'render_icon_library' )
+        );
+        
         // Подменю: Игроки
         add_submenu_page(
             $parent_slug,                       // Родительский slug
@@ -213,64 +224,14 @@ class Arsenal_Team_Manager {
             array( $this, 'render_contracts' )
         );
         
-        // Подменю: Персонал
+        // Подменю: Корректировки статистики игроков
         add_submenu_page(
             $parent_slug,
-            'Персонал',
-            'Персонал',
+            'Корректировки статистики игроков',
+            'Корректировки статистики игроков',
             'manage_options',
-            'arsenal-staff',
-            array( $this, 'render_staff_list' )
-        );
-        
-        // Подменю: Библиотека иконок
-        add_submenu_page(
-            $parent_slug,
-            'Библиотека иконок',
-            'Иконки',
-            'manage_options',
-            'arsenal-icon-library',
-            array( $this, 'render_icon_library' )
-        );
-        
-        // Подменю: Стадионы
-        add_submenu_page(
-            $parent_slug,
-            'Стадионы',
-            'Стадионы',
-            'manage_options',
-            'arsenal-stadiums',
-            array( $this, 'render_stadiums_list' )
-        );
-        
-        // Подменю: Сезоны
-        add_submenu_page(
-            $parent_slug,
-            'Сезоны',
-            'Сезоны',
-            'manage_options',
-            'arsenal-seasons',
-            array( $this, 'render_seasons_list' )
-        );
-        
-        // Подменю: Турниры
-        add_submenu_page(
-            $parent_slug,
-            'Турниры',
-            'Турниры',
-            'manage_options',
-            'arsenal-tournaments',
-            array( $this->tournament_admin, 'render_tournaments_list' )
-        );
-        
-        // Подменю: Лиги
-        add_submenu_page(
-            $parent_slug,
-            'Лиги',
-            'Лиги',
-            'manage_options',
-            'arsenal-leagues',
-            array( $this, 'render_leagues_list' )
+            'arsenal-player-stats-corrections',
+            array( $this, 'render_player_stats_corrections' )
         );
         
         // Подменю: Корректировки турнирной таблицы
@@ -283,14 +244,44 @@ class Arsenal_Team_Manager {
             array( $this, 'render_adjustments_list' )
         );
         
-        // Подменю: Корректировки статистики игроков
+        // Подменю: Лиги
         add_submenu_page(
             $parent_slug,
-            'Корректировки статистики игроков',
-            'Корректировки статистики игроков',
+            'Лиги',
+            'Лиги',
             'manage_options',
-            'arsenal-player-stats-corrections',
-            array( $this, 'render_player_stats_corrections' )
+            'arsenal-leagues',
+            array( $this, 'render_leagues_list' )
+        );
+        
+        // Подменю: Матчи
+        add_submenu_page(
+            $parent_slug,
+            'Матчи',
+            'Матчи',
+            'manage_options',
+            'arsenal-matches',
+            array( $this->match_admin, 'render_matches_list' )
+        );
+        
+        // Подменю: Персонал
+        add_submenu_page(
+            $parent_slug,
+            'Персонал',
+            'Персонал',
+            'manage_options',
+            'arsenal-staff',
+            array( $this, 'render_staff_list' )
+        );
+        
+        // Подменю: Сезоны
+        add_submenu_page(
+            $parent_slug,
+            'Сезоны',
+            'Сезоны',
+            'manage_options',
+            'arsenal-seasons',
+            array( $this, 'render_seasons_list' )
         );
         
         // Подменю: Спонсоры и партнеры
@@ -301,6 +292,26 @@ class Arsenal_Team_Manager {
             'manage_options',
             'arsenal-sponsors',
             array( $this, 'render_sponsors_list' )
+        );
+        
+        // Подменю: Стадионы
+        add_submenu_page(
+            $parent_slug,
+            'Стадионы',
+            'Стадионы',
+            'manage_options',
+            'arsenal-stadiums',
+            array( $this, 'render_stadiums_list' )
+        );
+        
+        // Подменю: Турниры
+        add_submenu_page(
+            $parent_slug,
+            'Турниры',
+            'Турниры',
+            'manage_options',
+            'arsenal-tournaments',
+            array( $this->tournament_admin, 'render_tournaments_list' )
         );
         
         // Скрытая страница добавления спонсора (без пункта меню)

@@ -134,21 +134,27 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 				}
 				
 				// Определить текст тура (для Кубка - этапы, для других - номер тура)
-				$tour_text = 'Тур ' . intval( $match->tour );
-				if ( $tournament_id === 'E4DE8DC0' ) { // Кубок Беларуси
-					$tour_map = array(
-						1 => '1/16 Финала',
-						2 => '1/8 Финала',
-						3 => '1/4 Финала',
-						4 => '1/2 Финала',
-						5 => 'Финал'
-					);
-					$tour_text = $tour_map[ intval( $match->tour ) ] ?? 'Тур ' . intval( $match->tour );
+				// Если tour = 0, не показываем тур
+				$tour_text = '';
+				if ( ! empty( $match->tour ) && intval( $match->tour ) !== 0 ) {
+					$tour_text = 'Тур ' . intval( $match->tour );
+					if ( $tournament_id === 'E4DE8DC0' ) { // Кубок Беларуси
+						$tour_map = array(
+							1 => '1/16 Финала',
+							2 => '1/8 Финала',
+							3 => '1/4 Финала',
+							4 => '1/2 Финала',
+							5 => 'Финал'
+						);
+						$tour_text = $tour_map[ intval( $match->tour ) ] ?? 'Тур ' . intval( $match->tour );
+					}
 				}
 				?>
 				<span class="league-badge"><?php echo esc_html( $tournament_name ); ?></span>
-				<span class="tour-info"><?php echo esc_html( $tour_text ); ?></span>
-				<span class="meta-sep">•</span>
+				<?php if ( ! empty( $tour_text ) ) : ?>
+					<span class="tour-info"><?php echo esc_html( $tour_text ); ?></span>
+					<span class="meta-sep">•</span>
+				<?php endif; ?>
 				<span class="match-date"><?php echo esc_html( date_i18n( 'j F Y', strtotime( $match->match_date ) ) ); ?></span>
 			</div>
 

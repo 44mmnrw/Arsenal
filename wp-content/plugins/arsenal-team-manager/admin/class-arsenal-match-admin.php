@@ -18,36 +18,9 @@ class Arsenal_Match_Admin {
      * Конструктор
      */
     public function __construct() {
-        add_action( 'admin_menu', array( $this, 'add_admin_menu' ), 15 );
         add_action( 'admin_post_arsenal_create_match', array( $this, 'handle_create_match' ) );
         add_action( 'admin_post_arsenal_update_match', array( $this, 'handle_update_match' ) );
         add_action( 'admin_post_arsenal_delete_match', array( $this, 'handle_delete_match' ) );
-    }
-    
-    /**
-     * Добавление меню матчей в админку
-     */
-    public function add_admin_menu() {
-        // Подменю: Матчи
-        $parent_slug = 'arsenal-team';
-        
-        // Защита: убедиться, что parent_slug инициализирован
-        if ( empty( $parent_slug ) ) {
-            error_log( '[Arsenal Match Admin] Warning: parent_slug is empty in add_admin_menu()' );
-            return;
-        }
-        
-        add_submenu_page(
-            $parent_slug,                          // Родительский slug
-            'Матчи',                                 // Заголовок страницы
-            'Матчи',                                 // Название пункта
-            'manage_options',                        // Права
-            'arsenal-matches',                       // Slug
-            array( $this, 'render_matches_list' )   // Callback
-        );
-        
-        // Скрытая страница редактирования матча регистрируется в главном классе плагина
-        // чтобы избежать дублирования
     }
     
     /**
@@ -269,7 +242,7 @@ class Arsenal_Match_Admin {
             'home_score' => isset( $_POST['home_score'] ) && $_POST['home_score'] !== '' ? sanitize_text_field( $_POST['home_score'] ) : null,
             'away_score' => isset( $_POST['away_score'] ) && $_POST['away_score'] !== '' ? sanitize_text_field( $_POST['away_score'] ) : null,
             'status' => sanitize_text_field( $_POST['status'] ?? 'NS' ),
-            'tour' => ! empty( $_POST['tour'] ) ? sanitize_text_field( $_POST['tour'] ) : null,
+            'tour' => isset( $_POST['tour'] ) && $_POST['tour'] !== '' ? sanitize_text_field( $_POST['tour'] ) : null,
             'stadium_id' => ! empty( $_POST['stadium_id'] ) ? sanitize_text_field( $_POST['stadium_id'] ) : null,
             'attendance' => ! empty( $_POST['attendance'] ) ? sanitize_text_field( $_POST['attendance'] ) : null,
             'main_referee' => ! empty( $_POST['main_referee'] ) ? sanitize_text_field( $_POST['main_referee'] ) : null,

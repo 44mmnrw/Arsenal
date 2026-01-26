@@ -183,7 +183,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         ?>
                     </div>
                     <div class="matches-col-tour">
-                        <?php echo ! empty( $match->tour ) ? intval( $match->tour ) : '—'; ?>
+                        <?php echo isset( $match->tour ) && $match->tour !== '' ? intval( $match->tour ) : '—'; ?>
                     </div>
                     <div class="matches-col-action">
                         <a href="<?php echo esc_url( admin_url( 'admin.php?page=arsenal-match-edit&match_id=' . $match->id ) ); ?>" 
