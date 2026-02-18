@@ -84,12 +84,12 @@ class Arsenal_Season_Admin {
         
         // Получение данных из формы
         $data = array(
-            'season_name' => $_POST['season_name'],
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'],
-            'is_active' => isset( $_POST['is_active'] ) ? 1 : 0,
+            'season_name' => sanitize_text_field( $_POST['season_name'] ?? '' ),
+            'start_date'  => sanitize_text_field( $_POST['start_date'] ?? '' ),
+            'end_date'    => sanitize_text_field( $_POST['end_date'] ?? '' ),
+            'is_active'   => isset( $_POST['is_active'] ) ? 1 : 0,
         );
-        
+
         // Создание сезона
         $season_id = Arsenal_Season_Manager::create_season( $data );
         
@@ -117,12 +117,12 @@ class Arsenal_Season_Admin {
         
         // Получение данных из формы
         $data = array(
-            'season_name' => $_POST['season_name'],
-            'start_date' => $_POST['start_date'],
-            'end_date' => $_POST['end_date'],
-            'is_active' => isset( $_POST['is_active'] ) ? 1 : 0,
+            'season_name' => sanitize_text_field( $_POST['season_name'] ?? '' ),
+            'start_date'  => sanitize_text_field( $_POST['start_date'] ?? '' ),
+            'end_date'    => sanitize_text_field( $_POST['end_date'] ?? '' ),
+            'is_active'   => isset( $_POST['is_active'] ) ? 1 : 0,
         );
-        
+
         // Обновление сезона
         $result = Arsenal_Season_Manager::update_season( $season_id, $data );
         

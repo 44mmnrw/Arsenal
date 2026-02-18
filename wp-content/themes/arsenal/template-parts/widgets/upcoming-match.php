@@ -14,10 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// ID команды Арсенал
-$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
-if ( ! $arsenal_team_id ) {
-	$arsenal_team_id = 'EB8AA245'; // Fallback ID Арсенала
+// ID команды Арсенал — с кешированием через transient
+$arsenal_team_id = get_transient( 'arsenal_team_id' );
+if ( false === $arsenal_team_id ) {
+	$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
+	if ( ! $arsenal_team_id ) {
+		$arsenal_team_id = 'EB8AA245'; // Fallback ID Арсенала
+	}
+	set_transient( 'arsenal_team_id', $arsenal_team_id, DAY_IN_SECONDS );
 }
 
 // Получаем ближайший матч Арсенала (где ещё нет счёта)

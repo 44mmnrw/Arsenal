@@ -27,13 +27,34 @@ require_once ARSENAL_TM_PLUGIN_DIR . 'inc/class-installer.php';
 
 /**
  * Главный класс плагина
+ *
+ * Отвечает за:
+ *   - загрузку зависимостей и инициализацию admin-классов (load_dependencies)
+ *   - регистрацию глобальных хуков (init_hooks)
+ *   - подключение стилей/скриптов (enqueue_admin_assets)
+ *   - обработку формы спонсора (handle_sponsor_form_submission)
+ *
+ * Регистрация меню и render-коллбэки вынесены в Arsenal_Menu_Manager.
  */
 class Arsenal_Team_Manager {
-    
+
     private static $instance = null;
-    public $tournament_admin = null;
-    public $match_admin = null;
-    
+
+    // Все admin-инстансы хранятся как свойства класса.
+    // public — доступ нужен Arsenal_Menu_Manager.
+    public $match_admin;
+    public $tournament_admin;
+    public $lineup_admin;
+    public $match_events_admin;
+    public $stadium_admin;
+    public $season_admin;
+    public $league_admin;
+    public $adjustments_admin;
+    public $staff_admin;
+    public $management_admin;
+    public $corrections_admin;
+    public $sponsors_admin;
+
     /**
      * Singleton
      */
@@ -43,21 +64,20 @@ class Arsenal_Team_Manager {
         }
         return self::$instance;
     }
-    
+
     /**
      * Конструктор
      */
     private function __construct() {
-        $this->init_hooks();
         $this->load_dependencies();
+        $this->init_hooks();
     }
-    
+
     /**
-     * Инициализация хуков
+     * Инициализация хуков (кроме admin_menu — он в Arsenal_Menu_Manager)
      */
     private function init_hooks() {
         add_action( 'admin_init', array( $this, 'handle_sponsor_form_submission' ) );
-        add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
         add_action( 'after_setup_theme', array( $this, 'register_image_sizes' ) );
     }
@@ -73,477 +93,84 @@ class Arsenal_Team_Manager {
     }
     
     /**
-     * Подключение зависимостей
+     * Загрузка зависимостей и инициализация всех admin-классов.
+     * Инстансы сохраняются как свойства для повторного использования.
      */
     private function load_dependencies() {
-        // Классы управления матчами
+        // ── Require ───────────────────────────────────────────────────────────
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-match-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-match-admin.php';
-        
-        // Классы управления составами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-lineup-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-lineup-admin.php';
-        
-        // Классы управления событиями
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-match-events-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-match-events-admin.php';
-        
-        // Классы управления стадионами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-stadium-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-stadium-admin.php';
-        
-        // Классы управления сезонами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-season-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-season-admin.php';
-        
-        // Классы управления турнирами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-tournament-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-tournament-admin.php';
-        
-        // Классы управления лигами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-league-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-league-admin.php';
-        
-        // Классы управления корректировками турнирной таблицы
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-standings-adjustments-manager.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-standings-adjustments-admin.php';
-        
-        // Классы управления персоналом
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-staff-admin.php';
-        
-        // Классы управления составами
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-squad-admin.php';
-        
-        // Классы управления руководством
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-management-admin.php';
-        
-        // Классы управления корректировками статистики игроков
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
-        
-        // Инициализируем админ-интерфейсы
-        $this->match_admin = new Arsenal_Match_Admin();
-        new Arsenal_Lineup_Admin();
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
+
+        // ── Инициализация инстансов ───────────────────────────────────────────
+
+        // Матчи
+        $this->match_admin        = new Arsenal_Match_Admin();
+        $this->lineup_admin       = new Arsenal_Lineup_Admin();
+        $this->match_events_admin = new Arsenal_Match_Events_Admin();
+
+        // Само-регистрирующиеся через конструктор (хранить не нужно)
         new Arsenal_Lineup_Manager();
         new Arsenal_Match_Events_Manager();
-        new Arsenal_Match_Events_Admin();
-        
-        // Инициализируем админ-интерфейс стадионов
-        $stadium_admin = new Arsenal_Stadium_Admin();
-        $stadium_admin->__init__();
-        
-        // Инициализируем админ-интерфейс сезонов
-        $season_admin = new Arsenal_Season_Admin();
-        $season_admin->__init__();
-        
-        // Инициализируем админ-интерфейс турниров
-        $this->tournament_admin = new Arsenal_Tournament_Admin();
+        new Arsenal_Squad_Admin();
+
+        // Стадионы, сезоны, турниры, лиги, корректировки — требуют __init__()
+        $this->stadium_admin     = new Arsenal_Stadium_Admin();
+        $this->stadium_admin->__init__();
+
+        $this->season_admin      = new Arsenal_Season_Admin();
+        $this->season_admin->__init__();
+
+        $this->tournament_admin  = new Arsenal_Tournament_Admin();
         $this->tournament_admin->__init__();
-        
-        // Инициализируем админ-интерфейс лиг
-        $league_admin = new Arsenal_League_Admin();
-        $league_admin->__init__();
-        
-        // Инициализируем админ-интерфейс корректировок
-        $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
-        $adjustments_admin->__init__();
-        
-        // Инициализируем админ-интерфейс персонала
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->init();
-        
-        // Инициализируем админ-интерфейс руководства
-        $management_admin = new Arsenal_Management_Admin();
-        $management_admin->init();
-        
-        // Инициализируем админ-интерфейс корректировок статистики
-        $stats_corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
-        $stats_corrections_admin->init();
+
+        $this->league_admin      = new Arsenal_League_Admin();
+        $this->league_admin->__init__();
+
+        $this->adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
+        $this->adjustments_admin->__init__();
+
+        // Персонал (init не в конструкторе)
+        $this->staff_admin       = new Arsenal_Staff_Admin();
+        $this->staff_admin->init();
+
+        // Руководство (конструктор сам вызывает init — повторный вызов не нужен)
+        $this->management_admin  = new Arsenal_Management_Admin();
+
+        // Корректировки статистики (init не в конструкторе)
+        $this->corrections_admin = new Arsenal_Player_Stats_Corrections_Admin();
+        $this->corrections_admin->init();
+
+        // Спонсоры
+        $this->sponsors_admin    = new Arsenal_Sponsors_Admin();
+
+        // ── Регистрация меню через выделенный класс ───────────────────────────
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-menu-manager.php';
+        $menu_manager = new Arsenal_Menu_Manager( $this );
+        add_action( 'admin_menu', array( $menu_manager, 'register' ) );
     }
-    
+
     /**
-     * Добавление меню в админку
-     */
-    public function add_admin_menu() {
-        // Основное меню
-        $parent_slug = 'arsenal-team';
-        
-        // Защита: убедиться, что parent_slug инициализирован
-        if ( empty( $parent_slug ) ) {
-            error_log( '[Arsenal] Warning: parent_slug is empty in add_admin_menu()' );
-            return;
-        }
-        
-        add_menu_page(
-            'Арсенал',                          // Заголовок страницы
-            'Арсенал',                          // Название пункта меню
-            'manage_options',                   // Права доступа
-            $parent_slug,                       // Slug
-            array( $this, 'render_dashboard' ), // Callback функция
-            'dashicons-admin-users',            // Иконка
-            30                                  // Позиция в меню
-        );
-        
-        // Подменю: Библиотека иконок
-        add_submenu_page(
-            $parent_slug,
-            'Библиотека иконок',
-            'Иконки',
-            'manage_options',
-            'arsenal-icon-library',
-            array( $this, 'render_icon_library' )
-        );
-        
-        // Подменю: Игроки
-        add_submenu_page(
-            $parent_slug,                       // Родительский slug
-            'Игроки',                           // Заголовок страницы
-            'Игроки',                           // Название пункта
-            'manage_options',                   // Права
-            'arsenal-players',                  // Slug
-            array( $this, 'render_players_list' ) // Callback
-        );
-        
-        // Подменю: Команды лиги
-        add_submenu_page(
-            $parent_slug,
-            'Команды лиги',
-            'Команды лиги',
-            'manage_options',
-            'arsenal-teams',
-            array( $this, 'render_teams_list' )
-        );
-        
-        // Подменю: Контракты
-        add_submenu_page(
-            $parent_slug,
-            'Контракты',
-            'Контракты',
-            'manage_options',
-            'arsenal-contracts',
-            array( $this, 'render_contracts' )
-        );
-        
-        // Подменю: Корректировки статистики игроков
-        add_submenu_page(
-            $parent_slug,
-            'Корректировки статистики игроков',
-            'Корректировки статистики игроков',
-            'manage_options',
-            'arsenal-player-stats-corrections',
-            array( $this, 'render_player_stats_corrections' )
-        );
-        
-        // Подменю: Корректировки турнирной таблицы
-        add_submenu_page(
-            $parent_slug,
-            'Корректировки таблицы',
-            'Корректировки таблицы',
-            'manage_options',
-            'arsenal-adjustments',
-            array( $this, 'render_adjustments_list' )
-        );
-        
-        // Подменю: Лиги
-        add_submenu_page(
-            $parent_slug,
-            'Лиги',
-            'Лиги',
-            'manage_options',
-            'arsenal-leagues',
-            array( $this, 'render_leagues_list' )
-        );
-        
-        // Подменю: Матчи
-        add_submenu_page(
-            $parent_slug,
-            'Матчи',
-            'Матчи',
-            'manage_options',
-            'arsenal-matches',
-            array( $this->match_admin, 'render_matches_list' )
-        );
-        
-        // Подменю: Персонал
-        add_submenu_page(
-            $parent_slug,
-            'Персонал',
-            'Персонал',
-            'manage_options',
-            'arsenal-staff',
-            array( $this, 'render_staff_list' )
-        );
-        
-        // Подменю: Сезоны
-        add_submenu_page(
-            $parent_slug,
-            'Сезоны',
-            'Сезоны',
-            'manage_options',
-            'arsenal-seasons',
-            array( $this, 'render_seasons_list' )
-        );
-        
-        // Подменю: Спонсоры и партнеры
-        add_submenu_page(
-            $parent_slug,
-            'Спонсоры и партнеры',
-            'Спонсоры и партнеры',
-            'manage_options',
-            'arsenal-sponsors',
-            array( $this, 'render_sponsors_list' )
-        );
-        
-        // Подменю: Стадионы
-        add_submenu_page(
-            $parent_slug,
-            'Стадионы',
-            'Стадионы',
-            'manage_options',
-            'arsenal-stadiums',
-            array( $this, 'render_stadiums_list' )
-        );
-        
-        // Подменю: Турниры
-        add_submenu_page(
-            $parent_slug,
-            'Турниры',
-            'Турниры',
-            'manage_options',
-            'arsenal-tournaments',
-            array( $this->tournament_admin, 'render_tournaments_list' )
-        );
-        
-        // Скрытая страница добавления спонсора (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить спонсора',
-            'Добавить спонсора',
-            'manage_options',
-            'arsenal-sponsor-add',
-            array( $this, 'render_sponsor_add' )
-        );
-        
-        // Скрытая страница редактирования спонсора (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать спонсора',
-            'Редактировать спонсора',
-            'manage_options',
-            'arsenal-sponsor-edit',
-            array( $this, 'render_sponsor_edit' )
-        );
-        
-        // Скрытая страница добавления стадиона (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить стадион',
-            'Добавить стадион',
-            'manage_options',
-            'arsenal-stadium-add',
-            array( $this, 'render_stadium_add' )
-        );
-        
-        // Скрытая страница редактирования стадиона (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать стадион',
-            'Редактировать стадион',
-            'manage_options',
-            'arsenal-stadium-edit',
-            array( $this, 'render_stadium_edit' )
-        );
-        
-        // Скрытая страница добавления сезона (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить сезон',
-            'Добавить сезон',
-            'manage_options',
-            'arsenal-season-add',
-            array( $this, 'render_season_add' )
-        );
-        
-        // Скрытая страница редактирования сезона (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать сезон',
-            'Редактировать сезон',
-            'manage_options',
-            'arsenal-season-edit',
-            array( $this, 'render_season_edit' )
-        );
-        
-        // Скрытая страница добавления турнира (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить турнир',
-            'Добавить турнир',
-            'manage_options',
-            'arsenal-tournament-add',
-            array( $this->tournament_admin, 'render_tournament_form' )
-        );
-        
-        // Скрытая страница редактирования турнира (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать турнир',
-            'Редактировать турнир',
-            'manage_options',
-            'arsenal-tournament-edit',
-            array( $this->tournament_admin, 'render_tournament_form' )
-        );
-        
-        // Скрытая страница добавления лиги (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить лигу',
-            'Добавить лигу',
-            'manage_options',
-            'arsenal-league-add',
-            array( $this, 'render_league_add' )
-        );
-        
-        // Скрытая страница редактирования лиги (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать лигу',
-            'Редактировать лигу',
-            'manage_options',
-            'arsenal-league-edit',
-            array( $this, 'render_league_edit' )
-        );
-        
-        // Скрытая страница добавления корректировки (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить корректировку',
-            'Добавить корректировку',
-            'manage_options',
-            'arsenal-adjustment-add',
-            array( $this, 'render_adjustment_add' )
-        );
-        
-        // Скрытая страница редактирования корректировки (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать корректировку',
-            'Редактировать корректировку',
-            'manage_options',
-            'arsenal-adjustment-edit',
-            array( $this, 'render_adjustment_edit' )
-        );
-        
-        // Скрытые страницы персонала (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить сотрудника',
-            'Добавить сотрудника',
-            'manage_options',
-            'arsenal-staff-add',
-            array( $this, 'render_staff_add' )
-        );
-        
-        add_submenu_page(
-            '',
-            'Редактировать сотрудника',
-            'Редактировать сотрудника',
-            'manage_options',
-            'arsenal-staff-edit',
-            array( $this, 'render_staff_edit' )
-        );
-        
-        add_submenu_page(
-            '',
-            'Добавить должность',
-            'Добавить должность',
-            'manage_options',
-            'arsenal-job-title-add',
-            array( $this, 'render_job_title_add' )
-        );
-        
-        add_submenu_page(
-            '',
-            'Редактировать должность',
-            'Редактировать должность',
-            'manage_options',
-            'arsenal-job-title-edit',
-            array( $this, 'render_job_title_edit' )
-        );
-        
-        // Скрытые страницы руководства (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить члена руководства',
-            'Добавить члена руководства',
-            'manage_options',
-            'arsenal-management-add',
-            array( $this, 'render_management_form' )
-        );
-        
-        // Скрытая страница добавления матча (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить матч',
-            'Добавить матч',
-            'manage_options',
-            'arsenal-match-add',
-            array( $this, 'render_match_add' )
-        );
-        
-        // Скрытая страница редактирования матча (без пункта меню)
-        add_submenu_page(
-            '',
-            'Редактировать матч',
-            'Редактировать матч',
-            'manage_options',
-            'arsenal-match-edit',
-            array( $this, 'render_match_edit' )
-        );
-        
-        // Скрытая страница событий матча (без пункта меню)
-        add_submenu_page(
-            '',
-            'События матча',
-            'События матча',
-            'manage_options',
-            'arsenal-match-events',
-            array( $this, 'render_match_events' )
-        );
-        
-        // Скрытая страница составов матча (без пункта меню)
-        add_submenu_page(
-            '',
-            'Составы матча',
-            'Составы матча',
-            'manage_options',
-            'arsenal-match-lineups',
-            array( $this, 'render_match_lineups' )
-        );
-        
-        // Скрытая страница редактирования игрока (без пункта меню)
-        add_submenu_page(
-            '', // Родитель пусто = скрытая страница
-            'Редактировать игрока',
-            'Редактировать игрока',
-            'manage_options',
-            'arsenal-player-edit',
-            array( $this, 'render_player_edit' )
-        );
-        
-        // Скрытая страница добавления игрока (без пункта меню)
-        add_submenu_page(
-            '',
-            'Добавить игрока',
-            'Добавить игрока',
-            'manage_options',
-            'arsenal-player-add',
-            array( $this, 'render_player_add' )
-        );
-    }
-    
-    /**
-     * Подключение стилей и скриптов
+     * Подключение стилей и скриптов для страниц плагина
      */
     public function enqueue_admin_assets( $hook ) {
         // Подключаем только на наших страницах
@@ -556,15 +183,15 @@ class Arsenal_Team_Manager {
             'arsenal-admin',
             ARSENAL_TM_PLUGIN_URL . 'admin/assets/css/admin.css',
             array(),
-            ARSENAL_TM_VERSION . '.' . time() // Добавляем timestamp для сброса кэша
+            filemtime( ARSENAL_TM_PLUGIN_DIR . 'admin/assets/css/admin.css' )
         );
-        
+
         // Стили страницы редактирования стадиона
         wp_enqueue_style(
             'arsenal-stadium-form',
             ARSENAL_TM_PLUGIN_URL . 'admin/assets/css/stadium-form.css',
             array( 'arsenal-admin' ),
-            ARSENAL_TM_VERSION . '.' . time()
+            filemtime( ARSENAL_TM_PLUGIN_DIR . 'admin/assets/css/stadium-form.css' )
         );
         
         wp_enqueue_script(
@@ -598,259 +225,6 @@ class Arsenal_Team_Manager {
         
         // Медиа библиотека для загрузки фото
         wp_enqueue_media();
-    }
-    
-    /**
-     * Главная страница (Dashboard)
-     */
-    public function render_dashboard() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/dashboard.php';
-    }
-    
-    /**
-     * Добавление матча
-     */
-    public function render_match_add() {
-        $match_admin = new Arsenal_Match_Admin();
-        $match_admin->render_match_form();
-    }
-    
-    /**
-     * Редактирование матча
-     */
-    public function render_match_edit() {
-        $match_admin = new Arsenal_Match_Admin();
-        $match_admin->render_match_form();
-    }
-    
-    /**
-     * События матча
-     */
-    public function render_match_events() {
-        $events_admin = new Arsenal_Match_Events_Admin();
-        $match_id = intval( $_GET['match_id'] ?? 0 );
-        $events_admin->render_events_form( $match_id );
-    }
-    
-    /**
-     * Составы матча
-     */
-    public function render_match_lineups() {
-        $lineups_admin = new Arsenal_Lineup_Admin();
-        $lineups_admin->render_lineups_form();
-    }
-    
-    /**
-     * Список игроков
-     */
-    public function render_players_list() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/players-list.php';
-    }
-    
-    /**
-     * Редактирование/добавление игрока
-     */
-    public function render_player_edit() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/player-form.php';
-    }
-    
-    /**
-     * Добавление игрока
-     */
-    public function render_player_add() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/player-form.php';
-    }
-    
-    /**
-     * Список команд лиги
-     */
-    public function render_teams_list() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/teams-list.php';
-    }
-    
-    /**
-     * Управление контрактами
-     */
-    public function render_contracts() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/contracts.php';
-    }
-    
-    /**
-     * Список стадионов
-     */
-    public function render_stadiums_list() {
-        $stadium_admin = new Arsenal_Stadium_Admin();
-        $stadium_admin->render_stadiums_list();
-    }
-    
-    /**
-     * Добавление стадиона
-     */
-    public function render_stadium_add() {
-        $stadium_admin = new Arsenal_Stadium_Admin();
-        $stadium_admin->render_stadium_form();
-    }
-    
-    /**
-     * Редактирование стадиона
-     */
-    public function render_stadium_edit() {
-        $stadium_admin = new Arsenal_Stadium_Admin();
-        $stadium_admin->render_stadium_form();
-    }
-    
-    /**
-     * Список сезонов
-     */
-    public function render_seasons_list() {
-        $season_admin = new Arsenal_Season_Admin();
-        $season_admin->render_seasons_list();
-    }
-    
-    /**
-     * Добавление сезона
-     */
-    public function render_season_add() {
-        $season_admin = new Arsenal_Season_Admin();
-        $season_admin->render_season_form();
-    }
-    
-    /**
-     * Редактирование сезона
-     */
-    public function render_season_edit() {
-        $season_admin = new Arsenal_Season_Admin();
-        $season_admin->render_season_form();
-    }
-    
-    /**
-     * Список лиг
-     */
-    public function render_leagues_list() {
-        $league_admin = new Arsenal_League_Admin();
-        $league_admin->render_leagues_list();
-    }
-    
-    /**
-     * Добавление лиги
-     */
-    public function render_league_add() {
-        $league_admin = new Arsenal_League_Admin();
-        $league_admin->render_league_form();
-    }
-    
-    /**
-     * Редактирование лиги
-     */
-    public function render_league_edit() {
-        $league_admin = new Arsenal_League_Admin();
-        $league_admin->render_league_form();
-    }
-    
-    /**
-     * Список корректировок турнирной таблицы
-     */
-    public function render_adjustments_list() {
-        $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
-        $adjustments_admin->render_adjustments_list();
-    }
-    
-    /**
-     * Добавление корректировки
-     */
-    public function render_adjustment_add() {
-        $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
-        $adjustments_admin->render_adjustment_form();
-    }
-    
-    /**
-     * Редактирование корректировки
-     */
-    public function render_adjustment_edit() {
-        $adjustments_admin = new Arsenal_Standings_Adjustments_Admin();
-        $adjustments_admin->render_adjustment_form();
-    }
-    
-    /**
-     * Список персонала
-     */
-    public function render_staff_list() {
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->render_staff_list();
-    }
-    
-    /**
-     * Добавление сотрудника
-     */
-    public function render_staff_add() {
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->render_staff_add();
-    }
-    
-    /**
-     * Редактирование сотрудника
-     */
-    public function render_staff_edit() {
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->render_staff_edit();
-    }
-    
-    /**
-     * Добавление должности
-     */
-    public function render_job_title_add() {
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->render_job_title_add();
-    }
-    
-    /**
-     * Редактирование должности
-     */
-    public function render_job_title_edit() {
-        $staff_admin = new Arsenal_Staff_Admin();
-        $staff_admin->render_job_title_edit();
-    }
-    
-    /**
-     * Библиотека иконок
-     */
-    public function render_icon_library() {
-        include ARSENAL_TM_PLUGIN_DIR . 'admin/views/icon-library.php';
-    }
-    
-    /**
-     * Спонсоры и партнеры
-     */
-    public function render_sponsors_list() {
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
-        $sponsors_admin = new Arsenal_Sponsors_Admin();
-        $sponsors_admin->render_sponsors_list();
-    }
-    
-    /**
-     * Добавление спонсора
-     */
-    public function render_sponsor_add() {
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
-        $sponsors_admin = new Arsenal_Sponsors_Admin();
-        $sponsors_admin->render_sponsor_form();
-    }
-    
-    /**
-     * Редактирование спонсора
-     */
-    public function render_sponsor_edit() {
-        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
-        $sponsors_admin = new Arsenal_Sponsors_Admin();
-        $sponsors_admin->render_sponsor_form();
-    }
-    
-    /**
-     * Список корректировок статистики игроков
-     */
-    public function render_player_stats_corrections() {
-        $corrections_admin = Arsenal_Player_Stats_Corrections_Admin::get_instance();
-        $corrections_admin->render_page();
     }
     
     /**
@@ -953,6 +327,9 @@ arsenal_team_manager();
 add_action( 'wp_ajax_arsenal_save_team_logo', 'arsenal_ajax_save_team_logo' );
 
 function arsenal_ajax_save_team_logo() {
+    // Проверяем nonce
+    check_ajax_referer( 'arsenal_save_team_logo_ajax', 'nonce' );
+
     // Проверяем права доступа
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_send_json_error( array( 'message' => 'Нет доступа' ) );

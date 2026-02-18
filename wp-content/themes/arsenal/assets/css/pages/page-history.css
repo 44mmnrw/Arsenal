@@ -567,8 +567,8 @@
 	}
 	
 	.entry-header h1 {
-        font-size: 1.75rem !important;
-        text-align: left !important;
+        font-size: 1.75rem;
+        text-align: left;
     }
     
     .club-history-container {
@@ -637,8 +637,8 @@
     }
 
     .entry-header h1 {
-        font-size: 1.5rem !important;
-        padding: 0 1.25rem !important;  
+        font-size: 1.5rem;
+        padding: 0 1.25rem;
     }
 
     .club-history-container {
@@ -827,8 +827,8 @@
     }
     
     .entry-header h1 {
-        font-size: 1.25rem !important;
-        padding: 0 1rem !important;
+        font-size: 1.25rem;
+        padding: 0 1rem;
     }
 
     .club-history-container {

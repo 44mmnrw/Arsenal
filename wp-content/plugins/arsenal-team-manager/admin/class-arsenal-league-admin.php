@@ -84,9 +84,9 @@ class Arsenal_League_Admin {
         
         // Получение данных из формы
         $data = array(
-            'league_name' => $_POST['league_name'],
+            'league_name' => sanitize_text_field( $_POST['league_name'] ?? '' ),
         );
-        
+
         // Создание лиги
         $league_id = Arsenal_League_Manager::create_league( $data );
         
@@ -114,9 +114,9 @@ class Arsenal_League_Admin {
         
         // Получение данных из формы
         $data = array(
-            'league_name' => $_POST['league_name'],
+            'league_name' => sanitize_text_field( $_POST['league_name'] ?? '' ),
         );
-        
+
         // Обновление лиги
         $result = Arsenal_League_Manager::update_league( $league_id, $data );
         

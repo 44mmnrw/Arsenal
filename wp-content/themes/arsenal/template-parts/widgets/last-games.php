@@ -14,10 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wpdb;
 
-// ID команды Арсенал по team_id из новой структуры БД
-$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name = 'Арсенал' LIMIT 1" );
-if ( ! $arsenal_team_id ) {
-	$arsenal_team_id = 'EB8AA245'; // Fallback ID Арсенала из БД
+// ID команды Арсенал — с кешированием через transient
+$arsenal_team_id = get_transient( 'arsenal_team_id' );
+if ( false === $arsenal_team_id ) {
+	$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name = 'Арсенал' LIMIT 1" );
+	if ( ! $arsenal_team_id ) {
+		$arsenal_team_id = 'EB8AA245'; // Fallback ID Арсенала из БД
+	}
+	set_transient( 'arsenal_team_id', $arsenal_team_id, DAY_IN_SECONDS );
 }
 
 // Получаем последние 3 матча Арсенала с именами команд
