@@ -62,7 +62,7 @@ class Arsenal_Menu_Manager {
             'manage_options',
             $slug,
             array( $this, 'render_dashboard' ),
-            'dashicons-admin-users',
+            'dashicons-dribbble',
             26
         );
 
