@@ -62,7 +62,7 @@ class Arsenal_Menu_Manager {
             'manage_options',
             $slug,
             array( $this, 'render_dashboard' ),
-            'dashicons-dribbble',
+            $this->get_menu_icon_svg(),
             26
         );
 
@@ -303,5 +303,18 @@ class Arsenal_Menu_Manager {
 
     public function render_match_lineups() {
         $this->plugin->lineup_admin->render_lineups_form();
+    }
+
+    /**
+     * SVG-иконка мяча для top-level меню плагина.
+     *
+     * @return string Data URI SVG
+     */
+    private function get_menu_icon_svg() {
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">'
+            . '<path d="M10 1.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 0 0 0-17Zm0 1.7c1.08 0 2.1.26 3 .73L11.9 5.3H8.1L7 3.93c.9-.47 1.92-.73 3-.73Zm-4.48 1.36l1.3 1.62L5.6 9.05L3.7 8.7a6.78 6.78 0 0 1 1.82-4.14Zm-1.88 5.92 2.23.41l1.12 3.44l-1.32 1.62a6.78 6.78 0 0 1-2.03-5.47Zm3.38 6.67 1.54-1.88h2.88l1.54 1.88a6.76 6.76 0 0 1-5.96 0Zm7.31-1.2L13 14.3l1.12-3.44l2.23-.4a6.78 6.78 0 0 1-2.02 5.46Zm2.66-7.22-1.9.35l-1.22-2.9l1.3-1.62A6.78 6.78 0 0 1 17 8.7ZM9 6.9h2l1.58 2.05L11.8 12H8.2l-.78-3.05L9 6.9Z"/>'
+            . '</svg>';
+
+        return 'data:image/svg+xml;base64,' . base64_encode( $svg );
     }
 }
