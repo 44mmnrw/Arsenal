@@ -1747,91 +1747,31 @@ if ( ! function_exists( 'arsenal_render_camera_placeholder' ) ) {
 }
 
 /**
- * Исправить статус страниц на "publish" при добавлении в меню или сохранении
- * Предотвращает автоматическое изменение статуса на "pending"
+ * Защита от непреднамеренного перевода уже опубликованных страниц в pending.
+ *
+ * Важно: применяем только к существующим страницам (с ID),
+ * чтобы не ломать нормальный workflow для новых черновиков/ожидающих публикации.
  */
-
-// Метод 1: При сохранении поста через wp_insert_post_data
 add_filter( 'wp_insert_post_data', function( $data, $postarr ) {
-	// Если это страница (page) и статус "pending", меняем на "publish"
-	if ( 'page' === $data['post_type'] && 'pending' === $data['post_status'] ) {
-		// Проверяем, был ли статус "publish" до этого
-		if ( ! empty( $postarr['ID'] ) ) {
-			$old_post = get_post( $postarr['ID'] );
-			if ( $old_post && 'publish' === $old_post->post_status ) {
-				$data['post_status'] = 'publish';
-			}
-		}
+	if ( empty( $data['post_type'] ) || 'page' !== $data['post_type'] ) {
+		return $data;
 	}
+
+	if ( empty( $data['post_status'] ) || 'pending' !== $data['post_status'] ) {
+		return $data;
+	}
+
+	if ( empty( $postarr['ID'] ) ) {
+		return $data;
+	}
+
+	$old_post = get_post( (int) $postarr['ID'] );
+	if ( $old_post && 'page' === $old_post->post_type && 'publish' === $old_post->post_status ) {
+		$data['post_status'] = 'publish';
+	}
+
 	return $data;
 }, 10, 2 );
-
-// Метод 2: После сохранения страницы - дополнительная подстраховка
-add_action( 'save_post_page', function( $post_id ) {
-	$post = get_post( $post_id );
-	if ( $post && 'pending' === $post->post_status ) {
-		// Если это существующая страница (не новая), переводим в publish
-		if ( get_post_meta( $post_id, '_wp_page_template' ) ) {
-			wp_update_post( array(
-				'ID'          => $post_id,
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}, 20 );
-
-// Метод 3: При обновлении пункта меню - самый прямой способ
-add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id, $args ) {
-	if ( ! empty( $args['menu-item-object-id'] ) ) {
-		$post_id = $args['menu-item-object-id'];
-		$post = get_post( $post_id );
-		
-		if ( $post && 'page' === $post->post_type && 'pending' === $post->post_status ) {
-			wp_update_post( array(
-				'ID'          => $post_id,
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}, 10, 3 );
-
-// Метод 5: После полного сохранения - финальная подстраховка
-add_action( 'wp_insert_post', function( $post_id, $post ) {
-	if ( 'page' === $post->post_type && 'pending' === $post->post_status ) {
-		if ( get_post_meta( $post_id, '_wp_page_template' ) ) {
-			wp_update_post( array(
-				'ID'          => $post_id,
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}, 20, 2 );
-
-// Метод 7: Финальный перехват - если всё равно pending, то publish (максимальный приоритет)
-add_action( 'shutdown', function() {
-	// Проверяем все страницы которые могли стать pending
-	global $wpdb;
-	$pending_pages = $wpdb->get_results(
-		"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'pending' AND post_modified > DATE_SUB(NOW(), INTERVAL 5 MINUTE)"
-	);
-	
-	if ( ! empty( $pending_pages ) ) {
-		foreach ( $pending_pages as $page ) {
-			wp_update_post( array(
-				'ID'          => $page->ID,
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}, 99 );
-
-// Метод 8: Самый агрессивный - каждый час очищаем все pending страницы (работает в фоне)
-add_action( 'wp_scheduled_delete', function() {
-	global $wpdb;
-	$wpdb->query(
-		"UPDATE {$wpdb->posts} SET post_status = 'publish' WHERE post_type = 'page' AND post_status = 'pending'"
-	);
-}, 99 );
 
 /**
  * Подключение Customizer Preview JavaScript
