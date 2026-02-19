@@ -163,14 +163,6 @@ add_action( 'wp_enqueue_scripts', function() {
 			'1.0.0'
 		);
 		
-		// Добавить скрипт для загрузки стилей асинхронно
-		echo '<script>
-			var link = document.querySelector("link[data-lazy-css]");
-			if ( link && link.media === "print" ) {
-				link.media = "all";
-				link.onload = function() { this.onload = null; };
-			}
-		</script>';
 	}
 }, 999 );
 
@@ -247,11 +239,6 @@ if ( ! function_exists( 'arsenal_setup' ) ) {
 			'script',
 		) );
 
-		// Отключаем блочный редактор (Gutenberg) везде - используем классический редактор
-		add_filter( 'use_block_editor_for_post_type', function() {
-			return false;
-		}, 10, 2 );
-
 		// Поддержка пользовательского логотипа
 		add_theme_support( 'custom-logo', array(
 			'height'      => 80,
@@ -273,24 +260,6 @@ if ( ! function_exists( 'arsenal_setup' ) ) {
 	}
 }
 add_action( 'after_setup_theme', 'arsenal_setup' );
-
-/**
- * Отключение Gutenberg editor и его скриптов
- */
-function arsenal_disable_gutenberg() {
-	// Отключаем стили и скрипты Gutenberg ТОЛЬКО на фронтенде
-	// НЕ отключаем в админке - это ломает React компоненты (меню, customizer и т.д.)
-	wp_dequeue_style( 'wp-block-library' );
-	wp_dequeue_style( 'wp-block-library-theme' );
-	wp_dequeue_style( 'global-styles' );
-	
-	// Отключаем скрипты
-	wp_dequeue_script( 'wp-embed' );
-	wp_dequeue_script( 'wp-editor' );
-	wp_dequeue_script( 'edit-widgets' );
-}
-add_action( 'wp_enqueue_scripts', 'arsenal_disable_gutenberg' );
-// НЕ добавляем в admin_enqueue_scripts - это ломает админку!
 
 /**
  * Подключение стилей и скриптов
@@ -402,16 +371,6 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 		wp_enqueue_style(
 			'arsenal-staff-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
-			array( 'arsenal-footer' ),
-			ARSENAL_VERSION
-		);
-	}
-
-	// Стили страницы управления клубом (для страницы Руководство)
-	if ( is_page_template( 'templates/page-management.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'management' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'administration' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'руководство' ) ) ) {
-		wp_enqueue_style(
-			'arsenal-management',
-			ARSENAL_THEME_URI . '/assets/css/pages/page-management.css',
 			array( 'arsenal-footer' ),
 			ARSENAL_VERSION
 		);
@@ -1836,22 +1795,6 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id, $ar
 	}
 }, 10, 3 );
 
-// Метод 4: Перехватить прямо перед сохранением при редакте поста
-add_action( 'pre_post_update', function( $post_id, $data ) {
-	// Если это страница и пытаемся установить pending, меняем на publish
-	if ( isset( $data['post_status'] ) && 'pending' === $data['post_status'] ) {
-		$post = get_post( $post_id );
-		if ( $post && 'page' === $post->post_type && 'publish' === $post->post_status ) {
-			// Это уже опубликованная страница - не позволяем менять на pending
-			remove_action( 'pre_post_update', [ $this, 'pre_post_update' ] );
-			wp_update_post( array(
-				'ID'          => $post_id,
-				'post_status' => 'publish',
-			) );
-		}
-	}
-}, 9, 2 );
-
 // Метод 5: После полного сохранения - финальная подстраховка
 add_action( 'wp_insert_post', function( $post_id, $post ) {
 	if ( 'page' === $post->post_type && 'pending' === $post->post_status ) {
@@ -1863,15 +1806,6 @@ add_action( 'wp_insert_post', function( $post_id, $post ) {
 		}
 	}
 }, 20, 2 );
-
-// Метод 6: Перехватить переход статуса и запретить pending для страниц
-add_filter( 'transition_post_status', function( $new_status, $old_status, $post ) {
-	if ( 'page' === $post->post_type && 'pending' === $new_status && 'publish' === $old_status ) {
-		// Страница была publish, не даём ей стать pending
-		return 'publish';
-	}
-	return $new_status;
-}, 10, 3 );
 
 // Метод 7: Финальный перехват - если всё равно pending, то publish (максимальный приоритет)
 add_action( 'shutdown', function() {

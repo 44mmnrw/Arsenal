@@ -209,7 +209,8 @@ class Arsenal_Team_Manager {
                 'save_team_logo_nonce' => wp_create_nonce( 'arsenal_save_team_logo_ajax' ),
                 'get_team_coaches_nonce' => wp_create_nonce( 'arsenal_get_team_coaches' ),
                 'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'nonce' => wp_create_nonce( 'arsenal_admin_nonce' )
+                'nonce' => wp_create_nonce( 'arsenal_admin_nonce' ),
+                'home_url' => home_url( '/' ),
             )
         );
         

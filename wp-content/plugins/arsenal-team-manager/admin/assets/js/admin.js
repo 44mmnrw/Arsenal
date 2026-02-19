@@ -42,7 +42,7 @@
                 
                 // Конвертируем в относительный URL
                 var relativeUrl = fullUrl;
-                var homeUrl = '<?php echo home_url(); ?>';
+                var homeUrl = arsenal_ajax.home_url || '';
                 if (relativeUrl.indexOf(homeUrl) === 0) {
                     relativeUrl = relativeUrl.substring(homeUrl.length);
                     if (relativeUrl.charAt(0) !== '/') {

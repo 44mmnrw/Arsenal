@@ -399,5 +399,5 @@ class Arsenal_Theme_Installer {
 	}
 }
 
-// Инициализируем установщик
-Arsenal_Theme_Installer::init();
+// Legacy-установщик отключен: актуальный сценарий создания страниц/меню
+// централизован в functions.php (arsenal_create_required_pages / arsenal_create_main_menu).
