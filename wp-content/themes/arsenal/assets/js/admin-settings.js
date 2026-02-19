@@ -9,11 +9,11 @@ jQuery(document).ready(function($) {
 	$('.arsenal-upload-button').on('click', function(e) {
 		e.preventDefault();
 		
-		var button = $(this);
-		var targetId = button.data('target');
-		var container = button.closest('.arsenal-image-upload');
-		
-		var mediaUploader = wp.media({
+		const button = $(this);
+		const targetId = button.data('target');
+		const container = button.closest('.arsenal-image-upload');
+
+		const mediaUploader = wp.media({
 			title: 'Выберите изображение',
 			button: {
 				text: 'Использовать это изображение'
@@ -22,7 +22,7 @@ jQuery(document).ready(function($) {
 		});
 		
 		mediaUploader.on('select', function() {
-			var attachment = mediaUploader.state().get('selection').first().toJSON();
+			const attachment = mediaUploader.state().get('selection').first().toJSON();
 			
 			$('#' + targetId).val(attachment.url);
 			container.find('.arsenal-preview-image').attr('src', attachment.url).show();
@@ -36,9 +36,9 @@ jQuery(document).ready(function($) {
 	$('.arsenal-remove-button').on('click', function(e) {
 		e.preventDefault();
 		
-		var button = $(this);
-		var container = button.closest('.arsenal-image-upload');
-		var input = container.find('input[type="hidden"]');
+		const button = $(this);
+		const container = button.closest('.arsenal-image-upload');
+		const input = container.find('input[type="hidden"]');
 		
 		input.val('');
 		container.find('.arsenal-preview-image').attr('src', '').hide();

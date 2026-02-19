@@ -174,9 +174,6 @@ class Arsenal_Match_Admin {
         $match_id = Arsenal_Match_Manager::create_match( $data );
         
         if ( $match_id ) {
-            wp_safe_remote_post( admin_url( 'admin.php?page=arsenal-matches' ), array(
-                'blocking' => false,
-            ) );
             wp_redirect( admin_url( 'admin.php?page=arsenal-matches&success=1' ) );
         } else {
             wp_redirect( admin_url( 'admin.php?page=arsenal-match-add&error=1' ) );

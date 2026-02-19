@@ -365,8 +365,14 @@
 	window.arsenal = window.arsenal || {};
 
 	window.arsenal.loadHistoryData = function(callback) {
-		fetch('/wp-json/arsenal/v1/history-data')
-			.then(response => response.json())
+		var url = (typeof arsenalHistoryData !== 'undefined') ? arsenalHistoryData.restUrl : '/wp-json/arsenal/v1/history-data';
+		fetch(url)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('HTTP error ' + response.status);
+				}
+				return response.json();
+			})
 			.then(data => {
 				if (callback && typeof callback === 'function') {
 					callback(data);

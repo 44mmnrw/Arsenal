@@ -27,6 +27,26 @@ class Arsenal_Menu_Manager {
      */
     public function __construct( Arsenal_Team_Manager $plugin ) {
         $this->plugin = $plugin;
+        add_action( 'admin_head', array( $this, 'hide_arsenal_menu_hint' ) );
+    }
+
+    /**
+     * Убирает визуальный индикатор «скрытого подменю» у top-level пункта Арсенал.
+     *
+     * Функциональность подменю сохраняется, скрывается только декоративная стрелка.
+     */
+    public function hide_arsenal_menu_hint() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        ?>
+        <style id="arsenal-menu-hint-fix">
+            #adminmenu .toplevel_page_arsenal-team .wp-menu-arrow,
+            #adminmenu .toplevel_page_arsenal-team > a.menu-top::after {
+                display: none !important;
+            }
+        </style>
+        <?php
     }
 
     /**
@@ -43,7 +63,27 @@ class Arsenal_Menu_Manager {
             $slug,
             array( $this, 'render_dashboard' ),
             'dashicons-admin-users',
-            30
+            26
+        );
+
+        // Резервная ссылка в меню «Плагины», если верхний пункт скрыт кастомизацией админки.
+        add_submenu_page(
+            'plugins.php',
+            'Arsenal Team Manager',
+            'Arsenal Team Manager',
+            'manage_options',
+            $slug,
+            array( $this, 'render_dashboard' )
+        );
+
+        // Явный пункт главной страницы плагина (dashboard)
+        add_submenu_page(
+            $slug,
+            'Главная',
+            'Главная',
+            'manage_options',
+            $slug,
+            array( $this, 'render_dashboard' )
         );
 
         // ── Видимые подменю (сортировка: алфавит) ──────────────────────────

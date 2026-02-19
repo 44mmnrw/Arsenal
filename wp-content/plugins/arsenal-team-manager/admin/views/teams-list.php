@@ -63,7 +63,7 @@ if ( isset( $_POST['save_team_logo'] ) && check_admin_referer( 'arsenal_save_tea
     $logo_url = esc_url_raw( $_POST['logo_url'] );
     
     $updated = $wpdb->update(
-        'wp_arsenal_teams',
+        $wpdb->prefix . 'arsenal_teams',
         array( 'logo_url' => $logo_url ),
         array( 'id' => $team_id ),
         array( '%s' ),
@@ -78,7 +78,7 @@ if ( isset( $_POST['save_team_logo'] ) && check_admin_referer( 'arsenal_save_tea
 }
 
 // Получаем все лиги для селектора
-$leagues = $wpdb->get_results( "SELECT id, league_name FROM wp_arsenal_leagues ORDER BY league_name" );
+$leagues = $wpdb->get_results( "SELECT id, league_name FROM {$wpdb->prefix}arsenal_leagues ORDER BY league_name" );
 
 // Получаем все команды лиги
 $teams = $wpdb->get_results( "
@@ -89,7 +89,7 @@ $teams = $wpdb->get_results( "
         logo_url,
         created_at,
         updated_at
-    FROM wp_arsenal_teams
+    FROM {$wpdb->prefix}arsenal_teams
     ORDER BY name ASC
 " );
 
@@ -102,8 +102,8 @@ if ( ! empty( $teams ) ) {
             c.name as coach_name,
             tc.start_date,
             tc.end_date
-        FROM wp_arsenal_team_coaches tc
-        LEFT JOIN wp_arsenal_coaches c ON tc.coach_id = c.coach_id
+        FROM {$wpdb->prefix}arsenal_team_coaches tc
+        LEFT JOIN {$wpdb->prefix}arsenal_coaches c ON tc.coach_id = c.coach_id
         WHERE tc.team_id IN (" . implode( ',', array_map( function( $t ) { return "'" . $t->team_id . "'"; }, $teams ) ) . ")
         ORDER BY tc.start_date DESC
     " );

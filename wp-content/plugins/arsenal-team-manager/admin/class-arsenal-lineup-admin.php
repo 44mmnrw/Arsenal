@@ -186,21 +186,3 @@ class Arsenal_Lineup_Admin {
     }
 }
 
-/**
- * Получить составы матча (дублирование метода из Match Manager для удобства)
- */
-function Arsenal_Lineup_Manager_get_match_lineups( $match_id ) {
-    global $wpdb;
-    
-    $lineups = $wpdb->get_results( $wpdb->prepare(
-        "SELECT ml.*, p.first_name, p.last_name, t.name as team_name
-         FROM {$wpdb->prefix}arsenal_match_lineups ml
-         LEFT JOIN {$wpdb->prefix}arsenal_players p ON ml.player_id = p.player_id
-         LEFT JOIN {$wpdb->prefix}arsenal_teams t ON ml.team_id = t.team_id
-         WHERE ml.match_id = %s
-         ORDER BY ml.team_id, ml.is_starting DESC, ml.shirt_number",
-        $match_id
-    ) );
-    
-    return $lineups;
-}

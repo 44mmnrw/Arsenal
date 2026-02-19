@@ -1,7 +1,7 @@
 <?php
 /**
  * Управление контрактами игроков
- * Использует таблицу wp_arsenal_team_contracts
+ * Использует таблицу {$wpdb->prefix}arsenal_team_contracts
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -120,22 +120,22 @@ $contracts = $wpdb->get_results( "
         p.first_name,
         p.last_name,
         p.photo_url
-    FROM wp_arsenal_team_contracts c
-    LEFT JOIN wp_arsenal_players p ON c.player_id = p.player_id
+    FROM {$wpdb->prefix}arsenal_team_contracts c
+    LEFT JOIN {$wpdb->prefix}arsenal_players p ON c.player_id = p.player_id
     ORDER BY c.created_at DESC
 " );
 
 // Получить список доступных игроков
 $players = $wpdb->get_results( "
     SELECT player_id, first_name, last_name, shirt_number 
-    FROM wp_arsenal_players 
+    FROM {$wpdb->prefix}arsenal_players 
     ORDER BY last_name, first_name
 " );
 
 // Получить список составов
 $squads = $wpdb->get_results( "
     SELECT squad_id, squad_name 
-    FROM wp_arsenal_squad 
+    FROM {$wpdb->prefix}arsenal_squad 
     ORDER BY squad_name
 " );
 

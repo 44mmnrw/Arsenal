@@ -588,6 +588,9 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 			ARSENAL_VERSION,
 			true
 		);
+		wp_localize_script( 'arsenal-page-history-js', 'arsenalHistoryData', array(
+			'restUrl' => esc_url_raw( rest_url( 'arsenal/v1/history-data' ) ),
+		) );
 
 		// Передача данных в JavaScript
 		wp_localize_script( 'arsenal-script', 'arsenalData', array(
@@ -1917,8 +1920,8 @@ add_action( 'customize_preview_init', function() {
  * @since 1.0.0
  */
 add_action( 'wp_ajax_arsenal_save_customizer_setting', function() {
-	// Проверка nonce если передан
-	if ( ! empty( $_POST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'arsenal-customizer-nonce' ) ) {
+	// Проверка nonce
+	if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'arsenal-customizer-nonce' ) ) {
 		wp_die( 'Security check failed' );
 	}
 

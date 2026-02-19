@@ -18,7 +18,7 @@
 
 		// Плавная прокрутка для якорных ссылок
 		$('a[href^="#"]').on('click', function(event) {
-			var target = $(this.getAttribute('href'));
+			const target = $(this.getAttribute('href'));
 			if (target.length) {
 				event.preventDefault();
 				$('html, body').stop().animate({
@@ -28,8 +28,8 @@
 		});
 
 		// Sticky header при прокрутке
-		var header = $('.site-header');
-		var headerOffset = header.offset().top;
+		const header = $('.site-header');
+		const headerOffset = header.offset().top;
 		
 		$(window).scroll(function() {
 			if ($(window).scrollTop() > headerOffset) {

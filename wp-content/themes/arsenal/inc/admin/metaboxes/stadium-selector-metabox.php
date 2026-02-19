@@ -55,7 +55,7 @@ function arsenal_render_stadium_selector_metabox( $post, $metabox ) {
 	wp_nonce_field( 'arsenal_stadium_selector_nonce', 'arsenal_stadium_selector_nonce' );
 
 	// Получаем все стадионы из БД
-	$stadiums = $wpdb->get_results( "SELECT id, name, city, capacity FROM {$wpdb->prefix}arsenal_stadiums ORDER BY name ASC" );
+	$stadiums = $wpdb->get_results( $wpdb->prepare( "SELECT id, name, city, capacity FROM {$wpdb->prefix}arsenal_stadiums ORDER BY name ASC" ) );
 
 	?>
 	<div class="arsenal-stadium-selector">

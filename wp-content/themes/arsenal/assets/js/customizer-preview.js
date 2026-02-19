@@ -11,7 +11,7 @@
 	'use strict';
 
 	// Получить nonce из глобального объекта (если доступен)
-	var nonce = typeof arsenalCustomizerNonce !== 'undefined' ? arsenalCustomizerNonce : '';
+	const nonce = typeof arsenalCustomizerNonce !== 'undefined' ? arsenalCustomizerNonce : '';
 
 	// Ждём, когда Customizer будет готов
 	if ( typeof wp !== 'undefined' && wp.customize ) {
@@ -23,15 +23,15 @@
 				e.preventDefault();
 				e.stopPropagation();
 
-				var settingId = $( this ).data( 'customize-setting-link' );
-				var $element = $( this );
-				var currentText = $element.text();
-				var offset = $element.offset();
+				const settingId = $( this ).data( 'customize-setting-link' );
+				const $element = $( this );
+				const currentText = $element.text();
+				const offset = $element.offset();
 
 				console.log( 'Clicked on editable element:', settingId, 'Text:', currentText );
 
 				// Создаём popup HTML
-				var popupHTML = '<div class="arsenal-edit-popup" style="position: fixed; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; background: white; padding: 20px; min-width: 300px;">' +
+				const popupHTML = '<div class="arsenal-edit-popup" style="position: fixed; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; background: white; padding: 20px; min-width: 300px;">' +
 					'<div class="popup-header" style="margin-bottom: 15px; font-weight: 600; font-size: 14px; color: #333;">Редактировать текст</div>' +
 					'<input type="text" class="popup-input" value="' + esc_attr( currentText ) + '" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; box-sizing: border-box; margin-bottom: 15px;">' +
 					'<div class="popup-actions" style="display: flex; gap: 10px; justify-content: flex-end;">' +
@@ -44,12 +44,12 @@
 				$( '.arsenal-edit-popup' ).remove();
 
 				// Добавляем новый popup
-				var $popup = $( popupHTML );
+				const $popup = $( popupHTML );
 				$( 'body' ).append( $popup );
 
 				// Позиционируем popup возле элемента
-				var popupLeft = offset.left;
-				var popupTop = offset.top + $element.outerHeight() + 10;
+				const popupLeft = offset.left;
+				const popupTop = offset.top + $element.outerHeight() + 10;
 
 				$popup.css( {
 					'left': popupLeft + 'px',
@@ -57,13 +57,13 @@
 				} );
 
 				// Фокус на input
-				var $input = $popup.find( '.popup-input' );
+				const $input = $popup.find( '.popup-input' );
 				$input.focus();
 				$input.select();
 
 				// === СОХРАНИТЬ ===
 				$popup.find( '.popup-save' ).on( 'click', function() {
-					var newText = $input.val().trim();
+					const newText = $input.val().trim();
 
 					if ( newText && newText !== currentText ) {
 						console.log( 'Saving new text:', newText, 'to setting:', settingId );
@@ -181,7 +181,7 @@
 	 * Вспомогательная функция для экранирования HTML атрибутов
 	 */
 	function esc_attr( text ) {
-		var div = document.createElement( 'div' );
+		const div = document.createElement( 'div' );
 		div.textContent = text;
 		return div.innerHTML;
 	}

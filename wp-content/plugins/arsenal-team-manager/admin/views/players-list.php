@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 global $wpdb;
 
 // Получаем все доступные сезоны
-$seasons = $wpdb->get_results( "SELECT id, season_name FROM wp_arsenal_seasons ORDER BY id DESC" );
+$seasons = $wpdb->get_results( "SELECT id, season_name FROM {$wpdb->prefix}arsenal_seasons ORDER BY id DESC" );
 
 // Определяем выбранный сезон (текущий или из GET параметра)
 $selected_season_id = isset( $_GET['season_id'] ) ? intval( $_GET['season_id'] ) : null;
@@ -29,9 +29,9 @@ $players = $wpdb->get_results( $wpdb->prepare(
         c.contract_start,
         c.contract_end,
         pos.name as position_name
-    FROM wp_arsenal_players p
-    INNER JOIN wp_arsenal_team_contracts c ON p.player_id = c.player_id
-    LEFT JOIN wp_arsenal_positions pos ON p.position_id = pos.position_id
+    FROM {$wpdb->prefix}arsenal_players p
+    INNER JOIN {$wpdb->prefix}arsenal_team_contracts c ON p.player_id = c.player_id
+    LEFT JOIN {$wpdb->prefix}arsenal_positions pos ON p.position_id = pos.position_id
     WHERE c.contract_start <= %s 
         AND c.contract_end >= %s
     ORDER BY p.last_name, p.first_name",

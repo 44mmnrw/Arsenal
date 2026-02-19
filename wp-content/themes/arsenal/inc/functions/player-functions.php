@@ -87,96 +87,107 @@ function arsenal_get_player_seasons( $player_id ) {
 }
 
 /**
+ * Хелпер: агрегирует статистику игрока по массиву match_id.
+ * Используется в arsenal_get_player_stats() и arsenal_get_tournament_yearly_stats().
+ */
+function arsenal_aggregate_player_stats_for_matches( $player_id, $match_ids ) {
+	global $wpdb;
+
+	if ( empty( $match_ids ) ) {
+		return (object) array(
+			'matches_played'  => 0,
+			'matches_started' => 0,
+			'minutes_played'  => 0,
+			'goals'           => 0,
+			'assists'         => 0,
+			'yellow_cards'    => 0,
+			'red_cards'       => 0,
+		);
+	}
+
+	$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
+	$params       = array_merge( array( $player_id ), $match_ids );
+
+	$minutes_data = $wpdb->get_results( $wpdb->prepare(
+		"SELECT
+			ml.match_id,
+			ml.is_starting,
+			MIN(CASE WHEN me.event_type = '8A3000CC' THEN me.minute END) as sub_out,
+			MAX(CASE WHEN me.event_type = 'F6804FE9' THEN me.minute END) as sub_in
+		 FROM {$wpdb->prefix}arsenal_match_lineups ml
+		 LEFT JOIN {$wpdb->prefix}arsenal_match_events me
+			ON ml.match_id = me.match_id AND me.player_id = ml.player_id
+		 WHERE ml.player_id = %s AND ml.match_id IN ($placeholders)
+		 GROUP BY ml.match_id",
+		$params
+	) );
+
+	$matches_played  = 0;
+	$matches_started = 0;
+	$total_minutes   = 0;
+
+	foreach ( $minutes_data as $row ) {
+		$mins = arsenal_calculate_match_minutes( $row->is_starting, $row->sub_in, $row->sub_out );
+		if ( intval( $row->is_starting ) === 1 ) {
+			$matches_started++;
+		}
+		if ( $mins > 0 || intval( $row->is_starting ) === 1 ) {
+			$matches_played++;
+		}
+		$total_minutes += $mins;
+	}
+
+	$events = $wpdb->get_row( $wpdb->prepare(
+		"SELECT
+			SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
+			SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
+			SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
+			SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards
+		 FROM {$wpdb->prefix}arsenal_match_events
+		 WHERE player_id = %s AND match_id IN ($placeholders)",
+		$params
+	) );
+
+	return (object) array(
+		'matches_played'  => $matches_played,
+		'matches_started' => $matches_started,
+		'minutes_played'  => $total_minutes,
+		'goals'           => $events->goals ?? 0,
+		'assists'         => $events->assists ?? 0,
+		'yellow_cards'    => $events->yellow_cards ?? 0,
+		'red_cards'       => $events->red_cards ?? 0,
+	);
+}
+
+/**
  * Получить статистику игрока по tournament_id + году
- * ШАГ 1: Берем ВСЕ match_id турнира за год
- * ШАГ 2: Ищем события игрока в этих матчах
  */
 function arsenal_get_player_stats( $player_id, $tournament_id = null, $year = null ) {
 	global $wpdb;
-	
-	// ШАГ 1: Получаем ВСЕ match_id матчей турнира за текущий год
+
 	$match_ids = $wpdb->get_col( $wpdb->prepare(
-		"SELECT match_id FROM {$wpdb->prefix}arsenal_matches 
+		"SELECT match_id FROM {$wpdb->prefix}arsenal_matches
 		 WHERE tournament_id = %s AND YEAR(match_date) = %d",
 		$tournament_id,
 		$year
 	) );
-	
+
 	if ( empty( $match_ids ) ) {
 		return (object) array(
-			'matches_played' => 0,
+			'matches_played'  => 0,
 			'matches_started' => 0,
-			'minutes_played' => 0,
-			'goals' => 0,
-			'assists' => 0,
-			'yellow_cards' => 0,
-			'red_cards' => 0
+			'minutes_played'  => 0,
+			'goals'           => 0,
+			'assists'         => 0,
+			'yellow_cards'    => 0,
+			'red_cards'       => 0,
+			'goals_conceded'  => null,
 		);
 	}
-	
-	// ШАГ 2: Ищем матчи и минуты игрока в этих матчах
-	$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
-	
-	// ШАГ 3: Вычисляем реальные минуты на основе подстановок
-	// Для каждого матча где был игрок в lineups, ищем события sub_out/sub_in
-	$params_events = array_merge( array( $player_id ), $match_ids );
-	
-	$minutes_data = $wpdb->get_results( 
-		$wpdb->prepare(
-			"SELECT 
-				ml.match_id,
-				ml.is_starting,
-				MIN(CASE WHEN me.event_type = '8A3000CC' THEN me.minute END) as sub_out,
-				MAX(CASE WHEN me.event_type = 'F6804FE9' THEN me.minute END) as sub_in
-			 FROM {$wpdb->prefix}arsenal_match_lineups ml
-			 LEFT JOIN {$wpdb->prefix}arsenal_match_events me ON ml.match_id = me.match_id AND me.player_id = ml.player_id
-			 WHERE ml.player_id = %s AND ml.match_id IN ($placeholders)
-			 GROUP BY ml.match_id",
-			$params_events
-		) 
-	);
-	
-	$matches_played_count  = 0;
-	$matches_started_count = 0;
-	$total_minutes         = 0;
-	
-	foreach ( $minutes_data as $match_record ) {
-		$minutes_for_match = arsenal_calculate_match_minutes( $match_record->is_starting, $match_record->sub_in, $match_record->sub_out );
-		
-		if ( intval( $match_record->is_starting ) === 1 ) {
-			$matches_started_count++;
-		}
-		
-		if ( $minutes_for_match > 0 || intval( $match_record->is_starting ) === 1 ) {
-			$matches_played_count++;
-		}
-		
-		$total_minutes += $minutes_for_match;
-	}
-	
-	$events = $wpdb->get_row( 
-		$wpdb->prepare(
-			"SELECT 
-				SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
-				SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
-				SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
-				SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards
-			 FROM {$wpdb->prefix}arsenal_match_events
-			 WHERE player_id = %s AND match_id IN ($placeholders)",
-			$params_events
-		) 
-	);
-	
-	return (object) array(
-		'matches_played' => $matches_played_count,
-		'matches_started' => $matches_started_count,
-		'minutes_played' => $total_minutes,
-		'goals' => $events->goals ?? 0,
-		'assists' => $events->assists ?? 0,
-		'yellow_cards' => $events->yellow_cards ?? 0,
-		'red_cards' => $events->red_cards ?? 0,
-		'goals_conceded' => null  // Будет переопределено далее для вратарей
-	);
+
+	$stats                = arsenal_aggregate_player_stats_for_matches( $player_id, $match_ids );
+	$stats->goals_conceded = null;
+	return $stats;
 }
 
 /**
@@ -200,11 +211,11 @@ function arsenal_get_player_events( $player_id, $tournament_id, $year = null ) {
 		return array();
 	}
 	
-	// ШАГ 2: Для каждого матча проверяем участие игрока и его события
+	// ШАГ 2: Получаем данные матчей + все события игрока одним запросом (JOIN вместо N субзапросов)
 	$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
-	
+
 	$events = $wpdb->get_results( $wpdb->prepare(
-		"SELECT 
+		"SELECT
 			m.match_id,
 			m.match_date,
 			m.home_score,
@@ -214,19 +225,32 @@ function arsenal_get_player_events( $player_id, $tournament_id, $year = null ) {
 			ht.name as home_team,
 			at.name as away_team,
 			ml.is_starting,
-			(SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = 'A3898573') as goals,
-			(SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = 'B44F03A6') as assists,
-			(SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = '7B83D3F0') as yellow_cards,
-			(SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = 'FC171553') as red_cards,
-			(SELECT MIN(minute) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = '8A3000CC') as sub_out,
-			(SELECT MAX(minute) FROM {$wpdb->prefix}arsenal_match_events WHERE match_id = m.match_id AND player_id = %s AND event_type = 'F6804FE9') as sub_in
+			COALESCE(pe.goals, 0)        as goals,
+			COALESCE(pe.assists, 0)      as assists,
+			COALESCE(pe.yellow_cards, 0) as yellow_cards,
+			COALESCE(pe.red_cards, 0)    as red_cards,
+			pe.sub_out,
+			pe.sub_in
 		 FROM {$wpdb->prefix}arsenal_matches m
 		 INNER JOIN {$wpdb->prefix}arsenal_teams ht ON ht.team_id = m.home_team_id
 		 INNER JOIN {$wpdb->prefix}arsenal_teams at ON at.team_id = m.away_team_id
 		 INNER JOIN {$wpdb->prefix}arsenal_match_lineups ml ON ml.match_id = m.match_id AND ml.player_id = %s
+		 LEFT JOIN (
+			SELECT
+				match_id,
+				SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
+				SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
+				SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
+				SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards,
+				MIN(CASE WHEN event_type = '8A3000CC' THEN minute END)    as sub_out,
+				MAX(CASE WHEN event_type = 'F6804FE9' THEN minute END)    as sub_in
+			FROM {$wpdb->prefix}arsenal_match_events
+			WHERE player_id = %s
+			GROUP BY match_id
+		 ) pe ON pe.match_id = m.match_id
 		 WHERE m.match_id IN ($placeholders)
 		 ORDER BY m.match_date DESC",
-		array_merge( array( $player_id, $player_id, $player_id, $player_id, $player_id, $player_id, $player_id ), $match_ids )
+		array_merge( array( $player_id, $player_id ), $match_ids )
 	) );
 	
 	// ШАГ 3: Для каждого матча рассчитаем минуты
@@ -364,73 +388,33 @@ function arsenal_get_tournament_yearly_stats( $player_id, $tournament_id ) {
 			$matches_by_year[$match->year][] = $match->match_id;
 		}
 		
+		// Получаем позицию игрока один раз (вне цикла)
+		$player_data   = arsenal_get_player_data( $player_id );
+		$position_code = isset( $player_data->position_id ) ? $player_data->position_id : null;
+
 		// Для каждого года получаем статистику
 		foreach ( $matches_by_year as $year => $match_ids ) {
 			if ( empty( $match_ids ) ) {
 				continue;
 			}
-			
-			$placeholders = implode( ',', array_fill( 0, count( $match_ids ), '%s' ) );
-			$params_lineups = array_merge( array( $player_id ), $match_ids );
-			
-			// Считаем минуты и количество сыгранных матчей
-			$minutes_data = $wpdb->get_results( $wpdb->prepare(
-				"SELECT 
-					ml.match_id,
-					ml.is_starting,
-					MIN(CASE WHEN me.event_type = '8A3000CC' THEN me.minute END) as sub_out,
-					MAX(CASE WHEN me.event_type = 'F6804FE9' THEN me.minute END) as sub_in
-				 FROM {$wpdb->prefix}arsenal_match_lineups ml
-				 LEFT JOIN {$wpdb->prefix}arsenal_match_events me ON ml.match_id = me.match_id AND me.player_id = ml.player_id
-				 WHERE ml.player_id = %s AND ml.match_id IN ($placeholders)
-				 GROUP BY ml.match_id",
-				$params_lineups
-			) );
-			
-			$matches_played_count  = 0;
-			$total_minutes         = 0;
-	
-			foreach ( $minutes_data as $match_record ) {
-				$minutes_for_match = arsenal_calculate_match_minutes( $match_record->is_starting, $match_record->sub_in, $match_record->sub_out );
-		
-				if ( $minutes_for_match > 0 || intval( $match_record->is_starting ) === 1 ) {
-					$matches_played_count++;
-				}
-		
-				$total_minutes += $minutes_for_match;
-			}
-			
-			// Получаем события
-			$events = $wpdb->get_row( $wpdb->prepare(
-				"SELECT 
-					SUM(CASE WHEN event_type = 'A3898573' THEN 1 ELSE 0 END) as goals,
-					SUM(CASE WHEN event_type = 'B44F03A6' THEN 1 ELSE 0 END) as assists,
-					SUM(CASE WHEN event_type = '7B83D3F0' THEN 1 ELSE 0 END) as yellow_cards,
-					SUM(CASE WHEN event_type = 'FC171553' THEN 1 ELSE 0 END) as red_cards
-				 FROM {$wpdb->prefix}arsenal_match_events
-				 WHERE player_id = %s AND match_id IN ($placeholders)",
-				$params_lineups
-			) );
-			
-			// Получаем позицию игрока для определения, вратарь ли это
-			$player_data = arsenal_get_player_data( $player_id );
-			$position_code = isset( $player_data->position_id ) ? $player_data->position_id : null;
-			
+
+			$stats = arsenal_aggregate_player_stats_for_matches( $player_id, $match_ids );
+
 			// Если вратарь, считаем пропущенные голы за год
 			$goals_conceded = 0;
 			if ( $position_code === 'A98B3A74' ) {
 				$goals_conceded = arsenal_get_goalkeeper_goals_conceded( $player_id, $tournament_id, $year );
 			}
-			
+
 			$years_stats[] = (object) array(
-				'year' => $year,
-				'matches_played' => $matches_played_count,
-				'minutes_played' => $total_minutes,
-				'goals' => $events->goals ?? 0,
-				'assists' => $events->assists ?? 0,
-				'yellow_cards' => $events->yellow_cards ?? 0,
-				'red_cards' => $events->red_cards ?? 0,
-				'goals_conceded' => $goals_conceded
+				'year'           => $year,
+				'matches_played' => $stats->matches_played,
+				'minutes_played' => $stats->minutes_played,
+				'goals'          => $stats->goals,
+				'assists'        => $stats->assists,
+				'yellow_cards'   => $stats->yellow_cards,
+				'red_cards'      => $stats->red_cards,
+				'goals_conceded' => $goals_conceded,
 			);
 		}
 	}
@@ -553,8 +537,8 @@ function arsenal_apply_player_corrections( $stats, $player_id, $tournament_id, $
 		$year = intval( $year );
 	}
 	
-	// DEBUG
-	$debug = isset( $_GET['debug_corrections'] ) && $_GET['debug_corrections'] === '1';
+	// DEBUG (только для администраторов)
+	$debug = current_user_can( 'manage_options' ) && isset( $_GET['debug_corrections'] ) && $_GET['debug_corrections'] === '1';
 	if ( $debug ) {
 		error_log( "=== arsenal_apply_player_corrections DEBUG ===" );
 		error_log( "Player ID: $player_id, Tournament: $tournament_id, Year: $year" );

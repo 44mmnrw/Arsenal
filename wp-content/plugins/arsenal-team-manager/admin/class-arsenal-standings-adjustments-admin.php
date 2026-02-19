@@ -89,14 +89,14 @@ class Arsenal_Standings_Adjustments_Admin {
         
         // Получение данных из формы
         $data = array(
-            'tournament_id' => $_POST['tournament_id'],
-            'season_id' => $_POST['season_id'],
-            'team_id' => $_POST['team_id'],
-            'adjustment_points' => $_POST['adjustment_points'],
-            'comment' => $_POST['comment'],
-            'applied_date' => $_POST['applied_date'],
+            'tournament_id'     => sanitize_text_field( $_POST['tournament_id'] ?? '' ),
+            'season_id'         => sanitize_text_field( $_POST['season_id'] ?? '' ),
+            'team_id'           => sanitize_text_field( $_POST['team_id'] ?? '' ),
+            'adjustment_points' => intval( $_POST['adjustment_points'] ?? 0 ),
+            'comment'           => sanitize_textarea_field( $_POST['comment'] ?? '' ),
+            'applied_date'      => sanitize_text_field( $_POST['applied_date'] ?? '' ),
         );
-        
+
         // Создание корректировки
         $adjustment_id = Arsenal_Standings_Adjustments_Manager::create_adjustment( $data );
         
@@ -124,14 +124,14 @@ class Arsenal_Standings_Adjustments_Admin {
         
         // Получение данных из формы
         $data = array(
-            'tournament_id' => $_POST['tournament_id'],
-            'season_id' => $_POST['season_id'],
-            'team_id' => $_POST['team_id'],
-            'adjustment_points' => $_POST['adjustment_points'],
-            'comment' => $_POST['comment'],
-            'applied_date' => $_POST['applied_date'],
+            'tournament_id'     => sanitize_text_field( $_POST['tournament_id'] ?? '' ),
+            'season_id'         => sanitize_text_field( $_POST['season_id'] ?? '' ),
+            'team_id'           => sanitize_text_field( $_POST['team_id'] ?? '' ),
+            'adjustment_points' => intval( $_POST['adjustment_points'] ?? 0 ),
+            'comment'           => sanitize_textarea_field( $_POST['comment'] ?? '' ),
+            'applied_date'      => sanitize_text_field( $_POST['applied_date'] ?? '' ),
         );
-        
+
         // Обновление корректировки
         $result = Arsenal_Standings_Adjustments_Manager::update_adjustment( $adjustment_id, $data );
         

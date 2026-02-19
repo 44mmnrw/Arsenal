@@ -30,7 +30,7 @@ if ( isset( $_POST['arsenal_save_season'] ) && check_admin_referer( 'arsenal_sav
 $active_season_year = get_option( 'arsenal_active_season_year', intval( date( 'Y' ) ) );
 
 // ID команды Арсенал - ищем по названию и получаем team_id (VARCHAR для матчей)
-$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM wp_arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
+$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
 if ( ! $arsenal_team_id ) {
     $arsenal_team_id = null;
 }
@@ -38,14 +38,14 @@ if ( ! $arsenal_team_id ) {
 // Статистика - безопасные запросы с обработкой ошибок
 // Игроки в составе - только те, у кого есть контракт
 $total_players = intval( $wpdb->get_var( 
-    "SELECT COUNT(DISTINCT player_id) FROM wp_arsenal_team_contracts"
+    "SELECT COUNT(DISTINCT player_id) FROM {$wpdb->prefix}arsenal_team_contracts"
 ) );
 
 // Матчи Арсенала (где оба тима есть и забиты оба счёта)
 $total_matches = 0;
 if ( $arsenal_team_id ) {
     $total_matches = intval( $wpdb->get_var( $wpdb->prepare( 
-        "SELECT COUNT(*) FROM wp_arsenal_matches 
+        "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_matches 
         WHERE (home_team_id = %s OR away_team_id = %s)
         AND home_score IS NOT NULL AND away_score IS NOT NULL
         AND YEAR(match_date) = %d
@@ -64,7 +64,7 @@ if ( $arsenal_team_id ) {
             WHEN away_team_id = %s THEN away_score
             ELSE 0 
         END), 0)
-        FROM wp_arsenal_matches 
+        FROM {$wpdb->prefix}arsenal_matches 
         WHERE (home_team_id = %s OR away_team_id = %s)
         AND home_score IS NOT NULL AND away_score IS NOT NULL
         AND YEAR(match_date) = %d
@@ -79,7 +79,7 @@ if ( $arsenal_team_id ) {
             WHEN away_team_id = %s THEN home_score
             ELSE 0 
         END), 0)
-        FROM wp_arsenal_matches 
+        FROM {$wpdb->prefix}arsenal_matches 
         WHERE (home_team_id = %s OR away_team_id = %s)
         AND home_score IS NOT NULL AND away_score IS NOT NULL
         AND YEAR(match_date) = %d
@@ -97,7 +97,7 @@ if ( function_exists( 'arsenal_calculate_standings' ) ) {
 }
 
 // Получаем ID Арсенала по team_id
-$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM wp_arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
+$arsenal_team_id = $wpdb->get_var( "SELECT team_id FROM {$wpdb->prefix}arsenal_teams WHERE name LIKE '%Арсенал%' LIMIT 1" );
 
 // Находим позицию Арсенала в таблице
 $position = '—';

@@ -17,12 +17,12 @@ if ( isset( $_POST['arsenal_save_position'] ) ) {
     $sort_order = intval( $_POST['sort_order'] );
     
     // Проверяем, существует ли позиция
-    $exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM wp_arsenal_positions WHERE code = %s", $code ) );
+    $exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_positions WHERE code = %s", $code ) );
     
     if ( $exists ) {
         // Обновляем
         $wpdb->update(
-            'wp_arsenal_positions',
+            $wpdb->prefix . 'arsenal_positions',
             array(
                 'name_ru' => $name_ru,
                 'name_en' => $name_en,
@@ -36,7 +36,7 @@ if ( isset( $_POST['arsenal_save_position'] ) ) {
     } else {
         // Добавляем новую
         $wpdb->insert(
-            'wp_arsenal_positions',
+            $wpdb->prefix . 'arsenal_positions',
             array(
                 'code' => $code,
                 'name_ru' => $name_ru,
@@ -56,12 +56,12 @@ if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['c
     $code = sanitize_text_field( $_GET['code'] );
     
     // Проверяем, используется ли позиция
-    $used = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM wp_arsenal_players WHERE position = %s", $code ) );
+    $used = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_players WHERE position = %s", $code ) );
     
     if ( $used > 0 ) {
         echo '<div class="notice notice-error"><p>Нельзя удалить позицию, которая используется игроками (' . $used . ' игр.).</p></div>';
     } else {
-        $wpdb->delete( 'wp_arsenal_positions', array( 'code' => $code ), array( '%s' ) );
+        $wpdb->delete( $wpdb->prefix . 'arsenal_positions', array( 'code' => $code ), array( '%s' ) );
         echo '<div class="notice notice-success"><p>Позиция удалена.</p></div>';
     }
 }
@@ -71,8 +71,8 @@ $positions = $wpdb->get_results( "
     SELECT 
         pos.*,
         COUNT(p.id) as players_count
-    FROM wp_arsenal_positions pos
-    LEFT JOIN wp_arsenal_players p ON p.position = pos.id
+    FROM {$wpdb->prefix}arsenal_positions pos
+    LEFT JOIN {$wpdb->prefix}arsenal_players p ON p.position = pos.id
     GROUP BY pos.id
     ORDER BY pos.sort_order
 " );

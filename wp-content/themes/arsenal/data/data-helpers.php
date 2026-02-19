@@ -14,13 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function arsenal_get_standings() {
     $file = get_template_directory() . '/data/standings.json';
-    
+
     if ( ! file_exists( $file ) ) {
         return null;
     }
-    
-    $json = @file_get_contents( $file );
-    if ( ! $json ) {
+
+    $json = file_get_contents( $file );
+    if ( false === $json ) {
+        error_log( 'Arsenal: cannot read ' . $file );
         return null;
     }
     return json_decode( $json, true );
@@ -31,13 +32,14 @@ function arsenal_get_standings() {
  */
 function arsenal_get_team_info() {
     $file = get_template_directory() . '/data/team_info.json';
-    
+
     if ( ! file_exists( $file ) ) {
         return null;
     }
-    
-    $json = @file_get_contents( $file );
-    if ( ! $json ) {
+
+    $json = file_get_contents( $file );
+    if ( false === $json ) {
+        error_log( 'Arsenal: cannot read ' . $file );
         return null;
     }
     return json_decode( $json, true );
@@ -48,13 +50,14 @@ function arsenal_get_team_info() {
  */
 function arsenal_get_fixtures() {
     $file = get_template_directory() . '/data/fixtures.json';
-    
+
     if ( ! file_exists( $file ) ) {
         return null;
     }
-    
-    $json = @file_get_contents( $file );
-    if ( ! $json ) {
+
+    $json = file_get_contents( $file );
+    if ( false === $json ) {
+        error_log( 'Arsenal: cannot read ' . $file );
         return null;
     }
     return json_decode( $json, true );

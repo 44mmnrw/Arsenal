@@ -179,7 +179,7 @@
 .player-stats-bar {
 	background-color: #fff;
 	width: 100%;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid var(--gray-200);
 }
 
 .player-stats-bar-container {
@@ -206,14 +206,14 @@
 }
 
 .player-stats-bar-number {
-	color: #c41e3a;
+	color: var(--red-700);
 	font-size: 2rem;
 	font-weight: 600;
 	line-height: 1;
 }
 
 .player-stats-bar-label {
-	color: #666;
+	color: var(--gray-600);
 	font-size: 0.875rem;
 	font-weight: 400;
 	line-height: 1.4;
@@ -237,7 +237,7 @@
 .custom-season-select-trigger {
 	border: none;
 	background: transparent;
-	color: #c41e3a;
+	color: var(--red-700);
 	font-size: 2rem;
 	font-weight: 600;
 	cursor: pointer;
@@ -282,7 +282,7 @@
 	display: block;
 	padding: 0.5rem 1rem;
 	font-size: 2rem;
-	color: #c41e3a;
+	color: var(--red-700);
 	text-decoration: none;
 	border-radius: 0;
 	font-weight: 600;
@@ -291,7 +291,7 @@
 
 .custom-season-select-dropdown a:hover {
 	background-color: #FFE5E5;
-	color: #c41e3a;
+	color: var(--red-700);
 }
 
 .custom-season-select-dropdown a.selected {
@@ -390,10 +390,10 @@
 .section-title {
 	font-size: 1.25rem;
 	font-weight: 700;
-	color: #333;
+	color: var(--gray-900);
 	margin: 0 0 1.5625rem 0;
 	padding-left: 0.9375rem;
-	border-left: 0.25rem solid #c41e3a;
+	border-left: 0.25rem solid var(--red-700);
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -402,7 +402,7 @@
 .section-title svg {
 	width: 1.25rem;
 	height: 1.25rem;
-	color: #c41e3a;
+	color: var(--red-700);
 }
 
 .stats-cards-grid {
@@ -422,22 +422,22 @@
 
 .stat-card:hover {
 	background: #fff;
-	border-color: #c41e3a;
-	box-shadow: 0 0.375rem 1.25rem #c41e3a1f;
+	border-color: var(--red-700);
+	box-shadow: 0 0.375rem 1.25rem var(--red-700)1f;
 	transform: translateY(-4px);
 }
 
 .stat-card-value {
 	font-size: 2.25rem;
 	font-weight: 800;
-	color: #c41e3a;
+	color: var(--red-700);
 	margin-bottom: 0.5rem;
 	line-height: 1;
 }
 
 .stat-card-label {
 	font-size: 0.75rem;
-	color: #666;
+	color: var(--gray-600);
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
 	font-weight: 600;
@@ -698,15 +698,15 @@
 	text-align: left;
 	font-size: 0.625rem;
 	font-weight: 700;
-	color: #666;
+	color: var(--gray-600);
 	text-transform: uppercase;
 	letter-spacing: 0.03125rem;
-	border-bottom: 0.125rem solid #e0e0e0;
+	border-bottom: 0.125rem solid var(--gray-200);
 }
 
 .matches-table td {
 	padding: 0.9375rem;
-	color: #333;
+	color: var(--gray-900);
 	font-size: 0.75rem;
 	border-bottom: 1px solid #f5f5f5;
 }
@@ -717,7 +717,7 @@
 
 .match-score {
 	font-weight: 700;
-	color: #c41e3a;
+	color: var(--red-700);
 }
 
 .match-events {
@@ -834,7 +834,7 @@
 	align-items: center;
 	gap: 0.3125rem;
 	padding: 0.375rem 0.75rem;
-	background: #c41e3a;
+	background: var(--red-700);
 	color: #fff;
 	text-decoration: none;
 	border-radius: 0.375rem;
@@ -857,12 +857,12 @@
 }
 
 .match-link:hover {
-	color: #c41e3a;
+	color: var(--red-700);
 }
 
 /* Номер игрока в таблице события */
 .shirt-number-highlight {
-	color: #c41e3a;
+	color: var(--red-700);
 }
 
 /* Биография */
@@ -895,15 +895,15 @@
 	text-align: left;
 	font-size: 0.75rem;
 	font-weight: 700;
-	color: #666;
+	color: var(--gray-600);
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	border-bottom: 0.1875rem solid #c41e3a;
+	border-bottom: 0.1875rem solid var(--red-700);
 }
 
 .stats-table td {
 	padding: 1.125rem 0.9375rem;
-	color: #333;
+	color: var(--gray-900);
 	font-size: 0.9375rem;
 	border-bottom: 1px solid #f5f5f5;
 }
@@ -922,7 +922,7 @@
 
 .stats-table .year-cell {
 	font-weight: 700;
-	color: #c41e3a;
+	color: var(--red-700);
 	font-size: 1rem;
 }
 
@@ -932,9 +932,9 @@
 }
 
 .stats-table .total-row td {
-	color: #333;
+	color: var(--gray-900);
 	padding: 1.375rem 0.9375rem;
-	border-top: 0.1875rem solid #c41e3a;
+	border-top: 0.1875rem solid var(--red-700);
 	border-bottom: none;
 	font-size: 1rem;
 }
@@ -1456,7 +1456,7 @@
 
 	/* Полоса статистики */
 	.player-stats-bar {
-		border-bottom: 1px solid #e0e0e0;
+		border-bottom: 1px solid var(--gray-200);
 	}
 
 	.player-stats-bar-container {
@@ -1584,21 +1584,21 @@
 		text-align: right;
 		background-color: var(--gray-50);
 		font-size: 0.6875rem;
-		color: #333;
+		color: var(--gray-900);
 	}
 
 	.matches-table td::before {
 		content: attr(data-label);
 		float: left;
 		font-weight: 700;
-		color: #666;
+		color: var(--gray-600);
 		text-align: left;
 	}
 
 	.matches-table tr {
 		display: block;
 		margin-bottom: 0.375rem;
-		border: 1px solid #e0e0e0;
+		border: 1px solid var(--gray-200);
 		border-radius: 0.375rem;
 		overflow: hidden;
 		background: #fff;
@@ -1628,7 +1628,7 @@
 	.stats-table tr {
 		display: block;
 		margin-bottom: 0.375rem;
-		border: 1px solid #e0e0e0;
+		border: 1px solid var(--gray-200);
 		border-radius: 0.375rem;
 		overflow: hidden;
 		background: #fff;
@@ -1642,14 +1642,14 @@
 		text-align: right;
 		background-color: var(--gray-50);
 		font-size: 0.6875rem;
-		color: #333;
+		color: var(--gray-900);
 	}
 
 	.stats-table td::before {
 		content: attr(data-label);
 		float: left;
 		font-weight: 700;
-		color: #666;
+		color: var(--gray-600);
 		text-align: left;
 		margin-right: 0.625rem;
 	}

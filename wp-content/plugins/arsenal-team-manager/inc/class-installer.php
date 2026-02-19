@@ -21,8 +21,22 @@ class Arsenal_Team_Manager_Installer {
 	 * Основной метод установки
 	 */
 	public static function install() {
-		// Создаем все таблицы БД
-		self::create_database_tables();
+		/*
+		 * ВАЖНО:
+		 * По умолчанию на активации НЕ выполняем загрузку SQL-дампа,
+		 * чтобы избежать таймаутов и непреднамеренного пересоздания данных.
+		 *
+		 * Если нужно принудительно прогнать установку БД при активации,
+		 * можно явно включить это через константу:
+		 * define( 'ARSENAL_TM_RUN_DB_INSTALL_ON_ACTIVATION', true );
+		 */
+		$run_db_install_on_activation = defined( 'ARSENAL_TM_RUN_DB_INSTALL_ON_ACTIVATION' )
+			? (bool) constant( 'ARSENAL_TM_RUN_DB_INSTALL_ON_ACTIVATION' )
+			: false;
+
+		if ( $run_db_install_on_activation ) {
+			self::create_database_tables();
+		}
 		
 		// Отмечаем, что установка выполнена
 		update_option( 'arsenal_team_manager_installed', current_time( 'mysql' ) );

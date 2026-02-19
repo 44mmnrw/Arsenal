@@ -34,7 +34,7 @@ class Arsenal_Squad_Admin {
     public function register_menu() {
         // Страница скрыта из меню, но доступна программно
         add_submenu_page(
-            'arsenal-team',
+            '',
             'Добавить состав',
             'Состав',
             'manage_options',
@@ -42,11 +42,6 @@ class Arsenal_Squad_Admin {
             array( $this, 'render_squad_form' ),
             999 // Высокий приоритет для скрытия
         );
-        
-        // Скрываем меню-пункт через CSS
-        add_action( 'admin_head', function() {
-            echo '<style>#adminmenu a[href*="arsenal-squad-add"] { display: none !important; }</style>';
-        });
     }
 
     /**
@@ -56,16 +51,11 @@ class Arsenal_Squad_Admin {
         global $wpdb;
 
         if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset( $_POST['nonce'] ) ) {
-            error_log( '=== Squad Form POST ===' );
-            error_log( 'Nonce: ' . $_POST['nonce'] );
-            
             if ( ! wp_verify_nonce( $_POST['nonce'], 'arsenal_staff_nonce' ) ) {
-                error_log( 'Nonce verification failed' );
                 wp_die( 'Ошибка безопасности' );
             }
 
             $squad_name = sanitize_text_field( $_POST['squad_name'] ?? '' );
-            error_log( 'Squad name: ' . $squad_name );
 
             if ( empty( $squad_name ) ) {
                 echo '<div class="notice notice-error"><p>Название состава не может быть пустым</p></div>';
@@ -83,8 +73,6 @@ class Arsenal_Squad_Admin {
                     echo '<div class="notice notice-warning"><p>Состав с таким названием уже существует</p></div>';
                 } else {
                     // Вставляем новый состав
-                    error_log( 'Inserting squad: ' . $squad_name . ' (MD5: ' . $squad_id . ')' );
-                    
                     $result = $wpdb->insert(
                         $wpdb->prefix . 'arsenal_squad',
                         array(
@@ -94,15 +82,10 @@ class Arsenal_Squad_Admin {
                         array( '%s', '%s' )
                     );
                     
-                    error_log( 'Insert result: ' . ( $result ? 'SUCCESS' : 'FAILED' ) );
-                    if ( ! $result ) {
-                        error_log( 'DB Error: ' . $wpdb->last_error );
-                    }
-
                     if ( $result ) {
                         echo '<div class="notice notice-success"><p>Состав успешно добавлен</p></div>';
                     } else {
-                        echo '<div class="notice notice-error"><p>Ошибка при добавлении состава: ' . esc_html( $wpdb->last_error ) . '</p></div>';
+                        echo '<div class="notice notice-error"><p>Ошибка при добавлении состава. Попробуйте ещё раз.</p></div>';
                     }
                 }
             }
@@ -220,31 +203,24 @@ class Arsenal_Squad_Admin {
      * Обработчик удаления состава через AJAX
      */
     public function handle_delete_squad() {
-        error_log( '=== handle_delete_squad() ===' );
-        
         check_ajax_referer( 'arsenal_staff_nonce', '_ajax_nonce' );
 
         if ( ! current_user_can( 'manage_options' ) ) {
-            error_log( 'No permissions' );
             wp_send_json_error( 'Недостаточно прав' );
         }
 
         global $wpdb;
 
         $squad_id = intval( $_POST['squad_id'] ?? 0 );
-        error_log( 'Squad ID to delete: ' . $squad_id );
 
         if ( ! $squad_id ) {
-            error_log( 'Squad ID is empty' );
             wp_send_json_error( 'ID состава не указан' );
         }
 
         // Проверяем количество составов
         $squad_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_squad" );
-        error_log( 'Total squads: ' . $squad_count );
-        
+
         if ( $squad_count <= 1 ) {
-            error_log( 'Cannot delete last squad' );
             wp_send_json_error( 'Нельзя удалить последний состав' );
         }
 
@@ -253,30 +229,21 @@ class Arsenal_Squad_Admin {
             "SELECT COUNT(*) FROM {$wpdb->prefix}arsenal_staff WHERE squad_id = %d",
             $squad_id
         ) );
-        error_log( 'Staff in squad: ' . $staff_count );
 
         if ( $staff_count > 0 ) {
-            error_log( 'Squad has staff' );
             wp_send_json_error( 'В составе есть сотрудники. Сначала переместите их в другой состав.' );
         }
 
-        // Удаляем состав
-        error_log( 'Deleting squad ' . $squad_id );
         $result = $wpdb->delete(
             $wpdb->prefix . 'arsenal_squad',
             array( 'id' => $squad_id ),
             array( '%d' )
         );
-        error_log( 'Delete result: ' . ( $result ? 'SUCCESS' : 'FAILED' ) );
-        
-        if ( ! $result ) {
-            error_log( 'DB Error: ' . $wpdb->last_error );
-        }
 
         if ( $result ) {
             wp_send_json_success( 'Состав удален' );
         } else {
-            wp_send_json_error( 'Ошибка при удалении состава: ' . $wpdb->last_error );
+            wp_send_json_error( 'Ошибка при удалении состава. Попробуйте ещё раз.' );
         }
     }
 

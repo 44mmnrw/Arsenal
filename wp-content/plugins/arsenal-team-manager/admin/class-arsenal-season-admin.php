@@ -144,9 +144,8 @@ class Arsenal_Season_Admin {
         }
         
         // Проверка nonce
-        check_admin_referer( 'arsenal_delete_season_' . $_GET['season_id'] );
-        
-        $season_id = intval( $_GET['season_id'] );
+        $season_id = isset( $_GET['season_id'] ) ? intval( $_GET['season_id'] ) : 0;
+        check_admin_referer( 'arsenal_delete_season_' . $season_id );
         
         // Удаление сезона
         $result = Arsenal_Season_Manager::delete_season( $season_id );

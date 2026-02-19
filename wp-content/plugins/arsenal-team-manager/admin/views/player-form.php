@@ -55,7 +55,7 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
                            str_replace( '-', '', $birth_date ); // Дата в формате YYYY-MM-DD
         $data['player_id'] = strtoupper( substr( md5( $player_id_source ), 0, 8 ) );
         
-        $wpdb->insert( 'wp_arsenal_players', $data, $format );
+        $wpdb->insert( $wpdb->prefix . 'arsenal_players', $data, $format );
         $player_id = $wpdb->insert_id;
         
         if ( $wpdb->last_error ) {
@@ -65,7 +65,7 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
         }
     } else {
         // При редактировании НЕ меняем player_id
-        $result = $wpdb->update( 'wp_arsenal_players', $data, array( 'player_id' => $player_id ), $format, array( '%s' ) );
+        $result = $wpdb->update( $wpdb->prefix . 'arsenal_players', $data, array( 'player_id' => $player_id ), $format, array( '%s' ) );
         
         if ( $result === false ) {
             echo '<div class="notice notice-error"><p>❌ Ошибка при сохранении: ' . esc_html( $wpdb->last_error ) . '</p></div>';
@@ -78,7 +78,7 @@ if ( isset( $_POST['arsenal_save_player'] ) ) {
 // Получаем данные игрока
 $player = null;
 if ( ! $is_new ) {
-    $player = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM wp_arsenal_players WHERE player_id = %s", $player_id ) );
+    $player = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}arsenal_players WHERE player_id = %s", $player_id ) );
     
     if ( ! $player ) {
         echo '<div class="notice notice-error"><p>Игрок не найден.</p></div>';
@@ -87,7 +87,7 @@ if ( ! $is_new ) {
 }
 
 // Список позиций
-$positions = $wpdb->get_results( "SELECT position_id, name FROM wp_arsenal_positions ORDER BY id" );
+$positions = $wpdb->get_results( "SELECT position_id, name FROM {$wpdb->prefix}arsenal_positions ORDER BY id" );
 
 // Получаем тип состава из последнего контракта (если существует)
 $squad_info = null;
