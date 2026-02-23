@@ -34,10 +34,10 @@ if ( ! empty( $department_id ) ) {
 // Построить SQL запрос с фильтрами
 $sql = "SELECT s.*, jt.job_title_name as job_title, jt.job_title_name_plural, CONCAT(s.first_name, ' ', s.second_name) as full_name
 	FROM {$wpdb->prefix}arsenal_staff s
-	INNER JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id";
+	LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles jt ON s.job_title_id = jt.id";
 
 if ( ! empty( $department_id ) ) {
-	$sql .= $wpdb->prepare( " WHERE s.department_id = %d", intval( $department_id ) );
+	$sql .= $wpdb->prepare( " WHERE ( s.department_id = %d OR s.department_id IS NULL )", intval( $department_id ) );
 }
 
 $sql .= " ORDER BY jt.job_title_name ASC, s.second_name ASC, s.first_name ASC";
