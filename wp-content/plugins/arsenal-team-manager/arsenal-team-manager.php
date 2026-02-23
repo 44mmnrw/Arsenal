@@ -54,6 +54,7 @@ class Arsenal_Team_Manager {
     public $management_admin;
     public $corrections_admin;
     public $sponsors_admin;
+    public $db_import_admin;
 
     /**
      * Singleton
@@ -120,6 +121,7 @@ class Arsenal_Team_Manager {
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-player-stats-corrections-admin.php';
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-sponsors-admin.php';
+        require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-db-import-admin.php';
 
         // ── Инициализация инстансов ───────────────────────────────────────────
 
@@ -161,6 +163,9 @@ class Arsenal_Team_Manager {
 
         // Спонсоры
         $this->sponsors_admin    = new Arsenal_Sponsors_Admin();
+
+        // Импорт данных БД (одноразовый)
+        $this->db_import_admin   = new Arsenal_Db_Import_Admin();
 
         // ── Регистрация меню через выделенный класс ───────────────────────────
         require_once ARSENAL_TM_PLUGIN_DIR . 'admin/class-arsenal-menu-manager.php';

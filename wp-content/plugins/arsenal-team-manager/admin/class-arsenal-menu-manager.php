@@ -106,6 +106,9 @@ class Arsenal_Menu_Manager {
         add_submenu_page( $slug, 'Корректировки таблицы', 'Корректировки таблицы', 'manage_options',
             'arsenal-adjustments', array( $this, 'render_adjustments_list' ) );
 
+        add_submenu_page( $slug, 'Импорт данных', 'Импорт данных', 'manage_options',
+            'arsenal-db-import', array( $this, 'render_db_import' ) );
+
         add_submenu_page( $slug, 'Лиги', 'Лиги', 'manage_options',
             'arsenal-leagues', array( $this, 'render_leagues_list' ) );
 
@@ -303,6 +306,10 @@ class Arsenal_Menu_Manager {
 
     public function render_match_lineups() {
         $this->plugin->lineup_admin->render_lineups_form();
+    }
+
+    public function render_db_import() {
+        $this->plugin->db_import_admin->render_page();
     }
 
     /**
