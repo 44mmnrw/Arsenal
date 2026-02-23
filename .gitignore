@@ -41,6 +41,7 @@ backup/
 # Database backups (разрешены для коммита)
 !database/*.sql
 !wp-content/themes/arsenal/inc/database/*.sql
+!release/wp_arsenal_only.sql
 
 # Logs
 *.log
