@@ -210,15 +210,26 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                 <h3>👥 Все сотрудники</h3>
                             
                                 <?php 
+                                $department_names = array();
+                                $department_table = $wpdb->prefix . 'arsenal_staff_department';
+                                $department_table_exists = ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $department_table ) ) === $department_table );
+
+                                if ( $department_table_exists ) {
+                                    $department_rows = $wpdb->get_results( "SELECT id, department_name FROM {$wpdb->prefix}arsenal_staff_department" );
+                                    if ( ! empty( $department_rows ) ) {
+                                        foreach ( $department_rows as $dept_row ) {
+                                            $department_names[ (int) $dept_row->id ] = $dept_row->department_name;
+                                        }
+                                    }
+                                }
+
                                 // Получаем всех сотрудников со всех составов
                                 $all_staff = $wpdb->get_results(
                                     "SELECT s.*, 
                                             j.job_title_name, 
-                                            d.department_name,
                                             sq.squad_name
                                      FROM {$wpdb->prefix}arsenal_staff s
                                      LEFT JOIN {$wpdb->prefix}arsenal_staff_job_titles j ON s.job_title_id = j.id
-                                     LEFT JOIN {$wpdb->prefix}arsenal_staff_department d ON s.department_id = d.id
                                      LEFT JOIN {$wpdb->prefix}arsenal_squad sq ON s.squad_id = sq.id
                                      ORDER BY sq.squad_name ASC, s.second_name ASC, s.first_name ASC"
                                 );
@@ -263,7 +274,16 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                                 </td>
                                                 <td>
                                                     <span class="department-badge">
-                                                        <?php echo esc_html( $person->department_name ?? '—' ); ?>
+                                                        <?php
+                                                        $dept_name = '—';
+                                                        if ( ! empty( $person->department_id ) ) {
+                                                            $dept_id = (int) $person->department_id;
+                                                            if ( isset( $department_names[ $dept_id ] ) ) {
+                                                                $dept_name = $department_names[ $dept_id ];
+                                                            }
+                                                        }
+                                                        echo esc_html( $dept_name );
+                                                        ?>
                                                     </span>
                                                 </td>
                                                 <td>
