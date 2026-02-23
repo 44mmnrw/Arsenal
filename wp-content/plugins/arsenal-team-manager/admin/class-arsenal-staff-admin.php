@@ -247,7 +247,11 @@ class Arsenal_Staff_Admin {
      * AJAX добавление отдела
      */
     public function add_department_ajax() {
-        check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
+        $nonce = sanitize_text_field( $_POST['nonce'] ?? '' );
+
+        if ( ! $nonce || ( ! wp_verify_nonce( $nonce, 'arsenal_staff_nonce' ) && ! wp_verify_nonce( $nonce, 'arsenal_add_department' ) ) ) {
+            wp_send_json_error( 'Ошибка безопасности (nonce)' );
+        }
 
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_send_json_error( 'Недостаточно прав' );
@@ -268,6 +272,36 @@ class Arsenal_Staff_Admin {
         }
 
         global $wpdb;
+
+        $table_name = $wpdb->prefix . 'arsenal_staff_department';
+        $has_squad_id_column = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SHOW COLUMNS FROM {$table_name} LIKE %s",
+                'squad_id'
+            )
+        );
+
+        // Старые/облегчённые схемы БД: нет squad_id или он не передан.
+        // В этом режиме добавляем отдел глобально (без привязки к составу).
+        if ( ! $has_squad_id_column || empty( $squad_id ) ) {
+            $existing_department = $wpdb->get_var( $wpdb->prepare(
+                "SELECT id FROM {$table_name} WHERE department_name = %s LIMIT 1",
+                $department_name
+            ) );
+
+            if ( $existing_department ) {
+                wp_send_json_error( 'Отдел с таким названием уже существует' );
+            }
+
+            $department_id = Arsenal_Staff_Manager::add_department( $department_name, '', 0 );
+
+            if ( ! $department_id ) {
+                $db_error = ! empty( $wpdb->last_error ) ? ' (' . $wpdb->last_error . ')' : '';
+                wp_send_json_error( 'Ошибка при добавлении отдела в БД' . $db_error );
+            }
+
+            wp_send_json_success( 'Отдел добавлен' );
+        }
 
         // Проверить есть ли уже отдел с таким названием для этого состава
         $existing = $wpdb->get_var( $wpdb->prepare(
@@ -313,7 +347,8 @@ class Arsenal_Staff_Admin {
             if ( $result ) {
                 wp_send_json_success( 'Отдел добавлен' );
             } else {
-                wp_send_json_error( 'Ошибка при добавлении отдела' );
+                $db_error = ! empty( $wpdb->last_error ) ? ' (' . $wpdb->last_error . ')' : '';
+                wp_send_json_error( 'Ошибка при добавлении отдела' . $db_error );
             }
         } else {
             // Отдела нет ни в каком составе - создаём новый
@@ -330,7 +365,8 @@ class Arsenal_Staff_Admin {
                 );
                 wp_send_json_success( 'Отдел добавлен' );
             } else {
-                wp_send_json_error( 'Ошибка при добавлении отдела' );
+                $db_error = ! empty( $wpdb->last_error ) ? ' (' . $wpdb->last_error . ')' : '';
+                wp_send_json_error( 'Ошибка при добавлении отдела' . $db_error );
             }
         }
     }
