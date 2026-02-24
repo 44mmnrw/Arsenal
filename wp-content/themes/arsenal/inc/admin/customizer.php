@@ -212,7 +212,7 @@ function arsenal_customize_register( $wp_customize ) {
 		$wp_customize->add_setting(
 			'arsenal_banner_slide_' . $i . '_info',
 			array(
-				'default'           => ( $i === 1 ) ? 'Регион: Нижегородская обл. Стадион: «Капролактамовец». Страна: Россия.' : '',
+				'default'           => '',
 				'sanitize_callback' => 'sanitize_textarea_field',
 				'transport'         => 'refresh',
 			)

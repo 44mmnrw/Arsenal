@@ -103,25 +103,84 @@ $form_action = $is_edit ? 'arsenal_update_stadium' : 'arsenal_create_stadium';
 
                 <div class="form-group">
                     <label for="photo">Загрузить фото</label>
-                    <input type="file" name="photo" id="photo" accept="image/*" class="file-input">
-                    <p class="form-description">Форматы: JPG, PNG, GIF</p>
+                    <input type="hidden" name="photo_url" id="photo_url" value="<?php echo ! empty( $stadium ) && ! empty( $stadium->photo_url ) ? esc_attr( $stadium->photo_url ) : ''; ?>">
+                    <button type="button" id="select-stadium-photo" class="button button-secondary">Выбрать из медиатеки</button>
+                    <button type="button" id="remove-stadium-photo" class="button" style="margin-left:8px; <?php echo ( ! empty( $stadium ) && ! empty( $stadium->photo_url ) ) ? '' : 'display:none;'; ?>">Удалить фото</button>
+                    <p class="form-description">Используется стандартная библиотека WordPress (Media Library).</p>
                 </div>
 
-                <?php if ( $is_edit && ! empty( $stadium->photo_url ) ) : ?>
-                    <div class="form-group">
-                        <label>Текущее фото:</label>
-                        <?php
-                        $photo_url = $stadium->photo_url;
-                        if ( ! str_starts_with( $photo_url, 'http://' ) && ! str_starts_with( $photo_url, 'https://' ) ) {
-                            $photo_url = home_url( $photo_url );
+                <div class="form-group" id="stadium-photo-preview-wrap" style="<?php echo ( ! empty( $stadium ) && ! empty( $stadium->photo_url ) ) ? '' : 'display:none;'; ?>">
+                    <label>Текущее фото:</label>
+                    <?php
+                    $photo_url = ! empty( $stadium ) && ! empty( $stadium->photo_url ) ? $stadium->photo_url : '';
+                    if ( $photo_url && ! str_starts_with( $photo_url, 'http://' ) && ! str_starts_with( $photo_url, 'https://' ) ) {
+                        $photo_url = home_url( $photo_url );
+                    }
+                    ?>
+                    <img id="stadium-preview-image"
+                         src="<?php echo esc_url( $photo_url ); ?>"
+                         alt="<?php echo ! empty( $stadium->name ) ? esc_attr( $stadium->name ) : 'Стадион'; ?>"
+                         class="stadium-preview-image">
+                    <p class="form-description">Вы можете выбрать другое изображение в медиатеке.</p>
+                </div>
+
+                <script>
+                jQuery(function($) {
+                    let stadiumMediaFrame;
+                    const $selectBtn = $('#select-stadium-photo');
+                    const $removeBtn = $('#remove-stadium-photo');
+                    const $photoUrl = $('#photo_url');
+                    const $previewWrap = $('#stadium-photo-preview-wrap');
+                    const $previewImage = $('#stadium-preview-image');
+
+                    function showPreview(url) {
+                        if (!url) {
+                            $previewWrap.hide();
+                            $removeBtn.hide();
+                            return;
                         }
-                        ?>
-                        <img src="<?php echo esc_url( $photo_url ); ?>" 
-                             alt="<?php echo esc_attr( $stadium->name ); ?>"
-                             class="stadium-preview-image">
-                        <p class="form-description">Загрузите новое изображение, чтобы заменить</p>
-                    </div>
-                <?php endif; ?>
+
+                        $previewImage.attr('src', url);
+                        $previewWrap.show();
+                        $removeBtn.show();
+                    }
+
+                    $selectBtn.on('click', function(e) {
+                        e.preventDefault();
+
+                        if (stadiumMediaFrame) {
+                            stadiumMediaFrame.open();
+                            return;
+                        }
+
+                        stadiumMediaFrame = wp.media({
+                            title: 'Выберите фото стадиона',
+                            button: { text: 'Использовать изображение' },
+                            library: { type: 'image' },
+                            multiple: false
+                        });
+
+                        stadiumMediaFrame.on('select', function() {
+                            const attachment = stadiumMediaFrame.state().get('selection').first().toJSON();
+                            if (!attachment || !attachment.url) {
+                                return;
+                            }
+
+                            $photoUrl.val(attachment.url);
+                            showPreview(attachment.url);
+                        });
+
+                        stadiumMediaFrame.open();
+                    });
+
+                    $removeBtn.on('click', function(e) {
+                        e.preventDefault();
+                        $photoUrl.val('');
+                        $previewImage.attr('src', '');
+                        showPreview('');
+                    });
+                });
+                </script>
             </div>
 
             <!-- Полная ширина: Описание -->

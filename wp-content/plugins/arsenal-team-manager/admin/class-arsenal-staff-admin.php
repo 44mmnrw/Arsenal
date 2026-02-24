@@ -14,6 +14,97 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Arsenal_Staff_Admin {
 
     /**
+     * Обеспечить наличие колонки squad_id в таблице отделов.
+     *
+     * @return bool
+     */
+    private function ensure_department_squad_column() {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'arsenal_staff_department';
+        $has_squad_id_column = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SHOW COLUMNS FROM {$table_name} LIKE %s",
+                'squad_id'
+            )
+        );
+
+        if ( $has_squad_id_column ) {
+            return true;
+        }
+
+        $wpdb->query( "ALTER TABLE {$table_name} ADD COLUMN squad_id VARCHAR(64) NULL" );
+
+        $has_squad_id_column = (bool) $wpdb->get_var(
+            $wpdb->prepare(
+                "SHOW COLUMNS FROM {$table_name} LIKE %s",
+                'squad_id'
+            )
+        );
+
+        if ( $has_squad_id_column ) {
+            $wpdb->query( "ALTER TABLE {$table_name} ADD INDEX idx_squad_id (squad_id)" );
+        }
+
+        return $has_squad_id_column;
+    }
+
+    /**
+     * Обеспечить корректные индексы отделов для работы по составам.
+     *
+     * Старые схемы могли иметь UNIQUE(department_name), что блокирует
+     * одинаковые названия отделов в разных составах.
+     *
+     * @return void
+     */
+    private function ensure_department_indexes() {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'arsenal_staff_department';
+
+        $indexes = $wpdb->get_results( "SHOW INDEX FROM {$table_name}" );
+        if ( empty( $indexes ) ) {
+            return;
+        }
+
+        $unique_department_indexes = array();
+        $composite_unique_exists = false;
+
+        foreach ( $indexes as $index_row ) {
+            if ( (int) $index_row->Non_unique !== 0 ) {
+                continue;
+            }
+
+            if ( 'PRIMARY' === $index_row->Key_name ) {
+                continue;
+            }
+
+            if ( 'uniq_department_squad' === $index_row->Key_name || 'department_name_squad_id' === $index_row->Key_name ) {
+                $composite_unique_exists = true;
+            }
+
+            if ( 'department_name' === $index_row->Column_name ) {
+                $unique_department_indexes[ $index_row->Key_name ] = true;
+            }
+        }
+
+        // Удаляем старые уникальные индексы только на department_name.
+        if ( ! empty( $unique_department_indexes ) ) {
+            foreach ( array_keys( $unique_department_indexes ) as $index_name ) {
+                if ( 'uniq_department_squad' === $index_name || 'department_name_squad_id' === $index_name ) {
+                    continue;
+                }
+
+                $wpdb->query( "ALTER TABLE {$table_name} DROP INDEX {$index_name}" );
+            }
+        }
+
+        if ( ! $composite_unique_exists ) {
+            $wpdb->query( "ALTER TABLE {$table_name} ADD UNIQUE INDEX uniq_department_squad (department_name, squad_id)" );
+        }
+    }
+
+    /**
      * Конструктор
      */
     public function __construct() {
@@ -259,13 +350,10 @@ class Arsenal_Staff_Admin {
 
         require_once get_template_directory() . '/inc/classes/class-arsenal-staff-manager.php';
 
-        // squad_id приходит как строка (VARCHAR) - не конвертируем в intval!
+        // Поддержка обеих схем: hex squad_id и numeric id состава.
         $squad_id = sanitize_text_field( $_POST['squad_id'] ?? '' );
+        $squad_numeric_id = absint( $_POST['squad_numeric_id'] ?? 0 );
         $department_name = sanitize_text_field( $_POST['department_name'] ?? '' );
-
-        if ( empty( $squad_id ) ) {
-            wp_send_json_error( 'ID состава не указан' );
-        }
 
         if ( empty( $department_name ) ) {
             wp_send_json_error( 'Название отдела не может быть пустым' );
@@ -273,43 +361,65 @@ class Arsenal_Staff_Admin {
 
         global $wpdb;
 
-        $table_name = $wpdb->prefix . 'arsenal_staff_department';
-        $has_squad_id_column = (bool) $wpdb->get_var(
-            $wpdb->prepare(
-                "SHOW COLUMNS FROM {$table_name} LIKE %s",
-                'squad_id'
-            )
-        );
-
-        // Старые/облегчённые схемы БД: нет squad_id или он не передан.
-        // В этом режиме добавляем отдел глобально (без привязки к составу).
-        if ( ! $has_squad_id_column || empty( $squad_id ) ) {
-            $existing_department = $wpdb->get_var( $wpdb->prepare(
-                "SELECT id FROM {$table_name} WHERE department_name = %s LIMIT 1",
-                $department_name
+        $squad_hex_by_numeric = '';
+        if ( $squad_numeric_id > 0 ) {
+            $squad_hex_by_numeric = (string) $wpdb->get_var( $wpdb->prepare(
+                "SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d",
+                $squad_numeric_id
             ) );
-
-            if ( $existing_department ) {
-                wp_send_json_error( 'Отдел с таким названием уже существует' );
-            }
-
-            $department_id = Arsenal_Staff_Manager::add_department( $department_name, '', 0 );
-
-            if ( ! $department_id ) {
-                $db_error = ! empty( $wpdb->last_error ) ? ' (' . $wpdb->last_error . ')' : '';
-                wp_send_json_error( 'Ошибка при добавлении отдела в БД' . $db_error );
-            }
-
-            wp_send_json_success( 'Отдел добавлен' );
         }
 
+        $squad_ref = '';
+        if ( ! empty( $squad_id ) ) {
+            $squad_ref = $squad_id;
+        } elseif ( ! empty( $squad_hex_by_numeric ) ) {
+            $squad_ref = $squad_hex_by_numeric;
+        } elseif ( $squad_numeric_id > 0 ) {
+            $squad_ref = (string) $squad_numeric_id;
+        }
+
+        $table_name = $wpdb->prefix . 'arsenal_staff_department';
+
+        if ( empty( $squad_ref ) ) {
+            wp_send_json_error( 'ID состава не указан' );
+        }
+
+        if ( ! $this->ensure_department_squad_column() ) {
+            wp_send_json_error( 'Не удалось обновить структуру таблицы отделов (squad_id)' );
+        }
+
+        $this->ensure_department_indexes();
+
         // Проверить есть ли уже отдел с таким названием для этого состава
-        $existing = $wpdb->get_var( $wpdb->prepare(
-            "SELECT id FROM {$wpdb->prefix}arsenal_staff_department 
-             WHERE squad_id = %s AND department_name = %s",
-            $squad_id,
-            $department_name
-        ));
+        $squad_match_conditions = array();
+        $squad_match_values = array();
+
+        if ( ! empty( $squad_ref ) ) {
+            $squad_match_conditions[] = 'squad_id = %s';
+            $squad_match_values[] = $squad_ref;
+        }
+
+        if ( $squad_numeric_id > 0 ) {
+            $squad_match_conditions[] = 'squad_id = %d';
+            $squad_match_values[] = $squad_numeric_id;
+        }
+
+        if ( ! empty( $squad_hex_by_numeric ) && $squad_hex_by_numeric !== $squad_ref ) {
+            $squad_match_conditions[] = 'squad_id = %s';
+            $squad_match_values[] = $squad_hex_by_numeric;
+        }
+
+        if ( empty( $squad_match_conditions ) ) {
+            wp_send_json_error( 'ID состава не указан' );
+        }
+
+        $existing_query = "SELECT id FROM {$wpdb->prefix}arsenal_staff_department
+            WHERE department_name = %s
+            AND ( " . implode( ' OR ', $squad_match_conditions ) . " )
+            LIMIT 1";
+
+        $existing_query_params = array_merge( array( $department_name ), $squad_match_values );
+        $existing = $wpdb->get_var( $wpdb->prepare( $existing_query, $existing_query_params ) );
 
         if ( $existing ) {
             wp_send_json_error( 'Отдел с таким названием уже существует' );
@@ -332,6 +442,21 @@ class Arsenal_Staff_Admin {
                 $existing_other
             ));
 
+            // Legacy-случай: отдел был глобальным (без привязки), просто привязываем к текущему составу.
+            if ( isset( $dept_data->squad_id ) && ( null === $dept_data->squad_id || '' === (string) $dept_data->squad_id ) ) {
+                $updated = $wpdb->update(
+                    $wpdb->prefix . 'arsenal_staff_department',
+                    array( 'squad_id' => $squad_ref ),
+                    array( 'id' => $existing_other ),
+                    array( '%s' ),
+                    array( '%d' )
+                );
+
+                if ( false !== $updated ) {
+                    wp_send_json_success( 'Отдел добавлен' );
+                }
+            }
+
             // Вставляем новую запись для этого состава
             $result = $wpdb->insert(
                 $wpdb->prefix . 'arsenal_staff_department',
@@ -339,7 +464,7 @@ class Arsenal_Staff_Admin {
                     'department_name' => $dept_data->department_name,
                     'description' => $dept_data->description,
                     'sort_order' => $dept_data->sort_order,
-                    'squad_id' => $squad_id,
+                    'squad_id' => $squad_ref,
                 ),
                 array( '%s', '%s', '%d', '%s' )
             );
@@ -358,7 +483,7 @@ class Arsenal_Staff_Admin {
                 // Обновляем squad_id (VARCHAR строка, не число!)
                 $wpdb->update(
                     $wpdb->prefix . 'arsenal_staff_department',
-                    array( 'squad_id' => $squad_id ),
+                    array( 'squad_id' => $squad_ref ),
                     array( 'id' => $result ),
                     array( '%s' ),
                     array( '%d' )
@@ -386,8 +511,8 @@ class Arsenal_Staff_Admin {
         $squad_id = sanitize_text_field( $_POST['squad_id'] ?? '' );
         $department_id = intval( $_POST['department_id'] ?? 0 );
 
-        if ( ! $squad_id || ! $department_id ) {
-            wp_send_json_error( 'Параметры не указаны' );
+        if ( ! $department_id ) {
+            wp_send_json_error( 'ID отдела не указан' );
         }
 
         $result = Arsenal_Staff_Manager::delete_department( $department_id );
@@ -463,25 +588,64 @@ class Arsenal_Staff_Admin {
     public function get_departments_by_squad_ajax() {
         check_ajax_referer( 'arsenal_staff_nonce', 'nonce' );
 
-        $squad_id = intval( $_POST['squad_id'] ?? 0 );
-
-        if ( ! $squad_id ) {
-            wp_send_json_error( 'ID квада не указан' );
-        }
-
         global $wpdb;
 
-        // Получаем отделы для этого квада
-        // Проверяем напрямую по squad_id (может быть INT или VARCHAR в зависимости от таблицы)
-        $departments = $wpdb->get_results( $wpdb->prepare(
-            "SELECT d.id, d.department_name 
+        if ( ! $this->ensure_department_squad_column() ) {
+            wp_send_json_error( 'Не удалось обновить структуру таблицы отделов (squad_id)' );
+        }
+
+        $this->ensure_department_indexes();
+
+        $squad_id_raw = sanitize_text_field( $_POST['squad_id'] ?? '' );
+        $squad_numeric_id = absint( $_POST['squad_numeric_id'] ?? 0 );
+
+        if ( 0 === $squad_numeric_id && is_numeric( $squad_id_raw ) ) {
+            $squad_numeric_id = (int) $squad_id_raw;
+        }
+
+        $squad_hex_by_numeric = '';
+        if ( $squad_numeric_id > 0 ) {
+            $squad_hex_by_numeric = (string) $wpdb->get_var( $wpdb->prepare(
+                "SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d",
+                $squad_numeric_id
+            ) );
+        }
+
+        if ( empty( $squad_id_raw ) && empty( $squad_hex_by_numeric ) && $squad_numeric_id <= 0 ) {
+            wp_send_json_error( 'ID состава не указан' );
+        }
+
+        $where_clauses = array();
+        $where_values = array();
+
+        if ( ! empty( $squad_id_raw ) ) {
+            $where_clauses[] = 'd.squad_id = %s';
+            $where_values[] = $squad_id_raw;
+        }
+
+        if ( $squad_numeric_id > 0 ) {
+            $where_clauses[] = 'd.squad_id = %d';
+            $where_values[] = $squad_numeric_id;
+
+            $where_clauses[] = "d.squad_id IN ( SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d )";
+            $where_values[] = $squad_numeric_id;
+        }
+
+        if ( ! empty( $squad_hex_by_numeric ) && $squad_hex_by_numeric !== $squad_id_raw ) {
+            $where_clauses[] = 'd.squad_id = %s';
+            $where_values[] = $squad_hex_by_numeric;
+        }
+
+        if ( empty( $where_clauses ) ) {
+            wp_send_json_success( array() );
+        }
+
+        $departments_query = "SELECT DISTINCT d.id, d.department_name
              FROM {$wpdb->prefix}arsenal_staff_department d
-             WHERE d.squad_id = %d OR d.squad_id IN (
-                SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d
-             )
-             ORDER BY d.sort_order ASC, d.department_name ASC",
-            $squad_id, $squad_id
-        ) );
+             WHERE " . implode( ' OR ', $where_clauses ) . "
+             ORDER BY d.sort_order ASC, d.department_name ASC";
+
+        $departments = $wpdb->get_results( $wpdb->prepare( $departments_query, $where_values ) );
 
         wp_send_json_success( $departments );
     }

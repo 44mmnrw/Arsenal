@@ -34,6 +34,7 @@ class Arsenal_Db_Import_Admin {
 		add_action( 'wp_ajax_arsenal_db_import_start', array( $this, 'ajax_start_import' ) );
 		add_action( 'wp_ajax_arsenal_db_import_process', array( $this, 'ajax_process_import' ) );
 		add_action( 'wp_ajax_arsenal_db_import_status', array( $this, 'ajax_import_status' ) );
+		add_action( 'wp_ajax_arsenal_db_import_rearm', array( $this, 'ajax_rearm_import' ) );
 	}
 
 	/**
@@ -233,6 +234,25 @@ class Arsenal_Db_Import_Admin {
 			: 'Импорт выполняется...';
 
 		wp_send_json_success( $this->format_status_response( $state, $message ) );
+	}
+
+	/**
+	 * AJAX: повторная активация импорта (сброс one-shot флага).
+	 */
+	public function ajax_rearm_import() {
+		$this->guard_ajax_request();
+
+		$state = $this->get_state();
+		if ( ! empty( $state['file_path'] ) && file_exists( $state['file_path'] ) ) {
+			@unlink( $state['file_path'] );
+		}
+
+		delete_option( self::STATE_OPTION );
+		delete_option( self::DONE_OPTION );
+
+		wp_send_json_success( array(
+			'message' => 'Повторный импорт активирован. Можно запускать заново.',
+		) );
 	}
 
 	/**

@@ -48,7 +48,7 @@ for ( $i = 1; $i <= 5; $i++ ) {
 				$subtitle = get_theme_mod( 'arsenal_banner_subtitle', 'Держим вас в курсе последних новостей, результатов матчей и предстоящих игр команды.' );
 			}
 			if ( empty( $info ) ) {
-				$info = get_theme_mod( 'arsenal_banner_info', 'Регион: Нижегородская обл. Стадион: «Капролактамовец». Страна: Россия.' );
+				$info = get_theme_mod( 'arsenal_banner_info', '' );
 			}
 			if ( empty( $btn1_text ) ) {
 				$btn1_text = get_theme_mod( 'arsenal_banner_btn1_text', 'Наша команда' );
@@ -103,7 +103,7 @@ if ( empty( $slides ) ) {
 			'label'             => get_theme_mod( 'arsenal_banner_label', 'Добро пожаловать' ),
 			'title'             => get_theme_mod( 'arsenal_banner_title', 'ФК АРСЕНАЛ' ),
 			'subtitle'          => get_theme_mod( 'arsenal_banner_subtitle', 'Держим вас в курсе последних новостей, результатов матчей и предстоящих игр команды.' ),
-			'info'              => get_theme_mod( 'arsenal_banner_info', 'Регион: Нижегородская обл. Стадион: «Капролактамовец». Страна: Россия.' ),
+			'info'              => get_theme_mod( 'arsenal_banner_info', '' ),
 			'btn1_text'         => get_theme_mod( 'arsenal_banner_btn1_text', 'Наша команда' ),
 			'btn1_url'          => get_theme_mod( 'arsenal_banner_btn1_url', '#' ),
 			'btn2_text'         => get_theme_mod( 'arsenal_banner_btn2_text', 'Календарь матчей' ),

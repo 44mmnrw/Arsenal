@@ -93,7 +93,7 @@ class Arsenal_Stadium_Admin {
             'city' => sanitize_text_field( $_POST['city'] ?? '' ),
             'capacity' => sanitize_text_field( $_POST['capacity'] ?? '' ),
             'open_date' => sanitize_text_field( $_POST['open_date'] ?? '' ),
-            'photo_url' => sanitize_text_field( $_POST['photo_url'] ?? '' ),
+            'photo_url' => esc_url_raw( $_POST['photo_url'] ?? '' ),
             'description' => wp_kses_post( $_POST['description'] ?? '' ),
             'history' => sanitize_text_field( $_POST['history'] ?? '' ),
             'contacts' => sanitize_text_field( $_POST['contacts'] ?? '' ),
@@ -105,8 +105,8 @@ class Arsenal_Stadium_Admin {
             'on_date' => sanitize_text_field( $_POST['on_date'] ?? '' ),
         );
         
-        // Обработка загрузки изображения
-        if ( ! empty( $_FILES['photo'] ) ) {
+        // Fallback: обработка загрузки файла, если отправлен старый file input.
+        if ( ! empty( $_FILES['photo'] ) && ! empty( $_FILES['photo']['name'] ) ) {
             $photo_url = $this->handle_image_upload();
             if ( $photo_url ) {
                 $data['photo_url'] = $photo_url;
@@ -151,6 +151,7 @@ class Arsenal_Stadium_Admin {
             'city' => sanitize_text_field( $_POST['city'] ?? '' ),
             'capacity' => sanitize_text_field( $_POST['capacity'] ?? '' ),
             'open_date' => sanitize_text_field( $_POST['open_date'] ?? '' ),
+            'photo_url' => esc_url_raw( $_POST['photo_url'] ?? '' ),
             'description' => wp_kses_post( $_POST['description'] ?? '' ),
             'history' => sanitize_text_field( $_POST['history'] ?? '' ),
             'contacts' => sanitize_text_field( $_POST['contacts'] ?? '' ),
@@ -162,8 +163,8 @@ class Arsenal_Stadium_Admin {
             'on_date' => sanitize_text_field( $_POST['on_date'] ?? '' ),
         );
         
-        // Обработка загрузки изображения
-        if ( ! empty( $_FILES['photo'] ) ) {
+        // Fallback: обработка загрузки файла, если отправлен старый file input.
+        if ( ! empty( $_FILES['photo'] ) && ! empty( $_FILES['photo']['name'] ) ) {
             $photo_url = $this->handle_image_upload();
             if ( $photo_url ) {
                 $data['photo_url'] = $photo_url;
@@ -221,33 +222,16 @@ class Arsenal_Stadium_Admin {
     private function handle_image_upload() {
         require_once ABSPATH . 'wp-admin/includes/file.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
-        
-        $uploaded = wp_handle_upload( $_FILES['photo'], array(
-            'test_form' => false,
-            'mimes' => array(
-                'jpg|jpeg|jpe' => 'image/jpeg',
-                'png' => 'image/png',
-                'gif' => 'image/gif',
-            ),
-        ) );
-        
-        if ( isset( $uploaded['error'] ) ) {
-            error_log( 'Arsenal: Ошибка загрузки изображения - ' . $uploaded['error'] );
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+
+        $attachment_id = media_handle_upload( 'photo', 0 );
+
+        if ( is_wp_error( $attachment_id ) ) {
+            error_log( 'Arsenal: Ошибка загрузки изображения - ' . $attachment_id->get_error_message() );
             return false;
         }
-        
-        // Получаем полный URL и преобразуем в относительный путь
-        $full_url = $uploaded['url'];
-        $site_url = home_url();
-        
-        // Вычисляем относительный путь от корня сайта
-        $relative_path = ( $full_url && $site_url ) ? str_replace( $site_url, '', $full_url ) : $full_url;
-        
-        // Убеждаемся, что путь начинается со слэша
-        if ( $relative_path && ! str_starts_with( $relative_path, '/' ) ) {
-            $relative_path = '/' . $relative_path;
-        }
-        
-        return $relative_path;
+
+        $url = wp_get_attachment_url( $attachment_id );
+        return $url ? esc_url_raw( $url ) : false;
     }
 }

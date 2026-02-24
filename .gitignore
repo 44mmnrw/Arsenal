@@ -1,59 +1,25 @@
-# WordPress
-wp-config.php
-wp-content/uploads/
-wp-content/upgrade/
-wp-content/backup/
-wp-content/cache/
-wp-content/debug.log
-debug.log
+# Продакшн-ветка: отслеживаем только тему и плагин
 
-# Debug scripts
-_debug/
+# По умолчанию игнорируем всё в корне
+/*
 
-# Dependencies
-node_modules/
-vendor/
-# НО! Включаем vendor/ из темы Arsenal (для Carbon Fields)
-!wp-content/themes/arsenal/vendor/
+# Разрешаем сам .gitignore
+!/.gitignore
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
+# Разрешаем доступ к wp-content
+!/wp-content/
 
-# Environment
-.env
-.env.local
-.env.*.local
+# Внутри wp-content по умолчанию всё игнорируем
+/wp-content/*
 
-# OS
-Thumbs.db
-.DS_Store
+# Разрешаем только тему Arsenal
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/arsenal/
+!/wp-content/themes/arsenal/**
 
-# Backups
-*.sql
-*.bak
-backup/
-
-# Database backups (разрешены для коммита)
-!database/*.sql
-!wp-content/themes/arsenal/inc/database/*.sql
-!release/wp_arsenal_only.sql
-
-# Logs
-*.log
-logs/
-
-# Deployment files
-deployment-info.txt
-wp-config-production.php
-wp-config-debug.php
-*.zip
-*.tar.gz
-tools/
-
-# Documentation
-docs/
+# Разрешаем только плагин Arsenal Team Manager
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/arsenal-team-manager/
+!/wp-content/plugins/arsenal-team-manager/**

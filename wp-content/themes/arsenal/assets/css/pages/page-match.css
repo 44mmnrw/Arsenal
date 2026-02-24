@@ -547,6 +547,17 @@ lottie-player {
 	align-items: center;
 	border-radius: 0.25rem;
 	background-color: rgba(255, 255, 255, 0.05);
+	transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.player-entry.is-highlighted {
+	background-color: #fff0f0;
+	box-shadow: inset 0 0 0 1px #fca5a5;
+}
+
+.player-entry.is-highlighted .player-full-name {
+	color: var(--red-700);
+	font-weight: 700;
 }
 
 .player-shirt {
@@ -615,6 +626,24 @@ lottie-player {
 	border-radius: 0.625rem;
 	box-shadow: 0 0.625rem 0.9375rem var(--color-dark-gray)1a;
 	overflow: hidden;
+}
+
+.field-svg-vertical .field-player-marker {
+	cursor: pointer;
+}
+
+.field-svg-vertical .field-player-marker circle,
+.field-svg-vertical .field-player-marker text {
+	transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.field-svg-vertical .field-player-marker.is-active circle {
+	filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+	stroke-width: 3;
+}
+
+.field-svg-vertical .field-player-marker.is-active text {
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.8));
 }
 
 /* Добавляем скругленные углы к первому rect в горизонтальном SVG */

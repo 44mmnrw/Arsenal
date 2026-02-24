@@ -196,7 +196,13 @@ if ( ! empty( $available_seasons ) ) {
 				<!-- Фото -->
 				<div class="player-photo-wrapper<?php echo empty( $player->photo_url ) ? ' player-photo-wrapper--placeholder' : ''; ?>">
 					<?php if ( ! empty( $player->photo_url ) ) : ?>
-						<img src="<?php echo esc_url( home_url( $player->photo_url ) ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" loading="lazy">
+							<?php
+							$player_photo_url = trim( (string) $player->photo_url );
+							$player_photo_src = function_exists( 'arsenal_convert_logo_url' )
+								? arsenal_convert_logo_url( $player_photo_url )
+								: esc_url( $player_photo_url );
+							?>
+							<img src="<?php echo esc_url( $player_photo_src ); ?>" alt="<?php echo esc_attr( $display_name ); ?>" loading="lazy">
 					<?php else : ?>
 					<?php 
 					if ( function_exists( 'arsenal_render_camera_placeholder' ) ) {

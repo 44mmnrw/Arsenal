@@ -299,6 +299,51 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 							: 'Показать всех';
 					});
 				});
+
+				// Интерактив вертикального поля: hover по кружку игрока подсвечивает его в составе
+				const verticalMarkers = document.querySelectorAll('.field-svg-vertical .field-player-marker');
+				const clearHighlights = function() {
+					document.querySelectorAll('.field-svg-vertical .field-player-marker.is-active').forEach(function(marker) {
+						marker.classList.remove('is-active');
+					});
+
+					document.querySelectorAll('.player-entry.is-highlighted').forEach(function(item) {
+						item.classList.remove('is-highlighted');
+					});
+				};
+
+				verticalMarkers.forEach(function(marker) {
+					const key = marker.getAttribute('data-lineup-player-key');
+					if (!key) return;
+
+					marker.addEventListener('mouseenter', function() {
+						clearHighlights();
+						marker.classList.add('is-active');
+
+						document.querySelectorAll('.player-entry[data-lineup-player-key="' + key + '"]').forEach(function(item) {
+							item.classList.add('is-highlighted');
+						});
+					});
+
+					marker.addEventListener('mouseleave', clearHighlights);
+				});
+
+				// Обратная связь: hover по имени в составе подсвечивает кружок на поле
+				document.querySelectorAll('.player-entry[data-lineup-player-key]').forEach(function(item) {
+					const key = item.getAttribute('data-lineup-player-key');
+					if (!key) return;
+
+					item.addEventListener('mouseenter', function() {
+						clearHighlights();
+						item.classList.add('is-highlighted');
+
+						document.querySelectorAll('.field-svg-vertical .field-player-marker[data-lineup-player-key="' + key + '"]').forEach(function(marker) {
+							marker.classList.add('is-active');
+						});
+					});
+
+					item.addEventListener('mouseleave', clearHighlights);
+				});
 			});
 			</script>
 
@@ -325,11 +370,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								<div class="players-list">
 									<?php foreach ( $players as $player ) { 
 										$player_url = null;
+										$lineup_player_key = 'home-' . ( ! empty( $player->player_id ) ? (string) $player->player_id : md5( (string) $player->full_name . '|' . (string) $player->shirt_number ) );
 										if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
 											$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
 										}
 									?>
-									<div class="player-entry">
+									<div class="player-entry" data-lineup-player-key="<?php echo esc_attr( $lineup_player_key ); ?>">
 										<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>
 										<div class="player-info">
 											<?php if ( $player_url ) : ?>
@@ -386,10 +432,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						if ( ! empty( $organized['home_starting_by_position'] ) ) {
 							foreach ( $organized['home_starting_by_position'] as $position => $players ) {
 								foreach ( $players as $player ) {
+									$lineup_player_key = 'home-' . ( ! empty( $player->player_id ) ? (string) $player->player_id : md5( (string) $player->full_name . '|' . (string) $player->shirt_number ) );
 									$home_players[] = array(
 										'shirt' => $player->shirt_number,
 										'name' => $player->full_name,
-										'position' => $position
+										'position' => $position,
+										'lineup_key' => $lineup_player_key,
 									);
 								}
 							}
@@ -398,10 +446,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 						if ( ! empty( $organized['away_starting_by_position'] ) ) {
 							foreach ( $organized['away_starting_by_position'] as $position => $players ) {
 								foreach ( $players as $player ) {
+									$lineup_player_key = 'away-' . ( ! empty( $player->player_id ) ? (string) $player->player_id : md5( (string) $player->full_name . '|' . (string) $player->shirt_number ) );
 									$away_players[] = array(
 										'shirt' => $player->shirt_number,
 										'name' => $player->full_name,
-										'position' => $position
+										'position' => $position,
+										'lineup_key' => $lineup_player_key,
 									);
 								}
 							}
@@ -510,8 +560,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 											$coords = $home_positions_map[ $pos ][ $idx ];
 											$home_player_idx[ $pos ]++;
 											?>
-											<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="22" fill="#dc2626" stroke="white" stroke-width="2"/>
-											<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 7 ); ?>" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											<g class="field-player-marker" data-lineup-player-key="<?php echo esc_attr( $player['lineup_key'] ?? '' ); ?>">
+												<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="22" fill="#dc2626" stroke="white" stroke-width="2"/>
+												<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 7 ); ?>" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											</g>
 											<?php
 										}
 									}
@@ -537,8 +589,10 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 											$coords = $away_positions_map[ $pos ][ $idx ];
 											$away_player_idx[ $pos ]++;
 											?>
-											<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="22" fill="#1a56db" stroke="white" stroke-width="2"/>
-											<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 7 ); ?>" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											<g class="field-player-marker" data-lineup-player-key="<?php echo esc_attr( $player['lineup_key'] ?? '' ); ?>">
+												<circle cx="<?php echo esc_attr( $coords[0] ); ?>" cy="<?php echo esc_attr( $coords[1] ); ?>" r="22" fill="#1a56db" stroke="white" stroke-width="2"/>
+												<text x="<?php echo esc_attr( $coords[0] ); ?>" y="<?php echo esc_attr( $coords[1] + 7 ); ?>" text-anchor="middle" fill="white" font-size="14" font-weight="bold" font-family="Arial"><?php echo intval( $player['shirt'] ); ?></text>
+											</g>
 											<?php
 										}
 									}
@@ -691,11 +745,12 @@ if ( $stadium && ! empty( $stadium->photo_url ) ) {
 								<div class="players-list">
 									<?php foreach ( $players as $player ) { 
 										$player_url = null;
+										$lineup_player_key = 'away-' . ( ! empty( $player->player_id ) ? (string) $player->player_id : md5( (string) $player->full_name . '|' . (string) $player->shirt_number ) );
 										if ( function_exists( 'arsenal_get_player_url_if_has_contract' ) ) {
 											$player_url = arsenal_get_player_url_if_has_contract( $player->player_id );
 										}
 									?>
-									<div class="player-entry">
+									<div class="player-entry" data-lineup-player-key="<?php echo esc_attr( $lineup_player_key ); ?>">
 										<div class="player-shirt"><?php echo intval( $player->shirt_number ); ?></div>
 										<div class="player-info">
 											<?php if ( $player_url ) : ?>

@@ -97,12 +97,33 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                         </button>
                                     </div>
                                     
-                                    <?php 
-                                    // Получаем отделы для этого состава
-                                    $squad_departments = $wpdb->get_results( $wpdb->prepare(
-                                        "SELECT * FROM {$wpdb->prefix}arsenal_staff_department WHERE squad_id = %s ORDER BY sort_order ASC, department_name ASC",
-                                        $squad->squad_id
-                                    ) );
+                                    <?php
+                                    // Получаем отделы для этого состава (поддержка mixed-схем БД).
+                                    $department_table = $wpdb->prefix . 'arsenal_staff_department';
+                                    $has_squad_id_column = (bool) $wpdb->get_var(
+                                        $wpdb->prepare(
+                                            "SHOW COLUMNS FROM {$department_table} LIKE %s",
+                                            'squad_id'
+                                        )
+                                    );
+
+                                    if ( $has_squad_id_column ) {
+                                        $squad_departments = $wpdb->get_results( $wpdb->prepare(
+                                            "SELECT DISTINCT d.*
+                                             FROM {$department_table} d
+                                             WHERE d.squad_id = %s
+                                                OR d.squad_id = %d
+                                                OR d.squad_id IN (
+                                                    SELECT squad_id FROM {$wpdb->prefix}arsenal_squad WHERE id = %d
+                                                )
+                                             ORDER BY d.sort_order ASC, d.department_name ASC",
+                                            $squad->squad_id,
+                                            $squad->id,
+                                            $squad->id
+                                        ) );
+                                    } else {
+                                        $squad_departments = array();
+                                    }
                                     ?>
                                     
                                     <?php if ( $squad_departments ): ?>
@@ -117,7 +138,11 @@ $staff_count = Arsenal_Staff_Manager::count_staff( true );
                                             <?php endforeach; ?>
                                         </div>
                                     <?php else: ?>
-                                        <p class="squad-no-departments">Отделы не созданы</p>
+                                        <?php if ( ! $has_squad_id_column ): ?>
+                                            <p class="squad-no-departments">Требуется обновление структуры БД (нет колонки squad_id в таблице отделов)</p>
+                                        <?php else: ?>
+                                            <p class="squad-no-departments">Отделы не созданы</p>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                                 
@@ -532,6 +557,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData();
         formData.append('action', 'arsenal_add_department');
         formData.append('squad_id', addDepartmentSquadId);
+        formData.append('squad_numeric_id', addDepartmentSquadNumericId || '');
         formData.append('department_name', deptName);
         formData.append('nonce', nonce);
 

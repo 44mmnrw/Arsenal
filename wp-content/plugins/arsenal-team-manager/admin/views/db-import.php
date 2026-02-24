@@ -28,6 +28,11 @@ $nonce       = wp_create_nonce( 'arsenal_db_import_nonce' );
 	<?php if ( $import_done ) : ?>
 		<div class="notice notice-success">
 			<p><strong>Импорт уже выполнен.</strong> Кнопка скрыта, чтобы избежать повторного запуска.</p>
+			<p>
+				<button type="button" id="arsenal-db-rearm-btn" class="button button-secondary">
+					Разрешить повторный импорт
+				</button>
+			</p>
 		</div>
 	<?php else : ?>
 		<table class="form-table" role="presentation">
@@ -62,6 +67,7 @@ $nonce       = wp_create_nonce( 'arsenal_db_import_nonce' );
 	const ajaxUrl = '<?php echo esc_js( admin_url( 'admin-ajax.php' ) ); ?>';
 	const nonce = '<?php echo esc_js( $nonce ); ?>';
 	const startBtn = $('#arsenal-db-import-btn');
+	const rearmBtn = $('#arsenal-db-rearm-btn');
 	const sqlUrlInput = $('#arsenal-sql-url');
 	const wrap = $('#arsenal-db-progress-wrap');
 	const bar = $('#arsenal-db-progress-bar');
@@ -143,6 +149,38 @@ $nonce       = wp_create_nonce( 'arsenal_db_import_nonce' );
 			}).fail(function(){
 				setProgress(0, 'Ошибка сети при запуске импорта.');
 				disableButton(false);
+			});
+		});
+	}
+
+	if (rearmBtn.length) {
+		rearmBtn.on('click', function(){
+			if (!window.confirm('Разрешить повторный импорт базы?')) {
+				return;
+			}
+
+			rearmBtn.prop('disabled', true);
+			wrap.show();
+			setProgress(0, 'Сбрасываем статус одноразового импорта...');
+
+			$.post(ajaxUrl, {
+				action: 'arsenal_db_import_rearm',
+				nonce: nonce
+			}).done(function(resp){
+				if (!resp || !resp.success) {
+					const msg = resp && resp.data && resp.data.message ? resp.data.message : 'Не удалось активировать повторный импорт.';
+					setProgress(0, msg);
+					rearmBtn.prop('disabled', false);
+					return;
+				}
+
+				setProgress(0, resp.data && resp.data.message ? resp.data.message : 'Повторный импорт активирован. Обновляем страницу...');
+				setTimeout(function(){
+					window.location.reload();
+				}, 500);
+			}).fail(function(){
+				setProgress(0, 'Ошибка сети при активации повторного импорта.');
+				rearmBtn.prop('disabled', false);
 			});
 		});
 	}

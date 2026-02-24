@@ -1,6 +1,5 @@
 <?php
 /**
- * Шаблон страницы "История ДЮСШ"
  *
  * Template Name: История ДЮСШ
  * Template Post Type: page
