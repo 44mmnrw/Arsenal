@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $default_url = defined( 'Arsenal_Db_Import_Admin::DEFAULT_SQL_URL' )
 	? Arsenal_Db_Import_Admin::DEFAULT_SQL_URL
-	: 'https://raw.githubusercontent.com/44mmnrw/Arsenal/dev_main/release/wp_arsenal_only.sql';
+	: 'https://raw.githubusercontent.com/44mmnrw/Arsenal/prod_main/release/wp_arsenal_only.sql';
 
 $current_url = ! empty( $state['sql_url'] ) ? $state['sql_url'] : $default_url;
 $nonce       = wp_create_nonce( 'arsenal_db_import_nonce' );
@@ -53,7 +53,7 @@ $nonce       = wp_create_nonce( 'arsenal_db_import_nonce' );
 	<?php endif; ?>
 
 	<div id="arsenal-db-progress-wrap" style="max-width:720px; margin-top:12px; <?php echo $import_done ? '' : 'display:none;'; ?>">
-		<div style="background:#f0f0f1; border-radius:8px; overflow:hidden; height:22px;">
+		<div style="background:#c3c4c7; border-radius:8px; overflow:hidden; height:22px;">
 			<div id="arsenal-db-progress-bar" style="width:<?php echo $import_done ? '100' : '0'; ?>%; background:#2271b1; color:#fff; font-weight:600; text-align:center; height:22px; line-height:22px; transition:width .2s;">
 				<?php echo $import_done ? '100%' : '0%'; ?>
 			</div>

@@ -114,7 +114,7 @@ $matches = $wpdb->get_results( $wpdb->prepare( $query, ...$prepare_values ) );
 $has_matches = ! empty( $matches );
 ?>
 
-<main class="calendar-page">
+<main id="main" class="site-main calendar-page">
 	<section class="calendar-section">
 		<div class="container">
 			<div class="calendar-header">

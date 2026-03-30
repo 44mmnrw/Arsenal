@@ -25,7 +25,7 @@ class Arsenal_Db_Import_Admin {
 	/**
 	 * URL SQL по умолчанию (можно поменять в UI перед запуском).
 	 */
-	const DEFAULT_SQL_URL = 'https://raw.githubusercontent.com/44mmnrw/Arsenal/dev_main/release/wp_arsenal_only.sql';
+	const DEFAULT_SQL_URL = 'https://raw.githubusercontent.com/44mmnrw/Arsenal/prod_main/release/wp_arsenal_only.sql';
 
 	/**
 	 * Конструктор.
@@ -83,6 +83,15 @@ class Arsenal_Db_Import_Admin {
 			wp_send_json_error( array( 'message' => 'SQL файл пустой или недоступен.' ) );
 		}
 
+		// Read a larger sample to avoid false negatives when SQL has long headers/comments.
+		$sample = @file_get_contents( $tmp_file, false, null, 0, 262144 );
+		if ( false === $sample || false === stripos( $sample, '_arsenal_' ) ) {
+			@unlink( $tmp_file );
+			wp_send_json_error( array(
+				'message' => 'Скачанный файл не похож на SQL-дамп Arsenal (не найдено *_arsenal_* в начале файла). Проверьте URL дампа.',
+			) );
+		}
+
 		$state = array(
 			'sql_url'              => $sql_url,
 			'file_path'            => $tmp_file,
@@ -92,6 +101,7 @@ class Arsenal_Db_Import_Admin {
 			'processed_statements' => 0,
 			'executed_statements'  => 0,
 			'error_count'          => 0,
+			'last_error'           => '',
 			'started_at'           => current_time( 'mysql' ),
 			'done'                 => false,
 		);
@@ -203,6 +213,7 @@ class Arsenal_Db_Import_Admin {
 
 			if ( false === $result ) {
 				$state['error_count']++;
+				$state['last_error'] = (string) $wpdb->last_error;
 				continue;
 			}
 
@@ -216,6 +227,24 @@ class Arsenal_Db_Import_Admin {
 
 		$eof_reached = feof( $handle );
 		fclose( $handle );
+
+		if ( $eof_reached && (int) ( $state['executed_statements'] ?? 0 ) <= 0 ) {
+			if ( file_exists( $file_path ) ) {
+				@unlink( $file_path );
+			}
+
+			$details = '';
+			if ( ! empty( $state['last_error'] ) ) {
+				$details = ' Последняя SQL-ошибка: ' . $state['last_error'];
+			}
+
+			delete_option( self::STATE_OPTION );
+			delete_option( self::DONE_OPTION );
+
+			wp_send_json_error( array(
+				'message' => 'Импорт не выполнил ни одного SQL-запроса. Ошибок выполнения: ' . (int) ( $state['error_count'] ?? 0 ) . '.' . $details,
+			) );
+		}
 
 		if ( $eof_reached && '' === trim( (string) $state['buffer'] ) ) {
 			$state['done'] = true;
@@ -277,13 +306,18 @@ class Arsenal_Db_Import_Admin {
 	}
 
 	/**
-	 * Проверяет, относится ли SQL к wp_arsenal_*.
+	 * Проверяет, относится ли SQL к wp_arsenal_* и должен ли выполняться.
+	 *
+	 * Выполняем только команды, необходимые для переноса структуры/данных:
+	 * DROP TABLE, CREATE TABLE, INSERT INTO.
+	 * LOCK/ALTER намеренно пропускаются, так как на части хостингов
+	 * они часто запрещены и создают ложное ощущение проваленного импорта.
 	 *
 	 * @param string $statement SQL-запрос.
 	 * @return bool
 	 */
 	private function is_arsenal_statement( $statement ) {
-		$pattern = '/\b(?:DROP\s+TABLE\s+IF\s+EXISTS|CREATE\s+TABLE|INSERT\s+INTO|ALTER\s+TABLE|LOCK\s+TABLES)\s+`?wp_arsenal_[a-z0-9_]+`?/i';
+		$pattern = '/\b(?:DROP\s+TABLE\s+IF\s+EXISTS|CREATE\s+TABLE|INSERT\s+INTO)\s+`?wp_arsenal_[a-z0-9_]+`?/i';
 		return (bool) preg_match( $pattern, $statement );
 	}
 
@@ -324,6 +358,7 @@ class Arsenal_Db_Import_Admin {
 			'processed'        => (int) ( $state['processed_statements'] ?? 0 ),
 			'executed'         => (int) ( $state['executed_statements'] ?? 0 ),
 			'errors'           => (int) ( $state['error_count'] ?? 0 ),
+			'last_error'       => (string) ( $state['last_error'] ?? '' ),
 			'message'          => $message,
 			'import_completed' => (bool) get_option( self::DONE_OPTION, false ),
 		);

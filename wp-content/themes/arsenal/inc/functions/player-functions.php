@@ -126,12 +126,25 @@ function arsenal_aggregate_player_stats_for_matches( $player_id, $match_ids ) {
 	$matches_started = 0;
 	$total_minutes   = 0;
 
+	// Legacy fallback: в старых импортированных данных может отсутствовать
+	// корректная разметка участия (is_starting/sub_in/sub_out).
+	// Если не найдено НИ ОДНОГО явного маркера участия, считаем факт строки
+	// в lineup как сыгранный матч (без изменения минут).
+	$has_reliable_appearance_markers = false;
+	foreach ( $minutes_data as $row ) {
+		if ( intval( $row->is_starting ) === 1 || is_numeric( $row->sub_in ) || is_numeric( $row->sub_out ) ) {
+			$has_reliable_appearance_markers = true;
+			break;
+		}
+	}
+	$use_legacy_lineup_fallback = ! $has_reliable_appearance_markers;
+
 	foreach ( $minutes_data as $row ) {
 		$mins = arsenal_calculate_match_minutes( $row->is_starting, $row->sub_in, $row->sub_out );
 		if ( intval( $row->is_starting ) === 1 ) {
 			$matches_started++;
 		}
-		if ( $mins > 0 || intval( $row->is_starting ) === 1 ) {
+		if ( $mins > 0 || intval( $row->is_starting ) === 1 || $use_legacy_lineup_fallback ) {
 			$matches_played++;
 		}
 		$total_minutes += $mins;

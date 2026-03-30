@@ -1,7 +1,6 @@
 <?php
 /**
- * Plugin Name: Arsenal Team Manager
- * Plugin URI: https://github.com/44mmnrw/Arsenal
+ * Plugin Name: Arsenal Team Manager 
  * Description: Управление командой ФК Арсенал Дзержинск - игроки, статистика, составы
  * Version: 1.0.0
  * Author: Arsenal Dev Team

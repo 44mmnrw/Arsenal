@@ -645,7 +645,52 @@
 	}
 }
 
+/* ====== ПУСТОЙ КАЛЕНДАРЬ (Нет матчей) ====== */
 
+.calendar-empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.5rem 1.5rem;
+	text-align: center;
+	min-height: auto;
+	margin-top: 0;
+}
 
+.calendar-empty p {
+	font-family: 'Inter', sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+	color: var(--gray-600);
+	margin: 0;
+	line-height: 1.5;
+}
 
+/* Убрать лишние отступы в разделе с пустым календарём */
+.calendar-header:has(.calendar-empty) {
+	margin-bottom: 0;
+}
+
+/* Адаптивный дизайн для пустого календаря */
+@media (max-width: 768px) {
+	.calendar-empty {
+		padding: 2rem 1rem;
+		margin-top: 1.5rem;
+	}
+
+	.calendar-empty p {
+		font-size: 0.9375rem;
+	}
+}
+
+@media (max-width: 30rem) {
+	.calendar-empty {
+		padding: 1.5rem 0.75rem;
+		margin-top: 1rem;
+	}
+
+	.calendar-empty p {
+		font-size: 0.875rem;
+	}
+}
 
