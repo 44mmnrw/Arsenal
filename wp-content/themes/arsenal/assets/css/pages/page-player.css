@@ -80,7 +80,7 @@
 .player-photo-wrapper img {
 	height: 100%;
 	width: 100%;
-	background: linear-gradient(180deg, var(--gray-100) 0%, var(--gray-50) 100%);
+	background: linear-gradient(180deg, var(--gray-100) 0%, var(--gray-300) 100%);
 	aspect-ratio: 1 / 1;
 	object-fit: contain;
 	display: block;
