@@ -86,7 +86,7 @@ h1 {
 
 .staff-card__photo {
 	position: relative;
-	background: linear-gradient(180deg, var(--red-500) 0%, var(--red-100) 100%);
+	background: linear-gradient(180deg, var(--gray-100) 0%, var(--gray-300) 100%);
 	display: flex;
 	align-items: center;
 	justify-content: center;
