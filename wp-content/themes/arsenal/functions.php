@@ -358,21 +358,25 @@ if ( ! function_exists( 'arsenal_enqueue_scripts' ) ) {
 
 	// Стили страницы команды (только для страницы Команда)
 	if ( is_page_template( 'templates/page-squad-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'squad' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'team' ) ) || is_page( 'main-squad' ) ) {
+		$squad_grid_css = ARSENAL_THEME_DIR . '/assets/css/pages/page-squad-grid.css';
+		$squad_grid_ver = file_exists( $squad_grid_css ) ? (string) filemtime( $squad_grid_css ) : ARSENAL_VERSION;
 		wp_enqueue_style(
 			'arsenal-players-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-squad-grid.css',
 			array( 'arsenal-footer' ),
-			ARSENAL_VERSION
+			$squad_grid_ver
 		);
 	}
 
 	// Стили страницы тренерского штаба (для страницы Тренеры)
 	if ( is_page_template( 'templates/page-coaches-grid.php' ) || is_page_template( 'templates/page-staff-grid.php' ) || ( function_exists( 'get_page_by_path' ) && is_page( 'coaches' ) ) || ( function_exists( 'get_page_by_path' ) && is_page( 'тренеры' ) ) ) {
+		$staff_grid_css = ARSENAL_THEME_DIR . '/assets/css/pages/page-staff-grid.css';
+		$staff_grid_ver = file_exists( $staff_grid_css ) ? (string) filemtime( $staff_grid_css ) : ARSENAL_VERSION;
 		wp_enqueue_style(
 			'arsenal-staff-grid',
 			ARSENAL_THEME_URI . '/assets/css/pages/page-staff-grid.css',
 			array( 'arsenal-footer' ),
-			ARSENAL_VERSION
+			$staff_grid_ver
 		);
 	}
 
